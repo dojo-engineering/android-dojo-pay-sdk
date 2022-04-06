@@ -10,11 +10,19 @@ class DojoCardPaymentResultContract(
     private val sandboxMode: Boolean = false
 ) : ActivityResultContract<DojoCardPaymentPayload, DojoCardPaymentResult>() {
 
-    override fun createIntent(context: Context, input: DojoCardPaymentPayload?): Intent {
-        return Intent(context, DojoCardPaymentActivity::class.java)
+    override fun createIntent(context: Context, input: DojoCardPaymentPayload): Intent {
+        val intent = Intent(context, DojoCardPaymentActivity::class.java)
+        intent.putExtra(KEY_SANDBOX_MODE, sandboxMode)
+        intent.putExtra(KEY_PAYLOAD, input)
+        return intent
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): DojoCardPaymentResult {
         return DojoCardPaymentResult()
+    }
+
+    companion object {
+        const val KEY_SANDBOX_MODE = "SANDBOX_MODE"
+        const val KEY_PAYLOAD = "PAYLOAD"
     }
 }
