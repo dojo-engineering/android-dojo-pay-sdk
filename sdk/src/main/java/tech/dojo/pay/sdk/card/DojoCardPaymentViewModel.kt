@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
-class DojoCardPaymentViewModel(
+internal class DojoCardPaymentViewModel(
     private val payload: DojoCardPaymentPayload
 ) : ViewModel() {
 

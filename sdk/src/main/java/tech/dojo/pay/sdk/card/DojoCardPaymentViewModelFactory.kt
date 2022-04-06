@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 
-class DojoCardPaymentViewModelFactory(
+internal class DojoCardPaymentViewModelFactory(
     private val arguments: Bundle?
 ) : ViewModelProvider.Factory {
 
