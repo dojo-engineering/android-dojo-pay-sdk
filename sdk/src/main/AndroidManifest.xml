@@ -3,7 +3,7 @@
     package="tech.dojo.pay.sdk">
 
     <application>
-        <activity android:name=".DojoCardPaymentActivity"/>
+        <activity android:name=".card.DojoCardPaymentActivity"/>
     </application>
 
 </manifest>

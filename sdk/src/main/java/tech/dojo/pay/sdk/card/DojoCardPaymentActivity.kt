@@ -1,12 +1,13 @@
-package tech.dojo.pay.sdk
+package tech.dojo.pay.sdk.card
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.R
 
-class DojoCardPaymentActivity : AppCompatActivity() {
+internal class DojoCardPaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
