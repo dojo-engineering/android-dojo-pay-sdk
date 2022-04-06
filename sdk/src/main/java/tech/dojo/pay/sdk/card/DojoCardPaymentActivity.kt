@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -7,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
 
@@ -18,8 +20,10 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         val sandboxMode = intent.extras!!.getBoolean(DojoCardPaymentResultContract.KEY_SANDBOX_MODE)
 
         lifecycleScope.launch {
-            delay(1000)
-            setResult(RESULT_OK)
+            delay(3000)
+            val data = Intent()
+            data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, DojoCardPaymentResult.SUCCESSFUL)
+            setResult(RESULT_OK, data)
             finish()
         }
     }

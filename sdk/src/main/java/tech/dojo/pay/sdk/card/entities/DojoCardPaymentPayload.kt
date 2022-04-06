@@ -3,6 +3,7 @@ package tech.dojo.pay.sdk.card.entities
 import java.io.Serializable
 
 data class DojoCardPaymentPayload(
+    val token: String,
     val cardDetails: DojoCardDetails,
     val userEmailAddress: String? = null,
     val userPhoneNumber: String? = null,

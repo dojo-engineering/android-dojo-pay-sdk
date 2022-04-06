@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
@@ -18,11 +19,16 @@ class DojoCardPaymentResultContract(
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): DojoCardPaymentResult {
-        return DojoCardPaymentResult()
+        return if (resultCode == RESULT_OK && intent != null) {
+            intent.getSerializableExtra(KEY_RESULT) as DojoCardPaymentResult
+        } else {
+            DojoCardPaymentResult.CANCELLED
+        }
     }
 
-    companion object {
+    internal companion object {
         const val KEY_SANDBOX_MODE = "SANDBOX_MODE"
         const val KEY_PAYLOAD = "PAYLOAD"
+        const val KEY_RESULT = "RESULT"
     }
 }

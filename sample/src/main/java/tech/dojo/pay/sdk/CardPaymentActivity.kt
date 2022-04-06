@@ -8,12 +8,13 @@ import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
 class CardPaymentActivity : AppCompatActivity() {
 
-    private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) {
-        Toast.makeText(this, "Payment completed", Toast.LENGTH_SHORT).show()
+    private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
+        showToast(result)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,7 @@ class CardPaymentActivity : AppCompatActivity() {
     }
 
     private fun createPayload() = DojoCardPaymentPayload(
+        token = "token",
         cardDetails = DojoCardDetails(
             cardNumber = "1234123412341234",
             cardName = "Monzo",
@@ -50,5 +52,12 @@ class CardPaymentActivity : AppCompatActivity() {
         )
     )
 
+    private fun showToast(result: DojoCardPaymentResult) {
+        val message = when (result) {
+            DojoCardPaymentResult.CANCELLED -> "Payment cancelled"
+            else -> "Payment completed"
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
 }
