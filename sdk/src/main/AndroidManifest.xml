@@ -2,4 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tech.dojo.pay.sdk">
 
+    <application>
+        <activity android:name=".DojoCardPaymentActivity"/>
+    </application>
+
 </manifest>
