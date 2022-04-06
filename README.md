@@ -5,7 +5,6 @@ will be used for external customers
 
 ## How to use
 
-- The project has the ability to publish UI library specific for Paymentense and Dojo projects.
 - The libraries will be published to company nexus repository.
 - The library uses Semantic Version scheme as mentioned at https://semver.org/
 
