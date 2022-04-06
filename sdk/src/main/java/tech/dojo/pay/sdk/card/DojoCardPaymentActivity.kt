@@ -2,27 +2,26 @@ package tech.dojo.pay.sdk.card
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
+
+    private val viewModel: DojoCardPaymentViewModel by viewModels {
+        DojoCardPaymentViewModelFactory(intent.extras)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
+        observeResult()
+    }
 
-        val payload = intent.extras!!.getSerializable(DojoCardPaymentResultContract.KEY_PAYLOAD) as DojoCardPaymentPayload
-        val sandboxMode = intent.extras!!.getBoolean(DojoCardPaymentResultContract.KEY_SANDBOX_MODE)
-
-        lifecycleScope.launch {
-            delay(3000)
+    private fun observeResult() {
+        viewModel.result.observe(this) { result ->
             val data = Intent()
-            data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, DojoCardPaymentResult.SUCCESSFUL)
+            data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
             setResult(RESULT_OK, data)
             finish()
         }
