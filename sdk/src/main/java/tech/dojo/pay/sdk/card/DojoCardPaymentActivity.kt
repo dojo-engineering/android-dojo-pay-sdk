@@ -16,6 +16,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
         observeResult()
+        observe3DSEvent()
     }
 
     private fun observeResult() {
@@ -24,6 +25,15 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
             data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
             setResult(RESULT_OK, data)
             finish()
+        }
+    }
+
+    private fun observe3DSEvent() {
+        viewModel.threeDsNavigationEvent.observe(this) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.container, Dojo3DSFragment())
+                .commit()
         }
     }
 }

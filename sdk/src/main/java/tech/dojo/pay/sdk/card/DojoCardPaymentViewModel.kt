@@ -13,12 +13,17 @@ internal class DojoCardPaymentViewModel(
 ) : ViewModel() {
 
     val result = MutableLiveData<DojoCardPaymentResult>()
+    val threeDsNavigationEvent = MutableLiveData<Unit>()
 
     init {
         viewModelScope.launch {
             delay(3000)
-            result.postValue(DojoCardPaymentResult.SUCCESSFUL)
+            threeDsNavigationEvent.value = Unit
         }
+    }
+
+    fun on3DSCompleted() {
+        result.value = DojoCardPaymentResult.SUCCESSFUL
     }
 
 }
