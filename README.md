@@ -11,14 +11,11 @@ will be used for external customers
 ## Features 🎨
 
 - Publish to **Github packages**.
-- Dependency versions managed via `buildSrc`.
 - Kotlin Static Analysis via `ktlint` and `detekt`.
 
 ## Gradle Setup 🐘
 
 This project is using [**Gradle Kotlin DSL**](https://docs.gradle.org/current/userguide/kotlin_dsl.html) as well as the [Plugin DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block) to setup the build.
-
-Dependencies are centralized inside the [Dependencies.kt](buildSrc/src/main/java/Dependencies.kt) file in the `buildSrc` folder. This provides convenient auto-completion when writing your gradle files.
 
 ## Static Analysis 🔍
 
@@ -35,11 +32,11 @@ This project is also using [**detekt**](https://github.com/detekt/detekt) to ana
 
 ```
 
-## Using UI Components ##
+## Using Dojo Pay SDK ##
 
 ### 1. Authentication
 
-- Authentication to GitHub Packages is required for installing or using the ui components sdk. More details about Github Authentication for packages can be found at https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry
+- Authentication to GitHub Packages is required for installing or using the sdk. More details about Github Authentication for packages can be found at https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry
 - Ensure `github.properties` file is populated with the following
 ```
 gpr.user=GITHUB_USERID 
@@ -56,7 +53,7 @@ Replace GITHUB_USERID with personal / organisation Github User ID and PERSONAL_A
 
 **NOTE: DO NOT COMMIT WITH YOUR GITHUB CREDENTIALS TO REPOSITORY. IT IS ONY MEANT TO BE USED LOCALLY.**
 
-### 2.Add UI components dependencies
+### 2.Add dependency
 
 ### MAVEN
 
