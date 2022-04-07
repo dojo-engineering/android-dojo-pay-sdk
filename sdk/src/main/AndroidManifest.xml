@@ -5,7 +5,7 @@
     <application>
         <activity
             android:name=".card.DojoCardPaymentActivity"
-            android:theme="@style/Theme.AppCompat.Translucent"/>
+            android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>
