@@ -17,7 +17,7 @@ class CardPaymentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCardPaymentBinding
 
-    private val cardPaymentHandler = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
+    private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
         binding.viewProgress.visibility = View.GONE
         showToast(result)
     }
@@ -29,7 +29,7 @@ class CardPaymentActivity : AppCompatActivity() {
 
         binding.btnPay.setOnClickListener {
             binding.viewProgress.visibility = View.VISIBLE
-            cardPaymentHandler.launch(createParams())
+            cardPayment.launch(createParams())
         }
     }
 
