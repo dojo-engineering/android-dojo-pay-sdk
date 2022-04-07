@@ -25,7 +25,7 @@ internal class DojoCardPaymentViewModel(
     }
 
     fun on3DSCompleted() {
-        //result.value = DojoCardPaymentResult.SUCCESSFUL
+        result.value = DojoCardPaymentResult.SUCCESSFUL
     }
 
 }
