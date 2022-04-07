@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
@@ -22,12 +23,17 @@ class CardPaymentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_card_payment)
 
         findViewById<View>(R.id.btnPay).setOnClickListener {
-            cardPayment.launch(createPayload())
+            cardPayment.launch(createParams())
         }
     }
 
-    private fun createPayload() = DojoCardPaymentPayload(
+    private fun createParams() = DojoCardPaymentParams(
         token = "token",
+        sandboxMode = true,
+        paymentPayload = createPayload()
+    )
+
+    private fun createPayload() = DojoCardPaymentPayload(
         cardDetails = DojoCardDetails(
             cardNumber = "1234123412341234",
             cardName = "Monzo",

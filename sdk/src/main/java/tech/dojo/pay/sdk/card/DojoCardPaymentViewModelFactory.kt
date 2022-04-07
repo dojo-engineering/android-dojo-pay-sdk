@@ -3,7 +3,7 @@ package tech.dojo.pay.sdk.card
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 
 internal class DojoCardPaymentViewModelFactory(
     private val arguments: Bundle?
@@ -11,9 +11,8 @@ internal class DojoCardPaymentViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val args = requireNotNull(arguments)
-        val payload = args.getSerializable(DojoCardPaymentResultContract.KEY_PAYLOAD) as DojoCardPaymentPayload
-        val sandboxMode = args.getBoolean(DojoCardPaymentResultContract.KEY_SANDBOX_MODE)
-        return DojoCardPaymentViewModel(payload) as T
+        val params = args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
+        return DojoCardPaymentViewModel(params) as T
     }
 
 }

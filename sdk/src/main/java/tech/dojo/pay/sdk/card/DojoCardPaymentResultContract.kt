@@ -4,17 +4,14 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
-class DojoCardPaymentResultContract(
-    private val sandboxMode: Boolean = false
-) : ActivityResultContract<DojoCardPaymentPayload, DojoCardPaymentResult>() {
+class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoCardPaymentResult>() {
 
-    override fun createIntent(context: Context, input: DojoCardPaymentPayload): Intent {
+    override fun createIntent(context: Context, input: DojoCardPaymentParams): Intent {
         val intent = Intent(context, DojoCardPaymentActivity::class.java)
-        intent.putExtra(KEY_SANDBOX_MODE, sandboxMode)
-        intent.putExtra(KEY_PAYLOAD, input)
+        intent.putExtra(KEY_PARAMS, input)
         return intent
     }
 
@@ -27,8 +24,7 @@ class DojoCardPaymentResultContract(
     }
 
     internal companion object {
-        const val KEY_SANDBOX_MODE = "SANDBOX_MODE"
-        const val KEY_PAYLOAD = "PAYLOAD"
+        const val KEY_PARAMS = "PARAMS"
         const val KEY_RESULT = "RESULT"
     }
 }

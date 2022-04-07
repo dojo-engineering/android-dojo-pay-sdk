@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
 internal class DojoCardPaymentViewModel(
-    private val payload: DojoCardPaymentPayload
+    private val params: DojoCardPaymentParams
 ) : ViewModel() {
 
     val result = MutableLiveData<DojoCardPaymentResult>()
