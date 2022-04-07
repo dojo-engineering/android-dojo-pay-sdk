@@ -26,7 +26,7 @@ class Dojo3DSFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         lifecycleScope.launch {
-            delay(1000)
+            delay(1000) //Wait for 3ds completion
             viewModel.on3DSCompleted()
         }
     }

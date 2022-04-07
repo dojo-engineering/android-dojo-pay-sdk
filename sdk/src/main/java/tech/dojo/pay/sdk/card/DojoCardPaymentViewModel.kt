@@ -17,7 +17,7 @@ internal class DojoCardPaymentViewModel(
 
     init {
         viewModelScope.launch {
-            delay(3000)
+            delay(3000) //Make requests
             threeDsNavigationEvent.value = Unit
         }
     }
