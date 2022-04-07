@@ -36,4 +36,8 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
                 .commit()
         }
     }
+
+    override fun onBackPressed() {
+        if (viewModel.canExit) super.onBackPressed()
+    }
 }
