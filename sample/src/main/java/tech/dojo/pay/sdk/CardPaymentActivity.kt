@@ -11,26 +11,32 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
+import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
 
 class CardPaymentActivity : AppCompatActivity() {
 
-    private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
+    private lateinit var binding: ActivityCardPaymentBinding
+
+    private val cardPaymentHandler = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
+        binding.viewProgress.visibility = View.GONE
         showToast(result)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_card_payment)
+        binding = ActivityCardPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<View>(R.id.btnPay).setOnClickListener {
-            cardPayment.launch(createParams())
+        binding.btnPay.setOnClickListener {
+            binding.viewProgress.visibility = View.VISIBLE
+            cardPaymentHandler.launch(createParams())
         }
     }
 
     private fun createParams() = DojoCardPaymentParams(
         token = "token",
-        sandboxMode = true,
-        paymentPayload = createPayload()
+        paymentPayload = createPayload(),
+        sandboxMode = true
     )
 
     private fun createPayload() = DojoCardPaymentPayload(
