@@ -3,13 +3,15 @@ package tech.dojo.pay.sdk.card
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import java.lang.Exception
 
 internal class DojoCardPaymentViewModel(
-    private val params: DojoCardPaymentParams
+    private val params: DojoCardPaymentParams,
+    private val repository: CardPaymentRepository
 ) : ViewModel() {
 
     val events = MutableLiveData<DojoCardPaymentEvent>()
@@ -17,9 +19,13 @@ internal class DojoCardPaymentViewModel(
 
     init {
         viewModelScope.launch {
-            delay(3000) //Make requests
-            canExit = true
-            events.value = DojoCardPaymentEvent.Navigate3DS
+            try {
+                val deviceData = repository.collectDeviceData(params.token, params.paymentPayload)
+                canExit = true
+                events.value = DojoCardPaymentEvent.Navigate3DS
+            } catch (e: Exception) {
+                events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+            }
         }
     }
 
