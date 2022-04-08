@@ -2,14 +2,16 @@ package tech.dojo.pay.sdk
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
+import tech.dojo.pay.sdk.token.TokenGenerator
 
 class CardPaymentActivity : AppCompatActivity() {
 
@@ -17,7 +19,10 @@ class CardPaymentActivity : AppCompatActivity() {
 
     private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
         binding.viewProgress.visibility = View.GONE
-        showToast(result)
+        showDialog(
+            title = "Payment result",
+            message = "${result.name} (${result.code})"
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,32 +31,47 @@ class CardPaymentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnPay.setOnClickListener {
-            binding.viewProgress.visibility = View.VISIBLE
-            cardPayment.launch(createParams())
+            pay(
+                DojoCardDetails(
+                    cardNumber = "4456530000001096",
+                    cardName = "Card holder",
+                    expiryDate = "12 / 24",
+                    cv2 = "020"
+                )
+            )
         }
     }
 
-    private fun createParams() = DojoCardPaymentParams(
-        token = "mbbJ3GP7oIChKpXM5dQ_t8EHMK6ruMwkuOEKgN8NlS22NN5X-wbne2bFlqegacBJYxKrJNPEnTJqCHsqa50eHDKkn9fUbmyS32QZ3DI6hMX4fyKjzDB7OwrsW1gPPO4G6o6-1NLXGcrRtMkqWNngU5gLH-Ss",
-        paymentPayload = createPayload(),
-        sandboxMode = true
-    )
+    private fun pay(cardDetails: DojoCardDetails) {
+        binding.viewProgress.visibility = View.VISIBLE
+        lifecycleScope.launch {
+            val token = try {
+                TokenGenerator.generateToken()
+            } catch (e: Exception) {
+                binding.viewProgress.visibility = View.GONE
+                showDialog(
+                    title = "Can't generate token",
+                    message = e.message ?: ""
+                )
+                return@launch
+            }
 
-    private fun createPayload() = DojoCardPaymentPayload(
-        cardDetails = DojoCardDetails(
-            cardNumber = "4456530000001096",
-            cardName = "Card holder",
-            expiryDate = "12 / 24",
-            cv2 = "020"
-        )
-    )
+            val params = DojoCardPaymentParams(
+                token = token,
+                paymentPayload = DojoCardPaymentPayload(cardDetails),
+                sandboxMode = true
+            )
 
-    private fun showToast(result: DojoCardPaymentResult) {
-        val message = when (result) {
-            DojoCardPaymentResult.CANCELLED -> "Payment cancelled"
-            else -> "Payment completed"
+            cardPayment.launch(params)
         }
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .create()
+            .show()
     }
 
 }
