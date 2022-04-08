@@ -32,7 +32,7 @@ class CardPaymentActivity : AppCompatActivity() {
     }
 
     private fun createParams() = DojoCardPaymentParams(
-        token = "0kyE4B2qIat_b2T7zAs3ddOS2xhM_xRLdWpzra8KMuKtHM3jZ3IsrVF0VnIq7euLBa-nypuju4a1FVAX5QZl0v8fI8CnNta1p3ooJGu4u_G8ca3C6bfe7260J3cKaOhLpqt4Zc6ydw2fGjWceVO6KY2Uoz8H",
+        token = "Tg0QWmplSJP2dL6-USMn4QrGcH4WbRgCyf5GpfdJUZrXPUjZwoVb9lFPXngE7F7ck802ZX27WByqBEy09SJnITslBoOIdO7a_5MTngUBUjeTGI5_s3-NSHTOBjOXtgO0uQdJppIuvD_Taoi4fN9JJgh8YE8W",
         paymentPayload = createPayload(),
         sandboxMode = true
     )
