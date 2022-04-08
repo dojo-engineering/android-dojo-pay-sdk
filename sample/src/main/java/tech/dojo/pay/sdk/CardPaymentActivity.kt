@@ -29,14 +29,16 @@ class CardPaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCardPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setCardDetails(Cards.ThreeDSV2)
+        setCardListeners()
 
         binding.btnPay.setOnClickListener {
             pay(
                 DojoCardDetails(
-                    cardNumber = "4456530000001096",
-                    cardName = "Card holder",
-                    expiryDate = "12 / 24",
-                    cv2 = "020"
+                    cardNumber = binding.cardNumber.toString(),
+                    cardName = binding.cardHolder.toString(),
+                    expiryDate = binding.expiryDate.toString(),
+                    cv2 = binding.securityCode.toString()
                 )
             )
         }
@@ -47,14 +49,12 @@ class CardPaymentActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val token = try {
                 TokenGenerator.generateToken()
-            } catch (e: Exception) {
-                binding.viewProgress.visibility = View.GONE
-                showDialog(
-                    title = "Can't generate token",
-                    message = e.message ?: ""
-                )
+            } catch (e: Throwable) {
+                showTokenError(e)
                 return@launch
             }
+
+            displayToken(token)
 
             val params = DojoCardPaymentParams(
                 token = token,
@@ -64,6 +64,40 @@ class CardPaymentActivity : AppCompatActivity() {
 
             cardPayment.launch(params)
         }
+    }
+
+    private fun setCardListeners() {
+        binding.btn3DSV2.setOnClickListener {
+            setCardDetails(Cards.ThreeDSV2)
+        }
+
+        binding.btn3DSV1.setOnClickListener {
+            setCardDetails(Cards.ThreeDSV1)
+        }
+
+        binding.btnNo3DS.setOnClickListener {
+            setCardDetails(Cards.NoThreeDS)
+        }
+    }
+
+    private fun setCardDetails(details: DojoCardDetails) {
+        binding.cardNumber.setText(details.cardNumber)
+        binding.cardHolder.setText(details.cardName)
+        binding.expiryDate.setText(details.expiryDate)
+        binding.securityCode.setText(details.cv2)
+    }
+
+    private fun showTokenError(e: Throwable) {
+        binding.viewProgress.visibility = View.GONE
+        showDialog(
+            title = "Can't generate token",
+            message = e.message ?: ""
+        )
+    }
+
+    private fun displayToken(token: String) {
+        binding.token.setText(token)
+        binding.token.visibility = View.VISIBLE
     }
 
     private fun showDialog(title: String, message: String) {
