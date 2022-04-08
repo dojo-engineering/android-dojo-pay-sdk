@@ -7,7 +7,7 @@ import java.net.SocketTimeoutException
 
 internal class CardPaymentRepository(private val api: CardPaymentApi) {
 
-    suspend fun processPayment(token: String, payload: DojoCardPaymentPayload): PaymentResult {
+    suspend fun makePayment(token: String, payload: DojoCardPaymentPayload): PaymentResult {
         val paymentDetails = payload.toPaymentDetails()
         collectDeviceData(token, paymentDetails)
         return processPayment(token, paymentDetails)

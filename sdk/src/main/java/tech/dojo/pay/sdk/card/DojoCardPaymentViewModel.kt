@@ -20,7 +20,7 @@ internal class DojoCardPaymentViewModel(
     init {
         viewModelScope.launch {
             try {
-                val result = repository.processPayment(params.token, params.paymentPayload)
+                val result = repository.makePayment(params.token, params.paymentPayload)
                 canExit = true
                 events.value = DojoCardPaymentEvent.Navigate3DS
             } catch (e: Exception) {
