@@ -14,12 +14,19 @@ internal class DojoCardPaymentViewModel(
 ) : ViewModel() {
 
     val result = MutableLiveData<DojoCardPaymentResult>()
+    val threeDsNavigationEvent = MutableLiveData<Unit>()
+    var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
         viewModelScope.launch {
-            delay(3000)
-            result.postValue(DojoCardPaymentResult.SUCCESSFUL)
+            delay(3000) //Make requests
+            canExit = true
+            threeDsNavigationEvent.value = Unit
         }
+    }
+
+    fun on3DSCompleted() {
+        result.value = DojoCardPaymentResult.SUCCESSFUL
     }
 
     private fun fetch3dsPage(stepUpUrl: String, jwtToken: String, md: String): String {
