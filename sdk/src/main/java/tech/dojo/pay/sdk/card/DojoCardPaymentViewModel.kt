@@ -22,7 +22,7 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 val deviceData = repository.collectDeviceData(params.token, params.paymentPayload)
-                canExit = true
+                //canExit = true
                 events.value = DojoCardPaymentEvent.Navigate3DS
             } catch (e: Exception) {
                 events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
@@ -30,8 +30,15 @@ internal class DojoCardPaymentViewModel(
         }
     }
 
-    fun fetchThreeDsPage(stepUpUrl: String, md: String, jwtToken: String) {
-
+    fun fetchThreeDsPage(stepUpUrl: String, jwtToken: String, md: String) {
+        viewModelScope.launch {
+            try {
+                val page = repository.fetch3dsPage(stepUpUrl, jwtToken, md)
+                events.value = DojoCardPaymentEvent.Show3dsScreen(page)
+            } catch (e: Exception) {
+                events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+            }
+        }
     }
 
     fun on3DSCompleted() {

@@ -1,8 +1,6 @@
 package tech.dojo.pay.sdk.card
 
-import android.R.attr.data
 import android.os.Bundle
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +8,6 @@ import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
-import java.nio.charset.Charset
-
 
 class Dojo3DSFragment : Fragment() {
 
@@ -46,6 +42,13 @@ class Dojo3DSFragment : Fragment() {
             settings.useWideViewPort = true
         }
 
+        viewModel.events.observe(viewLifecycleOwner) {
+            if (it is DojoCardPaymentEvent.Show3dsScreen) {
+                load3dsPage(it.pageContent)
+            }
+        }
+
+        viewModel.fetchThreeDsPage(stepUpUrl, jwtToken, md)
     }
 
     private fun load3dsPage(htmlContent: String) {
