@@ -1,7 +1,9 @@
 package tech.dojo.pay.sdk.card.data
 
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 internal class CardPaymentApiBuilder(
     private val sandboxMode: Boolean
@@ -14,10 +16,17 @@ internal class CardPaymentApiBuilder(
         Retrofit.Builder()
             .baseUrl(getBaseUrl(sandboxMode))
             .addConverterFactory(GsonConverterFactory.create())
+            .client(createHttpClient())
             .build()
 
     private fun getBaseUrl(sandboxMode: Boolean): String {
         val extaPart = if (sandboxMode) "test." else ""
         return "https://web.e.${extaPart}connect.paymentsense.cloud/api/"
     }
+
+    private fun createHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .build()
 }

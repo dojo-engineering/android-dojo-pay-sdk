@@ -1,13 +1,19 @@
 package tech.dojo.pay.sdk.card.data
 
-import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.DeviceDataRequest
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import java.net.SocketTimeoutException
 
 internal class CardPaymentRepository(private val api: CardPaymentApi) {
 
-    suspend fun collectDeviceData(token: String, payload: DojoCardPaymentPayload): DeviceData =
-        api.collectDeviceData(token, createDeviceDataRequest(payload))
+    suspend fun collectDeviceData(token: String, payload: DojoCardPaymentPayload) {
+        val deviceData = api.collectDeviceData(token, createDeviceDataRequest(payload))
+        try {
+            api.handleDataCollection(deviceData.formAction, deviceData.token)
+        } catch (e: SocketTimeoutException) {
+            // Ignore timeout exceptions
+        }
+    }
 
     private fun createDeviceDataRequest(payload: DojoCardPaymentPayload): DeviceDataRequest {
         val card = payload.cardDetails
