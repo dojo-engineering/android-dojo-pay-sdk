@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import java.lang.Exception
 
 internal class DojoCardPaymentViewModel(
     private val params: DojoCardPaymentParams,
@@ -20,9 +21,13 @@ internal class DojoCardPaymentViewModel(
 
     init {
         viewModelScope.launch {
-            delay(3000) //Make requests
-            canExit = true
-            threeDsNavigationEvent.value = Unit
+            try {
+                repository.collectDeviceData()
+                canExit = true
+                threeDsNavigationEvent.value = Unit
+            } catch (e: Exception) {
+                result.value = DojoCardPaymentResult.SDK_INTERNAL_ERROR
+            }
         }
     }
 
