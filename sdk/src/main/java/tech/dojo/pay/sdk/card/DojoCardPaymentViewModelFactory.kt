@@ -14,7 +14,7 @@ internal class DojoCardPaymentViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val args = requireNotNull(arguments)
         val params = args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
-        val api = CardPaymentApiBuilder(params.sandboxMode, params.token).create()
+        val api = CardPaymentApiBuilder(params.sandboxMode).create()
         val repo = CardPaymentRepository(api)
         return DojoCardPaymentViewModel(params, repo) as T
     }
