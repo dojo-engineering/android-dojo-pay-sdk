@@ -15,6 +15,14 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
         }
     }
 
+    suspend fun fetch3dsPage(url: String, token: String, md: String): String {
+        return try {
+            api.fetchSecurePage(url, token, md)
+        } catch (e: Exception) {
+            ""
+        }
+    }
+
     private fun createDeviceDataRequest(payload: DojoCardPaymentPayload): DeviceDataRequest {
         val card = payload.cardDetails
         return DeviceDataRequest(

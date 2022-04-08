@@ -1,8 +1,10 @@
 package tech.dojo.pay.sdk.card.data
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
 internal class CardPaymentApiBuilder(
@@ -15,6 +17,7 @@ internal class CardPaymentApiBuilder(
     private fun createRetrofit(): Retrofit =
         Retrofit.Builder()
             .baseUrl(getBaseUrl(sandboxMode))
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(createHttpClient())
             .build()

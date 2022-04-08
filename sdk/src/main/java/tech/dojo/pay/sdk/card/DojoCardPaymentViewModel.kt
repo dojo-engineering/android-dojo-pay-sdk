@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdk.card
 
-import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,7 +33,13 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 val page = repository.fetch3dsPage(stepUpUrl, jwtToken, md)
-                events.value = DojoCardPaymentEvent.Show3dsScreen(page)
+
+                if (page.isEmpty()) {
+                    events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+                } else {
+                    events.value = DojoCardPaymentEvent.Show3dsScreen(page)
+                }
+
             } catch (e: Exception) {
                 events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
             }
