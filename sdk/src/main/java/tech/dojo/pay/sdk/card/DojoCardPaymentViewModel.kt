@@ -21,7 +21,7 @@ internal class DojoCardPaymentViewModel(
     init {
         viewModelScope.launch {
             try {
-                val deviceData = repository.collectDeviceData(params.token, params.paymentPayload)
+                repository.collectDeviceData(params.token, params.paymentPayload)
                 //canExit = true
                 events.value = DojoCardPaymentEvent.Navigate3DS
             } catch (e: Exception) {
