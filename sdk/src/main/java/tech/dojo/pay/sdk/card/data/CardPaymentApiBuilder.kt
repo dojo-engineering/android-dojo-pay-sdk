@@ -6,7 +6,7 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class CardPaymentApiBuilder(
+internal class CardPaymentApiBuilder(
     private val sandboxMode: Boolean,
     private val token: String
 ) {
@@ -18,7 +18,7 @@ class CardPaymentApiBuilder(
         Retrofit.Builder()
             .baseUrl(getBaseUrl(sandboxMode))
             .addConverterFactory(GsonConverterFactory.create())
-            .client(createHttpClient())
+            //.client(createHttpClient())
             .build()
 
     private fun getBaseUrl(sandboxMode: Boolean): String {
@@ -26,7 +26,7 @@ class CardPaymentApiBuilder(
         return "https://web.e.${extaPart}connect.paymentsense.cloud/api/"
     }
 
-    private fun createHttpClient(): OkHttpClient =
+    /*private fun createHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(TokenInterceptor(token))
             .build()
@@ -42,5 +42,5 @@ class CardPaymentApiBuilder(
                 .build()
             return chain.proceed(newRequest)
         }
-    }
+    }*/
 }
