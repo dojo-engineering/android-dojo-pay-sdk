@@ -7,18 +7,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResultStatus
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
 internal class DojoCardPaymentViewModel(
     private val params: DojoCardPaymentParams
 ) : ViewModel() {
 
-    val result = MutableLiveData<DojoCardPaymentResultStatus>()
+    val result = MutableLiveData<DojoCardPaymentResult>()
 
     init {
         viewModelScope.launch {
             delay(3000)
-            result.postValue(DojoCardPaymentResultStatus.SUCCESSFUL)
+            result.postValue(DojoCardPaymentResult.SUCCESSFUL)
         }
     }
 
