@@ -35,10 +35,10 @@ class CardPaymentActivity : AppCompatActivity() {
         binding.btnPay.setOnClickListener {
             pay(
                 DojoCardDetails(
-                    cardNumber = binding.cardNumber.toString(),
-                    cardName = binding.cardHolder.toString(),
-                    expiryDate = binding.expiryDate.toString(),
-                    cv2 = binding.securityCode.toString()
+                    cardNumber = binding.cardNumber.text.toString(),
+                    cardName = binding.cardHolder.text.toString(),
+                    expiryDate = binding.expiryDate.text.toString(),
+                    cv2 = binding.securityCode.text.toString()
                 )
             )
         }
