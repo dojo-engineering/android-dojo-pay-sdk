@@ -8,7 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.Url
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
-import tech.dojo.pay.sdk.card.data.entities.PaymentResult
+import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 
 internal interface CardPaymentApi {
 
@@ -29,5 +29,5 @@ internal interface CardPaymentApi {
     suspend fun processPayment(
         @Path("token") token: String,
         @Body payload: PaymentDetails
-    ) : PaymentResult
+    ) : PaymentResponse
 }

@@ -1,6 +1,6 @@
 package tech.dojo.pay.sdk.card.data.entities
 
-class PaymentResult(
+class PaymentResponse(
     val statusCode: Int,
     val authCode: String?,
     val acsUrl: String?,

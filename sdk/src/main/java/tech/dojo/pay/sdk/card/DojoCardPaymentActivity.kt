@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
 
@@ -20,10 +22,10 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
     }
 
     private fun observeEvents() {
-        viewModel.events.observe(this) { event ->
-            when (event) {
-                is DojoCardPaymentEvent.ReturnResult -> returnResult(event.result)
-                is DojoCardPaymentEvent.Navigate3DS -> navigate3DS()
+        viewModel.paymentResult.observe(this) { result ->
+            when (result) {
+                is PaymentResult.Completed -> returnResult(result.value)
+                is PaymentResult.ThreeDSRequired -> navigate3DS(result.params)
             }
         }
     }
@@ -35,10 +37,10 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun navigate3DS() {
+    private fun navigate3DS(params: ThreeDSParams) {
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.container, Dojo3DSFragment())
+            .add(R.id.container, Dojo3DSFragment.newInstance(params))
             .commit()
     }
 

@@ -10,10 +10,15 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.R
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
-class Dojo3DSFragment : Fragment() {
+internal class Dojo3DSFragment private constructor() : Fragment() {
 
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
+
+    private val params: ThreeDSParams by lazy {
+        requireArguments().getSerializable(KEY_PARAMS) as ThreeDSParams
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,5 +34,17 @@ class Dojo3DSFragment : Fragment() {
             delay(1000) //Wait for 3ds completion
             viewModel.on3DSCompleted()
         }
+    }
+
+    companion object {
+
+        fun newInstance(params: ThreeDSParams): Dojo3DSFragment =
+            Dojo3DSFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(KEY_PARAMS, params)
+                }
+            }
+
+        private const val KEY_PARAMS = "PARAMS"
     }
 }
