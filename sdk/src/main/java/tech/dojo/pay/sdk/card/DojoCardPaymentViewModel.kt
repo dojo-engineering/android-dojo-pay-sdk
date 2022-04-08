@@ -12,13 +12,19 @@ internal class DojoCardPaymentViewModel(
     private val params: DojoCardPaymentParams
 ) : ViewModel() {
 
-    val result = MutableLiveData<DojoCardPaymentResult>()
+    val events = MutableLiveData<DojoCardPaymentEvent>()
+    var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
         viewModelScope.launch {
-            delay(3000)
-            result.postValue(DojoCardPaymentResult.SUCCESSFUL)
+            delay(3000) //Make requests
+            canExit = true
+            events.value = DojoCardPaymentEvent.Navigate3DS
         }
+    }
+
+    fun on3DSCompleted() {
+        events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SUCCESSFUL)
     }
 
 }
