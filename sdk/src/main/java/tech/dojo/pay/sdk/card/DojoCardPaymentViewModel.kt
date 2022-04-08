@@ -14,8 +14,7 @@ internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository
 ) : ViewModel() {
 
-    val result = MutableLiveData<DojoCardPaymentResult>()
-    val threeDsNavigationEvent = MutableLiveData<Unit>()
+    val events = MutableLiveData<DojoCardPaymentEvent>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
