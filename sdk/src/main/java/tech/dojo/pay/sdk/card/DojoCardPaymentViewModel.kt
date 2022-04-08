@@ -22,15 +22,15 @@ internal class DojoCardPaymentViewModel(
             try {
                 val deviceData = repository.collectDeviceData(params.token, params.paymentPayload)
                 canExit = true
-                threeDsNavigationEvent.value = Unit
+                events.value = DojoCardPaymentEvent.Navigate3DS
             } catch (e: Exception) {
-                result.value = DojoCardPaymentResult.SDK_INTERNAL_ERROR
+                events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }
 
     fun on3DSCompleted() {
-        result.value = DojoCardPaymentResult.SUCCESSFUL
+        events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SUCCESSFUL)
     }
 
 }
