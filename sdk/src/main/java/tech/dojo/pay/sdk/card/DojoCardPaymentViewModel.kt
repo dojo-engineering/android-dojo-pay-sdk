@@ -25,29 +25,12 @@ internal class DojoCardPaymentViewModel(
         }
     }
 
+    fun fetchThreeDsPage(stepUpUrl: String, md: String, jwtToken: String) {
+
+    }
+
     fun on3DSCompleted() {
         result.value = DojoCardPaymentResult.SUCCESSFUL
     }
-
-    private fun fetch3dsPage(stepUpUrl: String, jwtToken: String, md: String): String {
-        val securePageHtml = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-        </head>
-        <body>
-        <form id="threeDs20Form" target="_self" method="post" action="$stepUpUrl">
-            <input name="JWT" type="hidden" value="$jwtToken"/>
-            <input name="MD" type="hidden" value="$md"/>
-        </form>
-        </div>
-        </body>
-        </html>
-        """
-
-        return Base64.encodeToString(securePageHtml.toByteArray(), Base64.NO_PADDING)
-    }
-
 
 }
