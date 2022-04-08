@@ -5,12 +5,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
-import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
 
 class CardPaymentActivity : AppCompatActivity() {
@@ -34,33 +32,17 @@ class CardPaymentActivity : AppCompatActivity() {
     }
 
     private fun createParams() = DojoCardPaymentParams(
-        token = "token",
+        token = "0kyE4B2qIat_b2T7zAs3ddOS2xhM_xRLdWpzra8KMuKtHM3jZ3IsrVF0VnIq7euLBa-nypuju4a1FVAX5QZl0v8fI8CnNta1p3ooJGu4u_G8ca3C6bfe7260J3cKaOhLpqt4Zc6ydw2fGjWceVO6KY2Uoz8H",
         paymentPayload = createPayload(),
         sandboxMode = true
     )
 
     private fun createPayload() = DojoCardPaymentPayload(
         cardDetails = DojoCardDetails(
-            cardNumber = "1234123412341234",
-            cardName = "Monzo",
-            expiryDate = "12 / 22",
-            cv2 = "123"
-        ),
-        userEmailAddress = "client@gmail.com",
-        userPhoneNumber = "+4412345678",
-        billingAddress = DojoAddressDetails(
-            address1 = "Address 1",
-            address2 = "Address 2",
-            address3 = "Address 3",
-            address4 = "Address 4",
-            city = "London",
-            state = "California",
-            postcode = "N126YT",
-            countryCode = "GBP"
-        ),
-        shippingDetails = DojoShippingDetails(
-            name = "My home",
-            address = DojoAddressDetails()
+            cardNumber = "4456530000001096",
+            cardName = "Card holder",
+            expiryDate = "12 / 24",
+            cv2 = "020"
         )
     )
 
