@@ -8,6 +8,7 @@ import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.lang.Exception
 
 internal class DojoCardPaymentViewModel(
@@ -24,25 +25,15 @@ internal class DojoCardPaymentViewModel(
                 paymentResult.value = repository.makePayment(params.token, params.paymentPayload)
                 //canExit = paymentResult.value is PaymentResult.ThreeDSRequired
             } catch (e: Exception) {
-                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+                paymentResult.value =
+                    PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }
 
-    fun fetchThreeDsPage(stepUpUrl: String, jwtToken: String, md: String) {
+    fun fetchThreeDsPage(params: ThreeDSParams) {
         viewModelScope.launch {
-            try {
-                val page = repository.fetch3dsPage(stepUpUrl, jwtToken, md)
-
-                if (page.isEmpty()) {
-                    events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
-                } else {
-                    events.value = DojoCardPaymentEvent.Show3dsScreen(page)
-                }
-
-            } catch (e: Exception) {
-                events.value = DojoCardPaymentEvent.ReturnResult(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
-            }
+            paymentResult.value = repository.fetch3dsPage(params)
         }
     }
 

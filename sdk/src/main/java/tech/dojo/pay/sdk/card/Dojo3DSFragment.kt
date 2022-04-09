@@ -8,6 +8,7 @@ import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 internal class Dojo3DSFragment private constructor() : Fragment() {
@@ -35,13 +36,13 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
             settings.useWideViewPort = true
         }
 
-        viewModel.events.observe(viewLifecycleOwner) {
-            if (it is DojoCardPaymentEvent.Show3dsScreen) {
+        viewModel.paymentResult.observe(viewLifecycleOwner) {
+            if (it is PaymentResult.ShowThreeDsPage) {
                 load3dsPage(it.pageContent)
             }
         }
 
-        viewModel.fetchThreeDsPage(stepUpUrl, jwtToken, md)
+        viewModel.fetchThreeDsPage(params)
     }
 
     private fun load3dsPage(htmlContent: String) {
