@@ -41,7 +41,8 @@ class CardPaymentActivity : AppCompatActivity() {
         cardDetails = DojoCardDetails(
             cardNumber = "4456530000001096",
             cardName = "Card holder",
-            expiryDate = "12 / 24",
+            expiryMonth = "12",
+            expiryYear = "24",
             cv2 = "020"
         )
     )
