@@ -8,22 +8,15 @@ import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
-class Dojo3DSFragment : Fragment() {
+internal class Dojo3DSFragment private constructor() : Fragment() {
 
     private lateinit var webView: WebView
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
 
-    private val stepUpUrl by lazy {
-        requireNotNull(arguments).getString(KEY_STEP_UP_URL) as String
-    }
-
-    private val jwtToken by lazy {
-        requireNotNull(arguments).getString(KEY_JWT) as String
-    }
-
-    private val md by lazy {
-        requireNotNull(arguments).getString(KEY_MD) as String
+    private val params: ThreeDSParams by lazy {
+        requireArguments().getSerializable(KEY_PARAMS) as ThreeDSParams
     }
 
     override fun onCreateView(
@@ -60,9 +53,14 @@ class Dojo3DSFragment : Fragment() {
     }
 
     companion object {
-        const val KEY_STEP_UP_URL = "stepUpUrl"
-        const val KEY_JWT = "jwt"
-        const val KEY_MD = "md"
-    }
 
+        fun newInstance(params: ThreeDSParams): Dojo3DSFragment =
+            Dojo3DSFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(KEY_PARAMS, params)
+                }
+            }
+
+        private const val KEY_PARAMS = "PARAMS"
+    }
 }
