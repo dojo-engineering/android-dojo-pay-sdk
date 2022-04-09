@@ -24,11 +24,13 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
         }
     }
 
-    suspend fun fetch3dsPage(url: String, token: String, md: String): String {
+    suspend fun fetch3dsPage(params: ThreeDSParams): PaymentResult {
         return try {
-            api.fetchSecurePage(url, token, md)
+            api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md).let {
+                PaymentResult.ShowThreeDsPage(it)
+            }
         } catch (e: Exception) {
-            ""
+            PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 
