@@ -33,11 +33,14 @@ class CardPaymentActivity : AppCompatActivity() {
         setCardListeners()
 
         binding.btnPay.setOnClickListener {
+            val (month, year) = binding.expiryDate.text.toString().split("/")
+
             pay(
                 DojoCardDetails(
                     cardNumber = binding.cardNumber.text.toString(),
                     cardName = binding.cardHolder.text.toString(),
-                    expiryDate = binding.expiryDate.text.toString(),
+                    expiryMonth = month,
+                    expiryYear = year,
                     cv2 = binding.securityCode.text.toString()
                 )
             )
@@ -83,7 +86,7 @@ class CardPaymentActivity : AppCompatActivity() {
     private fun setCardDetails(details: DojoCardDetails) {
         binding.cardNumber.setText(details.cardNumber)
         binding.cardHolder.setText(details.cardName)
-        binding.expiryDate.setText(details.expiryDate)
+        binding.expiryDate.setText("${details.expiryMonth}/${details.expiryYear}")
         binding.securityCode.setText(details.cv2)
     }
 
