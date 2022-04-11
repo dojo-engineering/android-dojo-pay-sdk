@@ -33,6 +33,8 @@ class CardPaymentActivity : AppCompatActivity() {
         setCardListeners()
 
         binding.btnPay.setOnClickListener {
+            val (month, year) = binding.expiryDate.text.toString().split("/")
+
             pay(
                 DojoCardDetails(
                     cardNumber = binding.cardNumber.text.toString(),
