@@ -40,12 +40,14 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
-                    webView.loadUrl(
-                        "javascript:(function() {" +
-                                "window.parent.addEventListener ('message', function(event) {" +
-                                " androidListener.receiveMessage(JSON.stringify(event.data));});" +
-                                "})()"
-                    )
+                    if (url.contains("ThreeDSecure20Complete")) {
+                        webView.loadUrl(
+                            "javascript:(function() {" +
+                                    "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
+                                    " androidListener.receiveMessage(response);" +
+                                    "})()"
+                        )
+                    }
                 }
             }
         }

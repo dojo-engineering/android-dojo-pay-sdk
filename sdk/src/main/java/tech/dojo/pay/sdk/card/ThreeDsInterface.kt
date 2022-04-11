@@ -1,6 +1,7 @@
 package tech.dojo.pay.sdk.card
 
 import android.webkit.JavascriptInterface
+import android.webkit.WebView
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
@@ -15,15 +16,12 @@ internal class ThreeDsInterface(
         val type = object : TypeToken<Map<String, Any>>() {}.type
         val result = gson.fromJson<Map<String, Any>>(event, type)
 
-        if (result.containsKey("messageData")) {
-            val paymentResult = if (result.containsKey("statusCode") && result["statusCode"] is Int) {
-                requireNotNull(
-                    DojoCardPaymentResult.values().find { it.code == result["statusCode"] })
-            } else {
-                DojoCardPaymentResult.SDK_INTERNAL_ERROR
-            }
-            onEventCallback.invoke(paymentResult)
+        val paymentResult = if (result.containsKey("statusCode")) {
+            DojoCardPaymentResult.values().find { it.code == (result["statusCode"] as? Double)?.toInt() }
+                ?: DojoCardPaymentResult.SDK_INTERNAL_ERROR
+        } else {
+            DojoCardPaymentResult.SDK_INTERNAL_ERROR
         }
+        onEventCallback.invoke(paymentResult)
     }
-
 }
