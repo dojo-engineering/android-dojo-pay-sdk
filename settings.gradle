@@ -13,5 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Dojo Pay Android SDK"
-include ':sample'
-include ':sdk'
+include(
+        ':sample',
+        ':sdk'
+)

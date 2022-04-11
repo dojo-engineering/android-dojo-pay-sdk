@@ -4,15 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
+
 internal class Dojo3DSFragment private constructor() : Fragment() {
+
+    private lateinit var webView: WebView
 
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
 
@@ -28,12 +30,34 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
         return inflater.inflate(R.layout.fragment_dojo_3ds, container, false)
     }
 
-    override fun onStart() {
-        super.onStart()
-        lifecycleScope.launch {
-            delay(1000) //Wait for 3ds completion
-            viewModel.on3DSCompleted()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        webView = view.findViewById<WebView>(R.id.webView).apply {
+            settings.javaScriptEnabled = true
+            settings.useWideViewPort = true
+            addJavascriptInterface(ThreeDsInterface(viewModel::on3DSCompleted), "androidListener")
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    super.onPageFinished(view, url)
+                    if (url.contains("ThreeDSecure20Complete")) {
+                        webView.loadUrl(
+                            "javascript:(function() {" +
+                                    "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
+                                    " androidListener.receiveMessage(response);" +
+                                    "})()"
+                        )
+                    }
+                }
+            }
         }
+
+        viewModel.threeDsPage.observe(viewLifecycleOwner) {
+                val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
+                webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
+        }
+
+        viewModel.fetchThreeDsPage(params)
     }
 
     companion object {
