@@ -23,7 +23,7 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 paymentResult.value = repository.makePayment(params.token, params.paymentPayload)
-                //canExit = paymentResult.value is PaymentResult.ThreeDSRequired
+                canExit = paymentResult.value is PaymentResult.ThreeDSRequired
             } catch (e: Exception) {
                 paymentResult.value =
                     PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
@@ -37,8 +37,8 @@ internal class DojoCardPaymentViewModel(
         }
     }
 
-    fun on3DSCompleted() {
-        paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SUCCESSFUL)
+    fun on3DSCompleted(result: DojoCardPaymentResult) {
+        paymentResult.value = PaymentResult.Completed(result)
     }
 
 }
