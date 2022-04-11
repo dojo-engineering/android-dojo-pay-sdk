@@ -24,11 +24,10 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
         }
     }
 
-    suspend fun fetch3dsPage(params: ThreeDSParams): String {
-        return api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
-    }
-
-    private suspend fun processPayment(token: String, paymentDetails: PaymentDetails): PaymentResult {
+    private suspend fun processPayment(
+        token: String,
+        paymentDetails: PaymentDetails
+    ): PaymentResult {
         val response = api.processPayment(token, paymentDetails)
         val paymentResult = requireNotNull(
             DojoCardPaymentResult.values().find { it.code == response.statusCode }
@@ -47,17 +46,32 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
         }
     }
 
+    suspend fun fetch3dsPage(params: ThreeDSParams): String {
+        return api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
+    }
+
     private fun DojoCardPaymentPayload.toPaymentDetails(): PaymentDetails =
         PaymentDetails(
             cV2 = cardDetails.cv2,
             cardName = cardDetails.cardName,
             cardNumber = cardDetails.cardNumber,
-            expiryDate = cardDetails.expiryDate,
+            expiryDate = formatExpiryDate(cardDetails.expiryMonth, cardDetails.expiryYear),
             userEmailAddress = userEmailAddress,
             userPhoneNumber = userPhoneNumber,
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,
             metaData = metaData
         )
+
+    /**
+     * API requires the expiry to be in the format mm / yy, with the spaces.
+     * To ensure the correct format is being adhered to, formatting is done before any calls
+     * are made
+     */
+    private fun formatExpiryDate(month: String?, year: String?): String? {
+        if (month == null || year == null) return null
+        return String.format("%s / %s", month, year)
+    }
+
 }
 
