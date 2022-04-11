@@ -9,13 +9,13 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 
 internal class Dojo3DSFragment private constructor() : Fragment() {
 
     private lateinit var webView: WebView
+
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
 
     private val params: ThreeDSParams by lazy {
@@ -52,11 +52,9 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
             }
         }
 
-        viewModel.paymentResult.observe(viewLifecycleOwner) {
-            if (it is PaymentResult.ShowThreeDsPage) {
-                val page = it.pageContent.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
+        viewModel.threeDsPage.observe(viewLifecycleOwner) {
+                val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
                 webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
-            }
         }
 
         viewModel.fetchThreeDsPage(params)
