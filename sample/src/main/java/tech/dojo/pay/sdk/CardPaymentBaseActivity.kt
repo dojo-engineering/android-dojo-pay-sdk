@@ -1,0 +1,126 @@
+package tech.dojo.pay.sdk
+
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
+import tech.dojo.pay.sdk.token.TokenGenerator
+
+abstract class CardPaymentBaseActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityCardPaymentBinding
+
+    abstract fun onPayClicked(params: DojoCardPaymentParams)
+
+    fun showResult(result: DojoCardPaymentResult) {
+        showDialog(
+            title = "Payment result",
+            message = "${result.name} (${result.code})"
+        )
+        displayToken("")
+    }
+
+    fun setProgressIndicatorVisible(visible: Boolean) {
+        binding.viewProgress.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCardPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setCardDetails(Cards.ThreeDSV2)
+        setCardListeners()
+        setTokenListener()
+
+        binding.btnPay.setOnClickListener {
+            val (month, year) = binding.expiryDate.text.toString().split("/")
+
+            onPayClicked(
+                DojoCardPaymentParams(
+                    token = binding.token.text.toString(),
+                    paymentPayload = DojoCardPaymentPayload(
+                        DojoCardDetails(
+                            cardNumber = binding.cardNumber.text.toString(),
+                            cardName = binding.cardHolder.text.toString(),
+                            expiryMonth = month,
+                            expiryYear = year,
+                            cv2 = binding.securityCode.text.toString()
+                        )
+                    ),
+                    sandboxMode = binding.checkboxSandbox.isChecked
+                )
+
+            )
+        }
+    }
+
+    private fun setCardListeners() {
+        binding.btn3DSV2.setOnClickListener {
+            setCardDetails(Cards.ThreeDSV2)
+        }
+
+        binding.btn3DSV1.setOnClickListener {
+            setCardDetails(Cards.ThreeDSV1)
+        }
+
+        binding.btnNo3DS.setOnClickListener {
+            setCardDetails(Cards.NoThreeDS)
+        }
+    }
+
+    private fun setTokenListener() {
+        binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
+            binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
+            displayToken("")
+        }
+
+        binding.btnGenerateToken.setOnClickListener {
+            binding.viewProgress.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                try {
+                    displayToken(TokenGenerator.generateToken())
+                } catch (e: Throwable) {
+                    showTokenError(e)
+                } finally {
+                    binding.viewProgress.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun setCardDetails(details: DojoCardDetails) {
+        binding.cardNumber.setText(details.cardNumber)
+        binding.cardHolder.setText(details.cardName)
+        binding.expiryDate.setText("${details.expiryMonth}/${details.expiryYear}")
+        binding.securityCode.setText(details.cv2)
+    }
+
+    private fun showTokenError(e: Throwable) {
+        binding.viewProgress.visibility = View.GONE
+        showDialog(
+            title = "Can't generate token",
+            message = e.message ?: ""
+        )
+    }
+
+    private fun displayToken(token: String) {
+        binding.token.setText(token)
+        binding.token.visibility = View.VISIBLE
+    }
+
+    private fun showDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .create()
+            .show()
+    }
+
+}
