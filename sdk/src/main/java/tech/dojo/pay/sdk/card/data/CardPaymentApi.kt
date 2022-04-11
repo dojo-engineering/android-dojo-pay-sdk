@@ -30,4 +30,12 @@ internal interface CardPaymentApi {
         @Path("token") token: String,
         @Body payload: PaymentDetails
     ) : PaymentResponse
+
+    @POST
+    @FormUrlEncoded
+    suspend fun fetchSecurePage(
+        @Url url: String,
+        @Field("JWT") jwt: String,
+        @Field("MD") md: String
+    ) : String
 }

@@ -46,6 +46,10 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
         }
     }
 
+    suspend fun fetch3dsPage(params: ThreeDSParams): String {
+        return api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
+    }
+
     private fun DojoCardPaymentPayload.toPaymentDetails(): PaymentDetails =
         PaymentDetails(
             cV2 = cardDetails.cv2,
