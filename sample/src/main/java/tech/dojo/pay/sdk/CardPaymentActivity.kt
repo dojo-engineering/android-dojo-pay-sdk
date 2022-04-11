@@ -56,17 +56,16 @@ class CardPaymentActivity : AppCompatActivity() {
                 showTokenError(e)
                 return@launch
             }
-            val (month, year) = binding.expiryDate.text.toString().split("/")
 
-            pay(
-                DojoCardDetails(
-                    cardNumber = binding.cardNumber.text.toString(),
-                    cardName = binding.cardHolder.text.toString(),
-                    expiryMonth = month,
-                    expiryYear = year,
-                    cv2 = binding.securityCode.text.toString()
-                )
+            displayToken(token)
+
+            val params = DojoCardPaymentParams(
+                token = token,
+                paymentPayload = DojoCardPaymentPayload(cardDetails),
+                sandboxMode = true
             )
+
+            cardPayment.launch(params)
         }
     }
 
