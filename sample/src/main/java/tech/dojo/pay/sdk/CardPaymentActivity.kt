@@ -23,6 +23,7 @@ class CardPaymentActivity : AppCompatActivity() {
             title = "Payment result",
             message = "${result.name} (${result.code})"
         )
+        displayToken("")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,40 +32,33 @@ class CardPaymentActivity : AppCompatActivity() {
         setContentView(binding.root)
         setCardDetails(Cards.ThreeDSV2)
         setCardListeners()
+        setTokenListener()
 
         binding.btnPay.setOnClickListener {
             val (month, year) = binding.expiryDate.text.toString().split("/")
 
             pay(
-                DojoCardDetails(
-                    cardNumber = binding.cardNumber.text.toString(),
-                    cardName = binding.cardHolder.text.toString(),
-                    expiryMonth = month,
-                    expiryYear = year,
-                    cv2 = binding.securityCode.text.toString()
+                DojoCardPaymentParams(
+                    token = binding.token.text.toString(),
+                    paymentPayload = DojoCardPaymentPayload(
+                        DojoCardDetails(
+                            cardNumber = binding.cardNumber.text.toString(),
+                            cardName = binding.cardHolder.text.toString(),
+                            expiryMonth = month,
+                            expiryYear = year,
+                            cv2 = binding.securityCode.text.toString()
+                        )
+                    ),
+                    sandboxMode = binding.checkboxSandbox.isChecked
                 )
+
             )
         }
     }
 
-    private fun pay(cardDetails: DojoCardDetails) {
+    private fun pay(params: DojoCardPaymentParams) {
         binding.viewProgress.visibility = View.VISIBLE
         lifecycleScope.launch {
-            val token = try {
-                TokenGenerator.generateToken()
-            } catch (e: Throwable) {
-                showTokenError(e)
-                return@launch
-            }
-
-            displayToken(token)
-
-            val params = DojoCardPaymentParams(
-                token = token,
-                paymentPayload = DojoCardPaymentPayload(cardDetails),
-                sandboxMode = true
-            )
-
             cardPayment.launch(params)
         }
     }
@@ -80,6 +74,26 @@ class CardPaymentActivity : AppCompatActivity() {
 
         binding.btnNo3DS.setOnClickListener {
             setCardDetails(Cards.NoThreeDS)
+        }
+    }
+
+    private fun setTokenListener() {
+        binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
+            binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
+            displayToken("")
+        }
+
+        binding.btnGenerateToken.setOnClickListener {
+            binding.viewProgress.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                try {
+                    displayToken(TokenGenerator.generateToken())
+                } catch (e: Throwable) {
+                    showTokenError(e)
+                } finally {
+                    binding.viewProgress.visibility = View.GONE
+                }
+            }
         }
     }
 
