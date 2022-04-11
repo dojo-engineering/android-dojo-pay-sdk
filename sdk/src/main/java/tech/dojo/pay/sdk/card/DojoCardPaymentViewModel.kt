@@ -9,7 +9,7 @@ import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import java.lang.Exception
+import kotlin.Exception
 
 internal class DojoCardPaymentViewModel(
     private val params: DojoCardPaymentParams,
@@ -17,6 +17,7 @@ internal class DojoCardPaymentViewModel(
 ) : ViewModel() {
 
     val paymentResult = MutableLiveData<PaymentResult>()
+    val threeDsPage = MutableLiveData<String>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
@@ -33,12 +34,16 @@ internal class DojoCardPaymentViewModel(
 
     fun fetchThreeDsPage(params: ThreeDSParams) {
         viewModelScope.launch {
-            paymentResult.value = repository.fetch3dsPage(params)
+            try {
+                threeDsPage.value = repository.fetch3dsPage(params)
+            } catch (e: Exception) {
+                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+            }
         }
     }
 
     fun on3DSCompleted(result: DojoCardPaymentResult) {
-        paymentResult.value = PaymentResult.Completed(result)
+        paymentResult.postValue(PaymentResult.Completed(result))
     }
 
 }
