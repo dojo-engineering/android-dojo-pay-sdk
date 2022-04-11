@@ -65,7 +65,7 @@ internal class CardPaymentRepository(private val api: CardPaymentApi) {
      * are made
      */
     private fun formatExpiryDate(month: String?, year: String?): String? {
-        if (month != null || year == null) return null
+        if (month == null || year == null) return null
         return String.format("%s / %s", month, year)
     }
 
