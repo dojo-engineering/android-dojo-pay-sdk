@@ -36,7 +36,7 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
         webView = view.findViewById<WebView>(R.id.webView).apply {
             settings.javaScriptEnabled = true
             settings.useWideViewPort = true
-            addJavascriptInterface(ThreeDsInterface(::onThreeDsEventChanged), "androidListener")
+            addJavascriptInterface(ThreeDsInterface(viewModel::on3DSCompleted), "androidListener")
             webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView, url: String) {
                     super.onPageFinished(view, url)
@@ -58,10 +58,6 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
         }
 
         viewModel.fetchThreeDsPage(params)
-    }
-
-    private fun onThreeDsEventChanged(event: String) {
-
     }
 
     companion object {
