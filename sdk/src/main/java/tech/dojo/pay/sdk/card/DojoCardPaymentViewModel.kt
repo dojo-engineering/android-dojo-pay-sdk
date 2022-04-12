@@ -3,8 +3,10 @@ package tech.dojo.pay.sdk.card
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
+import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
@@ -18,11 +20,18 @@ internal class DojoCardPaymentViewModel(
 
     val paymentResult = MutableLiveData<PaymentResult>()
     val threeDsPage = MutableLiveData<String>()
+    val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
+        /*deviceData.value = DeviceData(
+            formAction = "https://centinelapistag.cardinalcommerce.com/V1/Cruise/Collect",
+            token = "token"
+        )*/
         viewModelScope.launch {
             try {
+                deviceData.value = repository.collectDeviceData(params.token, params.paymentPayload)
+                delay(10000)
                 paymentResult.value = repository.makePayment(params.token, params.paymentPayload)
                 canExit = paymentResult.value is PaymentResult.ThreeDSRequired
             } catch (e: Exception) {

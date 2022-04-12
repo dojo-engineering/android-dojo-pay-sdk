@@ -1,7 +1,9 @@
 package tech.dojo.pay.sdk.card
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.WebView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.sdk.R
@@ -19,6 +21,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
         observeEvents()
+        handleDeviceData()
     }
 
     private fun observeEvents() {
@@ -47,4 +50,31 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (viewModel.canExit) super.onBackPressed()
     }
+
+    //--------------------------------------------------------
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun handleDeviceData() {
+        val webView = findViewById<WebView>(R.id.web)
+        webView.settings.javaScriptEnabled = true
+
+        viewModel.deviceData.observe(this) { data ->
+            val page = getHtml(data.token, data.formAction)
+            webView.loadData(page, "text/html", "utf-8")
+        }
+    }
+
+    private fun getHtml(token: String, formAction: String): String =
+        """
+        <html>
+            <body onload="document.forms[0].submit()">
+            <h1>My First Heading</h1>
+            <p>My first paragraph.</p>
+            <form id="ddc-form" target=”ddc-iframe”  method="POST" action="$formAction">
+                <input id="ddc-input" name="JWT" type="hidden" value="$token" />
+            </form>
+            <iframe name=”ddc-iframe” height="1" width="1"> </iframe>
+            </body>
+        </html>
+        """.trimIndent()
 }
