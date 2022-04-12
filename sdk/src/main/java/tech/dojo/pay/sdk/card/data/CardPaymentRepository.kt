@@ -8,31 +8,18 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.net.SocketTimeoutException
 
-internal class CardPaymentRepository(private val api: CardPaymentApi) {
+internal class CardPaymentRepository(
+    private val api: CardPaymentApi,
+    private val token: String,
+    payload: DojoCardPaymentPayload
+) {
 
-    suspend fun collectDeviceData(token: String, payload: DojoCardPaymentPayload): DeviceData {
-        val paymentDetails = payload.toPaymentDetails()
-        return api.collectDeviceData(token, paymentDetails)
-    }
+    private val paymentDetails = payload.toPaymentDetails()
 
-    suspend fun makePayment(token: String, payload: DojoCardPaymentPayload): PaymentResult {
-        val paymentDetails = payload.toPaymentDetails()
-        return processPayment(token, paymentDetails)
-    }
+    suspend fun collectDeviceData(): DeviceData =
+        api.collectDeviceData(token, paymentDetails)
 
-    /*private suspend fun collectDeviceData(token: String, paymentDetails: PaymentDetails) {
-        val deviceData = api.collectDeviceData(token, paymentDetails)
-        try {
-            api.handleDataCollection(deviceData.formAction, deviceData.token)
-        } catch (e: SocketTimeoutException) {
-            // Ignore timeout exceptions
-        }
-    }*/
-
-    private suspend fun processPayment(
-        token: String,
-        paymentDetails: PaymentDetails
-    ): PaymentResult {
+    suspend fun processPayment(): PaymentResult {
         val response = api.processPayment(token, paymentDetails)
         val paymentResult = requireNotNull(
             DojoCardPaymentResult.values().find { it.code == response.statusCode }

@@ -3,6 +3,10 @@ package tech.dojo.pay.sdk.card
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
@@ -14,7 +18,6 @@ import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import kotlin.Exception
 
 internal class DojoCardPaymentViewModel(
-    private val params: DojoCardPaymentParams,
     private val repository: CardPaymentRepository
 ) : ViewModel() {
 
@@ -24,21 +27,20 @@ internal class DojoCardPaymentViewModel(
     var canExit: Boolean = false //User should not be able to leave while request is not completed
 
     init {
-        /*deviceData.value = DeviceData(
-            formAction = "https://centinelapistag.cardinalcommerce.com/V1/Cruise/Collect",
-            token = "token"
-        )*/
-        viewModelScope.launch {
-            try {
-                deviceData.value = repository.collectDeviceData(params.token, params.paymentPayload)
-                delay(10000)
-                paymentResult.value = repository.makePayment(params.token, params.paymentPayload)
-                canExit = paymentResult.value is PaymentResult.ThreeDSRequired
-            } catch (e: Exception) {
-                paymentResult.value =
-                    PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
-            }
+        launchCatching {
+            deviceData.value = repository.collectDeviceData()
         }
+    }
+
+    fun onFingerprintCaptured() {
+        launchCatching {
+            paymentResult.value = repository.processPayment()
+            canExit = true
+        }
+    }
+
+    fun on3DSCompleted(result: DojoCardPaymentResult) {
+        paymentResult.postValue(PaymentResult.Completed(result))
     }
 
     fun fetchThreeDsPage(params: ThreeDSParams) {
@@ -51,8 +53,13 @@ internal class DojoCardPaymentViewModel(
         }
     }
 
-    fun on3DSCompleted(result: DojoCardPaymentResult) {
-        paymentResult.postValue(PaymentResult.Completed(result))
-    }
+    private fun launchCatching(block: suspend CoroutineScope.() -> Unit): Job =
+        viewModelScope.launch {
+            try {
+                block()
+            } catch (throwable: Throwable) {
+                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+            }
+        }
 
 }

@@ -10,6 +10,8 @@ import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.fingerprint.FingerPrintCaptureFragment
+import tech.dojo.pay.sdk.card.threeds.Dojo3DSFragment
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
 
@@ -20,11 +22,20 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
-        observeEvents()
-        handleDeviceData()
+        observeDeviceData()
+        observeResult()
     }
 
-    private fun observeEvents() {
+    private fun observeDeviceData() {
+        viewModel.deviceData.observe(this) { deviceData ->
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.container, FingerPrintCaptureFragment.newInstance(deviceData))
+                .commit()
+        }
+    }
+
+    private fun observeResult() {
         viewModel.paymentResult.observe(this) { result ->
             when (result) {
                 is PaymentResult.Completed -> returnResult(result.value)
@@ -43,38 +54,11 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
     private fun navigate3DS(params: ThreeDSParams) {
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.container, Dojo3DSFragment.newInstance(params))
+            .replace(R.id.container, Dojo3DSFragment.newInstance(params))
             .commit()
     }
 
     override fun onBackPressed() {
         if (viewModel.canExit) super.onBackPressed()
     }
-
-    //--------------------------------------------------------
-
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun handleDeviceData() {
-        val webView = findViewById<WebView>(R.id.web)
-        webView.settings.javaScriptEnabled = true
-
-        viewModel.deviceData.observe(this) { data ->
-            val page = getHtml(data.token, data.formAction)
-            webView.loadData(page, "text/html", "utf-8")
-        }
-    }
-
-    private fun getHtml(token: String, formAction: String): String =
-        """
-        <html>
-            <body onload="document.forms[0].submit()">
-            <h1>My First Heading</h1>
-            <p>My first paragraph.</p>
-            <form id="ddc-form" target=”ddc-iframe”  method="POST" action="$formAction">
-                <input id="ddc-input" name="JWT" type="hidden" value="$token" />
-            </form>
-            <iframe name=”ddc-iframe” height="1" width="1"> </iframe>
-            </body>
-        </html>
-        """.trimIndent()
 }

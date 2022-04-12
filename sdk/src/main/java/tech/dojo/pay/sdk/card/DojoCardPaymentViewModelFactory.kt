@@ -15,8 +15,8 @@ internal class DojoCardPaymentViewModelFactory(
         val args = requireNotNull(arguments)
         val params = args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
         val api = CardPaymentApiBuilder(params.sandboxMode).create()
-        val repo = CardPaymentRepository(api)
-        return DojoCardPaymentViewModel(params, repo) as T
+        val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
+        return DojoCardPaymentViewModel(repo) as T
     }
 
 }

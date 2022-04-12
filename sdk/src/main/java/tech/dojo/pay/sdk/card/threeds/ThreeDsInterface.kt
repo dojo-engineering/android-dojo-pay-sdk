@@ -1,7 +1,6 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.threeds
 
 import android.webkit.JavascriptInterface
-import android.webkit.WebView
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
