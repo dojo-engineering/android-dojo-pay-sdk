@@ -13,5 +13,10 @@ enum class DojoCardPaymentResult(val code: Int) {
     NO_ACCESS_TOKEN_SUPPLIED(404),
     INTERNAL_SERVER_ERROR(500),
     SDK_INTERNAL_ERROR(7770),
-    CANCELLED(7771) //Process cancelled by user
+    CANCELLED(7771); //Process cancelled by user
+
+    companion object {
+        fun fromCode(code: Int): DojoCardPaymentResult =
+            values().find { it.code == code } ?: SDK_INTERNAL_ERROR
+    }
 }

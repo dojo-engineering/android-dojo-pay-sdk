@@ -1,16 +1,13 @@
 package tech.dojo.pay.sdk.card
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.webkit.WebView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import tech.dojo.pay.sdk.card.fingerprint.FingerPrintCaptureFragment
 import tech.dojo.pay.sdk.card.threeds.Dojo3DSFragment
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {

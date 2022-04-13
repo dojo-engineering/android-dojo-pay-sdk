@@ -21,9 +21,7 @@ internal class CardPaymentRepository(
 
     suspend fun processPayment(): PaymentResult {
         val response = api.processPayment(token, paymentDetails)
-        val paymentResult = requireNotNull(
-            DojoCardPaymentResult.values().find { it.code == response.statusCode }
-        )
+        val paymentResult = DojoCardPaymentResult.fromCode(response.statusCode)
 
         return if (paymentResult == DojoCardPaymentResult.AUTHORIZING) {
             PaymentResult.ThreeDSRequired(
