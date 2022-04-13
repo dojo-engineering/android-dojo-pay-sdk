@@ -3,16 +3,12 @@ package tech.dojo.pay.sdk.card
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import kotlin.Exception
@@ -25,19 +21,27 @@ internal class DojoCardPaymentViewModel(
     val threeDsPage = MutableLiveData<String>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
+    var fingerPrintCapturedEvent = Channel<Unit>()
 
     init {
-        launchCatching {
-            deviceData.value = repository.collectDeviceData()
+        viewModelScope.launch {
+            try {
+                deviceData.value = repository.collectDeviceData()
+                withTimeoutOrNull(FINGERPRINT_TIMEOUT_MILLIS) {
+                    fingerPrintCapturedEvent.receive() //Wait till event is fired
+                }
+                paymentResult.value = repository.processPayment()
+                canExit = true
+            } catch (throwable: Throwable) {
+                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+            }
         }
     }
 
     fun onFingerprintCaptured() {
-        launchCatching {
-            paymentResult.value = repository.processPayment()
-            canExit = true
-        }
+        fingerPrintCapturedEvent.trySend(Unit)
     }
+
 
     fun on3DSCompleted(result: DojoCardPaymentResult) {
         paymentResult.postValue(PaymentResult.Completed(result))
@@ -53,13 +57,7 @@ internal class DojoCardPaymentViewModel(
         }
     }
 
-    private fun launchCatching(block: suspend CoroutineScope.() -> Unit): Job =
-        viewModelScope.launch {
-            try {
-                block()
-            } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
-            }
-        }
-
+    companion object {
+        private const val FINGERPRINT_TIMEOUT_MILLIS = 15000L
+    }
 }

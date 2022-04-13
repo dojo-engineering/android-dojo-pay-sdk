@@ -2,7 +2,6 @@ package tech.dojo.pay.sdk.card.fingerprint
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,6 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.DojoCardPaymentViewModel
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 
@@ -57,8 +53,7 @@ internal class FingerPrintCaptureFragment private constructor(): Fragment() {
 
         @JavascriptInterface
         fun onFingerPrintCaptured() {
-            Log.v("custom", "Result captured")
-            //viewModel.onFingerprintCaptured()
+            viewModel.onFingerprintCaptured()
         }
     }
 
