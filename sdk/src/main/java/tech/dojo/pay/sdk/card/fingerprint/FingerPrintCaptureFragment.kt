@@ -32,6 +32,10 @@ internal class FingerPrintCaptureFragment private constructor(): Fragment() {
         loadData(html, "text/html", "utf-8")
     }
 
+    /**
+     * Form is submitted when page is loaded via 'onload' property.
+     * The result of this form will be loaded to the iframe.
+     */
     private fun getHtml(token: String, formAction: String): String =
         """
         <html>
