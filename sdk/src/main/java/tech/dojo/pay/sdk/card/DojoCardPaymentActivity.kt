@@ -27,10 +27,9 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
 
     private fun observeDeviceData() {
         viewModel.deviceData.observe(this) { deviceData ->
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.container, DojoFingerPrintFragment.newInstance(deviceData))
-                .commit()
+            supportFragmentManager.commit {
+                add(R.id.container, DojoFingerPrintFragment.newInstance(deviceData))
+            }
         }
     }
 
