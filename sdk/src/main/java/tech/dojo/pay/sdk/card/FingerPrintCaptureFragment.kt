@@ -25,6 +25,7 @@ internal class FingerPrintCaptureFragment private constructor(): Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = WebView(requireContext()).apply {
+        layoutParams = ViewGroup.LayoutParams(0,0)
         settings.javaScriptEnabled = true
         addJavascriptInterface(FingerPrintCaptureListener(), "Android")
         val html = getHtml(deviceData.token, deviceData.formAction)
