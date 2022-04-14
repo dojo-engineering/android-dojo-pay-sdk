@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.threeds
+package tech.dojo.pay.sdk.card
 
 import android.webkit.JavascriptInterface
 import com.google.gson.GsonBuilder

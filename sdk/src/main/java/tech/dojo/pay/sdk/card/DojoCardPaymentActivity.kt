@@ -8,7 +8,6 @@ import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import tech.dojo.pay.sdk.card.threeds.Dojo3DSFragment
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
 

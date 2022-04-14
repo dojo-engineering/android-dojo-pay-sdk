@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.threeds
+package tech.dojo.pay.sdk.card
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.DojoCardPaymentViewModel
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 
