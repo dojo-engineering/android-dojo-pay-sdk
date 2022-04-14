@@ -1,17 +1,20 @@
 package tech.dojo.pay.sdk
 
-import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 
 class CardPaymentActivity : CardPaymentBaseActivity() {
 
-    private val cardPayment = registerForActivityResult(DojoCardPaymentResultContract()) { result ->
+    private val cardPayment = DojoSdk.createCardPaymentHandler(this) { result ->
         setProgressIndicatorVisible(false)
         showResult(result)
     }
 
-    override fun onPayClicked(params: DojoCardPaymentParams) {
+    override fun onSandboxChecked(isChecked: Boolean) {
+        DojoSdk.sandbox = isChecked
+    }
+
+    override fun onPayClicked(token: String, payload: DojoCardPaymentPayload) {
         setProgressIndicatorVisible(true)
-        cardPayment.launch(params)
+        cardPayment.executeCardPayment(token, payload)
     }
 }

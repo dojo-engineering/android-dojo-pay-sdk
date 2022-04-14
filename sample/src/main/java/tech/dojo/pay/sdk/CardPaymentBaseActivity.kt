@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
@@ -17,7 +16,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCardPaymentBinding
 
-    abstract fun onPayClicked(params: DojoCardPaymentParams)
+    abstract fun onSandboxChecked(isChecked: Boolean)
+
+    abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
 
     fun showResult(result: DojoCardPaymentResult) {
         showDialog(
@@ -43,20 +44,16 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             val (month, year) = binding.expiryDate.text.toString().split("/")
 
             onPayClicked(
-                DojoCardPaymentParams(
-                    token = binding.token.text.toString(),
-                    paymentPayload = DojoCardPaymentPayload(
-                        DojoCardDetails(
-                            cardNumber = binding.cardNumber.text.toString(),
-                            cardName = binding.cardHolder.text.toString(),
-                            expiryMonth = month,
-                            expiryYear = year,
-                            cv2 = binding.securityCode.text.toString()
-                        )
-                    ),
-                    sandboxMode = binding.checkboxSandbox.isChecked
+                token = binding.token.text.toString(),
+                payload = DojoCardPaymentPayload(
+                    DojoCardDetails(
+                        cardNumber = binding.cardNumber.text.toString(),
+                        cardName = binding.cardHolder.text.toString(),
+                        expiryMonth = month,
+                        expiryYear = year,
+                        cv2 = binding.securityCode.text.toString()
+                    )
                 )
-
             )
         }
     }
@@ -76,9 +73,12 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     private fun setTokenListener() {
+        DojoSdk.sandbox = binding.checkboxSandbox.isChecked
+
         binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
             displayToken("")
+            onSandboxChecked(isChecked)
         }
 
         binding.btnGenerateToken.setOnClickListener {
