@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.commit
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
@@ -47,13 +48,14 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
         finish()
+        overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.container, Dojo3DSFragment.newInstance(params))
-            .commit()
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.enter, R.anim.exit)
+            replace(R.id.container, Dojo3DSFragment.newInstance(params))
+        }
     }
 
     override fun onBackPressed() {
