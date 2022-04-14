@@ -52,7 +52,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
 
     private fun navigate3DS(params: ThreeDSParams) {
         supportFragmentManager.commit {
-            setCustomAnimations(R.anim.enter, R.anim.exit)
+            setCustomAnimations(R.anim.enter, 0)
             replace(R.id.container, Dojo3DSFragment.newInstance(params))
         }
     }
