@@ -47,7 +47,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
         finish()
-        overridePendingTransition(R.anim.enter, R.anim.exit)
+        overridePendingTransition(0, R.anim.exit)
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
