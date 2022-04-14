@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
@@ -32,6 +33,10 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         webView = view.findViewById<WebView>(R.id.webView).apply {
             settings.javaScriptEnabled = true
