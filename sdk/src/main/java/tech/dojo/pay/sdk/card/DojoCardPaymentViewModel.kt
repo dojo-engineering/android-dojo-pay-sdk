@@ -43,7 +43,6 @@ internal class DojoCardPaymentViewModel(
         fingerPrintCapturedEvent.trySend(Unit)
     }
 
-
     fun on3DSCompleted(result: DojoCardPaymentResult) {
         paymentResult.postValue(PaymentResult.Completed(result))
     }

@@ -12,6 +12,7 @@ internal class DojoCardPaymentViewModelFactory(
     private val arguments: Bundle?
 ) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val args = requireNotNull(arguments)
         val params = args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
