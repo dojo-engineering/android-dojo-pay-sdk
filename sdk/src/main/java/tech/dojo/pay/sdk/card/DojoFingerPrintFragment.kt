@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 
-internal class FingerPrintCaptureFragment private constructor(): Fragment() {
+internal class DojoFingerPrintFragment private constructor(): Fragment() {
 
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
 
@@ -63,8 +63,8 @@ internal class FingerPrintCaptureFragment private constructor(): Fragment() {
 
     companion object {
 
-        fun newInstance(deviceData: DeviceData): FingerPrintCaptureFragment =
-            FingerPrintCaptureFragment().apply {
+        fun newInstance(deviceData: DeviceData): DojoFingerPrintFragment =
+            DojoFingerPrintFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(KEY_DEVICE_DATA, deviceData)
                 }
