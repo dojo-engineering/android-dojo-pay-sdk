@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
@@ -29,7 +30,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     fun setProgressIndicatorVisible(visible: Boolean) {
-        binding.viewProgress.visibility = if (visible) View.VISIBLE else View.GONE
+        binding.viewProgress.isVisible = visible
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
