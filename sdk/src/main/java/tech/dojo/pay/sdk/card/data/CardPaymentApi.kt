@@ -18,13 +18,6 @@ internal interface CardPaymentApi {
         @Body payload: PaymentDetails
     ) : DeviceData
 
-    @POST
-    @FormUrlEncoded
-    suspend fun handleDataCollection(
-        @Url url: String,
-        @Field("JWT") jwt: String
-    )
-
     @POST("payments/{token}")
     suspend fun processPayment(
         @Path("token") token: String,

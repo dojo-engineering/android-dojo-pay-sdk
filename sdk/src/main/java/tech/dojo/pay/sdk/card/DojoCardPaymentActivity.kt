@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
+import androidx.fragment.app.commit
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
@@ -18,10 +20,20 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
-        observeEvents()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        observeDeviceData()
+        observeResult()
     }
 
-    private fun observeEvents() {
+    private fun observeDeviceData() {
+        viewModel.deviceData.observe(this) { deviceData ->
+            supportFragmentManager.commit {
+                add(R.id.container, DojoFingerPrintFragment.newInstance(deviceData))
+            }
+        }
+    }
+
+    private fun observeResult() {
         viewModel.paymentResult.observe(this) { result ->
             when (result) {
                 is PaymentResult.Completed -> returnResult(result.value)
@@ -35,13 +47,14 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
         finish()
+        overridePendingTransition(0, R.anim.exit)
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.container, Dojo3DSFragment.newInstance(params))
-            .commit()
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.enter, 0)
+            replace(R.id.container, Dojo3DSFragment.newInstance(params))
+        }
     }
 
     override fun onBackPressed() {

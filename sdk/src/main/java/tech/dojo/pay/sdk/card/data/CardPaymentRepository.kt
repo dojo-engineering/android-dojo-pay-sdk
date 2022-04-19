@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card.data
 
+import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
@@ -7,31 +8,20 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.net.SocketTimeoutException
 
-internal class CardPaymentRepository(private val api: CardPaymentApi) {
+internal class CardPaymentRepository(
+    private val api: CardPaymentApi,
+    private val token: String,
+    payload: DojoCardPaymentPayload
+) {
 
-    suspend fun makePayment(token: String, payload: DojoCardPaymentPayload): PaymentResult {
-        val paymentDetails = payload.toPaymentDetails()
-        collectDeviceData(token, paymentDetails)
-        return processPayment(token, paymentDetails)
-    }
+    private val paymentDetails = payload.toPaymentDetails()
 
-    private suspend fun collectDeviceData(token: String, paymentDetails: PaymentDetails) {
-        val deviceData = api.collectDeviceData(token, paymentDetails)
-        try {
-            api.handleDataCollection(deviceData.formAction, deviceData.token)
-        } catch (e: SocketTimeoutException) {
-            // Ignore timeout exceptions
-        }
-    }
+    suspend fun collectDeviceData(): DeviceData =
+        api.collectDeviceData(token, paymentDetails)
 
-    private suspend fun processPayment(
-        token: String,
-        paymentDetails: PaymentDetails
-    ): PaymentResult {
+    suspend fun processPayment(): PaymentResult {
         val response = api.processPayment(token, paymentDetails)
-        val paymentResult = requireNotNull(
-            DojoCardPaymentResult.values().find { it.code == response.statusCode }
-        )
+        val paymentResult = DojoCardPaymentResult.fromCode(response.statusCode)
 
         return if (paymentResult == DojoCardPaymentResult.AUTHORIZING) {
             PaymentResult.ThreeDSRequired(
