@@ -1,7 +1,6 @@
 package tech.dojo.pay.sdk.card
 
 import androidx.activity.ComponentActivity
-import tech.dojo.pay.sdk.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult

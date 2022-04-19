@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk
+package tech.dojo.pay.sdk.card
 
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 
