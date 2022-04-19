@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
-class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoCardPaymentResult>() {
+internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoCardPaymentResult>() {
 
     override fun createIntent(context: Context, input: DojoCardPaymentParams): Intent {
         val intent = Intent(context, DojoCardPaymentActivity::class.java)
