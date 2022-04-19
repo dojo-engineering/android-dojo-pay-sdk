@@ -18,11 +18,11 @@ internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository
 ) : ViewModel() {
 
+    private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
     val threeDsPage = MutableLiveData<String>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
-    var fingerPrintCapturedEvent = Channel<Unit>()
 
     init {
         viewModelScope.launch {
