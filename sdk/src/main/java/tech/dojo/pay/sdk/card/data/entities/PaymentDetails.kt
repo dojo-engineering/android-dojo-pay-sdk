@@ -3,7 +3,7 @@ package tech.dojo.pay.sdk.card.data.entities
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
-class PaymentDetails(
+data class PaymentDetails(
     val cV2: String?,
     val cardName: String?,
     val cardNumber: String?,
