@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
@@ -15,8 +16,11 @@ import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
+import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import java.lang.IllegalArgumentException
@@ -42,5 +46,31 @@ internal class DojoCardPaymentViewModelTest {
         val viewModel = DojoCardPaymentViewModel(repository)
         val expected = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
         assertEquals(expected, viewModel.paymentResult.value)
+    }
+
+    @Test
+    fun `WHEN device data collection completes THEN device data is returned`() = runTest {
+        val deviceData = DeviceData("action", "token")
+        whenever(repository.collectDeviceData()).thenReturn(deviceData)
+        val viewModel = DojoCardPaymentViewModel(repository)
+        assertEquals(deviceData, viewModel.deviceData.value)
+    }
+
+    @Test
+    fun `WHEN device fingerprint is captured THEN payment processing starts`() = runTest {
+        val deviceData = DeviceData("action", "token")
+        whenever(repository.collectDeviceData()).thenReturn(deviceData)
+        val viewModel = DojoCardPaymentViewModel(repository)
+        viewModel.onFingerprintCaptured()
+        verify(repository).processPayment()
+    }
+
+    @Test
+    fun `WHEN device fingerprint is not captured AND timeout completes THEN payment processing starts`() = runTest {
+        val deviceData = DeviceData("action", "token")
+        whenever(repository.collectDeviceData()).thenReturn(deviceData)
+        DojoCardPaymentViewModel(repository)
+        advanceTimeBy(DojoCardPaymentViewModel.FINGERPRINT_TIMEOUT_MILLIS + 1)
+        verify(repository).processPayment()
     }
 }

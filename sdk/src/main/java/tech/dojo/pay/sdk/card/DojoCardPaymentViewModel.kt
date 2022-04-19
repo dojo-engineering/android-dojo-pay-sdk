@@ -58,6 +58,6 @@ internal class DojoCardPaymentViewModel(
     }
 
     companion object {
-        private const val FINGERPRINT_TIMEOUT_MILLIS = 15000L
+        const val FINGERPRINT_TIMEOUT_MILLIS = 15000L
     }
 }
