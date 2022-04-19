@@ -8,16 +8,14 @@ import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
@@ -72,5 +70,17 @@ internal class DojoCardPaymentViewModelTest {
         DojoCardPaymentViewModel(repository)
         advanceTimeBy(DojoCardPaymentViewModel.FINGERPRINT_TIMEOUT_MILLIS + 1)
         verify(repository).processPayment()
+    }
+
+    @Test
+    fun `WHEN payment processing completes THEN payment result is returned AND user can exit`() = runTest {
+        val deviceData = DeviceData("action", "token")
+        val result = PaymentResult.Completed(DojoCardPaymentResult.SUCCESSFUL)
+        whenever(repository.collectDeviceData()).thenReturn(deviceData)
+        whenever(repository.processPayment()).thenReturn(result)
+        val viewModel = DojoCardPaymentViewModel(repository)
+        viewModel.onFingerprintCaptured()
+        assertEquals(result, viewModel.paymentResult.value)
+        assertTrue(viewModel.canExit)
     }
 }
