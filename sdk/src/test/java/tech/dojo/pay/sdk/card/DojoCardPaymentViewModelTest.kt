@@ -15,12 +15,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.lang.IllegalArgumentException
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,5 +84,17 @@ internal class DojoCardPaymentViewModelTest {
         viewModel.onFingerprintCaptured()
         assertEquals(result, viewModel.paymentResult.value)
         assertTrue(viewModel.canExit)
+    }
+
+    @Test
+    fun `WHEN 3DS page is fetched THEN html is loaded`() = runTest {
+        val deviceData = DeviceData("action", "token")
+        val threeDsHtml = "html"
+        whenever(repository.collectDeviceData()).thenReturn(deviceData)
+        whenever(repository.fetch3dsPage(any())).thenReturn(threeDsHtml)
+        val viewModel = DojoCardPaymentViewModel(repository)
+        val params = ThreeDSParams("url", "jwt", "md")
+        viewModel.fetchThreeDsPage(params)
+        assertEquals(threeDsHtml, viewModel.threeDsPage.value)
     }
 }
