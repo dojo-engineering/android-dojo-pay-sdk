@@ -1,38 +1,39 @@
 # Dojo Pay SDK Android 🤖
 
-This project contains the SDK for payments. This will be used in our internal apps but also
-will be used for external customers
+This project contains the SDK for payments. This will be used in our internal apps but also will be used for external customers.
 
 ## How to use
 
-- The libraries will be published to company nexus repository.
-- The library uses Semantic Version scheme as mentioned at https://semver.org/
+SDK functionality can be accessed via `DojoSdk` object.
 
-## Features 🎨
+### Card payment
 
-- Publish to **Github packages**.
-- Kotlin Static Analysis via `ktlint` and `detekt`.
-
-## Gradle Setup 🐘
-
-This project is using [**Gradle Kotlin DSL**](https://docs.gradle.org/current/userguide/kotlin_dsl.html) as well as the [Plugin DSL](https://docs.gradle.org/current/userguide/plugins.html#sec:plugins_block) to setup the build.
-
-## Static Analysis 🔍
-
-This project is using [**ktlint**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle) plugin to format your code. To reformat all the source code as well as the buildscript you can run the `ktlintFormat` gradle task.
-
-This project is also using [**detekt**](https://github.com/detekt/detekt) to analyze the source code, with the configuration that is stored in the [detekt.yml](configs/detekt/detekt.yml) file (the file has been generated with the `detektGenerateConfig` task).
+Card payments are handled by `DojoCardPaymentHandler`. It can be instantiated via `DojoSdk.createCardPaymentHandler` factory method, which takes `activity` and `result callback` as parameters. Payment process begins when `DojoCardPaymentHandler.executeCardPayment` is being invoked.
 
 ```
-./gradlew detekt - To run detekt
-
-./gradlew ktlintCheck - checks all SourceSets and project Kotlin script files
-
-./gradlew ktlintFormat - tries to format according to the code style all SourceSets Kotlin files and project Kotlin script files
-
+class CardPaymentActivity : AppCompatActivity() {  
+  
+    private val cardPayment = DojoSdk.createCardPaymentHandler(this) { result ->  
+	    progressBar.isVisible = false  
+		showResult(result)  
+    }  
+  
+  override fun onPayClicked(token: String, payload: DojoCardPaymentPayload) {  
+        progressBar.isVisible = true  
+		cardPayment.executeCardPayment(token, payload)  
+    }  
+}
 ```
 
-## Using Dojo Pay SDK ##
+### Sandbox mode
+
+`sandbox` property controls whether payments should be processed on test environment. More details about test environment (token, test cards) can be found [here](https://docs.connect.paymentsense.cloud/ConnectE/SettingUpTestAccount).
+
+Just set the property to true to enable sandbox mode:
+
+    DojoSdk.sandbox = true
+
+## How to set up
 
 ### 1. Authentication
 
@@ -52,24 +53,3 @@ Replace GITHUB_USERID with personal / organisation Github User ID and PERSONAL_A
 - Replace GITHUB_USERID with personal / organisation Github User ID and PERSONAL_ACCESS_TOKEN with the token generated
 
 **NOTE: DO NOT COMMIT WITH YOUR GITHUB CREDENTIALS TO REPOSITORY. IT IS ONY MEANT TO BE USED LOCALLY.**
-
-### 2.Add dependency
-
-### MAVEN
-
-    TODO: Add Maven Repository
-
-
-### GRADLE
-
-    TODO: Add Gradle Repository
-
-
-## Releasing ##
-
-    TODO: Add Release Guidelines
-
-
-## Contributing ##
-
-We love contributions! Please read our [contribution guidelines](/CONTRIBUTING.md) to get started.
