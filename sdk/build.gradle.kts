@@ -1,6 +1,9 @@
+version = "1.0.0"
+
 plugins {
     id("com.android.library")
     kotlin("android")
+    publish
 }
 
 android {
