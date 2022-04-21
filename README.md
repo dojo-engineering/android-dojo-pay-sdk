@@ -11,17 +11,18 @@ SDK functionality can be accessed via `DojoSdk` object.
 Card payments are handled by `DojoCardPaymentHandler`. It can be instantiated via `DojoSdk.createCardPaymentHandler` factory method, which takes `activity` and `result callback` as parameters. Payment process begins when `DojoCardPaymentHandler.executeCardPayment` is being invoked.
 
 ```
-class CardPaymentActivity : AppCompatActivity() {  
-  
-    private val cardPayment = DojoSdk.createCardPaymentHandler(this) { result ->  
-	    progressBar.isVisible = false  
-		showResult(result)  
-    }  
-  
-  override fun onPayClicked(token: String, payload: DojoCardPaymentPayload) {  
-        progressBar.isVisible = true  
-		cardPayment.executeCardPayment(token, payload)  
-    }  
+class CardPaymentActivity : AppCompatActivity() {
+
+   private val cardPayment = DojoSdk.createCardPaymentHandler(this) { result ->
+      progressBar.isVisible = false
+      showResult(result)
+   }
+
+   override fun onPayClicked(token: String, payload: DojoCardPaymentPayload) {
+      progressBar.isVisible = true
+      cardPayment.executeCardPayment(token, payload)
+   }
+
 }
 ```
 
