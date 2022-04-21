@@ -34,6 +34,29 @@ Just set the property to true to enable sandbox mode:
 
     DojoSdk.sandbox = true
 
+### Result codes
+
+Backend codes
+```
+SUCCESSFUL = 0  
+AUTHORIZING = 3 
+REFERRED = 4  
+DECLINED = 5
+DUPLICATE_TRANSACTION = 20 
+FAILED = 30  
+WAITING_PRE_EXECUTE = 99
+INVALID_REQUEST = 400 
+ISSUE_WITH_ACCESS_TOKEN = 401  
+NO_ACCESS_TOKEN_SUPPLIED = 404 
+INTERNAL_SERVER_ERROR = 500
+```
+
+Additional codes
+```
+SDK_INTERNAL_ERROR = 7770 //Network connection issues or other issues
+CANCELLED = 7771 //Process was terminated by user (e.x. closed 3ds screen)
+```
+
 ## How to set up
 
 ### Add dependency
