@@ -54,8 +54,9 @@ INTERNAL_SERVER_ERROR = 500
 Additional codes
 ```
 SDK_INTERNAL_ERROR = 7770 //Network connection issues or other issues
-CANCELLED = 7771 //Process was terminated by user (e.x. closed 3ds screen)
 ```
+
+When payment process is terminated by user (e.x. closed 3ds screen), then `DECLINED(5)` error will be returned.
 
 ## How to set up
 

@@ -19,7 +19,7 @@ internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPa
         return if (resultCode == RESULT_OK && intent != null) {
             intent.getSerializableExtra(KEY_RESULT) as DojoCardPaymentResult
         } else {
-            DojoCardPaymentResult.CANCELLED
+            DojoCardPaymentResult.DECLINED
         }
     }
 
