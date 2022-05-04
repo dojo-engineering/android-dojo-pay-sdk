@@ -26,6 +26,21 @@ class CardPaymentActivity : AppCompatActivity() {
 }
 ```
 
+#### Receive payment result as activity result
+
+In order to launch card payment activity for result, call:
+
+```
+DojoSdk.startCardPayment(activity, token, payload)
+``` 
+
+Override `onActivityResult()` callback and parse the result:
+```
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {  
+    val result = DojoSdk.parseCardPaymentResult(requestCode, resultCode, data)  
+}
+```
+
 ### Sandbox mode
 
 `sandbox` property controls whether payments should be processed on test environment. More details about test environment (token, test cards) can be found [here](https://docs.connect.paymentsense.cloud/ConnectE/SettingUpTestAccount).
