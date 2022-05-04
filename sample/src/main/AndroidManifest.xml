@@ -25,6 +25,8 @@
 
         <activity android:name=".CardPaymentActivity"/>
 
+        <activity android:name=".CardPaymentOldSchoolActivity"/>
+
     </application>
 
 </manifest>
