@@ -6,8 +6,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
         <activity
             android:name=".card.DojoCardPaymentActivity"
+            android:theme="@style/Theme.Transparent"/>
+
+        <activity
+            android:name=".card.DojoGPayActivity"
             android:theme="@style/Theme.Transparent"/>
     </application>
 

@@ -10,6 +10,10 @@ class CardPaymentActivity : CardPaymentBaseActivity() {
         showResult(result)
     }
 
+    private val gPayment = DojoSdk.createGPayHandler(this) { result ->
+        showResult(result)
+    }
+
     override fun onSandboxChecked(isChecked: Boolean) {
         DojoSdk.sandbox = isChecked
     }
@@ -17,5 +21,9 @@ class CardPaymentActivity : CardPaymentBaseActivity() {
     override fun onPayClicked(token: String, payload: DojoCardPaymentPayload) {
         setProgressIndicatorVisible(true)
         cardPayment.executeCardPayment(token, payload)
+    }
+
+    override fun onGPayClicked(token: String) {
+        gPayment.executeGPay(token)
     }
 }

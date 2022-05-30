@@ -15,6 +15,10 @@ class CardPaymentOldSchoolActivity : CardPaymentBaseActivity() {
         DojoSdk.startCardPayment(this, token, payload)
     }
 
+    override fun onGPayClicked(token: String) {
+        DojoSdk.startGPay(this, token)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val result = DojoSdk.parseCardPaymentResult(requestCode, resultCode, data)

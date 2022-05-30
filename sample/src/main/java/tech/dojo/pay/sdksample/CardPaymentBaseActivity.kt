@@ -21,6 +21,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     abstract fun onSandboxChecked(isChecked: Boolean)
 
     abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
+    abstract fun onGPayClicked(token: String)
 
     fun showResult(result: DojoPaymentResult) {
         showDialog(
@@ -57,6 +58,10 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                     )
                 )
             )
+        }
+
+        binding.btnGPay.setOnClickListener {
+            onGPayClicked(token = "")
         }
     }
 
