@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.SyncStateContract
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.android.gms.common.api.ApiException
@@ -13,6 +14,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.R
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 
 internal class DojoGPayActivity : AppCompatActivity() {
 
@@ -23,11 +25,18 @@ internal class DojoGPayActivity : AppCompatActivity() {
         performGPay()
     }
 
+    private val viewModel: DojoGPayViewModel by viewModels {
+        DojoGPayViewModelFactory(intent.extras)
+    }
+
     private lateinit var paymentsClient: PaymentsClient
 
     fun performGPay() {
         paymentsClient = PaymentsUtil.createPaymentsClient(this)
         possiblyShowGooglePayButton()
+        viewModel.paymentResult.observe(this) { result ->
+            var a = 0
+        }
     }
 
     private val baseRequest = JSONObject().apply {
@@ -39,8 +48,8 @@ internal class DojoGPayActivity : AppCompatActivity() {
         return JSONObject().apply {
             put("type", "PAYMENT_GATEWAY")
             put("parameters", JSONObject(mapOf(
-                "gateway" to "example",
-                "gatewayMerchantId" to "exampleGatewayMerchantId")))
+                "gateway" to "dojo",
+                "gatewayMerchantId" to "exampleGatewayMerchantId"))) //TODO
         }
     }
 
@@ -182,6 +191,8 @@ internal class DojoGPayActivity : AppCompatActivity() {
                 .getJSONObject("billingAddress").getString("name")
             Log.d("BillingName", billingName)
 
+
+            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
 //            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
 
             // Logging token string.

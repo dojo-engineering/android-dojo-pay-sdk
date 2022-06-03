@@ -61,7 +61,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         }
 
         binding.btnGPay.setOnClickListener {
-            onGPayClicked(token = "")
+            onGPayClicked(token = binding.token.text.toString())
         }
     }
 
