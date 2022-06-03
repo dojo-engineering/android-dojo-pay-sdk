@@ -49,7 +49,8 @@ internal class DojoGPayActivity : AppCompatActivity() {
             put("type", "PAYMENT_GATEWAY")
             put("parameters", JSONObject(mapOf(
                 "gateway" to "dojo",
-                "gatewayMerchantId" to "exampleGatewayMerchantId"))) //TODO
+//                "gatewayMerchantId" to "exampleGatewayMerchantId"))) //TODO
+                "gatewayMerchantId" to "771402011592305"))) //TODO
         }
     }
 
@@ -93,7 +94,8 @@ internal class DojoGPayActivity : AppCompatActivity() {
 
     fun createPaymentsClient(activity: Activity): PaymentsClient {
         val walletOptions = Wallet.WalletOptions.Builder()
-            .setEnvironment(WalletConstants.ENVIRONMENT_TEST) // TODO
+//            .setEnvironment(WalletConstants.ENVIRONMENT_TEST) // TODO
+            .setEnvironment(WalletConstants.ENVIRONMENT_PRODUCTION) // TODO
             .build()
 
         return Wallet.getPaymentsClient(activity, walletOptions)
@@ -196,9 +198,9 @@ internal class DojoGPayActivity : AppCompatActivity() {
 //            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
 
             // Logging token string.
-            Log.d("GooglePaymentToken", paymentMethodData
-                .getJSONObject("tokenizationData")
-                .getString("token")) // TODO remove this log
+//            Log.d("GooglePaymentToken", paymentMethodData
+//                .getJSONObject("tokenizationData")
+//                .getString("token")) // TODO remove this log
 
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString()) // TODO and remove this log as well

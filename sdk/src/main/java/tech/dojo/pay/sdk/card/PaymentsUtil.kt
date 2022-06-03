@@ -186,7 +186,7 @@ object PaymentsUtil {
      * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
      */
     private val merchantInfo: JSONObject =
-        JSONObject().put("merchantName", "Example Merchant")
+        JSONObject().put("Dojo", "Awesome merchant")
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the

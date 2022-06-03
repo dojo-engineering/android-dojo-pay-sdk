@@ -45,7 +45,7 @@ object Constants {
      *
      * @value #PAYMENTS_ENVIRONMENT
      */
-    const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_TEST
+    const val PAYMENTS_ENVIRONMENT = WalletConstants.ENVIRONMENT_PRODUCTION
 
     /**
      * The allowed networks to be requested from the API. If the user has cards from networks not
@@ -98,7 +98,7 @@ object Constants {
      *
      * @value #PAYMENT_GATEWAY_TOKENIZATION_NAME
      */
-    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "example"
+    const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "dojo"
 
     /**
      * Custom parameters required by the processor/gateway.
@@ -110,7 +110,7 @@ object Constants {
      */
     val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
         "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
-        "gatewayMerchantId" to "exampleGatewayMerchantId"
+        "gatewayMerchantId" to "771402011592305"
     )
 
     /**

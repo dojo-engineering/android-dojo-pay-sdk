@@ -4,7 +4,7 @@ import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
 data class GPayDetails(
-    var gPayToken: String?,
+    var token: String?,
     val userEmailAddress: String?,
     val userPhoneNumber: String?,
     val billingAddress: DojoAddressDetails?,

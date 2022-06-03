@@ -21,7 +21,7 @@ internal class DojoGPayViewModel(
         viewModelScope.launch {
             try {
                 var gPayPayload = GPayDetails(
-                    gPayToken = gPayData,
+                    token = gPayData,
                     userEmailAddress = null,
                     userPhoneNumber = null,
                     billingAddress = null,
