@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.token
+package tech.dojo.pay.sdksample.token
 
 class MerchantParams(
     val merchantUrl: String,
