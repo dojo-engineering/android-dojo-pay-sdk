@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk
+package tech.dojo.pay.sdksample
 
 import android.os.Bundle
 import android.view.View
@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
-import tech.dojo.pay.sdk.databinding.ActivityCardPaymentBinding
-import tech.dojo.pay.sdk.token.TokenGenerator
+import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
+import tech.dojo.pay.sdksample.token.TokenGenerator
 
 abstract class CardPaymentBaseActivity : AppCompatActivity() {
 

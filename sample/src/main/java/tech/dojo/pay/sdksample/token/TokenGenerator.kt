@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.token
+package tech.dojo.pay.sdksample.token
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
