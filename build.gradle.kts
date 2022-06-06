@@ -4,7 +4,7 @@ plugins {
     id("com.android.library") apply false
     kotlin("android") apply false
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
 
