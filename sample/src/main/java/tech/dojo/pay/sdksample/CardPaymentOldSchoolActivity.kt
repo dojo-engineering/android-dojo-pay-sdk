@@ -1,6 +1,7 @@
-package tech.dojo.pay.sdk
+package tech.dojo.pay.sdksample
 
 import android.content.Intent
+import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 
 class CardPaymentOldSchoolActivity : CardPaymentBaseActivity() {
