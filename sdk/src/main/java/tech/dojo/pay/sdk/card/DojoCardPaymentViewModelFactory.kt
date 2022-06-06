@@ -20,5 +20,4 @@ internal class DojoCardPaymentViewModelFactory(
         val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
         return DojoCardPaymentViewModel(repo) as T
     }
-
 }

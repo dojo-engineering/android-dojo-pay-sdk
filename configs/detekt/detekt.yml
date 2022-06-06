@@ -220,7 +220,6 @@ exceptions:
     exceptionNames:
       - Error
       - Exception
-      - Throwable
 
 performance:
   active: true

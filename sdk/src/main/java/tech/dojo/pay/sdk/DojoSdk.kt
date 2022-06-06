@@ -48,6 +48,4 @@ object DojoSdk {
         if (requestCode != REQUEST_CODE) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
     }
-
-
 }

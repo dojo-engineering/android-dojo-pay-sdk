@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 
-internal class DojoFingerPrintFragment private constructor(): Fragment() {
+internal class DojoFingerPrintFragment private constructor() : Fragment() {
 
     private val viewModel: DojoCardPaymentViewModel by activityViewModels()
 
@@ -25,7 +25,7 @@ internal class DojoFingerPrintFragment private constructor(): Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = WebView(requireContext()).apply {
-        layoutParams = ViewGroup.LayoutParams(0,0)
+        layoutParams = ViewGroup.LayoutParams(0, 0)
         settings.javaScriptEnabled = true
         addJavascriptInterface(FingerPrintCaptureListener(), "Android")
         val html = getHtml(deviceData.token, deviceData.formAction)
@@ -72,5 +72,4 @@ internal class DojoFingerPrintFragment private constructor(): Fragment() {
 
         private const val KEY_DEVICE_DATA = "DEVICE_DATA"
     }
-
 }

@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
-
 internal class Dojo3DSFragment private constructor() : Fragment() {
 
     private lateinit var webView: WebView
@@ -48,9 +47,9 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
                     if (url.contains("ThreeDSecure20Complete")) {
                         webView.loadUrl(
                             "javascript:(function() {" +
-                                    "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
-                                    " androidListener.receiveMessage(response);" +
-                                    "})()"
+                                "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
+                                " androidListener.receiveMessage(response);" +
+                                "})()"
                         )
                     }
                 }
@@ -58,8 +57,8 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
         }
 
         viewModel.threeDsPage.observe(viewLifecycleOwner) {
-                val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
-                webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
+            val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
+            webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
         }
 
         viewModel.fetchThreeDsPage(params)

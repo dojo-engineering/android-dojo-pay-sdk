@@ -124,5 +124,4 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             .create()
             .show()
     }
-
 }
