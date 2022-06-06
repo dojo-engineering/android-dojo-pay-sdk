@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk
+package tech.dojo.pay.sdksample
 
 import org.junit.Test
 
