@@ -43,11 +43,26 @@ If the contribution doesn't meet the above criteria, you may fail our automated 
 
 ## Creating a Pull Request
 
-1.  🍴 Fork the repository on GitHub.
-2.  🏃‍♀️ Clone/fetch your fork to your local development machine. It's a good idea to run the tests just
+1. 🍴 Fork the repository on GitHub.
+2. 🏃‍♀️ Clone/fetch your fork to your local development machine. It's a good idea to run the tests just
     to make sure everything is in order.
-3.  🌿 Create a new branch and check it out.
-4.  🔮 Make your changes and commit them locally. Magic happens here!
-5.  ⤴️ Push your new branch to your fork. (e.g. `git push username fix-issue-16`).
-6.  📥 Open a Pull Request on github.com from your new branch on your fork to `main` in this
+3. 🌿 Create a new branch and check it out.
+4. 🔮 Make your changes and commit them locally. Magic happens here!
+5. ⤴️ Push your new branch to your fork. (e.g. `git push username fix-issue-16`).
+6. 📥 Open a Pull Request on github.com from your new branch on your fork to `main` in this
     repository.
+
+## Static Analysis 🔍
+
+This project is using [**ktlint**](https://github.com/pinterest/ktlint) with the [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle) plugin to format your code. To reformat all the source code as well as the buildscript you can run the `ktlintFormat` gradle task.
+
+This project is also using [**detekt**](https://github.com/detekt/detekt) to analyze the source code, with the configuration that is stored in the [detekt.yml](configs/detekt/detekt.yml) file (the file has been generated with the `detektGenerateConfig` task).
+
+```
+./gradlew detekt - To run detekt
+
+./gradlew ktlintCheck - checks all SourceSets and project Kotlin script files
+
+./gradlew ktlintFormat - tries to format according to the code style all SourceSets Kotlin files and project Kotlin script files
+
+```
