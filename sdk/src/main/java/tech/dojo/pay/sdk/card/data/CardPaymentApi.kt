@@ -6,8 +6,8 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Url
-import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 
 internal interface CardPaymentApi {
@@ -16,13 +16,13 @@ internal interface CardPaymentApi {
     suspend fun collectDeviceData(
         @Path("token") token: String,
         @Body payload: PaymentDetails
-    ) : DeviceData
+    ): DeviceData
 
     @POST("payments/{token}")
     suspend fun processPayment(
         @Path("token") token: String,
         @Body payload: PaymentDetails
-    ) : PaymentResponse
+    ): PaymentResponse
 
     @POST
     @FormUrlEncoded
@@ -30,5 +30,5 @@ internal interface CardPaymentApi {
         @Url url: String,
         @Field("JWT") jwt: String,
         @Field("MD") md: String
-    ) : String
+    ): String
 }

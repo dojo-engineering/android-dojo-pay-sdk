@@ -7,14 +7,13 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
 }
 
-
 subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         debug.set(false)
-        version.set("10.1.0")
+        version.set("0.42.1")
         verbose.set(true)
         android.set(false)
         outputToConsole.set(true)

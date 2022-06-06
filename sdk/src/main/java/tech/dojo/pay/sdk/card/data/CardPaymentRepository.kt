@@ -2,11 +2,10 @@ package tech.dojo.pay.sdk.card.data
 
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
-import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import java.net.SocketTimeoutException
 
 internal class CardPaymentRepository(
     private val api: CardPaymentApi,
@@ -62,6 +61,4 @@ internal class CardPaymentRepository(
         if (month == null || year == null) return null
         return String.format("%s / %s", month, year)
     }
-
 }
-

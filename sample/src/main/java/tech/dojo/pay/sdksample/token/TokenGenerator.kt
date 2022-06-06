@@ -23,5 +23,4 @@ object TokenGenerator {
             orderDescription = "Example description."
         )
     ).id
-
 }
