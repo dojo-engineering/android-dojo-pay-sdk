@@ -97,3 +97,11 @@ Replace GITHUB_USERID with personal / organisation Github User ID and PERSONAL_A
 - Replace GITHUB_USERID with personal / organisation Github User ID and PERSONAL_ACCESS_TOKEN with the token generated
 
 **NOTE: DO NOT COMMIT WITH YOUR GITHUB CREDENTIALS TO REPOSITORY. IT IS ONY MEANT TO BE USED LOCALLY.**
+
+## Releasing ##
+
+Please read our [release guidelines](/RELEASING.md) for publishing or releasing artifacts.
+
+## Contributing ##
+
+We love contributions! Please read our [contribution guidelines](/CONTRIBUTING.md) to get started.
