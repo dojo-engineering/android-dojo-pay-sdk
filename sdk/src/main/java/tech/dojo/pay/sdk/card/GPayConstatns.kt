@@ -75,14 +75,14 @@ object Constants {
      *
      * @value #COUNTRY_CODE Your local country
      */
-    const val COUNTRY_CODE = "US"
+    const val COUNTRY_CODE = "GB"
 
     /**
      * Required by the API, but not visible to the user.
      *
      * @value #CURRENCY_CODE Your local currency
      */
-    const val CURRENCY_CODE = "USD"
+    const val CURRENCY_CODE = "GBP"
 
     /**
      * Supported countries for shipping (use ISO 3166-1 alpha-2 country codes). Relevant only when
@@ -110,7 +110,7 @@ object Constants {
      */
     val PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS = mapOf(
         "gateway" to PAYMENT_GATEWAY_TOKENIZATION_NAME,
-        "gatewayMerchantId" to "771402011592305"
+        "gatewayMerchantId" to "exampleGatewayMerchantId"
     )
 
     /**
@@ -119,7 +119,7 @@ object Constants {
      *
      * @value #DIRECT_TOKENIZATION_PUBLIC_KEY
      */
-    const val DIRECT_TOKENIZATION_PUBLIC_KEY = "REPLACE_ME"
+//    const val DIRECT_TOKENIZATION_PUBLIC_KEY = "REPLACE_ME"
 
     /**
      * Parameters required for `DIRECT` tokenization.
@@ -128,8 +128,8 @@ object Constants {
      *
      * @value #DIRECT_TOKENIZATION_PARAMETERS
      */
-    val DIRECT_TOKENIZATION_PARAMETERS = mapOf(
-        "protocolVersion" to "ECv1",
-        "publicKey" to DIRECT_TOKENIZATION_PUBLIC_KEY
-    )
+//    val DIRECT_TOKENIZATION_PARAMETERS = mapOf(
+//        "protocolVersion" to "ECv1",
+//        "publicKey" to DIRECT_TOKENIZATION_PUBLIC_KEY
+//    )
 }

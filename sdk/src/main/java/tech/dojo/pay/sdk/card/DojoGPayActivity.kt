@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.SyncStateContract
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -44,67 +45,10 @@ internal class DojoGPayActivity : AppCompatActivity() {
         put("apiVersionMinor", 0)
     }
 
-    private fun gatewayTokenizationSpecification(): JSONObject {
-        return JSONObject().apply {
-            put("type", "PAYMENT_GATEWAY")
-            put("parameters", JSONObject(mapOf(
-                "gateway" to "dojo",
-//                "gatewayMerchantId" to "exampleGatewayMerchantId"))) //TODO
-                "gatewayMerchantId" to "771402011592305"))) //TODO
-        }
-    }
-
-    private val allowedCardNetworks = JSONArray(listOf(
-        "AMEX",
-        "DISCOVER",
-        "INTERAC",
-        "JCB",
-        "MASTERCARD",
-        "MIR",
-        "VISA"))
-
-    private val allowedCardAuthMethods = JSONArray(listOf(
-        "PAN_ONLY",
-        "CRYPTOGRAM_3DS"))
-
-
-    private fun baseCardPaymentMethod(): JSONObject {
-        return JSONObject().apply {
-
-            val parameters = JSONObject().apply {
-                put("allowedAuthMethods", allowedCardAuthMethods)
-                put("allowedCardNetworks", allowedCardNetworks)
-                put("billingAddressRequired", true)
-                put("billingAddressParameters", JSONObject().apply {
-                    put("format", "FULL")
-                })
-            }
-
-            put("type", "CARD")
-            put("parameters", parameters)
-        }
-    }
-
-    private fun cardPaymentMethod(): JSONObject {
-        val cardPaymentMethod = baseCardPaymentMethod()
-        cardPaymentMethod.put("tokenizationSpecification", gatewayTokenizationSpecification())
-
-        return cardPaymentMethod
-    }
-
-    fun createPaymentsClient(activity: Activity): PaymentsClient {
-        val walletOptions = Wallet.WalletOptions.Builder()
-//            .setEnvironment(WalletConstants.ENVIRONMENT_TEST) // TODO
-            .setEnvironment(WalletConstants.ENVIRONMENT_PRODUCTION) // TODO
-            .build()
-
-        return Wallet.getPaymentsClient(activity, walletOptions)
-    }
-
     fun isReadyToPayRequest(): JSONObject? {
         return try {
             baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(baseCardPaymentMethod()))
+                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
             }
 
         } catch (e: JSONException) {
@@ -194,13 +138,18 @@ internal class DojoGPayActivity : AppCompatActivity() {
             Log.d("BillingName", billingName)
 
 
-            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
+//            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
 //            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
 
             // Logging token string.
 //            Log.d("GooglePaymentToken", paymentMethodData
 //                .getJSONObject("tokenizationData")
 //                .getString("token")) // TODO remove this log
+
+            Toast.makeText(
+                this,
+                paymentMethodData.toString(),
+                Toast.LENGTH_LONG).show();
 
         } catch (e: JSONException) {
             Log.e("handlePaymentSuccess", "Error: " + e.toString()) // TODO and remove this log as well

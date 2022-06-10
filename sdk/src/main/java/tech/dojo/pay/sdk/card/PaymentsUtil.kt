@@ -79,20 +79,20 @@ object PaymentsUtil {
      * @throws JSONException
      * @see [PaymentMethodTokenizationSpecification](https://developers.google.com/pay/api/android/reference/object.PaymentMethodTokenizationSpecification)
      */
-    private fun directTokenizationSpecification(): JSONObject {
-        if (Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == "REPLACE_ME" ||
-            (Constants.DIRECT_TOKENIZATION_PARAMETERS.isEmpty() ||
-                    Constants.DIRECT_TOKENIZATION_PUBLIC_KEY.isEmpty())) {
-
-            throw RuntimeException(
-                "Please edit the Constants.java file to add protocol version & public key.")
-        }
-
-        return JSONObject().apply {
-            put("type", "DIRECT")
-            put("parameters", JSONObject(Constants.DIRECT_TOKENIZATION_PARAMETERS))
-        }
-    }
+//    private fun directTokenizationSpecification(): JSONObject {
+//        if (Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == "REPLACE_ME" ||
+//            (Constants.DIRECT_TOKENIZATION_PARAMETERS.isEmpty() ||
+//                    Constants.DIRECT_TOKENIZATION_PUBLIC_KEY.isEmpty())) {
+//
+//            throw RuntimeException(
+//                "Please edit the Constants.java file to add protocol version & public key.")
+//        }
+//
+//        return JSONObject().apply {
+//            put("type", "DIRECT")
+//            put("parameters", JSONObject(Constants.DIRECT_TOKENIZATION_PARAMETERS))
+//        }
+//    }
 
     /**
      * Card networks supported by your app and your gateway.
@@ -129,16 +129,16 @@ object PaymentsUtil {
      * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
      */
     // Optionally, you can add billing address/phone number associated with a CARD payment method.
-    private fun baseCardPaymentMethod(): JSONObject {
+    fun baseCardPaymentMethod(): JSONObject {
         return JSONObject().apply {
 
             val parameters = JSONObject().apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)
                 put("allowedCardNetworks", allowedCardNetworks)
-                put("billingAddressRequired", true)
-                put("billingAddressParameters", JSONObject().apply {
-                    put("format", "FULL")
-                })
+//                put("billingAddressRequired", true)
+//                put("billingAddressParameters", JSONObject().apply {
+//                    put("format", "FULL")
+//                })
             }
 
             put("type", "CARD")
@@ -186,7 +186,7 @@ object PaymentsUtil {
      * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
      */
     private val merchantInfo: JSONObject =
-        JSONObject().put("Dojo", "Awesome merchant")
+        JSONObject().put("merchantName", "Example Merchant")
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
@@ -214,7 +214,7 @@ object PaymentsUtil {
         return JSONObject().apply {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
-            put("countryCode", Constants.COUNTRY_CODE)
+//            put("countryCode", Constants.COUNTRY_CODE)
             put("currencyCode", Constants.CURRENCY_CODE)
         }
     }
@@ -230,16 +230,16 @@ object PaymentsUtil {
             baseRequest.apply {
                 put("allowedPaymentMethods", JSONArray().put(cardPaymentMethod()))
                 put("transactionInfo", getTransactionInfo(priceCemts.centsToString()))
-                put("merchantInfo", merchantInfo)
+//                put("merchantInfo", merchantInfo) <- is Optional, if not present or not registered will show not recognized
 
                 // An optional shipping address requirement is a top-level property of the
                 // PaymentDataRequest JSON object.
-                val shippingAddressParameters = JSONObject().apply {
-                    put("phoneNumberRequired", false)
-                    put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
-                }
-                put("shippingAddressParameters", shippingAddressParameters)
-                put("shippingAddressRequired", true)
+//                val shippingAddressParameters = JSONObject().apply {
+//                    put("phoneNumberRequired", false)
+//                    put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
+//                }
+//                put("shippingAddressParameters", shippingAddressParameters)
+//                put("shippingAddressRequired", true)
             }
         } catch (e: JSONException) {
             null
