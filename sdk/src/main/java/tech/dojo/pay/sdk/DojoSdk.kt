@@ -8,7 +8,6 @@ import tech.dojo.pay.sdk.card.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 
 object DojoSdk {
 
@@ -21,7 +20,7 @@ object DojoSdk {
      */
     fun createCardPaymentHandler(
         activity: ComponentActivity,
-        onResult: (DojoCardPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit
     ): DojoCardPaymentHandler = DojoCardPaymentHandlerImpl(activity, onResult)
 
     /**
@@ -44,7 +43,7 @@ object DojoSdk {
      * Parses activity result to DojoCardPaymentResult.
      * If the result was not initiated by card payment, then null will be returned.
      */
-    fun parseCardPaymentResult(requestCode: Int, resultCode: Int, intent: Intent?): DojoCardPaymentResult? {
+    fun parseCardPaymentResult(requestCode: Int, resultCode: Int, intent: Intent?): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
     }

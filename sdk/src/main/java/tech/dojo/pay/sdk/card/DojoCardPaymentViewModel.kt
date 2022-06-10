@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import kotlin.Exception
@@ -33,7 +33,7 @@ internal class DojoCardPaymentViewModel(
                 paymentResult.value = repository.processPayment()
                 canExit = true
             } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }
@@ -42,7 +42,7 @@ internal class DojoCardPaymentViewModel(
         fingerPrintCapturedEvent.trySend(Unit)
     }
 
-    fun on3DSCompleted(result: DojoCardPaymentResult) {
+    fun on3DSCompleted(result: DojoPaymentResult) {
         paymentResult.postValue(PaymentResult.Completed(result))
     }
 
@@ -51,7 +51,7 @@ internal class DojoCardPaymentViewModel(
             try {
                 threeDsPage.value = repository.fetch3dsPage(params)
             } catch (e: Exception) {
-                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }

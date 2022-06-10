@@ -20,7 +20,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.lang.IllegalArgumentException
@@ -44,7 +44,7 @@ internal class DojoCardPaymentViewModelTest {
     fun `WHEN device data collection fails THEN sdk internal error is returned`() = runTest {
         whenever(repository.collectDeviceData()).thenThrow(IllegalArgumentException())
         val viewModel = DojoCardPaymentViewModel(repository)
-        val expected = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+        val expected = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
         assertEquals(expected, viewModel.paymentResult.value)
     }
 
@@ -77,7 +77,7 @@ internal class DojoCardPaymentViewModelTest {
     @Test
     fun `WHEN payment processing completes THEN payment result is returned AND user can exit`() = runTest {
         val deviceData = DeviceData("action", "token")
-        val result = PaymentResult.Completed(DojoCardPaymentResult.SUCCESSFUL)
+        val result = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
         whenever(repository.collectDeviceData()).thenReturn(deviceData)
         whenever(repository.processPayment()).thenReturn(result)
         val viewModel = DojoCardPaymentViewModel(repository)

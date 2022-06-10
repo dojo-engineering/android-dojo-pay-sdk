@@ -17,7 +17,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
@@ -66,7 +66,7 @@ internal class CardPaymentRepositoryTest {
 
         whenever(api.processPayment(any(), any())).thenReturn(
             PaymentResponse(
-                statusCode = DojoCardPaymentResult.AUTHORIZING.code,
+                statusCode = DojoPaymentResult.AUTHORIZING.code,
                 stepUpUrl = threeDSParams.stepUpUrl,
                 jwt = threeDSParams.jwt,
                 md = threeDSParams.md
@@ -81,10 +81,10 @@ internal class CardPaymentRepositoryTest {
     @Test
     fun `WHEN result code is not AUTHORIZING THEN completed result is returned`() = runTest {
         whenever(api.processPayment(any(), any())).thenReturn(
-            PaymentResponse(statusCode = DojoCardPaymentResult.SUCCESSFUL.code)
+            PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
         )
         val result = repo.processPayment()
-        val expected = PaymentResult.Completed(DojoCardPaymentResult.SUCCESSFUL)
+        val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
         assertEquals(expected, result)
     }
 

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
@@ -22,7 +22,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
     abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
 
-    fun showResult(result: DojoCardPaymentResult) {
+    fun showResult(result: DojoPaymentResult) {
         showDialog(
             title = "Payment result",
             message = "${result.name} (${result.code})"
