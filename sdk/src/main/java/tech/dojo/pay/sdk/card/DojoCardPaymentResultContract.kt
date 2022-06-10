@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 
-internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoCardPaymentResult>() {
+internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoPaymentResult>() {
 
     override fun createIntent(context: Context, input: DojoCardPaymentParams): Intent {
         val intent = Intent(context, DojoCardPaymentActivity::class.java)
@@ -15,11 +15,11 @@ internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPa
         return intent
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): DojoCardPaymentResult {
+    override fun parseResult(resultCode: Int, intent: Intent?): DojoPaymentResult {
         return if (resultCode == RESULT_OK && intent != null) {
-            intent.getSerializableExtra(KEY_RESULT) as DojoCardPaymentResult
+            intent.getSerializableExtra(KEY_RESULT) as DojoPaymentResult
         } else {
-            DojoCardPaymentResult.DECLINED
+            DojoPaymentResult.DECLINED
         }
     }
 
