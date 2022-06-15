@@ -3,10 +3,10 @@ package tech.dojo.pay.sdk.card
 import android.webkit.JavascriptInterface
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 
 internal class ThreeDsInterface(
-    private val onEventCallback: ((DojoCardPaymentResult) -> Unit)
+    private val onEventCallback: ((DojoPaymentResult) -> Unit)
 ) {
 
     @JavascriptInterface
@@ -18,9 +18,9 @@ internal class ThreeDsInterface(
         val statusCode = (result["statusCode"] as? Double)?.toInt()
 
         val paymentResult = if (statusCode != null) {
-            DojoCardPaymentResult.fromCode(statusCode)
+            DojoPaymentResult.fromCode(statusCode)
         } else {
-            DojoCardPaymentResult.SDK_INTERNAL_ERROR
+            DojoPaymentResult.SDK_INTERNAL_ERROR
         }
 
         onEventCallback.invoke(paymentResult)

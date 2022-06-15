@@ -1,6 +1,6 @@
-package tech.dojo.pay.sdk.card.entities
+package tech.dojo.pay.sdk
 
-enum class DojoCardPaymentResult(val code: Int) {
+enum class DojoPaymentResult(val code: Int) {
     SUCCESSFUL(0),
     AUTHORIZING(3),
     REFERRED(4),
@@ -15,7 +15,7 @@ enum class DojoCardPaymentResult(val code: Int) {
     SDK_INTERNAL_ERROR(7770);
 
     companion object {
-        fun fromCode(code: Int): DojoCardPaymentResult =
+        fun fromCode(code: Int): DojoPaymentResult =
             values().find { it.code == code } ?: SDK_INTERNAL_ERROR
     }
 }
