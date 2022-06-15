@@ -3,11 +3,11 @@ package tech.dojo.pay.sdk.card
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 
 internal class DojoCardPaymentHandlerImpl(
     activity: ComponentActivity,
-    onResult: (DojoCardPaymentResult) -> Unit
+    onResult: (DojoPaymentResult) -> Unit
 ) : DojoCardPaymentHandler {
 
     private val cardPayment = activity.registerForActivityResult(DojoCardPaymentResultContract(), onResult)

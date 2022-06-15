@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.commit
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
@@ -42,7 +42,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity() {
         }
     }
 
-    private fun returnResult(result: DojoCardPaymentResult) {
+    private fun returnResult(result: DojoPaymentResult) {
         val data = Intent()
         data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
