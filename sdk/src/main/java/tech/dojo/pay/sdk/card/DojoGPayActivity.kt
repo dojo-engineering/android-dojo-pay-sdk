@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
+import com.google.android.gms.wallet.PaymentsClient
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -32,7 +33,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
 
     private lateinit var paymentsClient: PaymentsClient
 
-    fun performGPay() {
+    private fun performGPay() {
         paymentsClient = PaymentsUtil.createPaymentsClient(this)
         possiblyShowGooglePayButton()
         viewModel.paymentResult.observe(this) { result ->
@@ -43,17 +44,6 @@ internal class DojoGPayActivity : AppCompatActivity() {
     private val baseRequest = JSONObject().apply {
         put("apiVersion", 2)
         put("apiVersionMinor", 0)
-    }
-
-    fun isReadyToPayRequest(): JSONObject? {
-        return try {
-            baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
-            }
-
-        } catch (e: JSONException) {
-            null
-        }
     }
 
     private fun possiblyShowGooglePayButton() {
@@ -71,6 +61,17 @@ internal class DojoGPayActivity : AppCompatActivity() {
                 // Process error
                 Log.w("isReadyToPay failed", exception)
             }
+        }
+    }
+
+    private fun isReadyToPayRequest(): JSONObject? {
+        return try {
+            baseRequest.apply {
+                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
+            }
+
+        } catch (e: JSONException) {
+            null
         }
     }
 
