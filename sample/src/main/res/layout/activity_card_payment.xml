@@ -218,9 +218,9 @@
         android:id="@+id/btnGPay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:layout_marginLeft="16dp"
-        android:text="GPay"
+        android:layout_marginTop="24dp"
+        android:text="Google Pay"
         app:layout_constraintStart_toEndOf="@+id/btnGenerateToken"
         app:layout_constraintTop_toBottomOf="@+id/layoutButtons" />
 
