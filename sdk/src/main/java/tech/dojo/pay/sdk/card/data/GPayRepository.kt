@@ -1,8 +1,7 @@
 package tech.dojo.pay.sdk.card.data
 
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
@@ -16,9 +15,9 @@ internal class GPayRepository (
 
     suspend fun processPayment(gPayPayload: GPayDetails): PaymentResult {
         val response = api.processGPay(token, gPayPayload)
-        val paymentResult = DojoCardPaymentResult.fromCode(response.statusCode)
+        val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
 
-        return if (paymentResult == DojoCardPaymentResult.AUTHORIZING) {
+        return if (paymentResult == DojoPaymentResult.AUTHORIZING) {
             PaymentResult.ThreeDSRequired(
                 ThreeDSParams(
                     stepUpUrl = requireNotNull(response.stepUpUrl),

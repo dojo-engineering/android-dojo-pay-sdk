@@ -4,10 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 
 internal class DojoGPayViewModel(
