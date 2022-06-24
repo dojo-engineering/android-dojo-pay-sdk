@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.*
-import tech.dojo.pay.sdk.card.DojoCardPaymentHandlerImpl
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.DojoGPayHandlerImpl
+import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 
 object DojoSdk {
 

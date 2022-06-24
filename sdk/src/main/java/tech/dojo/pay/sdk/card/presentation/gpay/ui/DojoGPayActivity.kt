@@ -1,9 +1,7 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.gpay.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.provider.SyncStateContract
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -16,7 +14,9 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.presentation.gpay.util.PaymentsUtil
+import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
+import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
 
 internal class DojoGPayActivity : AppCompatActivity() {
 

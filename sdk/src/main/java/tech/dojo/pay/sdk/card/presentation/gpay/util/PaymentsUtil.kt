@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.gpay.util
 
 import android.app.Activity
 import com.google.android.gms.wallet.PaymentsClient
@@ -22,6 +22,7 @@ import com.google.android.gms.wallet.Wallet
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import tech.dojo.pay.sdk.card.Constants
 import java.math.BigDecimal
 import java.math.RoundingMode
 

@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.gpay.handler
 
 interface DojoGPayHandler {
 

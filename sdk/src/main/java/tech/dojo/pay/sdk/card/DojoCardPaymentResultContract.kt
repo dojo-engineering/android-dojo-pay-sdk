@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContract
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.presentation.card.ui.DojoCardPaymentActivity
+import tech.dojo.pay.sdk.card.presentation.gpay.ui.DojoGPayActivity
 
 internal class DojoCardPaymentResultContract : ActivityResultContract<DojoCardPaymentParams, DojoPaymentResult>() {
 
