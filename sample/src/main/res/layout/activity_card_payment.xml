@@ -16,7 +16,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
+    <include
+        android:id="@+id/btnGPay"
+        layout="@layout/button_pay_with_gpay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnPay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/token_text_container" />
     <FrameLayout
         android:id="@+id/viewProgress"
         android:layout_width="match_parent"
@@ -185,9 +194,10 @@
         app:layout_constraintTop_toBottomOf="@id/layoutButtons"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/token_text_container"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
@@ -213,15 +223,4 @@
         android:text="Generate token"
         app:layout_constraintStart_toEndOf="@+id/checkboxSandbox"
         app:layout_constraintTop_toBottomOf="@+id/layoutButtons" />
-
-    <Button
-        android:id="@+id/btnGPay"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:text="GPay"
-        app:layout_constraintStart_toEndOf="@+id/btnGenerateToken"
-        app:layout_constraintTop_toBottomOf="@+id/layoutButtons" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
