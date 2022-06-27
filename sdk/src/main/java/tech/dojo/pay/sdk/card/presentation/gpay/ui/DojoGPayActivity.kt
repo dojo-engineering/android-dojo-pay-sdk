@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.android.gms.wallet.*
+import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -44,11 +45,12 @@ internal class DojoGPayActivity : AppCompatActivity() {
         }
     }
 
-    private fun startPaymentProcess(){
-       val params= requireNotNull(intent.extras)
-           .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
+    private fun startPaymentProcess() {
+        val params = requireNotNull(intent.extras)
+            .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
         gPayEngine.payWithGoogle(params.totalAmountPayload)
     }
+
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -64,15 +66,12 @@ internal class DojoGPayActivity : AppCompatActivity() {
                         // The user cancelled the payment attempt
                     }
 
-                    AutoResolveHelper.RESULT_ERROR -> {
-                        AutoResolveHelper.getStatusFromIntent(data)?.let {
-                            Log.d("GPay Failed", it.status.toString())
-                        }
+                    RESULT_ERROR -> {
+                        AutoResolveHelper.getStatusFromIntent(data)
+                            ?.let { Log.d("GPay Failed", it.status.toString()) }
+                        returnResult(DojoPaymentResult.FAILED)
                     }
                 }
-
-                // Re-enables the Google Pay payment button.
-//                googlePayButton.isClickable = true
             }
         }
     }
