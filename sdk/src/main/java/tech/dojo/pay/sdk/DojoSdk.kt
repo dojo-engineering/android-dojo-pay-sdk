@@ -10,6 +10,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 
@@ -50,11 +51,13 @@ object DojoSdk {
 
     fun startGPay(
         activity: Activity,
-        token: String
+        token: String,
+        payload: DojoTotalAmountPayload
+
     ) {
         val intent = DojoGPayResultContract().createIntent(
             activity,
-            DojoGPayParams(token)
+            DojoGPayParams(token,payload)
         )
         activity.startActivityForResult(intent, REQUEST_CODE)
     }
