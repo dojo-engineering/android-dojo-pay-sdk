@@ -25,6 +25,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.Constants
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -235,7 +236,7 @@ object PaymentsUtil {
      * @see [TransactionInfo](https://developers.google.com/pay/api/android/reference/object.TransactionInfo)
      */
     @Throws(JSONException::class)
-    private fun getTransactionInfo(price: String): JSONObject {
+    private fun getTransactionInfo(price: String,currencyCode:String): JSONObject {
         return JSONObject().apply {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
@@ -249,11 +250,11 @@ object PaymentsUtil {
      * @return Payment data expected by your app.
      * @see [PaymentDataRequest](https://developers.google.com/pay/api/android/reference/object.PaymentDataRequest)
      */
-    fun getPaymentDataRequest(priceCemts: Long): JSONObject? {
+    fun getPaymentDataRequest(totalAmountPayload: DojoTotalAmountPayload): JSONObject? {
         return try {
             baseRequest.apply {
                 put("allowedPaymentMethods", JSONArray().put(cardPaymentMethod()))
-                put("transactionInfo", getTransactionInfo(priceCemts.centsToString()))
+                put("transactionInfo", getTransactionInfo(totalAmountPayload.valueInCents.centsToString(),totalAmountPayload.currencyCode))
 //                put("merchantInfo", merchantInfo) <- is Optional, if not present or not registered will show not recognized
 
                 // An optional shipping address requirement is a top-level property of the

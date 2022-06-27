@@ -6,6 +6,7 @@ import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
 
 class DojoGPayEngine(
     private val activity: Activity,
@@ -34,10 +35,8 @@ class DojoGPayEngine(
     /**
      * start the payment process for google pay
      */
-    internal fun payWithGoogle() {
-        val priceCents: Long = 10
-
-        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(priceCents)
+    internal fun payWithGoogle(totalAmountPayload: DojoTotalAmountPayload) {
+        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalAmountPayload)
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
 
         // Since loadPaymentData may show the UI asking the user to select a payment method, we use

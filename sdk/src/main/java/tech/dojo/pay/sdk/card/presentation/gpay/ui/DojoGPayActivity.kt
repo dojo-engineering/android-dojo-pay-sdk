@@ -13,6 +13,7 @@ import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
+import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
@@ -35,12 +36,18 @@ internal class DojoGPayActivity : AppCompatActivity() {
 
     private fun performGPay() {
         gPayEngine.isReadyToPay(
-            onGpayAvailable = { gPayEngine.payWithGoogle() },
+            onGpayAvailable = { startPaymentProcess() },
             onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
         )
         viewModel.paymentResult.observe(this) { result ->
             var a = 0
         }
+    }
+
+    private fun startPaymentProcess(){
+       val params= requireNotNull(intent.extras)
+           .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
+        gPayEngine.payWithGoogle(params.totalAmountPayload)
     }
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
