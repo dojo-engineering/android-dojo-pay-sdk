@@ -19,9 +19,11 @@ package tech.dojo.pay.sdk.card.presentation.gpay.util
 import android.app.Activity
 import com.google.android.gms.wallet.PaymentsClient
 import com.google.android.gms.wallet.Wallet
+import com.google.android.gms.wallet.WalletConstants
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.Constants
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -42,7 +44,7 @@ object PaymentsUtil {
      * @return Google Pay API base request object.
      * @throws JSONException
      */
-    private val baseRequest = JSONObject().apply {
+    val baseRequest = JSONObject().apply {
         put("apiVersion", 2)
         put("apiVersionMinor", 0)
     }
@@ -118,6 +120,20 @@ object PaymentsUtil {
      */
     private val allowedCardAuthMethods = JSONArray(Constants.SUPPORTED_METHODS)
 
+
+    /**
+     * return the Json  object for the is ready to pay request
+     */
+    fun getReadyToPayRequest(): JSONObject? {
+        return try {
+            PaymentsUtil.baseRequest.apply {
+                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
+            }
+
+        } catch (e: JSONException) {
+            null
+        }
+    }
     /**
      * Describe your app's support for the CARD payment method.
      *
@@ -197,12 +213,20 @@ object PaymentsUtil {
      */
     fun createPaymentsClient(activity: Activity): PaymentsClient {
         val walletOptions = Wallet.WalletOptions.Builder()
-            .setEnvironment(Constants.PAYMENTS_ENVIRONMENT)
+            .setEnvironment(getGpayEnvironment())
             .build()
 
         return Wallet.getPaymentsClient(activity, walletOptions)
     }
 
+    /**
+     * returns environment based on the sandBox status if it's on then it will return test environment
+     * off it will return prod environment
+     */
+    fun getGpayEnvironment() = when {
+        DojoSdk.sandbox -> WalletConstants.ENVIRONMENT_TEST
+        else -> Constants.PAYMENTS_ENVIRONMENT
+    }
     /**
      * Provide Google Pay API with a payment amount, currency, and amount status.
      *
@@ -215,7 +239,6 @@ object PaymentsUtil {
         return JSONObject().apply {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
-//            put("countryCode", Constants.COUNTRY_CODE)
             put("currencyCode", Constants.CURRENCY_CODE)
         }
     }

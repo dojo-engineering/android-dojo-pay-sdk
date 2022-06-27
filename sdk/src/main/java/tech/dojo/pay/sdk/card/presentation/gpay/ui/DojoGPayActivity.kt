@@ -7,14 +7,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.wallet.*
-import com.google.android.gms.wallet.PaymentsClient
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
-import tech.dojo.pay.sdk.card.presentation.gpay.util.PaymentsUtil
+import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
+import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
+import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
 
@@ -31,80 +31,22 @@ internal class DojoGPayActivity : AppCompatActivity() {
         DojoGPayViewModelFactory(intent.extras)
     }
 
-    private lateinit var paymentsClient: PaymentsClient
+    private val gPayEngine: DojoGPayEngine by lazy { DojoGPayEngine(this) }
 
     private fun performGPay() {
-        paymentsClient = PaymentsUtil.createPaymentsClient(this)
-        possiblyShowGooglePayButton()
+        gPayEngine.isReadyToPay(
+            onGpayAvailable = { gPayEngine.payWithGoogle() },
+            onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
+        )
         viewModel.paymentResult.observe(this) { result ->
             var a = 0
         }
     }
-
-    private val baseRequest = JSONObject().apply {
-        put("apiVersion", 2)
-        put("apiVersionMinor", 0)
-    }
-
-    private fun possiblyShowGooglePayButton() {
-
-        val isReadyToPayJson = isReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString()) ?: return
-
-        // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
-        // OnCompleteListener to be triggered when the result of the call is known.
-        val task = paymentsClient.isReadyToPay(request)
-        task.addOnCompleteListener { completedTask ->
-            try {
-                completedTask.getResult(ApiException::class.java)?.let(::setGooglePayAvailable)
-            } catch (exception: ApiException) {
-                // Process error
-                Log.w("isReadyToPay failed", exception)
-            }
-        }
-    }
-
-    private fun isReadyToPayRequest(): JSONObject? {
-        return try {
-            baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
-            }
-
-        } catch (e: JSONException) {
-            null
-        }
-    }
-
-    private fun setGooglePayAvailable(available: Boolean) {
-
-        val priceCents: Long = 10
-
-        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(priceCents)
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-
-        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-        // AutoResolveHelper to wait for the user interacting with it. Once completed,
-        // onActivityResult will be called with the result.
-        if (request != null) {
-            AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), this, 99999) // TODO code
-        }
-
-        if (available) {
-//            googlePayButton.visibility = View.VISIBLE
-        } else {
-//            Toast.makeText(
-//                this,
-//                "Unfortunately, Google Pay is not available on this device",
-//                Toast.LENGTH_LONG).show();
-        }
-    }
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // Value passed in AutoResolveHelper
-            99999 -> {
+            GOOGLE_PAY_ACTIVITY_REQUEST_CODE -> {
                 when (resultCode) {
                     RESULT_OK ->
                         data?.let { intent ->
@@ -129,11 +71,12 @@ internal class DojoGPayActivity : AppCompatActivity() {
     }
 
     private fun handlePaymentSuccess(paymentData: PaymentData) {
-        val paymentInformation = paymentData.toJson() ?: return
+        val paymentInformation = paymentData.toJson()
 
         try {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
-            val paymentMethodData = JSONObject(paymentInformation).getJSONObject("paymentMethodData")
+            val paymentMethodData =
+                JSONObject(paymentInformation).getJSONObject("paymentMethodData")
             val billingName = paymentMethodData.getJSONObject("info")
                 .getJSONObject("billingAddress").getString("name")
             Log.d("BillingName", billingName)
@@ -150,10 +93,23 @@ internal class DojoGPayActivity : AppCompatActivity() {
             Toast.makeText(
                 this,
                 paymentMethodData.toString(),
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_LONG
+            ).show();
 
         } catch (e: JSONException) {
-            Log.e("handlePaymentSuccess", "Error: " + e.toString()) // TODO and remove this log as well
+            Log.e(
+                "handlePaymentSuccess",
+                "Error: " + e.toString()
+            ) // TODO and remove this log as well
         }
     }
+
+    private fun returnResult(result: DojoPaymentResult) {
+        val data = Intent()
+        data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
+        setResult(RESULT_OK, data)
+        finish()
+        overridePendingTransition(0, R.anim.exit)
+    }
+
 }
