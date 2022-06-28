@@ -16,7 +16,7 @@ class DojoGPayEngine(
     /**
      * Check that Google Pay is available and ready
      */
-    fun isReadyToPay(
+    internal fun isReadyToPay(
         onGpayAvailable: () -> Unit,
         onGpayUnavailable: () -> Unit
     ) {

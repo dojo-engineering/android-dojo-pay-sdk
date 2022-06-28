@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdksample
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -62,12 +61,15 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 )
             )
         }
-        DojoGPayEngine(this).isReadyToPay(
-            { binding.btnGPay.googlePayButton.visibility=View.VISIBLE},
-            {binding.btnGPay.googlePayButton.visibility=View.GONE}
+        DojoSdk.isGpayAvailable(this,
+            { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
+            { binding.btnGPay.googlePayButton.visibility = View.GONE }
         )
         binding.btnGPay.googlePayButton.setOnClickListener {
-            onGPayClicked(token = binding.token.text.toString(), payload = DojoTotalAmountPayload(10L,"GBP"))
+            onGPayClicked(
+                token = binding.token.text.toString(),
+                payload = DojoTotalAmountPayload(10L, "GBP")
+            )
         }
     }
 

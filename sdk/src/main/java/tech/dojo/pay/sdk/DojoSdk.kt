@@ -13,6 +13,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
+import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 
 object DojoSdk {
 
@@ -57,16 +58,32 @@ object DojoSdk {
     ) {
         val intent = DojoGPayResultContract().createIntent(
             activity,
-            DojoGPayParams(token,payload)
+            DojoGPayParams(token, payload)
         )
         activity.startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    fun isGpayAvailable(
+        activity: Activity,
+        onGpayAvailable: () -> Unit,
+        onGpayUnavailable: () -> Unit
+    ) {
+        DojoGPayEngine(activity)
+            .isReadyToPay(
+                { onGpayAvailable() },
+                { onGpayUnavailable() }
+            )
     }
 
     /**
      * Parses activity result to DojoCardPaymentResult.
      * If the result was not initiated by card payment, then null will be returned.
      */
-    fun parseCardPaymentResult(requestCode: Int, resultCode: Int, intent: Intent?): DojoPaymentResult? {
+    fun parseCardPaymentResult(
+        requestCode: Int,
+        resultCode: Int,
+        intent: Intent?
+    ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
     }
