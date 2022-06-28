@@ -15,6 +15,7 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
@@ -41,7 +42,12 @@ internal class DojoGPayActivity : AppCompatActivity() {
             onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
         )
         viewModel.paymentResult.observe(this) { result ->
-            var a = 0
+            when (result) {
+                is PaymentResult.Completed -> returnResult(result.value)
+                is PaymentResult.ThreeDSRequired -> {
+                    // TODO start 3ds handling
+                }
+            }
         }
     }
 
@@ -83,12 +89,12 @@ internal class DojoGPayActivity : AppCompatActivity() {
             // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
             val paymentMethodData =
                 JSONObject(paymentInformation).getJSONObject("paymentMethodData")
-            val billingName = paymentMethodData.getJSONObject("info")
-                .getJSONObject("billingAddress").getString("name")
-            Log.d("BillingName", billingName)
+            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
 
-
-//            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
+            // TODO remove this log
+//            val billingName = paymentMethodData.getJSONObject("info")
+//                .getJSONObject("billingAddress").getString("name")
+//            Log.d("BillingName", billingName)
 //            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
 
             // Logging token string.
@@ -96,17 +102,14 @@ internal class DojoGPayActivity : AppCompatActivity() {
 //                .getJSONObject("tokenizationData")
 //                .getString("token")) // TODO remove this log
 
-            Toast.makeText(
-                this,
-                paymentMethodData.toString(),
-                Toast.LENGTH_LONG
-            ).show();
+//            Toast.makeText(
+//                this,
+//                paymentMethodData.toString(),
+//                Toast.LENGTH_LONG
+//            ).show()// TODO remove this log
 
         } catch (e: JSONException) {
-            Log.e(
-                "handlePaymentSuccess",
-                "Error: " + e.toString()
-            ) // TODO and remove this log as well
+            returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 

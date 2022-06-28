@@ -69,10 +69,7 @@ object DojoSdk {
         onGpayUnavailable: () -> Unit
     ) {
         DojoGPayEngine(activity)
-            .isReadyToPay(
-                { onGpayAvailable() },
-                { onGpayUnavailable() }
-            )
+            .isReadyToPay({ onGpayAvailable() }, { onGpayUnavailable() })
     }
 
     /**
