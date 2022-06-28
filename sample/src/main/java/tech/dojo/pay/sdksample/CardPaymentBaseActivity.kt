@@ -68,7 +68,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         binding.btnGPay.googlePayButton.setOnClickListener {
             onGPayClicked(
                 token = binding.token.text.toString(),
-                payload = DojoTotalAmountPayload(10L, "GBP")
+                payload = DojoTotalAmountPayload(0.10, "GBP")
             )
         }
     }

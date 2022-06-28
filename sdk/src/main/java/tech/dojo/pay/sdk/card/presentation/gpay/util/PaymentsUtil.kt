@@ -254,7 +254,7 @@ object PaymentsUtil {
         return try {
             baseRequest.apply {
                 put("allowedPaymentMethods", JSONArray().put(cardPaymentMethod()))
-                put("transactionInfo", getTransactionInfo(totalAmountPayload.valueInCents.centsToString(),totalAmountPayload.currencyCode))
+                put("transactionInfo", getTransactionInfo(totalAmountPayload.amount.centsToString(),totalAmountPayload.currencyCode))
 //                put("merchantInfo", merchantInfo) <- is Optional, if not present or not registered will show not recognized
 
                 // An optional shipping address requirement is a top-level property of the
@@ -277,7 +277,6 @@ object PaymentsUtil {
  *
  * @param cents value of the price.
  */
-fun Long.centsToString() = BigDecimal(this)
-    .divide(PaymentsUtil.CENTS)
+fun Double.centsToString() = BigDecimal(this)
     .setScale(2, RoundingMode.HALF_EVEN)
     .toString()

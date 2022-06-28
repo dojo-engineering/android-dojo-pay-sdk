@@ -28,8 +28,10 @@ class DojoGPayEngine(
         paymentsClient
             .isReadyToPay(request)
             .addOnSuccessListener { onGpayAvailable() }
-            .addOnFailureListener { onGpayUnavailable() }
-            .addOnFailureListener { Log.w("isReadyToPay failed", it) }
+            .addOnFailureListener {
+                Log.w("isReadyToPay failed", it)
+                onGpayUnavailable()
+            }
     }
 
     /**
