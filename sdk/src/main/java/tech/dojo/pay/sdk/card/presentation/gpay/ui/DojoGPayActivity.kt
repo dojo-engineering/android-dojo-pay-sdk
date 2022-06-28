@@ -68,9 +68,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
                             PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
                         }
 
-                    RESULT_CANCELED -> {
-                        // The user cancelled the payment attempt
-                    }
+                    RESULT_CANCELED -> { returnResult(DojoPaymentResult.FAILED) }
 
                     RESULT_ERROR -> {
                         AutoResolveHelper.getStatusFromIntent(data)
