@@ -3,7 +3,6 @@ package tech.dojo.pay.sdk.card.presentation.gpay.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -61,22 +60,27 @@ internal class DojoGPayActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             // Value passed in AutoResolveHelper
-            GOOGLE_PAY_ACTIVITY_REQUEST_CODE -> {
-                when (resultCode) {
-                    RESULT_OK ->
-                        data?.let { intent ->
-                            PaymentData.getFromIntent(intent)?.let(::handlePaymentSuccess)
-                        }
+            GOOGLE_PAY_ACTIVITY_REQUEST_CODE -> handleGPayResults(resultCode, data)
+        }
+    }
 
-                    RESULT_CANCELED -> { returnResult(DojoPaymentResult.FAILED) }
-
-                    RESULT_ERROR -> {
-                        AutoResolveHelper.getStatusFromIntent(data)
-                            ?.let { Log.d("GPay Failed", it.status.toString()) }
-                        returnResult(DojoPaymentResult.FAILED)
-                    }
-                }
+    private fun handleGPayResults(resultCode: Int, data: Intent?) {
+        when (resultCode) {
+            RESULT_OK -> handleOkResultFromGPay(data)
+            RESULT_CANCELED -> returnResult(DojoPaymentResult.FAILED)
+            RESULT_ERROR -> {
+                AutoResolveHelper.getStatusFromIntent(data)
+                    ?.let { Log.d("GPay Failed", it.status.toString()) }
+                returnResult(DojoPaymentResult.FAILED)
             }
+        }
+    }
+
+    private fun handleOkResultFromGPay(data: Intent?) {
+        if (data != null) {
+            PaymentData.getFromIntent(data)?.let(::handlePaymentSuccess)
+        } else {
+            returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 
