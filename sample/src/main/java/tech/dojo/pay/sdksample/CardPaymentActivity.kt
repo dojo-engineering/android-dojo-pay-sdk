@@ -2,6 +2,7 @@ package tech.dojo.pay.sdksample
 
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
 
 class CardPaymentActivity : CardPaymentBaseActivity() {
 
@@ -23,7 +24,7 @@ class CardPaymentActivity : CardPaymentBaseActivity() {
         cardPayment.executeCardPayment(token, payload)
     }
 
-    override fun onGPayClicked(token: String) {
-        gPayment.executeGPay(token)
+    override fun onGPayClicked(token: String,payload: DojoTotalAmountPayload) {
+        gPayment.executeGPay(token,payload)
     }
 }

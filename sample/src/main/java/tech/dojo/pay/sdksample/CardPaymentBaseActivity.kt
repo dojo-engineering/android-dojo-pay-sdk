@@ -11,6 +11,8 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
+import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
@@ -21,7 +23,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     abstract fun onSandboxChecked(isChecked: Boolean)
 
     abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
-    abstract fun onGPayClicked(token: String)
+    abstract fun onGPayClicked(token: String, payload: DojoTotalAmountPayload)
 
     fun showResult(result: DojoPaymentResult) {
         showDialog(
@@ -59,9 +61,15 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 )
             )
         }
-
+        DojoSdk.isGpayAvailable(this,
+            { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
+            { binding.btnGPay.googlePayButton.visibility = View.GONE }
+        )
         binding.btnGPay.googlePayButton.setOnClickListener {
-            onGPayClicked(token = binding.token.text.toString())
+            onGPayClicked(
+                token = binding.token.text.toString(),
+                payload = DojoTotalAmountPayload(0.10, "GBP")
+            )
         }
     }
 

@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

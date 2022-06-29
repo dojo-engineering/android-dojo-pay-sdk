@@ -8,5 +8,6 @@ internal data class DojoCardPaymentParams(
 ) : Serializable
 
 internal data class DojoGPayParams(
-    val token: String
+    val token: String,
+    val totalAmountPayload: DojoTotalAmountPayload
 ) : Serializable

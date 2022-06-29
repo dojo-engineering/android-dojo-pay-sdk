@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.util
 
 import android.webkit.JavascriptInterface
 import com.google.gson.GsonBuilder

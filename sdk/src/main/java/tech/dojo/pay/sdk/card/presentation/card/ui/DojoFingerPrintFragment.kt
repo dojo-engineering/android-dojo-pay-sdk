@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
 
 internal class DojoFingerPrintFragment private constructor() : Fragment() {
 
