@@ -18,7 +18,7 @@ internal class DojoGPayViewModelFactory(
         val args = requireNotNull(arguments)
         val params = args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
         val api = CardPaymentApiBuilder(DojoSdk.sandbox).create()
-        val repo = GPayRepository(api, params.token, "")
+        val repo = GPayRepository(api, params.dojoPaymentIntent.token, params.dojoPaymentIntent)
 //        val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
         return DojoGPayViewModel(repo) as T
     }
