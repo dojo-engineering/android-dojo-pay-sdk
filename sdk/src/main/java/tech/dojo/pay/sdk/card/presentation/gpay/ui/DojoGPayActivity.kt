@@ -77,7 +77,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
     }
 
     private fun handleOkResultFromGPay(data: Intent?) {
-        if (data != null) {
+        if (data != null && PaymentData.getFromIntent(data) != null) {
             PaymentData.getFromIntent(data)?.let(::handlePaymentSuccess)
         } else {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)

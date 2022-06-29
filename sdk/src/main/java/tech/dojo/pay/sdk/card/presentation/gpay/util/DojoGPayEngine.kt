@@ -20,18 +20,21 @@ class DojoGPayEngine(
         onGpayAvailable: () -> Unit,
         onGpayUnavailable: () -> Unit
     ) {
-
-        val isReadyToPayJson = PaymentsUtil.getReadyToPayRequest() ?: return
-        val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
-        // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
-        // Success and Failure Listener to be triggered when the result of the call is known.
-        paymentsClient
-            .isReadyToPay(request)
-            .addOnSuccessListener { onGpayAvailable() }
-            .addOnFailureListener {
-                Log.w("isReadyToPay failed", it)
-                onGpayUnavailable()
-            }
+        val isReadyToPayJson = PaymentsUtil.getReadyToPayRequest()
+        if (isReadyToPayJson != null) {
+            val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
+            // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
+            // Success and Failure Listener to be triggered when the result of the call is known.
+            paymentsClient
+                .isReadyToPay(request)
+                .addOnSuccessListener { onGpayAvailable() }
+                .addOnFailureListener {
+                    Log.w("isReadyToPay failed", it)
+                    onGpayUnavailable()
+                }
+        } else {
+            onGpayUnavailable()
+        }
     }
 
     /**
