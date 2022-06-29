@@ -16,10 +16,10 @@ internal class DojoGPayHandlerImpl(
     private val cardPayment = activity.registerForActivityResult(DojoGPayResultContract(), onResult)
 
     override fun executeGPay(
-        GPayPayload: DojoGPayPayload, paymentIntent: DojoPaymentIntent
+        GPayPayload: DojoGPayPayload, PaymentIntent: DojoPaymentIntent
     ) {
         cardPayment.launch(
-            DojoGPayParams(GPayPayload, paymentIntent)
+            DojoGPayParams(GPayPayload, PaymentIntent)
         )
     }
 }
