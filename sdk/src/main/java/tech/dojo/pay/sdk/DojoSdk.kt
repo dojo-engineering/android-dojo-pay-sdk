@@ -50,12 +50,12 @@ object DojoSdk {
     fun startGPay(
         activity: Activity,
         GPayPayload: DojoGPayPayload,
-        PaymentIntent: DojoPaymentIntent
+        paymentIntent: DojoPaymentIntent
 
     ) {
         val intent = DojoGPayResultContract().createIntent(
             activity,
-            DojoGPayParams(GPayPayload, PaymentIntent)
+            DojoGPayParams(GPayPayload, paymentIntent)
         )
         activity.startActivityForResult(intent, REQUEST_CODE)
     }

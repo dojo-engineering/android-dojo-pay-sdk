@@ -6,6 +6,6 @@ import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 interface DojoGPayHandler {
 
     fun executeGPay(
-        GPayPayload: DojoGPayPayload, PaymentIntent: DojoPaymentIntent
+        GPayPayload: DojoGPayPayload, paymentIntent: DojoPaymentIntent
     )
 }
