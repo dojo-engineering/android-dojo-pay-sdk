@@ -36,8 +36,14 @@ internal class DojoGPayActivity : AppCompatActivity() {
 
     private val gPayEngine: DojoGPayEngine by lazy { DojoGPayEngine(this) }
 
+    val params: DojoGPayParams by lazy {
+        requireNotNull(intent.extras)
+            .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
+    }
+
     private fun performGPay() {
         gPayEngine.isReadyToPay(
+            params.dojoGPayPayload.dojoGPayConfig,
             onGpayAvailable = { startPaymentProcess() },
             onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
         )
@@ -52,9 +58,10 @@ internal class DojoGPayActivity : AppCompatActivity() {
     }
 
     private fun startPaymentProcess() {
-        val params = requireNotNull(intent.extras)
-            .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
-        gPayEngine.payWithGoogle(params.dojoPaymentIntent.totalAmount)
+        gPayEngine.payWithGoogle(
+            params.dojoPaymentIntent.totalAmount,
+            params.dojoGPayPayload.dojoGPayConfig
+        )
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

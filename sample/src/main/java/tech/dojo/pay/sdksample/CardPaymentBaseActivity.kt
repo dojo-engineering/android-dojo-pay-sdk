@@ -62,6 +62,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             )
         }
         DojoSdk.isGpayAvailable(this,
+            DojoGPayConfig(merchantId = "", merchantName = ""),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
         )

@@ -25,6 +25,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.Constants
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -37,66 +38,16 @@ import java.math.RoundingMode
  * relevant to your implementation.
  */
 object PaymentsUtil {
-    val CENTS = BigDecimal(100)
-
     /**
      * Create a Google Pay API base request object with properties used in all requests.
      *
      * @return Google Pay API base request object.
      * @throws JSONException
      */
-    val baseRequest = JSONObject().apply {
+    private val baseRequest = JSONObject().apply {
         put("apiVersion", 2)
         put("apiVersionMinor", 0)
     }
-
-    /**
-     * Gateway Integration: Identify your gateway and your app's gateway merchant identifier.
-     *
-     *
-     * The Google Pay API response will return an encrypted payment method capable of being charged
-     * by a supported gateway after payer authorization.
-     *
-     *
-     * TODO: Check with your gateway on the parameters to pass and modify them in Constants.java.
-     *
-     * @return Payment data tokenization for the CARD payment method.
-     * @throws JSONException
-     * @see [PaymentMethodTokenizationSpecification](https://developers.google.com/pay/api/android/reference/object.PaymentMethodTokenizationSpecification)
-     */
-    private fun gatewayTokenizationSpecification(): JSONObject {
-        return JSONObject().apply {
-            put("type", "PAYMENT_GATEWAY")
-            put("parameters", JSONObject(Constants.PAYMENT_GATEWAY_TOKENIZATION_PARAMETERS))
-        }
-    }
-
-    /**
-     * `DIRECT` Integration: Decrypt a response directly on your servers. This configuration has
-     * additional data security requirements from Google and additional PCI DSS compliance complexity.
-     *
-     *
-     * Please refer to the documentation for more information about `DIRECT` integration. The
-     * type of integration you use depends on your payment processor.
-     *
-     * @return Payment data tokenization for the CARD payment method.
-     * @throws JSONException
-     * @see [PaymentMethodTokenizationSpecification](https://developers.google.com/pay/api/android/reference/object.PaymentMethodTokenizationSpecification)
-     */
-//    private fun directTokenizationSpecification(): JSONObject {
-//        if (Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == "REPLACE_ME" ||
-//            (Constants.DIRECT_TOKENIZATION_PARAMETERS.isEmpty() ||
-//                    Constants.DIRECT_TOKENIZATION_PUBLIC_KEY.isEmpty())) {
-//
-//            throw RuntimeException(
-//                "Please edit the Constants.java file to add protocol version & public key.")
-//        }
-//
-//        return JSONObject().apply {
-//            put("type", "DIRECT")
-//            put("parameters", JSONObject(Constants.DIRECT_TOKENIZATION_PARAMETERS))
-//        }
-//    }
 
     /**
      * Card networks supported by your app and your gateway.
@@ -125,16 +76,20 @@ object PaymentsUtil {
     /**
      * return the Json  object for the is ready to pay request
      */
-    fun getReadyToPayRequest(): JSONObject? {
+    fun getReadyToPayRequest(dojoGPayConfig: DojoGPayConfig): JSONObject? {
         return try {
-            PaymentsUtil.baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(PaymentsUtil.baseCardPaymentMethod()))
+            baseRequest.apply {
+                put(
+                    "allowedPaymentMethods",
+                    JSONArray().put(baseCardPaymentMethod(dojoGPayConfig))
+                )
             }
 
         } catch (e: JSONException) {
             null
         }
     }
+
     /**
      * Describe your app's support for the CARD payment method.
      *
@@ -147,53 +102,61 @@ object PaymentsUtil {
      * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
      */
     // Optionally, you can add billing address/phone number associated with a CARD payment method.
-    fun baseCardPaymentMethod(): JSONObject {
+    private fun baseCardPaymentMethod(dojoGPayConfig: DojoGPayConfig): JSONObject {
         return JSONObject().apply {
+            put("type", "CARD")
+            put(
+                "parameters", createPaymentParamsJson(
+                    dojoGPayConfig.collectBilling,
+                    dojoGPayConfig.collectShipping,
+                    dojoGPayConfig.collectPhoneNumber
+                )
+            )
+            put(
+                "tokenizationSpecification",
+                getTokenizationSpecification(dojoGPayConfig.merchantId)
+            )
+        }
+    }
 
-            val parameters = JSONObject().apply {
+    private fun createPaymentParamsJson(
+        collectBilling: Boolean,
+        collectShipping: Boolean,
+        collectPhoneNumber: Boolean
+    ): JSONObject {
+        return JSONObject()
+            .apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)
                 put("allowedCardNetworks", allowedCardNetworks)
-//                put("billingAddressRequired", true)
-//                put("billingAddressParameters", JSONObject().apply {
-//                    put("format", "FULL")
-//                })
+                if (collectBilling) {
+                    put("billingAddressRequired", true)
+                    put(
+                        "billingAddressParameters",
+                        JSONObject()
+                            .put("format", "FULL")
+                    )
+                }
+                if (collectShipping) {
+                    put("shippingAddressRequired", true)
+                    val shippingAddressParameters = JSONObject().apply {
+                        put("format", "FULL")
+                        put("phoneNumberRequired", collectPhoneNumber)
+                        put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
+                    }
+                    put("shippingAddressParameters", shippingAddressParameters)
+                }
             }
-
-            put("type", "CARD")
-            put("parameters", parameters)
-        }
     }
 
-    /**
-     * Describe the expected returned payment data for the CARD payment method
-     *
-     * @return A CARD PaymentMethod describing accepted cards and optional fields.
-     * @throws JSONException
-     * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
-     */
-    private fun cardPaymentMethod(): JSONObject {
-        val cardPaymentMethod = baseCardPaymentMethod()
-        cardPaymentMethod.put("tokenizationSpecification", gatewayTokenizationSpecification())
-
-        return cardPaymentMethod
-    }
-
-    /**
-     * An object describing accepted forms of payment by your app, used to determine a viewer's
-     * readiness to pay.
-     *
-     * @return API version and payment methods supported by the app.
-     * @see [IsReadyToPayRequest](https://developers.google.com/pay/api/android/reference/object.IsReadyToPayRequest)
-     */
-    fun isReadyToPayRequest(): JSONObject? {
-        return try {
-            baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(baseCardPaymentMethod()))
-            }
-
-        } catch (e: JSONException) {
-            null
-        }
+    private fun getTokenizationSpecification(merchantId: String): JSONObject {
+        return JSONObject()
+            .put("type", "PAYMENT_GATEWAY")
+            .put(
+                "parameters",
+                JSONObject()
+                    .put("gateway", "dojo")
+                    .put("gatewayMerchantId", merchantId)
+            )
     }
 
     /**
@@ -224,10 +187,11 @@ object PaymentsUtil {
      * returns environment based on the sandBox status if it's on then it will return test environment
      * off it will return prod environment
      */
-    fun getGpayEnvironment() = when {
+    private fun getGpayEnvironment() = when {
         DojoSdk.sandbox -> WalletConstants.ENVIRONMENT_TEST
         else -> Constants.PAYMENTS_ENVIRONMENT
     }
+
     /**
      * Provide Google Pay API with a payment amount, currency, and amount status.
      *
@@ -236,7 +200,7 @@ object PaymentsUtil {
      * @see [TransactionInfo](https://developers.google.com/pay/api/android/reference/object.TransactionInfo)
      */
     @Throws(JSONException::class)
-    private fun getTransactionInfo(price: String,currencyCode:String): JSONObject {
+    private fun getTransactionInfo(price: String, currencyCode: String): JSONObject {
         return JSONObject().apply {
             put("totalPrice", price)
             put("totalPriceStatus", "FINAL")
@@ -250,10 +214,18 @@ object PaymentsUtil {
      * @return Payment data expected by your app.
      * @see [PaymentDataRequest](https://developers.google.com/pay/api/android/reference/object.PaymentDataRequest)
      */
-    fun getPaymentDataRequest(totalAmountPayload: DojoTotalAmount): JSONObject? {
+    fun getPaymentDataRequest(
+        totalAmountPayload: DojoTotalAmount,
+        dojoGPayConfig: DojoGPayConfig
+    ): JSONObject? {
         return try {
             baseRequest.apply {
-                put("allowedPaymentMethods", JSONArray().put(cardPaymentMethod()))
+                put(
+                    "allowedPaymentMethods",
+                    JSONArray().put(
+                        baseCardPaymentMethod(dojoGPayConfig)
+                    )
+                )
                 put(
                     "transactionInfo",
                     getTransactionInfo(
@@ -261,16 +233,12 @@ object PaymentsUtil {
                         totalAmountPayload.currencyCode
                     )
                 )
-//                put("merchantInfo", merchantInfo) <- is Optional, if not present or not registered will show not recognized
-
-                // An optional shipping address requirement is a top-level property of the
-                // PaymentDataRequest JSON object.
-//                val shippingAddressParameters = JSONObject().apply {
-//                    put("phoneNumberRequired", false)
-//                    put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
-//                }
-//                put("shippingAddressParameters", shippingAddressParameters)
-//                put("shippingAddressRequired", true)
+                put(
+                    "merchantInfo",
+                    JSONObject()
+                        .put("merchantName", dojoGPayConfig.merchantName)
+                        .put("merchantId", dojoGPayConfig.merchantId)
+                )
             }
         } catch (e: JSONException) {
             null
