@@ -4,7 +4,8 @@ import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
-import tech.dojo.pay.sdk.card.entities.DojoTotalAmountPayload
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 
 
 internal class DojoGPayHandlerImpl(
@@ -14,9 +15,11 @@ internal class DojoGPayHandlerImpl(
 
     private val cardPayment = activity.registerForActivityResult(DojoGPayResultContract(), onResult)
 
-    override fun executeGPay(token: String, payload: DojoTotalAmountPayload) {
+    override fun executeGPay(
+        GPayPayload: DojoGPayPayload, paymentIntent: DojoPaymentIntent
+    ) {
         cardPayment.launch(
-            DojoGPayParams(token, payload)
+            DojoGPayParams(GPayPayload, paymentIntent)
         )
     }
 }

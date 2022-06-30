@@ -6,8 +6,9 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import com.google.android.gms.wallet.*
+import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
+import com.google.android.gms.wallet.PaymentData
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -15,8 +16,8 @@ import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
+import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
 
@@ -53,7 +54,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
     private fun startPaymentProcess() {
         val params = requireNotNull(intent.extras)
             .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
-        gPayEngine.payWithGoogle(params.totalAmountPayload)
+        gPayEngine.payWithGoogle(params.dojoPaymentIntent.totalAmount)
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
