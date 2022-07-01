@@ -109,17 +109,29 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         }
 
         binding.btnGenerateToken.setOnClickListener {
-            binding.viewProgress.visibility = View.VISIBLE
             lifecycleScope.launch {
+                showLoading()
                 try {
                     displayToken(TokenGenerator.generateToken())
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
-                    binding.viewProgress.visibility = View.GONE
+                    hidLoading()
                 }
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.viewProgress.visibility = View.VISIBLE
+        binding.btnGPay.googlePayButton.isEnabled = false
+        binding.btnPay.isEnabled = false
+    }
+
+    private fun hidLoading() {
+        binding.viewProgress.visibility = View.GONE
+        binding.btnGPay.googlePayButton.isEnabled = true
+        binding.btnPay.isEnabled = true
     }
 
     private fun setCardDetails(details: DojoCardDetails) {
