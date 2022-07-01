@@ -12,7 +12,11 @@ import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 class DojoGPayEngine(
     private val activity: Activity,
 ) {
-    private val paymentsClient: PaymentsClient by lazy { PaymentsUtil.createPaymentsClient(activity) }
+    private val paymentsClient: PaymentsClient by lazy {
+        GooglePayJsonFactory.createPaymentsClient(
+            activity
+        )
+    }
 
     /**
      * Check that Google Pay is available and ready
@@ -22,7 +26,7 @@ class DojoGPayEngine(
         onGpayAvailable: () -> Unit,
         onGpayUnavailable: () -> Unit
     ) {
-        val isReadyToPayJson = PaymentsUtil.getReadyToPayRequest(dojoGPayConfig)
+        val isReadyToPayJson = GooglePayJsonFactory.getReadyToPayRequest(dojoGPayConfig)
         if (isReadyToPayJson != null) {
             val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
             // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
@@ -47,7 +51,7 @@ class DojoGPayEngine(
         dojoGPayConfig: DojoGPayConfig
     ) {
         val paymentDataRequestJson =
-            PaymentsUtil.getPaymentDataRequest(totalAmountPayload, dojoGPayConfig)
+            GooglePayJsonFactory.getPaymentDataRequest(totalAmountPayload, dojoGPayConfig)
         val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
 
         // Since loadPaymentData may show the UI asking the user to select a payment method, we use

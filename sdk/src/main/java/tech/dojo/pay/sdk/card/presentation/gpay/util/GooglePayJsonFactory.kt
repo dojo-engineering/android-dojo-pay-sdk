@@ -37,7 +37,7 @@ import java.math.RoundingMode
  * existence. Please consult the documentation to learn more and feel free to remove ones not
  * relevant to your implementation.
  */
-object PaymentsUtil {
+object GooglePayJsonFactory {
     /**
      * Create a Google Pay API base request object with properties used in all requests.
      *
@@ -247,7 +247,7 @@ object PaymentsUtil {
 }
 
 /**
- * Converts cents to a string format accepted by [PaymentsUtil.getPaymentDataRequest].
+ * Converts cents to a string format accepted by [GooglePayJsonFactory.getPaymentDataRequest].
  *
  * @param cents value of the price.
  */
