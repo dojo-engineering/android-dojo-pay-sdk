@@ -61,7 +61,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
         gPayEngine.payWithGoogle(
             params.dojoPaymentIntent.totalAmount,
             params.dojoGPayPayload.dojoGPayConfig
-        )
+        ) { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

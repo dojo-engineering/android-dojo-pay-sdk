@@ -48,18 +48,23 @@ class DojoGPayEngine(
      */
     internal fun payWithGoogle(
         totalAmountPayload: DojoTotalAmount,
-        dojoGPayConfig: DojoGPayConfig
+        dojoGPayConfig: DojoGPayConfig,
+        onPaymentRequestError: () -> Unit
     ) {
         val paymentDataRequestJson =
             GooglePayJsonFactory.getPaymentDataRequest(totalAmountPayload, dojoGPayConfig)
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
+        if (paymentDataRequestJson != null) {
+            val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
 
-        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-        // AutoResolveHelper to wait for the user interacting with it. Once completed,
-        // onActivityResult will be called with the result.
-        AutoResolveHelper.resolveTask(
-            paymentsClient.loadPaymentData(request), activity, GOOGLE_PAY_ACTIVITY_REQUEST_CODE
-        )
+            // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+            // AutoResolveHelper to wait for the user interacting with it. Once completed,
+            // onActivityResult will be called with the result.
+            AutoResolveHelper.resolveTask(
+                paymentsClient.loadPaymentData(request), activity, GOOGLE_PAY_ACTIVITY_REQUEST_CODE
+            )
+        } else {
+            onPaymentRequestError()
+        }
     }
 }
 
