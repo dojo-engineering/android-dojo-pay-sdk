@@ -187,6 +187,45 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutButtons">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxShippingAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:checked="false"
+                android:text="collectShipping"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxBillingAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:checked="false"
+                android:text="collectBillingForGpay" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxPhoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:checked="false"
+                android:text="collectPhone"
+                android:visibility="gone" />
+        </LinearLayout>
+
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkboxSandbox"
             android:layout_width="wrap_content"
@@ -196,7 +235,17 @@
             android:checked="true"
             android:text="Sandbox"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutButtons" />
+            app:layout_constraintTop_toBottomOf="@id/checkbox" />
+
+        <Button
+            android:id="@+id/btnGenerateToken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Generate token"
+            app:layout_constraintStart_toEndOf="@+id/checkboxSandbox"
+            app:layout_constraintTop_toBottomOf="@+id/checkbox" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/token_text_container"
@@ -219,14 +268,5 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/btnGenerateToken"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="24dp"
-            android:text="Generate token"
-            app:layout_constraintStart_toEndOf="@+id/checkboxSandbox"
-            app:layout_constraintTop_toBottomOf="@+id/layoutButtons" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

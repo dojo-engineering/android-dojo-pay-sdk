@@ -70,6 +70,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             onGPayClicked(
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
+                        collectShipping = binding.checkboxShippingAddress.isChecked,
+                        collectBilling = binding.checkboxBillingAddress.isChecked,
+                        collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         merchantName = "",
                         merchantId = ""
                     )
