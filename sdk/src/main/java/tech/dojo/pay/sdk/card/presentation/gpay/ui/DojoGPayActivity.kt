@@ -100,6 +100,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
             val paymentMethodData =
                 JSONObject(paymentInformation).getJSONObject("paymentMethodData")
             viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
+            returnResult(DojoPaymentResult.SUCCESSFUL)
 
             // TODO remove this log
 //            val billingName = paymentMethodData.getJSONObject("info")
