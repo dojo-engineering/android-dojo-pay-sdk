@@ -53,7 +53,6 @@ object GooglePayJsonFactory {
      * Card networks supported by your app and your gateway.
      *
      *
-     * TODO: Confirm card networks supported by your app and gateway & update in Constants.java.
      *
      * @return Allowed card networks
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
@@ -64,7 +63,6 @@ object GooglePayJsonFactory {
      * Card authentication methods supported by your app and your gateway.
      *
      *
-     * TODO: Confirm your processor supports Android device tokens on your supported card networks
      * and make updates in Constants.java.
      *
      * @return Allowed card authentication methods.
@@ -101,16 +99,11 @@ object GooglePayJsonFactory {
      * @throws JSONException
      * @see [PaymentMethod](https://developers.google.com/pay/api/android/reference/object.PaymentMethod)
      */
-    // Optionally, you can add billing address/phone number associated with a CARD payment method.
     private fun baseCardPaymentMethod(dojoGPayConfig: DojoGPayConfig): JSONObject {
         return JSONObject().apply {
             put("type", "CARD")
             put(
-                "parameters", createPaymentParamsJson(
-                    dojoGPayConfig.collectBilling,
-                    dojoGPayConfig.collectShipping,
-                    dojoGPayConfig.collectPhoneNumber
-                )
+                "parameters", createPaymentParamsJson(dojoGPayConfig.collectBilling)
             )
             put(
                 "tokenizationSpecification",
@@ -120,9 +113,7 @@ object GooglePayJsonFactory {
     }
 
     private fun createPaymentParamsJson(
-        collectBilling: Boolean,
-        collectShipping: Boolean,
-        collectPhoneNumber: Boolean
+        collectBilling: Boolean
     ): JSONObject {
         return JSONObject()
             .apply {
@@ -135,15 +126,6 @@ object GooglePayJsonFactory {
                         JSONObject()
                             .put("format", "FULL")
                     )
-                }
-                if (collectShipping) {
-                    put("shippingAddressRequired", true)
-                    val shippingAddressParameters = JSONObject().apply {
-                        put("format", "FULL")
-                        put("phoneNumberRequired", collectPhoneNumber)
-                        put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
-                    }
-                    put("shippingAddressParameters", shippingAddressParameters)
                 }
             }
     }
@@ -158,16 +140,6 @@ object GooglePayJsonFactory {
                     .put("gatewayMerchantId", merchantId)
             )
     }
-
-    /**
-     * Information about the merchant requesting payment information
-     *
-     * @return Information about the merchant.
-     * @throws JSONException
-     * @see [MerchantInfo](https://developers.google.com/pay/api/android/reference/object.MerchantInfo)
-     */
-    private val merchantInfo: JSONObject =
-        JSONObject().put("merchantName", "Example Merchant")
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
@@ -233,12 +205,22 @@ object GooglePayJsonFactory {
                         totalAmountPayload.currencyCode
                     )
                 )
+                put("emailRequired", dojoGPayConfig.collectEmailAddress)
+
                 put(
                     "merchantInfo",
                     JSONObject()
                         .put("merchantName", dojoGPayConfig.merchantName)
                         .put("merchantId", dojoGPayConfig.merchantId)
                 )
+
+                if (dojoGPayConfig.collectShipping) {
+                    put("shippingAddressRequired", true)
+                    put("shippingAddressParameters", JSONObject().apply {
+                        put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
+                        put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
+                    })
+                }
             }
         } catch (e: JSONException) {
             null
@@ -247,9 +229,7 @@ object GooglePayJsonFactory {
 }
 
 /**
- * Converts cents to a string format accepted by [GooglePayJsonFactory.getPaymentDataRequest].
- *
- * @param cents value of the price.
+ * Converts Double to a string format accepted by [GooglePayJsonFactory.getPaymentDataRequest].
  */
 fun Double.centsToString() = BigDecimal(this)
     .setScale(2, RoundingMode.HALF_EVEN)
