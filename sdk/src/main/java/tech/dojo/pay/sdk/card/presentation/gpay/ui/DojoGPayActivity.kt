@@ -102,23 +102,6 @@ internal class DojoGPayActivity : AppCompatActivity() {
             viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
             returnResult(DojoPaymentResult.SUCCESSFUL)
 
-            // TODO remove this log
-//            val billingName = paymentMethodData.getJSONObject("info")
-//                .getJSONObject("billingAddress").getString("name")
-//            Log.d("BillingName", billingName)
-//            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
-
-            // Logging token string.
-//            Log.d("GooglePaymentToken", paymentMethodData
-//                .getJSONObject("tokenizationData")
-//                .getString("token")) // TODO remove this log
-
-//            Toast.makeText(
-//                this,
-//                paymentMethodData.toString(),
-//                Toast.LENGTH_LONG
-//            ).show()// TODO remove this log
-
         } catch (e: JSONException) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
