@@ -62,7 +62,14 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             )
         }
         DojoSdk.isGpayAvailable(this,
-            DojoGPayConfig(merchantId = "", merchantName = ""),
+            DojoGPayConfig(
+                collectShipping = binding.checkboxShippingAddress.isChecked,
+                collectBilling = binding.checkboxBillingAddress.isChecked,
+                collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
+                collectEmailAddress = binding.checkboxEmail.isChecked,
+                merchantName = "Dojo Cafe (Paymentsense)",
+                merchantId = "66666"
+            ),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
         )
@@ -73,8 +80,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         collectShipping = binding.checkboxShippingAddress.isChecked,
                         collectBilling = binding.checkboxBillingAddress.isChecked,
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
-                        merchantName = "",
-                        merchantId = ""
+                        collectEmailAddress = binding.checkboxEmail.isChecked,
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "66666"
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(

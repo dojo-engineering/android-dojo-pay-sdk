@@ -188,7 +188,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/checkbox"
+            android:id="@+id/ShippingCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -204,16 +204,7 @@
                 android:layout_marginTop="24dp"
                 android:checked="false"
                 android:text="collectShipping"
-                android:visibility="gone" />
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/checkboxBillingAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="24dp"
-                android:checked="false"
-                android:text="collectBillingForGpay" />
+                android:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/checkboxPhoneNumber"
@@ -223,7 +214,36 @@
                 android:layout_marginTop="24dp"
                 android:checked="false"
                 android:text="collectPhone"
-                android:visibility="gone" />
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ShippingCheckBox">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxBillingAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:checked="false"
+                android:text="collectBilling" />
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/checkboxEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:checked="false"
+                android:text="collect email address"
+                android:visibility="visible" />
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatCheckBox
