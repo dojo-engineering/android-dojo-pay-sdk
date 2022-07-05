@@ -36,8 +36,14 @@ internal class DojoGPayActivity : AppCompatActivity() {
 
     private val gPayEngine: DojoGPayEngine by lazy { DojoGPayEngine(this) }
 
+    val params: DojoGPayParams by lazy {
+        requireNotNull(intent.extras)
+            .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
+    }
+
     private fun performGPay() {
         gPayEngine.isReadyToPay(
+            params.dojoGPayPayload.dojoGPayConfig,
             onGpayAvailable = { startPaymentProcess() },
             onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
         )
@@ -52,9 +58,10 @@ internal class DojoGPayActivity : AppCompatActivity() {
     }
 
     private fun startPaymentProcess() {
-        val params = requireNotNull(intent.extras)
-            .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
-        gPayEngine.payWithGoogle(params.dojoPaymentIntent.totalAmount)
+        gPayEngine.payWithGoogle(
+            params.dojoPaymentIntent.totalAmount,
+            params.dojoGPayPayload.dojoGPayConfig
+        ) { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,23 +100,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
             val paymentMethodData =
                 JSONObject(paymentInformation).getJSONObject("paymentMethodData")
             viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
-
-            // TODO remove this log
-//            val billingName = paymentMethodData.getJSONObject("info")
-//                .getJSONObject("billingAddress").getString("name")
-//            Log.d("BillingName", billingName)
-//            Toast.makeText(this, getString(R.string.payments_show_name, billingName), Toast.LENGTH_LONG).show()
-
-            // Logging token string.
-//            Log.d("GooglePaymentToken", paymentMethodData
-//                .getJSONObject("tokenizationData")
-//                .getString("token")) // TODO remove this log
-
-//            Toast.makeText(
-//                this,
-//                paymentMethodData.toString(),
-//                Toast.LENGTH_LONG
-//            ).show()// TODO remove this log
+            returnResult(DojoPaymentResult.SUCCESSFUL)
 
         } catch (e: JSONException) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)

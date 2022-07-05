@@ -6,21 +6,27 @@ import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.IsReadyToPayRequest
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 
 class DojoGPayEngine(
     private val activity: Activity,
 ) {
-    private val paymentsClient: PaymentsClient by lazy { PaymentsUtil.createPaymentsClient(activity) }
+    private val paymentsClient: PaymentsClient by lazy {
+        GooglePayJsonFactory.createPaymentsClient(
+            activity
+        )
+    }
 
     /**
      * Check that Google Pay is available and ready
      */
     internal fun isReadyToPay(
+        dojoGPayConfig: DojoGPayConfig,
         onGpayAvailable: () -> Unit,
         onGpayUnavailable: () -> Unit
     ) {
-        val isReadyToPayJson = PaymentsUtil.getReadyToPayRequest()
+        val isReadyToPayJson = GooglePayJsonFactory.getReadyToPayRequest(dojoGPayConfig)
         if (isReadyToPayJson != null) {
             val request = IsReadyToPayRequest.fromJson(isReadyToPayJson.toString())
             // The call to isReadyToPay is asynchronous and returns a Task. We need to provide an
@@ -40,16 +46,25 @@ class DojoGPayEngine(
     /**
      * start the payment process for google pay
      */
-    internal fun payWithGoogle(totalAmountPayload: DojoTotalAmount) {
-        val paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalAmountPayload)
-        val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
+    internal fun payWithGoogle(
+        totalAmountPayload: DojoTotalAmount,
+        dojoGPayConfig: DojoGPayConfig,
+        onPaymentRequestError: () -> Unit
+    ) {
+        val paymentDataRequestJson =
+            GooglePayJsonFactory.getPaymentDataRequest(totalAmountPayload, dojoGPayConfig)
+        if (paymentDataRequestJson != null) {
+            val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
 
-        // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-        // AutoResolveHelper to wait for the user interacting with it. Once completed,
-        // onActivityResult will be called with the result.
-        AutoResolveHelper.resolveTask(
-            paymentsClient.loadPaymentData(request), activity, GOOGLE_PAY_ACTIVITY_REQUEST_CODE
-        )
+            // Since loadPaymentData may show the UI asking the user to select a payment method, we use
+            // AutoResolveHelper to wait for the user interacting with it. Once completed,
+            // onActivityResult will be called with the result.
+            AutoResolveHelper.resolveTask(
+                paymentsClient.loadPaymentData(request), activity, GOOGLE_PAY_ACTIVITY_REQUEST_CODE
+            )
+        } else {
+            onPaymentRequestError()
+        }
     }
 }
 

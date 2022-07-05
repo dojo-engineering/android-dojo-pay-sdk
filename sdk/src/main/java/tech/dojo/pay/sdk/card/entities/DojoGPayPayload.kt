@@ -11,7 +11,8 @@ data class DojoGPayPayload(
 data class DojoGPayConfig(
     val collectShipping: Boolean = false,
     val collectBilling: Boolean = false,
-    val collectEmail: Boolean = false,
+    val collectEmailAddress: Boolean = false,
+    val collectPhoneNumber: Boolean = false,
     val merchantName: String,
     val merchantId: String
 ) : Serializable

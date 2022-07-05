@@ -62,6 +62,14 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             )
         }
         DojoSdk.isGpayAvailable(this,
+            DojoGPayConfig(
+                collectShipping = binding.checkboxShippingAddress.isChecked,
+                collectBilling = binding.checkboxBillingAddress.isChecked,
+                collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
+                collectEmailAddress = binding.checkboxEmail.isChecked,
+                merchantName = "Dojo Cafe (Paymentsense)",
+                merchantId = "66666"
+            ),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
         )
@@ -69,8 +77,12 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             onGPayClicked(
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
-                        merchantName = "",
-                        merchantId = ""
+                        collectShipping = binding.checkboxShippingAddress.isChecked,
+                        collectBilling = binding.checkboxBillingAddress.isChecked,
+                        collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
+                        collectEmailAddress = binding.checkboxEmail.isChecked,
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "66666"
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(
@@ -105,17 +117,29 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         }
 
         binding.btnGenerateToken.setOnClickListener {
-            binding.viewProgress.visibility = View.VISIBLE
             lifecycleScope.launch {
+                showLoading()
                 try {
                     displayToken(TokenGenerator.generateToken())
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
-                    binding.viewProgress.visibility = View.GONE
+                    hidLoading()
                 }
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.viewProgress.visibility = View.VISIBLE
+        binding.btnGPay.googlePayButton.isEnabled = false
+        binding.btnPay.isEnabled = false
+    }
+
+    private fun hidLoading() {
+        binding.viewProgress.visibility = View.GONE
+        binding.btnGPay.googlePayButton.isEnabled = true
+        binding.btnPay.isEnabled = true
     }
 
     private fun setCardDetails(details: DojoCardDetails) {
