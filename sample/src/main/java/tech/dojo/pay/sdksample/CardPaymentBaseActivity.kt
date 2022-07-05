@@ -82,7 +82,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         collectEmailAddress = binding.checkboxEmail.isChecked,
                         merchantName = "Dojo Cafe (Paymentsense)",
-                        merchantId = "66666"
+                        merchantId = "66666",
+                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
+                            listOf("US", "GB", "DE") else null
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(
