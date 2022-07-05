@@ -20,8 +20,8 @@ internal class DojoGPayViewModel(
             try {
                 var gPayPayload = GPayDetails(
                     token = gPayData,
-                    userEmailAddress = null,
-                    userPhoneNumber = null,
+                    email = null,
+                    phoneNumber = null,
                     billingAddress = null,
                     shippingDetails = null,
                     metaData = null
