@@ -4,33 +4,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.GPayRepository
-import tech.dojo.pay.sdk.card.data.entities.GPayDetails
+import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
+import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 
 internal class DojoGPayViewModel(
-    private val repository: GPayRepository
+    private val repository: GPayRepository,
+    private val gpayPaymentRequestMapper: GpayPaymentRequestMapper
 ) : ViewModel() {
-
     val paymentResult = MutableLiveData<PaymentResult>()
     var canExit: Boolean = false //User should not be able to leave while request is not completed
 
-    fun sendGPayDataToServer(gPayData: String) {
+    fun sendGPayDataToServer(gPayData: String, dojoGPayParams: DojoGPayParams) {
         viewModelScope.launch {
             try {
-                var gPayPayload = GPayDetails(
-                    token = gPayData,
-                    email = null,
-                    phoneNumber = null,
-                    billingAddress = null,
-                    shippingDetails = null,
-                    metaData = null
+                val result = repository.processPayment(
+                    gpayPaymentRequestMapper.apply(
+                        gPayData,
+                        dojoGPayParams
+                    )
                 )
-                var a = repository.processPayment(gPayPayload)
+                paymentResult.value = result
                 canExit = true
             } catch (throwable: Throwable) {
-                var a = 0
-//                paymentResult.value = PaymentResult.Completed(DojoCardPaymentResult.SDK_INTERNAL_ERROR)
+                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }
