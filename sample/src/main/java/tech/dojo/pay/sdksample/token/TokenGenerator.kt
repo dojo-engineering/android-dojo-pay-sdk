@@ -15,7 +15,7 @@ object TokenGenerator {
 
     suspend fun generateToken(): String = tokenApi.getToken(
         MerchantParams(
-            merchantUrl = "www.example.com",
+            gatewayUsername = "connect-e-test-3ds1-api",
             currencyCode = "826",
             amount = "100",
             transactionType = "SALE",
