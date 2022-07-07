@@ -1,7 +1,7 @@
 package tech.dojo.pay.sdksample.token
 
 class MerchantParams(
-    val merchantUrl: String,
+    val gatewayUsername: String,
     val currencyCode: String,
     val amount: String,
     val transactionType: String,

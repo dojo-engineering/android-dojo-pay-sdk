@@ -10,7 +10,6 @@ import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
 import com.google.android.gms.wallet.PaymentData
 import org.json.JSONException
-import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
@@ -93,15 +92,8 @@ internal class DojoGPayActivity : AppCompatActivity() {
     }
 
     private fun handlePaymentSuccess(paymentData: PaymentData) {
-        val paymentInformation = paymentData.toJson()
-
         try {
-            // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
-            val paymentMethodData =
-                JSONObject(paymentInformation).getJSONObject("paymentMethodData")
-            viewModel.sendGPayDataToServer(gPayData = paymentMethodData.toString())
-            returnResult(DojoPaymentResult.SUCCESSFUL)
-
+            viewModel.sendGPayDataToServer(gPayData = paymentData.toJson(), dojoGPayParams = params)
         } catch (e: JSONException) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }

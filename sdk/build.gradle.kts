@@ -37,6 +37,9 @@ android {
             "-Xopt-in=kotlin.RequiresOptIn"
         )
     }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -59,4 +62,5 @@ dependencies {
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    testImplementation("org.json:json:20180813")
 }

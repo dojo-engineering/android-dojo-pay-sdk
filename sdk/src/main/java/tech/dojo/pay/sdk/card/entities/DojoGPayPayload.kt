@@ -14,5 +14,6 @@ data class DojoGPayConfig(
     val collectEmailAddress: Boolean = false,
     val collectPhoneNumber: Boolean = false,
     val merchantName: String,
-    val merchantId: String
+    val merchantId: String,
+    val allowedCountryCodesForShipping: List<String>? = null
 ) : Serializable

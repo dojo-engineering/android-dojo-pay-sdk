@@ -218,7 +218,10 @@ object GooglePayJsonFactory {
                     put("shippingAddressRequired", true)
                     put("shippingAddressParameters", JSONObject().apply {
                         put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
-                        put("allowedCountryCodes", JSONArray(listOf("US", "GB")))
+                        put(
+                            "allowedCountryCodes",
+                            JSONArray(dojoGPayConfig.allowedCountryCodesForShipping)
+                        )
                     })
                 }
             }
