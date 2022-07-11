@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,6 @@ import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
