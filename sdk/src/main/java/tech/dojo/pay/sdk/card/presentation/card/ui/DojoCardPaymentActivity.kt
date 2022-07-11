@@ -6,13 +6,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.commit
-import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
-import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModelFactory
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
+import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModelFactory
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 
 internal class DojoCardPaymentActivity : AppCompatActivity() {
 

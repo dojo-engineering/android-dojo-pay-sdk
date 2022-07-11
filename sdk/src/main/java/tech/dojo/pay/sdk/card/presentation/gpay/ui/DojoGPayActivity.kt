@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.commit
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
 import com.google.android.gms.wallet.PaymentData
@@ -15,10 +16,12 @@ import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 
 internal class DojoGPayActivity : AppCompatActivity() {
 
@@ -26,6 +29,7 @@ internal class DojoGPayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        observeLiveData()
         performGPay()
     }
 
@@ -40,20 +44,22 @@ internal class DojoGPayActivity : AppCompatActivity() {
             .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
     }
 
+    private fun observeLiveData() {
+        viewModel.paymentResult.observe(this) { result ->
+            when (result) {
+                is PaymentResult.Completed -> returnResult(result.value)
+                is PaymentResult.ThreeDSRequired -> navigate3DS(result.params)
+
+            }
+        }
+    }
+
     private fun performGPay() {
         gPayEngine.isReadyToPay(
             params.dojoGPayPayload.dojoGPayConfig,
             onGpayAvailable = { startPaymentProcess() },
             onGpayUnavailable = { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
         )
-        viewModel.paymentResult.observe(this) { result ->
-            when (result) {
-                is PaymentResult.Completed -> returnResult(result.value)
-                is PaymentResult.ThreeDSRequired -> {
-                    // TODO start 3ds handling
-                }
-            }
-        }
     }
 
     private fun startPaymentProcess() {
@@ -96,6 +102,13 @@ internal class DojoGPayActivity : AppCompatActivity() {
             viewModel.sendGPayDataToServer(gPayData = paymentData.toJson(), dojoGPayParams = params)
         } catch (e: JSONException) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+        }
+    }
+
+    private fun navigate3DS(params: ThreeDSParams) {
+        supportFragmentManager.commit {
+            setCustomAnimations(R.anim.enter, 0)
+            replace(R.id.container, Dojo3DSFragment.newInstance(params))
         }
     }
 
