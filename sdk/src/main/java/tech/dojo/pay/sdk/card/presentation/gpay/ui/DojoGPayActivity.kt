@@ -25,14 +25,6 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 
 internal class DojoGPayActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dojo_card_payment)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        observeLiveData()
-        performGPay()
-    }
-
     private val viewModel: DojoGPayViewModel by viewModels {
         DojoGPayViewModelFactory(intent.extras)
     }
@@ -44,12 +36,19 @@ internal class DojoGPayActivity : AppCompatActivity() {
             .getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dojo_card_payment)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        observeLiveData()
+        performGPay()
+    }
+
     private fun observeLiveData() {
         viewModel.paymentResult.observe(this) { result ->
             when (result) {
                 is PaymentResult.Completed -> returnResult(result.value)
                 is PaymentResult.ThreeDSRequired -> navigate3DS(result.params)
-
             }
         }
     }
