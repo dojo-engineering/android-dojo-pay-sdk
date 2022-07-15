@@ -17,8 +17,8 @@
         app:layout_constraintTop_toTopOf="parent">
         <ImageView
             android:id="@+id/googlePayImage"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="fitCenter"

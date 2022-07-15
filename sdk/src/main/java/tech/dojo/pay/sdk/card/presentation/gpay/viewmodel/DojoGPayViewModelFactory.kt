@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.data.CardPaymentApiBuilder
+import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
@@ -22,8 +23,9 @@ internal class DojoGPayViewModelFactory(
             args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
         val api = CardPaymentApiBuilder(DojoSdk.sandbox).create()
         val repo = GPayRepository(api, params.dojoPaymentIntent.token)
+        val dojo3DSRepository = Dojo3DSRepository(api)
         val mapper = GpayPaymentRequestMapper(Gson())
-        return DojoGPayViewModel(repo, mapper) as T
+        return DojoGPayViewModel(repo, dojo3DSRepository, mapper) as T
     }
 
 }

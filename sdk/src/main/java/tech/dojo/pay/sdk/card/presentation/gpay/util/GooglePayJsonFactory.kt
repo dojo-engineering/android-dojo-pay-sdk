@@ -161,7 +161,7 @@ object GooglePayJsonFactory {
      */
     private fun getGpayEnvironment() = when {
         DojoSdk.sandbox -> WalletConstants.ENVIRONMENT_TEST
-        else -> Constants.PAYMENTS_ENVIRONMENT
+        else -> WalletConstants.ENVIRONMENT_PRODUCTION
     }
 
     /**
@@ -211,7 +211,7 @@ object GooglePayJsonFactory {
                     "merchantInfo",
                     JSONObject()
                         .put("merchantName", dojoGPayConfig.merchantName)
-                        .put("merchantId", dojoGPayConfig.merchantId)
+                        .put("merchantId", "BCR2DN6T57R5ZI34")
                 )
 
                 if (dojoGPayConfig.collectShipping) {
