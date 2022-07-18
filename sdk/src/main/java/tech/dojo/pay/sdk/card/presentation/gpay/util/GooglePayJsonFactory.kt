@@ -27,6 +27,7 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.Constants
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.presentation.gpay.util.GooglePayJsonFactory.CENTS
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -38,6 +39,8 @@ import java.math.RoundingMode
  * relevant to your implementation.
  */
 object GooglePayJsonFactory {
+    val CENTS = BigDecimal(100)
+
     /**
      * Create a Google Pay API base request object with properties used in all requests.
      *
@@ -107,7 +110,7 @@ object GooglePayJsonFactory {
             )
             put(
                 "tokenizationSpecification",
-                getTokenizationSpecification(dojoGPayConfig.merchantId)
+                getTokenizationSpecification(dojoGPayConfig.gatewayMerchantId)
             )
         }
     }
@@ -130,14 +133,14 @@ object GooglePayJsonFactory {
             }
     }
 
-    private fun getTokenizationSpecification(merchantId: String): JSONObject {
+    private fun getTokenizationSpecification(gatewayMerchantId: String): JSONObject {
         return JSONObject()
             .put("type", "PAYMENT_GATEWAY")
             .put(
                 "parameters",
                 JSONObject()
                     .put("gateway", "dojo")
-                    .put("gatewayMerchantId", merchantId)
+                    .put("gatewayMerchantId", gatewayMerchantId)
             )
     }
 
@@ -211,7 +214,7 @@ object GooglePayJsonFactory {
                     "merchantInfo",
                     JSONObject()
                         .put("merchantName", dojoGPayConfig.merchantName)
-                        .put("merchantId", "BCR2DN6T57R5ZI34")
+                        .put("merchantId", dojoGPayConfig.merchantId)
                 )
 
                 if (dojoGPayConfig.collectShipping) {
@@ -232,8 +235,9 @@ object GooglePayJsonFactory {
 }
 
 /**
- * Converts Double to a string format accepted by [GooglePayJsonFactory.getPaymentDataRequest].
+ * Converts Long to a string format accepted by [GooglePayJsonFactory.getPaymentDataRequest].
  */
-fun Double.centsToString() = BigDecimal(this)
+fun Long.centsToString() = BigDecimal(this)
+    .divide(CENTS)
     .setScale(2, RoundingMode.HALF_EVEN)
     .toString()

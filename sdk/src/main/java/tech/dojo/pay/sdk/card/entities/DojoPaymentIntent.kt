@@ -8,6 +8,6 @@ data class DojoPaymentIntent(
 ) : Serializable
 
 data class DojoTotalAmount(
-    val amount: Double,
+    val amount: Long,
     val currencyCode: String,
 ) : Serializable
