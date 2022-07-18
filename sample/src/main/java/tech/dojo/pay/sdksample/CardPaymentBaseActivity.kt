@@ -68,7 +68,8 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                 collectEmailAddress = binding.checkboxEmail.isChecked,
                 merchantName = "Dojo Cafe (Paymentsense)",
-                merchantId = "66666"
+                merchantId = "BCR2DN6T57R5ZI34",
+                gatewayMerchantId = "119784244252745"
             ),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
@@ -78,18 +79,19 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
                         collectShipping = binding.checkboxShippingAddress.isChecked,
+                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
+                            listOf("US", "GB", "DE") else null,
                         collectBilling = binding.checkboxBillingAddress.isChecked,
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         collectEmailAddress = binding.checkboxEmail.isChecked,
                         merchantName = "Dojo Cafe (Paymentsense)",
-                        merchantId = "66666",
-                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
-                            listOf("US", "GB", "DE") else null
+                        merchantId = "BCR2DN6T57R5ZI34",
+                        gatewayMerchantId = "119784244252745"
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(
                     token = binding.token.text.toString(),
-                    totalAmount = DojoTotalAmount(0.10, "GBP")
+                    totalAmount = DojoTotalAmount(10, "GBP")
                 )
             )
         }
