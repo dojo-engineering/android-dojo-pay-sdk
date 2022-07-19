@@ -21,13 +21,16 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
-internal class DojoGPayActivity : AppCompatActivity() {
+internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoGPayViewModel by viewModels {
         DojoGPayViewModelFactory(intent.extras)
     }
+    override val threeDSViewModel: Dojo3DSBaseViewModel by lazy { viewModel }
 
     private val gPayEngine: DojoGPayEngine by lazy { DojoGPayEngine(this) }
 
