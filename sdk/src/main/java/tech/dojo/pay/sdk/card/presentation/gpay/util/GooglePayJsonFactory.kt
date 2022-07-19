@@ -1,19 +1,3 @@
-/*
- * Copyright 2017 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package tech.dojo.pay.sdk.card.presentation.gpay.util
 
 import android.app.Activity
@@ -24,10 +8,10 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.Constants
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
-import tech.dojo.pay.sdk.card.presentation.gpay.util.GooglePayJsonFactory.CENTS
+import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.CENTS
+import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.PAYMENT_GATEWAY_TOKENIZATION_NAME
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -39,8 +23,6 @@ import java.math.RoundingMode
  * relevant to your implementation.
  */
 object GooglePayJsonFactory {
-    val CENTS = BigDecimal(100)
-
     /**
      * Create a Google Pay API base request object with properties used in all requests.
      *
@@ -139,7 +121,7 @@ object GooglePayJsonFactory {
             .put(
                 "parameters",
                 JSONObject()
-                    .put("gateway", "dojo")
+                    .put("gateway", PAYMENT_GATEWAY_TOKENIZATION_NAME)
                     .put("gatewayMerchantId", gatewayMerchantId)
             )
     }
