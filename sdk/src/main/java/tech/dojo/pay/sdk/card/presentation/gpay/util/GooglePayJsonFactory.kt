@@ -14,6 +14,8 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.CENTS
 import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.PAYMENT_GATEWAY_TOKENIZATION_NAME
 import java.math.BigDecimal
 import java.math.RoundingMode
+@Suppress("SwallowedException")
+
 
 /**
  * Contains helper static methods for dealing with the Payments API.

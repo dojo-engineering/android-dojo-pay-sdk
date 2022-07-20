@@ -13,6 +13,7 @@ import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
     private val dojo3DSRepository: Dojo3DSRepository,

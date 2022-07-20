@@ -6,6 +6,7 @@ import tech.dojo.pay.sdk.card.data.entities.GPayDetails
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class GpayPaymentRequestMapper(
     private val gson: Gson
 ) {

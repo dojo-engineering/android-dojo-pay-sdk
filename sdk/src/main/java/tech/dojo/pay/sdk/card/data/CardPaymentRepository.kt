@@ -6,6 +6,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import java.util.*
 
 internal class CardPaymentRepository(
     private val api: CardPaymentApi,
@@ -55,6 +56,6 @@ internal class CardPaymentRepository(
      */
     private fun formatExpiryDate(month: String?, year: String?): String? {
         if (month == null || year == null) return null
-        return String.format("%s / %s", month, year)
+        return String.format(Locale.getDefault(), "%s / %s", month, year)
     }
 }
