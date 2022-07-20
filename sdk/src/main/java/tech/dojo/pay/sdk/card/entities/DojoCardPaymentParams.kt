@@ -6,3 +6,8 @@ internal data class DojoCardPaymentParams(
     val token: String,
     val paymentPayload: DojoCardPaymentPayload
 ) : Serializable
+
+internal data class DojoGPayParams(
+    val dojoGPayPayload: DojoGPayPayload,
+    val dojoPaymentIntent: DojoPaymentIntent
+) : Serializable

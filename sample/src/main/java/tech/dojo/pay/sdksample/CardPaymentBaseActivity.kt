@@ -7,10 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.*
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
@@ -21,6 +20,10 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     abstract fun onSandboxChecked(isChecked: Boolean)
 
     abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
+    abstract fun onGPayClicked(
+        dojoGPayPayload: DojoGPayPayload,
+        dojoPaymentIntent: DojoPaymentIntent
+    )
 
     fun showResult(result: DojoPaymentResult) {
         showDialog(
@@ -58,6 +61,40 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 )
             )
         }
+        DojoSdk.isGpayAvailable(this,
+            DojoGPayConfig(
+                collectShipping = binding.checkboxShippingAddress.isChecked,
+                collectBilling = binding.checkboxBillingAddress.isChecked,
+                collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
+                collectEmailAddress = binding.checkboxEmail.isChecked,
+                merchantName = "Dojo Cafe (Paymentsense)",
+                merchantId = "BCR2DN6T57R5ZI34",
+                gatewayMerchantId = "119784244252745"
+            ),
+            { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
+            { binding.btnGPay.googlePayButton.visibility = View.GONE }
+        )
+        binding.btnGPay.googlePayButton.setOnClickListener {
+            onGPayClicked(
+                dojoGPayPayload = DojoGPayPayload(
+                    DojoGPayConfig(
+                        collectShipping = binding.checkboxShippingAddress.isChecked,
+                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
+                            listOf("US", "GB", "DE") else null,
+                        collectBilling = binding.checkboxBillingAddress.isChecked,
+                        collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
+                        collectEmailAddress = binding.checkboxEmail.isChecked,
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "BCR2DN6T57R5ZI34",
+                        gatewayMerchantId = "119784244252745"
+                    )
+                ),
+                dojoPaymentIntent = DojoPaymentIntent(
+                    token = binding.token.text.toString(),
+                    totalAmount = DojoTotalAmount(10, "GBP")
+                )
+            )
+        }
     }
 
     private fun setCardListeners() {
@@ -84,17 +121,29 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         }
 
         binding.btnGenerateToken.setOnClickListener {
-            binding.viewProgress.visibility = View.VISIBLE
             lifecycleScope.launch {
+                showLoading()
                 try {
                     displayToken(TokenGenerator.generateToken())
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
-                    binding.viewProgress.visibility = View.GONE
+                    hidLoading()
                 }
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.viewProgress.visibility = View.VISIBLE
+        binding.btnGPay.googlePayButton.isEnabled = false
+        binding.btnPay.isEnabled = false
+    }
+
+    private fun hidLoading() {
+        binding.viewProgress.visibility = View.GONE
+        binding.btnGPay.googlePayButton.isEnabled = true
+        binding.btnPay.isEnabled = true
     }
 
     private fun setCardDetails(details: DojoCardDetails) {

@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.threeds
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,16 +8,17 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.presentation.card.util.ThreeDsInterface
 
 internal class Dojo3DSFragment private constructor() : Fragment() {
 
     private lateinit var webView: WebView
 
-    private val viewModel: DojoCardPaymentViewModel by activityViewModels()
-
+    private val viewModel by lazy {
+        (requireActivity() as Dojo3DSViewModelHost).threeDSViewModel
+    }
     private val params: ThreeDSParams by lazy {
         requireArguments().getSerializable(KEY_PARAMS) as ThreeDSParams
     }
