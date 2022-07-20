@@ -60,7 +60,9 @@ class DojoGPayEngine(
             // AutoResolveHelper to wait for the user interacting with it. Once completed,
             // onActivityResult will be called with the result.
             AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request), activity, GOOGLE_PAY_ACTIVITY_REQUEST_CODE
+                paymentsClient.loadPaymentData(request),
+                activity,
+                GOOGLE_PAY_ACTIVITY_REQUEST_CODE
             )
         } else {
             onPaymentRequestError()

@@ -27,5 +27,4 @@ internal class DojoGPayViewModelFactory(
         val mapper = GpayPaymentRequestMapper(Gson())
         return DojoGPayViewModel(repo, dojo3DSRepository, mapper) as T
     }
-
 }

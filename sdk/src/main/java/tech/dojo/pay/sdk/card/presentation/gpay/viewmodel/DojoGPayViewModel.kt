@@ -19,7 +19,7 @@ internal class DojoGPayViewModel(
     private val gpayPaymentRequestMapper: GpayPaymentRequestMapper
 ) : Dojo3DSBaseViewModel() {
     val paymentResult = MutableLiveData<PaymentResult>()
-    var canExit: Boolean = false //User should not be able to leave while request is not completed
+    var canExit: Boolean = false // User should not be able to leave while request is not completed
 
     fun sendGPayDataToServer(gPayData: String, dojoGPayParams: DojoGPayParams) {
         viewModelScope.launch {

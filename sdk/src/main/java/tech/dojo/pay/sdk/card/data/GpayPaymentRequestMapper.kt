@@ -105,5 +105,4 @@ internal class GpayPaymentRequestMapper(
             null
         }
     }
-
 }

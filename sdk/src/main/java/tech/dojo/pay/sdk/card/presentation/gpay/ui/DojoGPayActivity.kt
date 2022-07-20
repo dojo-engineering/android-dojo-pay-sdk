@@ -123,5 +123,4 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
         finish()
         overridePendingTransition(0, R.anim.exit)
     }
-
 }

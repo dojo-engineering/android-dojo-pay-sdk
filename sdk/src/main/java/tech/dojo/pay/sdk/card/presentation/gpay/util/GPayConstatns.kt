@@ -31,7 +31,8 @@ object Constants {
         "DISCOVER",
         "JCB",
         "MASTERCARD",
-        "VISA")
+        "VISA"
+    )
 
     /**
      * The Google Pay API may return cards on file on Google.com (PAN_ONLY) and/or a device token on
@@ -41,7 +42,8 @@ object Constants {
      */
     val SUPPORTED_METHODS = listOf(
         "PAN_ONLY",
-        "CRYPTOGRAM_3DS")
+        "CRYPTOGRAM_3DS"
+    )
 
 
     /**

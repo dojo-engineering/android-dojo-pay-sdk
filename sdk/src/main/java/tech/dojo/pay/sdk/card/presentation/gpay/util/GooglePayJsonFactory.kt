@@ -14,8 +14,6 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.CENTS
 import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.PAYMENT_GATEWAY_TOKENIZATION_NAME
 import java.math.BigDecimal
 import java.math.RoundingMode
-@Suppress("SwallowedException")
-
 
 /**
  * Contains helper static methods for dealing with the Payments API.
@@ -24,6 +22,7 @@ import java.math.RoundingMode
  * existence. Please consult the documentation to learn more and feel free to remove ones not
  * relevant to your implementation.
  */
+@Suppress("SwallowedException")
 object GooglePayJsonFactory {
     /**
      * Create a Google Pay API base request object with properties used in all requests.
@@ -56,7 +55,6 @@ object GooglePayJsonFactory {
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
     private val allowedCardAuthMethods = JSONArray(Constants.SUPPORTED_METHODS)
-
 
     /**
      * return the Json  object for the is ready to pay request

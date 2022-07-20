@@ -12,6 +12,7 @@ internal object GpayPaymentRequestMapperTestData {
         collectPhoneNumber = true,
         merchantName = "test",
         merchantId = "test",
+        gatewayMerchantId = "test",
         allowedCountryCodesForShipping = listOf("us", "GP")
     )
     val dojoGPayPayload = DojoGPayPayload(
@@ -20,7 +21,7 @@ internal object GpayPaymentRequestMapperTestData {
     )
     private val dojoPaymentIntent = DojoPaymentIntent(
         token = "",
-        totalAmount = DojoTotalAmount(0.0, "")
+        totalAmount = DojoTotalAmount(0L, "")
     )
     val dojoGPayParams = DojoGPayParams(
         dojoGPayPayload = dojoGPayPayload,
