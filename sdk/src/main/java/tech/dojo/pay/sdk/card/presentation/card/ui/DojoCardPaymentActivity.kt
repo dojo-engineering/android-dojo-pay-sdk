@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,17 +6,23 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.commit
-import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.R
+import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
+import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModelFactory
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
-internal class DojoCardPaymentActivity : AppCompatActivity() {
+internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoCardPaymentViewModel by viewModels {
         DojoCardPaymentViewModelFactory(intent.extras)
     }
-
+    override val threeDSViewModel: Dojo3DSBaseViewModel by lazy { viewModel }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dojo_card_payment)

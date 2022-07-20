@@ -1,9 +1,9 @@
 package tech.dojo.pay.sdk.card.data
 
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
-import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
@@ -33,10 +33,6 @@ internal class CardPaymentRepository(
         } else {
             PaymentResult.Completed(paymentResult)
         }
-    }
-
-    suspend fun fetch3dsPage(params: ThreeDSParams): String {
-        return api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
     }
 
     private fun DojoCardPaymentPayload.toPaymentDetails(): PaymentDetails =

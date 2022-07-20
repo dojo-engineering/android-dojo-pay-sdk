@@ -1,25 +1,25 @@
-package tech.dojo.pay.sdk.card
+package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import tech.dojo.pay.sdk.card.data.CardPaymentRepository
-import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.data.CardPaymentRepository
+import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
+import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import kotlin.Exception
+import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 internal class DojoCardPaymentViewModel(
-    private val repository: CardPaymentRepository
-) : ViewModel() {
+    private val repository: CardPaymentRepository,
+    private val dojo3DSRepository: Dojo3DSRepository,
+) : Dojo3DSBaseViewModel() {
 
     private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
-    val threeDsPage = MutableLiveData<String>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false // User should not be able to leave while request is not completed
 
@@ -42,14 +42,14 @@ internal class DojoCardPaymentViewModel(
         fingerPrintCapturedEvent.trySend(Unit)
     }
 
-    fun on3DSCompleted(result: DojoPaymentResult) {
+    override fun on3DSCompleted(result: DojoPaymentResult) {
         paymentResult.postValue(PaymentResult.Completed(result))
     }
 
-    fun fetchThreeDsPage(params: ThreeDSParams) {
+    override fun fetchThreeDsPage(params: ThreeDSParams) {
         viewModelScope.launch {
             try {
-                threeDsPage.value = repository.fetch3dsPage(params)
+                threeDsPage.value = dojo3DSRepository.fetch3dsPage(params)
             } catch (e: Exception) {
                 paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }

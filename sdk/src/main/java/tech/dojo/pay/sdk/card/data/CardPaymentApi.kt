@@ -7,6 +7,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Url
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.data.entities.GPayDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 
@@ -30,5 +31,11 @@ internal interface CardPaymentApi {
         @Url url: String,
         @Field("JWT") jwt: String,
         @Field("MD") md: String
-    ): String
+    ) : String
+
+    @POST("payments/{token}/google-pay")
+    suspend fun processGPay(
+        @Path("token") token: String,
+        @Body payload: GPayDetails
+    ) : PaymentResponse
 }
