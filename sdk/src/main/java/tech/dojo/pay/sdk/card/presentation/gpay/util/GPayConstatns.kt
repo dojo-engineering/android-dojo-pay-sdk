@@ -45,7 +45,6 @@ object Constants {
         "CRYPTOGRAM_3DS"
     )
 
-
     /**
      * The name of your payment processor/gateway. Please refer to their documentation for more
      * information.
@@ -53,7 +52,6 @@ object Constants {
      * @value #PAYMENT_GATEWAY_TOKENIZATION_NAME
      */
     const val PAYMENT_GATEWAY_TOKENIZATION_NAME = "dojo"
-
 
     val CENTS = BigDecimal(100)
 }

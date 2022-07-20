@@ -50,10 +50,11 @@ internal class DojoGPayViewModelTest {
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
                         merchantName = "",
-                        merchantId = ""
+                        merchantId = "",
+                        gatewayMerchantId = ""
                     )
                 ),
-                dojoPaymentIntent = DojoPaymentIntent("", DojoTotalAmount(0.0, ""))
+                dojoPaymentIntent = DojoPaymentIntent("", DojoTotalAmount(0L, ""))
             )
             val gPayDetails = GPayDetails(
                 token = "testToken",

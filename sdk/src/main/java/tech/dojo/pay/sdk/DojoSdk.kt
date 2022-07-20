@@ -70,7 +70,8 @@ object DojoSdk {
             .isReadyToPay(
                 dojoGPayConfig,
                 { onGpayAvailable() },
-                { onGpayUnavailable() })
+                { onGpayUnavailable() }
+            )
     }
 
     /**

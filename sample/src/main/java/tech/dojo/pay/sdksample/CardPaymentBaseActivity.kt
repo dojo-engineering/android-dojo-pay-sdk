@@ -61,7 +61,8 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 )
             )
         }
-        DojoSdk.isGpayAvailable(this,
+        DojoSdk.isGpayAvailable(
+            this,
             DojoGPayConfig(
                 collectShipping = binding.checkboxShippingAddress.isChecked,
                 collectBilling = binding.checkboxBillingAddress.isChecked,
@@ -79,8 +80,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
                         collectShipping = binding.checkboxShippingAddress.isChecked,
-                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
-                            listOf("US", "GB", "DE") else null,
+                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked) {
+                            listOf("US", "GB", "DE")
+                        } else null,
                         collectBilling = binding.checkboxBillingAddress.isChecked,
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         collectEmailAddress = binding.checkboxEmail.isChecked,

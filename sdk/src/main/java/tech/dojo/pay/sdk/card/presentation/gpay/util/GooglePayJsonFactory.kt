@@ -67,7 +67,6 @@ object GooglePayJsonFactory {
                     JSONArray().put(baseCardPaymentMethod(dojoGPayConfig))
                 )
             }
-
         } catch (e: JSONException) {
             null
         }
@@ -88,7 +87,8 @@ object GooglePayJsonFactory {
         return JSONObject().apply {
             put("type", "CARD")
             put(
-                "parameters", createPaymentParamsJson(dojoGPayConfig.collectBilling)
+                "parameters",
+                createPaymentParamsJson(dojoGPayConfig.collectBilling)
             )
             put(
                 "tokenizationSpecification",
@@ -201,13 +201,16 @@ object GooglePayJsonFactory {
 
                 if (dojoGPayConfig.collectShipping) {
                     put("shippingAddressRequired", true)
-                    put("shippingAddressParameters", JSONObject().apply {
-                        put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
-                        put(
-                            "allowedCountryCodes",
-                            JSONArray(dojoGPayConfig.allowedCountryCodesForShipping)
-                        )
-                    })
+                    put(
+                        "shippingAddressParameters",
+                        JSONObject().apply {
+                            put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
+                            put(
+                                "allowedCountryCodes",
+                                JSONArray(dojoGPayConfig.allowedCountryCodesForShipping)
+                            )
+                        }
+                    )
                 }
             }
         } catch (e: JSONException) {

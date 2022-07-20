@@ -56,8 +56,8 @@ internal class GpayPaymentRequestMapper(
     ): String? {
         return try {
             if (
-                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectPhoneNumber
-                && dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectShipping
+                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectPhoneNumber &&
+                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectShipping
             ) {
                 JSONObject(paymentInformationJson).getJSONObject("shippingAddress")
                     .getString("phoneNumber")

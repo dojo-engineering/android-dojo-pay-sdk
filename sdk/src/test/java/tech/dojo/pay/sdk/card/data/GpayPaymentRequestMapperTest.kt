@@ -50,7 +50,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 
@@ -87,7 +87,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 
@@ -124,7 +124,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 
@@ -155,7 +155,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 
@@ -185,7 +185,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 
@@ -204,7 +204,7 @@ internal class GpayPaymentRequestMapperTest {
         )
         // act
         val result = mapper.apply(paymentInformationJson, gPayParams)
-        //assert
+        // assert
         Assert.assertEquals(expected, result)
     }
 }
