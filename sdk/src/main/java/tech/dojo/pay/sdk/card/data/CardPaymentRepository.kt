@@ -6,7 +6,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
-import java.util.*
+import java.util.Locale
 
 internal class CardPaymentRepository(
     private val api: CardPaymentApi,

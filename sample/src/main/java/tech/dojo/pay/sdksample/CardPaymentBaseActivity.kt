@@ -9,7 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
