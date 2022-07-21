@@ -15,7 +15,12 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
+import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
