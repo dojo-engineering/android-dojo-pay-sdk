@@ -20,7 +20,13 @@ import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -50,10 +56,11 @@ internal class DojoGPayViewModelTest {
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
                         merchantName = "",
-                        merchantId = ""
+                        merchantId = "",
+                        gatewayMerchantId = ""
                     )
                 ),
-                dojoPaymentIntent = DojoPaymentIntent("", DojoTotalAmount(0.0, ""))
+                dojoPaymentIntent = DojoPaymentIntent("", DojoTotalAmount(0L, ""))
             )
             val gPayDetails = GPayDetails(
                 token = "testToken",

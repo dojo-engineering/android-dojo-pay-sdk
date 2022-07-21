@@ -31,11 +31,11 @@ internal interface CardPaymentApi {
         @Url url: String,
         @Field("JWT") jwt: String,
         @Field("MD") md: String
-    ) : String
+    ): String
 
     @POST("payments/{token}/google-pay")
     suspend fun processGPay(
         @Path("token") token: String,
         @Body payload: GPayDetails
-    ) : PaymentResponse
+    ): PaymentResponse
 }

@@ -10,8 +10,8 @@ import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
-import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.CENTS
-import tech.dojo.pay.sdk.card.presentation.gpay.util.Constants.PAYMENT_GATEWAY_TOKENIZATION_NAME
+import tech.dojo.pay.sdk.card.presentation.gpay.util.GPayConstants.CENTS
+import tech.dojo.pay.sdk.card.presentation.gpay.util.GPayConstants.PAYMENT_GATEWAY_TOKENIZATION_NAME
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -22,6 +22,7 @@ import java.math.RoundingMode
  * existence. Please consult the documentation to learn more and feel free to remove ones not
  * relevant to your implementation.
  */
+@Suppress("SwallowedException")
 object GooglePayJsonFactory {
     /**
      * Create a Google Pay API base request object with properties used in all requests.
@@ -42,7 +43,7 @@ object GooglePayJsonFactory {
      * @return Allowed card networks
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
-    private val allowedCardNetworks = JSONArray(Constants.SUPPORTED_NETWORKS)
+    private val allowedCardNetworks = JSONArray(GPayConstants.SUPPORTED_NETWORKS)
 
     /**
      * Card authentication methods supported by your app and your gateway.
@@ -53,8 +54,7 @@ object GooglePayJsonFactory {
      * @return Allowed card authentication methods.
      * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
      */
-    private val allowedCardAuthMethods = JSONArray(Constants.SUPPORTED_METHODS)
-
+    private val allowedCardAuthMethods = JSONArray(GPayConstants.SUPPORTED_METHODS)
 
     /**
      * return the Json  object for the is ready to pay request
@@ -67,7 +67,6 @@ object GooglePayJsonFactory {
                     JSONArray().put(baseCardPaymentMethod(dojoGPayConfig))
                 )
             }
-
         } catch (e: JSONException) {
             null
         }
@@ -88,7 +87,8 @@ object GooglePayJsonFactory {
         return JSONObject().apply {
             put("type", "CARD")
             put(
-                "parameters", createPaymentParamsJson(dojoGPayConfig.collectBilling)
+                "parameters",
+                createPaymentParamsJson(dojoGPayConfig.collectBilling)
             )
             put(
                 "tokenizationSpecification",
@@ -118,17 +118,12 @@ object GooglePayJsonFactory {
     private fun getTokenizationSpecification(gatewayMerchantId: String): JSONObject {
         return JSONObject()
             .put("type", "PAYMENT_GATEWAY")
-            .put(
-                "parameters",
-                JSONObject()
-                    .put("gateway", PAYMENT_GATEWAY_TOKENIZATION_NAME)
-                    .put("gatewayMerchantId", gatewayMerchantId)
-            )
+            .put("parameters", JSONObject().put("gateway", PAYMENT_GATEWAY_TOKENIZATION_NAME).put("gatewayMerchantId", gatewayMerchantId))
     }
 
     /**
      * Creates an instance of [PaymentsClient] for use in an [Activity] using the
-     * environment and theme set in [Constants].
+     * environment and theme set in [GPayConstants].
      *
      * @param activity is the caller's activity.
      */
@@ -201,13 +196,16 @@ object GooglePayJsonFactory {
 
                 if (dojoGPayConfig.collectShipping) {
                     put("shippingAddressRequired", true)
-                    put("shippingAddressParameters", JSONObject().apply {
-                        put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
-                        put(
-                            "allowedCountryCodes",
-                            JSONArray(dojoGPayConfig.allowedCountryCodesForShipping)
-                        )
-                    })
+                    put(
+                        "shippingAddressParameters",
+                        JSONObject().apply {
+                            put("phoneNumberRequired", dojoGPayConfig.collectPhoneNumber)
+                            put(
+                                "allowedCountryCodes",
+                                JSONArray(dojoGPayConfig.allowedCountryCodesForShipping)
+                            )
+                        }
+                    )
                 }
             }
         } catch (e: JSONException) {
