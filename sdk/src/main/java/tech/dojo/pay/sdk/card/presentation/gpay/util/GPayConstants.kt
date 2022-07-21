@@ -2,7 +2,7 @@ package tech.dojo.pay.sdk.card.presentation.gpay.util
 
 import java.math.BigDecimal
 
-object Constants {
+object GPayConstants {
 
     /**
      * The allowed networks to be requested from the API. If the user has cards from networks not
