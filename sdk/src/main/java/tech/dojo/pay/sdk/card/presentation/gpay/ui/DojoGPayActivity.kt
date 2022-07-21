@@ -25,6 +25,8 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
+@Suppress("SwallowedException")
+
 internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoGPayViewModel by viewModels {
@@ -121,5 +123,4 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
         finish()
         overridePendingTransition(0, R.anim.exit)
     }
-
 }

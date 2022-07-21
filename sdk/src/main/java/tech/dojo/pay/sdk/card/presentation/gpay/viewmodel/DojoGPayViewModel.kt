@@ -12,13 +12,14 @@ import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoGPayViewModel(
     private val repository: GPayRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
     private val gpayPaymentRequestMapper: GpayPaymentRequestMapper
 ) : Dojo3DSBaseViewModel() {
     val paymentResult = MutableLiveData<PaymentResult>()
-    var canExit: Boolean = false //User should not be able to leave while request is not completed
+    var canExit: Boolean = false // User should not be able to leave while request is not completed
 
     fun sendGPayDataToServer(gPayData: String, dojoGPayParams: DojoGPayParams) {
         viewModelScope.launch {

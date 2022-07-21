@@ -27,7 +27,9 @@ class CardPaymentOldSchoolActivity : CardPaymentBaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val result = DojoSdk.parseCardPaymentResult(requestCode, resultCode, data)
+        val gPayResult = DojoSdk.parseGPayPaymentResult(requestCode, resultCode, data)
         setProgressIndicatorVisible(false)
         if (result != null) showResult(result)
+        if (gPayResult != null) showResult(gPayResult)
     }
 }

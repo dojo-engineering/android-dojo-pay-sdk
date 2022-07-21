@@ -26,5 +26,4 @@ internal class GPayRepository(
             PaymentResult.Completed(paymentResult)
         }
     }
-
 }

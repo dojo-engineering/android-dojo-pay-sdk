@@ -6,7 +6,7 @@ This project contains the SDK for payments. This will be used in our internal ap
 
 SDK functionality can be accessed via `DojoSdk` object.
 
-### Card payment
+## Card payment
 
 Card payments are handled by `DojoCardPaymentHandler`. It can be instantiated via `DojoSdk.createCardPaymentHandler` factory method, which takes `activity` and `result callback` as parameters. Payment process begins when `DojoCardPaymentHandler.executeCardPayment` is being invoked.
 
@@ -25,6 +25,86 @@ class CardPaymentActivity : AppCompatActivity() {
 
 }
 ```
+## Google pay
+### Please note that in order to test google pay in production you need to register your app at the google pay api consol.
+### Google pay availability
+Before we start on the google pay payment you need to check if google pay is available on that device by calling `isGpayAvailable()` from `DojoSdk`
+
+```
+        DojoSdk.isGpayAvailable(
+            activity,
+            DojoGPayConfig(
+                collectShipping = true ,
+                collectBilling = true,
+                collectPhoneNumber = true,
+                collectEmailAddress =true,
+                merchantName = "",
+                merchantId = "",
+                gatewayMerchantId = ""
+            ),
+            { 
+            // handle if the google pay is available on this device
+            googlePayButton.visibility = View.VISIBLE 
+            },
+            {
+            // handle if the google pay is  not available on this device
+            googlePayButton.visibility = View.GONE 
+            }
+        )
+```
+### Google pay payment
+After making sure that google pay is avilibe on that device now we can start on making the payment using google pay , to that  you first begin on building the `DojoGPayPayload`from our sdk this object consists
+1. `DojoGPayConfig`:  this object has all the google pay configurations most of them are optional it's based on your case if you want to enable or disable them like `collectShipping` for example, but what is required is the following parameters
+    - `merchantName` : this is your mechant name
+    - `merchantId` : this id you got from the google pay api console after submitting your app for review to get production access to google pay
+    - `gatewayMerchantId`: the id you got from dojo protal
+2. `email` :user email and it's optional
+   sample object
+```
+  DojoGPayConfig(
+                        collectShipping = true,
+                        allowedCountryCodesForShipping =  listOf("US", "GB"),
+                        collectBilling = true,
+                        collectPhoneNumber = true,
+                        collectEmailAddress = true,
+                        merchantName = "",
+                        merchantId = "",
+                        gatewayMerchantId = ""
+                    ),
+                    email= 
+                )
+```
+
+
+Second object that you need to provide for making the gpay payment is `dojoPaymentIntent`
+this object is used to make the sdk know the payment details like the `PaymentToken` and also the `Payment Amount`
+Sample object
+```
+     dojoPaymentIntent = DojoPaymentIntent(
+                    token = "token",
+                    totalAmount = DojoTotalAmount(10, "GBP")
+                )
+```
+
+Google pay  payments are handled by `DojoGPayHandler`. It can be instantiated via `DojoSdk.createGPayHandler` factory method, which takes `activity` and `result callback` as parameters. Payment process begins when `DojoGPayHandler.executeGPay` is being invoked.
+
+```
+class GpayPaymentActivity : AppCompatActivity() {
+
+   private val gPayment = DojoSdk.createGPayHandler(this) { result ->
+        showResult(result)
+    }
+
+     override fun onGPayClicked(
+        dojoGPayPayload: DojoGPayPayload,
+        dojoPaymentIntent: DojoPaymentIntent
+    ) {
+        gPayment.executeGPay(dojoGPayPayload, dojoPaymentIntent)
+    }
+
+}
+```
+
 
 #### Receive payment result as activity result
 
@@ -32,12 +112,15 @@ In order to launch card payment activity for result, call:
 
 ```
 DojoSdk.startCardPayment(activity, token, payload)
+DojoSdk.startGPay(this, dojoGPayPayload, dojoPaymentIntent)
+
 ``` 
 
 Override `onActivityResult()` callback and parse the result:
 ```
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {  
     val result = DojoSdk.parseCardPaymentResult(requestCode, resultCode, data)  
+    val gPayResult = DojoSdk.parseGPayPaymentResult(requestCode, resultCode, data)
 }
 ```
 
@@ -77,7 +160,7 @@ When payment process is terminated by user (e.x. closed 3ds screen), then `DECLI
 
 ### Add dependency
 
-`implementation 'tech.dojo.pay:sdk:1.1.0' `
+`implementation 'tech.dojo.pay:sdk:1.2.0' `
 
 ### Configure authentication
 

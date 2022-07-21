@@ -9,7 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
@@ -61,7 +66,8 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 )
             )
         }
-        DojoSdk.isGpayAvailable(this,
+        DojoSdk.isGpayAvailable(
+            this,
             DojoGPayConfig(
                 collectShipping = binding.checkboxShippingAddress.isChecked,
                 collectBilling = binding.checkboxBillingAddress.isChecked,
@@ -79,8 +85,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 dojoGPayPayload = DojoGPayPayload(
                     DojoGPayConfig(
                         collectShipping = binding.checkboxShippingAddress.isChecked,
-                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked)
-                            listOf("US", "GB", "DE") else null,
+                        allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked) {
+                            listOf("US", "GB", "DE")
+                        } else null,
                         collectBilling = binding.checkboxBillingAddress.isChecked,
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         collectEmailAddress = binding.checkboxEmail.isChecked,

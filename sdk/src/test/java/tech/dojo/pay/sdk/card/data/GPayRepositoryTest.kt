@@ -87,12 +87,10 @@ internal class GPayRepositoryTest {
             )
         )
 
-
         val ADDRESS_DETAILS = GooglePayAddressDetails(
             address1 = "Address",
             postcode = "Postcode",
             countryCode = "Country"
         )
     }
-
 }

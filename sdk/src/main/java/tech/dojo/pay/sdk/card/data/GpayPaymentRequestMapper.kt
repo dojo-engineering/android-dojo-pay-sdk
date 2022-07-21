@@ -6,6 +6,7 @@ import tech.dojo.pay.sdk.card.data.entities.GPayDetails
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class GpayPaymentRequestMapper(
     private val gson: Gson
 ) {
@@ -55,8 +56,8 @@ internal class GpayPaymentRequestMapper(
     ): String? {
         return try {
             if (
-                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectPhoneNumber
-                && dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectShipping
+                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectPhoneNumber &&
+                dojoGPayParams.dojoGPayPayload.dojoGPayConfig.collectShipping
             ) {
                 JSONObject(paymentInformationJson).getJSONObject("shippingAddress")
                     .getString("phoneNumber")
@@ -104,5 +105,4 @@ internal class GpayPaymentRequestMapper(
             null
         }
     }
-
 }
