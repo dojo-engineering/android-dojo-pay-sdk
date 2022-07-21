@@ -76,7 +76,7 @@ object DojoSdk {
     }
 
     /**
-     * check if google pay available for this device
+     * check if google pay available for this device.
      */
     fun isGpayAvailable(
         activity: Activity,
