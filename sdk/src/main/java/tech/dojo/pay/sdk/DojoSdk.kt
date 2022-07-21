@@ -5,12 +5,12 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
-import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
