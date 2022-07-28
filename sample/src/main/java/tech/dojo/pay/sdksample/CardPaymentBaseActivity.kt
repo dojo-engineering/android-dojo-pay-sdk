@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.NormalCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
@@ -24,7 +24,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
     abstract fun onSandboxChecked(isChecked: Boolean)
 
-    abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
+    abstract fun onPayClicked(token: String, payload: NormalCardPaymentPayload)
     abstract fun onGPayClicked(
         dojoGPayPayload: DojoGPayPayload,
         dojoPaymentIntent: DojoPaymentIntent
@@ -55,7 +55,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
             onPayClicked(
                 token = binding.token.text.toString(),
-                payload = DojoCardPaymentPayload(
+                payload = NormalCardPaymentPayload(
                     DojoCardDetails(
                         cardNumber = binding.cardNumber.text.toString(),
                         cardName = binding.cardHolder.text.toString(),
