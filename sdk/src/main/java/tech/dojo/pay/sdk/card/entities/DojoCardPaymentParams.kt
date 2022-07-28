@@ -4,7 +4,7 @@ import java.io.Serializable
 
 internal data class DojoCardPaymentParams(
     val token: String,
-    val paymentPayload: DojoCardPaymentPayload
+    val paymentPayload: DojoCardPaymentPayLoad
 ) : Serializable
 
 internal data class DojoGPayParams(
