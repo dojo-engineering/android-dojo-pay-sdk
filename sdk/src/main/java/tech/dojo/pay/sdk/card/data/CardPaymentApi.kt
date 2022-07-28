@@ -25,6 +25,12 @@ internal interface CardPaymentApi {
         @Body payload: PaymentDetails
     ): PaymentResponse
 
+    @POST("/payments/recurring/{token}")
+    suspend fun processPaymentForSaverCard(
+        @Path("token") token: String,
+        @Body payload: PaymentDetails
+    ): PaymentResponse
+
     @POST
     @FormUrlEncoded
     suspend fun fetchSecurePage(

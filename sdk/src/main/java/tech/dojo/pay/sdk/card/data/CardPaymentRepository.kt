@@ -3,7 +3,7 @@ package tech.dojo.pay.sdk.card.data
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import java.util.Locale
@@ -11,16 +11,19 @@ import java.util.Locale
 internal class CardPaymentRepository(
     private val api: CardPaymentApi,
     private val token: String,
-    payload: DojoCardPaymentPayload
+    private val payload: DojoCardPaymentPayLoad
 ) {
 
-    private val paymentDetails = payload.toPaymentDetails()
+    private val paymentDetails = when (payload) {
+        is DojoCardPaymentPayLoad.NormalCardPaymentPayload -> payload.toPaymentDetails()
+        is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> payload.toPaymentDetails()
+    }
 
     suspend fun collectDeviceData(): DeviceData =
         api.collectDeviceData(token, paymentDetails)
 
     suspend fun processPayment(): PaymentResult {
-        val response = api.processPayment(token, paymentDetails)
+        val response = processCardPaymentCall()
         val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
 
         return if (paymentResult == DojoPaymentResult.AUTHORIZING) {
@@ -36,7 +39,16 @@ internal class CardPaymentRepository(
         }
     }
 
-    private fun DojoCardPaymentPayload.toPaymentDetails(): PaymentDetails =
+    private suspend fun processCardPaymentCall() =
+        when (payload) {
+            is DojoCardPaymentPayLoad.NormalCardPaymentPayload -> api.processPayment(token, paymentDetails)
+            is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> api.processPaymentForSaverCard(
+                token,
+                paymentDetails
+            )
+        }
+
+    private fun DojoCardPaymentPayLoad.NormalCardPaymentPayload.toPaymentDetails(): PaymentDetails =
         PaymentDetails(
             cV2 = cardDetails.cv2,
             cardName = cardDetails.cardName,
@@ -47,6 +59,12 @@ internal class CardPaymentRepository(
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,
             metaData = metaData
+        )
+
+    private fun DojoCardPaymentPayLoad.SavedCardPaymentPayLoad.toPaymentDetails(): PaymentDetails =
+        PaymentDetails(
+            cV2 = cv2,
+            paymentMethodId = paymentMethodId
         )
 
     /**
