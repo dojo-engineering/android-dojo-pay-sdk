@@ -41,9 +41,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     fun setProgressIndicatorVisible(visible: Boolean) {
-        if (visible){
+        if (visible) {
             showLoading()
-        }else{
+        } else {
             hidLoading()
         }
     }
