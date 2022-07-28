@@ -6,19 +6,18 @@ import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 
-internal class DojoCardPaymentHandlerImpl(
+class DojoSavedCardPaymentHandlerImpl(
     activity: ComponentActivity,
     onResult: (DojoPaymentResult) -> Unit
-) : DojoCardPaymentHandler {
-
-    private val cardPayment =
+) : DojoSavedCardPaymentHandler {
+    private val savedCardPayment =
         activity.registerForActivityResult(DojoCardPaymentResultContract(), onResult)
 
-    override fun executeCardPayment(
+    override fun executeSavedCardPayment(
         token: String,
-        payload: DojoCardPaymentPayLoad.NormalCardPaymentPayload
+        payload: DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
     ) {
-        cardPayment.launch(
+        savedCardPayment.launch(
             DojoCardPaymentParams(token, payload)
         )
     }
