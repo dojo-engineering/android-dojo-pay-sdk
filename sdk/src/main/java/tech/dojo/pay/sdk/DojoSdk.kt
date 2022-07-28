@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.NormalCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
@@ -59,7 +59,7 @@ object DojoSdk {
     fun startCardPayment(
         activity: Activity,
         token: String,
-        payload: NormalCardPaymentPayload
+        payload: FullCardPaymentPayload
     ) {
         val intent = DojoCardPaymentResultContract().createIntent(
             activity,

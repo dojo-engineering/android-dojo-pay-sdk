@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.NormalCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
@@ -24,7 +25,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
     abstract fun onSandboxChecked(isChecked: Boolean)
 
-    abstract fun onPayClicked(token: String, payload: NormalCardPaymentPayload)
+    abstract fun onPayClicked(token: String, payload: FullCardPaymentPayload)
+    abstract fun onPaySavedCardClicked(token: String, payload: SavedCardPaymentPayLoad)
+
     abstract fun onGPayClicked(
         dojoGPayPayload: DojoGPayPayload,
         dojoPaymentIntent: DojoPaymentIntent
@@ -55,7 +58,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
             onPayClicked(
                 token = binding.token.text.toString(),
-                payload = NormalCardPaymentPayload(
+                payload = FullCardPaymentPayload(
                     DojoCardDetails(
                         cardNumber = binding.cardNumber.text.toString(),
                         cardName = binding.cardHolder.text.toString(),
@@ -63,6 +66,15 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         expiryYear = year,
                         cv2 = binding.securityCode.text.toString()
                     )
+                )
+            )
+        }
+        binding.btnPaySavedCard.setOnClickListener {
+            onPaySavedCardClicked(
+                token = binding.token.text.toString(),
+                payload = SavedCardPaymentPayLoad(
+                    cv2 = "020",
+                    paymentMethodId = "pm_6qTon7QGRK_7y2kFOmrbag"
                 )
             )
         }

@@ -16,7 +16,7 @@ internal class DojoCardPaymentHandlerImpl(
 
     override fun executeCardPayment(
         token: String,
-        payload: DojoCardPaymentPayLoad.NormalCardPaymentPayload
+        payload: DojoCardPaymentPayLoad.FullCardPaymentPayload
     ) {
         cardPayment.launch(
             DojoCardPaymentParams(token, payload)

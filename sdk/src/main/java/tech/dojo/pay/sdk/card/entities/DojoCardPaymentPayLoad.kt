@@ -3,7 +3,7 @@ package tech.dojo.pay.sdk.card.entities
 import java.io.Serializable
 
 sealed class DojoCardPaymentPayLoad : Serializable {
-    data class NormalCardPaymentPayload(
+    data class FullCardPaymentPayload(
         val cardDetails: DojoCardDetails,
         val userEmailAddress: String? = null,
         val userPhoneNumber: String? = null,

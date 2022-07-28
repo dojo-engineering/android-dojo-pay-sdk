@@ -17,7 +17,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.NormalCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
@@ -112,7 +112,7 @@ internal class CardPaymentRepositoryTest {
             address = ADDRESS_DETAILS
         )
 
-        val PAYLOAD = NormalCardPaymentPayload(
+        val PAYLOAD = FullCardPaymentPayload(
             cardDetails = CARD_DETAILS,
             userEmailAddress = "user@gmail.com",
             userPhoneNumber = "123456789",

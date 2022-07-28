@@ -15,7 +15,7 @@ internal class CardPaymentRepository(
 ) {
 
     private val paymentDetails = when (payload) {
-        is DojoCardPaymentPayLoad.NormalCardPaymentPayload -> payload.toPaymentDetails()
+        is DojoCardPaymentPayLoad.FullCardPaymentPayload -> payload.toPaymentDetails()
         is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> payload.toPaymentDetails()
     }
 
@@ -41,14 +41,14 @@ internal class CardPaymentRepository(
 
     private suspend fun processCardPaymentCall() =
         when (payload) {
-            is DojoCardPaymentPayLoad.NormalCardPaymentPayload -> api.processPayment(token, paymentDetails)
+            is DojoCardPaymentPayLoad.FullCardPaymentPayload -> api.processPayment(token, paymentDetails)
             is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> api.processPaymentForSaverCard(
                 token,
                 paymentDetails
             )
         }
 
-    private fun DojoCardPaymentPayLoad.NormalCardPaymentPayload.toPaymentDetails(): PaymentDetails =
+    private fun DojoCardPaymentPayLoad.FullCardPaymentPayload.toPaymentDetails(): PaymentDetails =
         PaymentDetails(
             cV2 = cardDetails.cv2,
             cardName = cardDetails.cardName,
