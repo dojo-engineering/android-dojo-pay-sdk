@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -42,7 +41,11 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     fun setProgressIndicatorVisible(visible: Boolean) {
-        binding.viewProgress.isVisible = visible
+        if (visible){
+            showLoading()
+        }else{
+            hidLoading()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,12 +160,14 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         binding.viewProgress.visibility = View.VISIBLE
         binding.btnGPay.googlePayButton.isEnabled = false
         binding.btnPay.isEnabled = false
+        binding.btnPaySavedCard.isEnabled = false
     }
 
     private fun hidLoading() {
         binding.viewProgress.visibility = View.GONE
         binding.btnGPay.googlePayButton.isEnabled = true
         binding.btnPay.isEnabled = true
+        binding.btnPaySavedCard.isEnabled = true
     }
 
     private fun setCardDetails(details: DojoCardDetails) {
