@@ -3,7 +3,6 @@ package tech.dojo.pay.sdk.card.data
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -18,6 +17,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
@@ -31,14 +31,10 @@ internal class CardPaymentRepositoryTest {
 
     private lateinit var repo: CardPaymentRepository
 
-    @Before
-    fun setup() {
-        repo = CardPaymentRepository(api, TOKEN, PAYLOAD)
-    }
-
     @Test
     fun `device data collected`() = runTest {
         whenever(api.collectDeviceData(any(), any())).thenReturn(DeviceData("action", "token"))
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
         repo.collectDeviceData()
         verify(api).collectDeviceData(
             token = TOKEN,
@@ -47,11 +43,11 @@ internal class CardPaymentRepositoryTest {
                 cardName = CARD_DETAILS.cardName,
                 expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
                 cV2 = CARD_DETAILS.cv2,
-                userEmailAddress = PAYLOAD.userEmailAddress,
-                userPhoneNumber = PAYLOAD.userPhoneNumber,
+                userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
+                userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
                 billingAddress = ADDRESS_DETAILS,
                 shippingDetails = SHIPPING_DETAILS,
-                metaData = PAYLOAD.metaData
+                metaData = FULL_CARD_PAYLOAD.metaData
             )
         )
     }
@@ -72,7 +68,7 @@ internal class CardPaymentRepositoryTest {
                 md = threeDSParams.md
             )
         )
-
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
         val result = repo.processPayment()
         val expected = PaymentResult.ThreeDSRequired(threeDSParams)
         assertEquals(expected, result)
@@ -83,6 +79,18 @@ internal class CardPaymentRepositoryTest {
         whenever(api.processPayment(any(), any())).thenReturn(
             PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
         )
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
+        val result = repo.processPayment()
+        val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `WHEN Payload is SavedCardPaymentPayLoad AND result code is not AUTHORIZING THEN completed result is returned FROM SAVED CARD PAYMENT `() = runTest {
+        whenever(api.processPaymentForSaverCard(any(), any())).thenReturn(
+            PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
+        )
+        repo = CardPaymentRepository(api, TOKEN, SAVED_CARD_PAYLOAD)
         val result = repo.processPayment()
         val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
         assertEquals(expected, result)
@@ -112,13 +120,17 @@ internal class CardPaymentRepositoryTest {
             address = ADDRESS_DETAILS
         )
 
-        val PAYLOAD = FullCardPaymentPayload(
+        val FULL_CARD_PAYLOAD = FullCardPaymentPayload(
             cardDetails = CARD_DETAILS,
             userEmailAddress = "user@gmail.com",
             userPhoneNumber = "123456789",
             billingAddress = ADDRESS_DETAILS,
             shippingDetails = SHIPPING_DETAILS,
             metaData = mapOf("1" to "one")
+        )
+        val SAVED_CARD_PAYLOAD = SavedCardPaymentPayLoad(
+            cv2 = "cvv",
+            paymentMethodId = "paymentMethodId"
         )
     }
 }
