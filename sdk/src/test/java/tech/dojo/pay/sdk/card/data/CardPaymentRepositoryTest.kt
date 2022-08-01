@@ -29,38 +29,59 @@ internal class CardPaymentRepositoryTest {
     @Mock
     lateinit var api: CardPaymentApi
 
+    @Mock
+    lateinit var requestMapper: CardPaymentRequestMapper
+
     private lateinit var repo: CardPaymentRepository
 
     @Test
     fun `device data collected`() = runTest {
+        // arrange
+        val paymentDetails = PaymentDetails(
+            cardNumber = CARD_DETAILS.cardNumber,
+            cardName = CARD_DETAILS.cardName,
+            expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
+            cV2 = CARD_DETAILS.cv2,
+            userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
+            userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
+            billingAddress = ADDRESS_DETAILS,
+            shippingDetails = SHIPPING_DETAILS,
+            metaData = FULL_CARD_PAYLOAD.metaData
+        )
+        whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
         whenever(api.collectDeviceData(any(), any())).thenReturn(DeviceData("action", "token"))
-        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
+        // act
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD, requestMapper)
         repo.collectDeviceData()
+        // assert
         verify(api).collectDeviceData(
             token = TOKEN,
-            payload = PaymentDetails(
-                cardNumber = CARD_DETAILS.cardNumber,
-                cardName = CARD_DETAILS.cardName,
-                expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
-                cV2 = CARD_DETAILS.cv2,
-                userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
-                userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
-                billingAddress = ADDRESS_DETAILS,
-                shippingDetails = SHIPPING_DETAILS,
-                metaData = FULL_CARD_PAYLOAD.metaData
-            )
+            payload = paymentDetails
         )
     }
 
     @Test
     fun `WHEN result code is AUTHORIZING THEN threeDs params are returned`() = runTest {
+        // arrange
+        val paymentDetails = PaymentDetails(
+            cardNumber = CARD_DETAILS.cardNumber,
+            cardName = CARD_DETAILS.cardName,
+            expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
+            cV2 = CARD_DETAILS.cv2,
+            userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
+            userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
+            billingAddress = ADDRESS_DETAILS,
+            shippingDetails = SHIPPING_DETAILS,
+            metaData = FULL_CARD_PAYLOAD.metaData
+        )
+        whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
         val threeDSParams = ThreeDSParams(
             stepUpUrl = "url",
             jwt = "jwt",
             md = "md"
         )
 
-        whenever(api.processPayment(any(), any())).thenReturn(
+        whenever(api.processPaymentForFullCard(any(), any())).thenReturn(
             PaymentResponse(
                 statusCode = DojoPaymentResult.AUTHORIZING.code,
                 stepUpUrl = threeDSParams.stepUpUrl,
@@ -68,33 +89,59 @@ internal class CardPaymentRepositoryTest {
                 md = threeDSParams.md
             )
         )
-        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
+        // act
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD, requestMapper)
         val result = repo.processPayment()
         val expected = PaymentResult.ThreeDSRequired(threeDSParams)
+        // assert
         assertEquals(expected, result)
     }
 
     @Test
     fun `WHEN result code is not AUTHORIZING THEN completed result is returned`() = runTest {
-        whenever(api.processPayment(any(), any())).thenReturn(
+        // arrange
+        val paymentDetails = PaymentDetails(
+            cardNumber = CARD_DETAILS.cardNumber,
+            cardName = CARD_DETAILS.cardName,
+            expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
+            cV2 = CARD_DETAILS.cv2,
+            userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
+            userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
+            billingAddress = ADDRESS_DETAILS,
+            shippingDetails = SHIPPING_DETAILS,
+            metaData = FULL_CARD_PAYLOAD.metaData
+        )
+        whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
+        whenever(api.processPaymentForFullCard(any(), any())).thenReturn(
             PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
         )
-        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD)
+        // act
+        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD, requestMapper)
         val result = repo.processPayment()
         val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
+        // assert
         assertEquals(expected, result)
     }
 
     @Test
-    fun `WHEN Payload is SavedCardPaymentPayLoad AND result code is not AUTHORIZING THEN completed result is returned FROM SAVED CARD PAYMENT `() = runTest {
-        whenever(api.processPaymentForSaverCard(any(), any())).thenReturn(
-            PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
-        )
-        repo = CardPaymentRepository(api, TOKEN, SAVED_CARD_PAYLOAD)
-        val result = repo.processPayment()
-        val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
-        assertEquals(expected, result)
-    }
+    fun `WHEN Payload is SavedCardPaymentPayLoad AND result code is not AUTHORIZING THEN completed result is returned FROM SAVED CARD PAYMENT `() =
+        runTest {
+            // arrange
+            val paymentDetails = PaymentDetails(
+                cV2 = CARD_DETAILS.cv2,
+                paymentMethodId = "paymentMethodId"
+            )
+            whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
+            whenever(api.processPaymentForSaverCard(any(), any())).thenReturn(
+                PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
+            )
+            // act
+            repo = CardPaymentRepository(api, TOKEN, SAVED_CARD_PAYLOAD, requestMapper)
+            val result = repo.processPayment()
+            val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
+            // assert
+            assertEquals(expected, result)
+        }
 
     private companion object {
         const val TOKEN = "TOKEN"
