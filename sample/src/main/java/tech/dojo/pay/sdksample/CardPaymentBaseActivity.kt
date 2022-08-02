@@ -44,7 +44,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         if (visible) {
             showLoading()
         } else {
-            hidLoading()
+            hideLoading()
         }
     }
 
@@ -150,7 +150,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
-                    hidLoading()
+                    hideLoading()
                 }
             }
         }
@@ -163,7 +163,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         binding.btnPaySavedCard.isEnabled = false
     }
 
-    private fun hidLoading() {
+    private fun hideLoading() {
         binding.viewProgress.visibility = View.GONE
         binding.btnGPay.googlePayButton.isEnabled = true
         binding.btnPay.isEnabled = true
