@@ -5,6 +5,12 @@ pluginManagement {
         mavenCentral()
     }
 }
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 rootProject.name = "Dojo Pay Android SDK"
 include(
         ':sample',
