@@ -1,4 +1,6 @@
-version = "1.2.0"
+import java.io.FileInputStream
+import java.util.Properties
+version = "0.1.0"
 
 plugins {
     id("com.android.library")
@@ -6,6 +8,8 @@ plugins {
     publish
 }
 
+val credentialsPropertiesFile = Properties()
+credentialsPropertiesFile.load(FileInputStream(rootProject.file("credentials.properties")))
 android {
     compileSdk = 32
 
@@ -42,6 +46,14 @@ android {
     }
 
     repositories {
+        maven {
+            name = "GitHubPackages"
+            setUrl("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
+            credentials {
+                username = credentialsPropertiesFile["gpr.user"] as String
+                password = credentialsPropertiesFile["gpr.key"] as String
+            }
+        }
         google()
         mavenCentral()
     }
@@ -52,14 +64,11 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("androidx.fragment:fragment-ktx:1.4.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1")
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.5.0")
-    implementation("com.google.android.gms:play-services-wallet:19.1.0") // GPay
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("tech.dojo.pay:sdk:1.2.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("org.mockito:mockito-inline:4.3.1")
