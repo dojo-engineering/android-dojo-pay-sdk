@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="tech.dojo.pay.uisdk" >
+
+    <application>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Transparent" />
+    </application>
+
+</manifest>
