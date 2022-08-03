@@ -5,12 +5,13 @@ import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
 data class PaymentDetails(
     val cV2: String?,
-    val cardName: String?,
-    val cardNumber: String?,
-    val expiryDate: String?,
-    val userEmailAddress: String?,
-    val userPhoneNumber: String?,
-    val billingAddress: DojoAddressDetails?,
-    val shippingDetails: DojoShippingDetails?,
-    val metaData: Map<String, String>?,
+    val cardName: String? = null,
+    val cardNumber: String? = null,
+    val expiryDate: String? = null,
+    val userEmailAddress: String? = null,
+    val userPhoneNumber: String? = null,
+    val billingAddress: DojoAddressDetails? = null,
+    val shippingDetails: DojoShippingDetails? = null,
+    val paymentMethodId: String? = null,
+    val metaData: Map<String, String>? = null,
 )

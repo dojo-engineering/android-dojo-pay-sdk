@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
@@ -24,7 +24,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
     abstract fun onSandboxChecked(isChecked: Boolean)
 
-    abstract fun onPayClicked(token: String, payload: DojoCardPaymentPayload)
+    abstract fun onPayClicked(token: String, payload: FullCardPaymentPayload)
+    abstract fun onPaySavedCardClicked(token: String, payload: SavedCardPaymentPayLoad)
+
     abstract fun onGPayClicked(
         dojoGPayPayload: DojoGPayPayload,
         dojoPaymentIntent: DojoPaymentIntent
@@ -39,7 +41,11 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     fun setProgressIndicatorVisible(visible: Boolean) {
-        binding.viewProgress.isVisible = visible
+        if (visible) {
+            showLoading()
+        } else {
+            hideLoading()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +61,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
             onPayClicked(
                 token = binding.token.text.toString(),
-                payload = DojoCardPaymentPayload(
+                payload = FullCardPaymentPayload(
                     DojoCardDetails(
                         cardNumber = binding.cardNumber.text.toString(),
                         cardName = binding.cardHolder.text.toString(),
@@ -63,6 +69,15 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         expiryYear = year,
                         cv2 = binding.securityCode.text.toString()
                     )
+                )
+            )
+        }
+        binding.btnPaySavedCard.setOnClickListener {
+            onPaySavedCardClicked(
+                token = binding.token.text.toString(),
+                payload = SavedCardPaymentPayLoad(
+                    cv2 = "020",
+                    paymentMethodId = "pm_6qTon7QGRK_7y2kFOmrbag"
                 )
             )
         }
@@ -135,7 +150,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
-                    hidLoading()
+                    hideLoading()
                 }
             }
         }
@@ -145,12 +160,14 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         binding.viewProgress.visibility = View.VISIBLE
         binding.btnGPay.googlePayButton.isEnabled = false
         binding.btnPay.isEnabled = false
+        binding.btnPaySavedCard.isEnabled = false
     }
 
-    private fun hidLoading() {
+    private fun hideLoading() {
         binding.viewProgress.visibility = View.GONE
         binding.btnGPay.googlePayButton.isEnabled = true
         binding.btnPay.isEnabled = true
+        binding.btnPaySavedCard.isEnabled = true
     }
 
     private fun setCardDetails(details: DojoCardDetails) {

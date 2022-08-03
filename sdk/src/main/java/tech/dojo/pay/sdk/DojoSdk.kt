@@ -6,20 +6,23 @@ import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 
 object DojoSdk {
-
-    private val REQUEST_CODE = "DOJO_PAY".hashCode()
+    private val REQUEST_CODE_SAVED_CARD = "DOJO_PAY_SAVED_CARD".hashCode()
+    private val REQUEST_CODE_CARD = "DOJO_PAY".hashCode()
     private val REQUEST_CODE_G_PAY = "DOJO_G_PAY".hashCode()
 
     var sandbox: Boolean = false
@@ -31,6 +34,14 @@ object DojoSdk {
         activity: ComponentActivity,
         onResult: (DojoPaymentResult) -> Unit
     ): DojoCardPaymentHandler = DojoCardPaymentHandlerImpl(activity, onResult)
+
+    /**
+     * Returns handler which starts payment process for saved card payment .
+     */
+    fun createSavedCardPaymentHandler(
+        activity: ComponentActivity,
+        onResult: (DojoPaymentResult) -> Unit
+    ): DojoSavedCardPaymentHandler = DojoSavedCardPaymentHandlerImpl(activity, onResult)
 
     /**
      * Returns handler which starts payment process G pay.
@@ -48,13 +59,30 @@ object DojoSdk {
     fun startCardPayment(
         activity: Activity,
         token: String,
-        payload: DojoCardPaymentPayload
+        payload: FullCardPaymentPayload
     ) {
         val intent = DojoCardPaymentResultContract().createIntent(
             activity,
             DojoCardPaymentParams(token, payload)
         )
-        activity.startActivityForResult(intent, REQUEST_CODE)
+        activity.startActivityForResult(intent, REQUEST_CODE_CARD)
+    }
+
+    /**
+     * Starts saved card payment activity.
+     * You should receive result via onActivityResult callback
+     * if you call this directly with out using the handler.
+     */
+    fun startSavedCardPayment(
+        activity: Activity,
+        token: String,
+        payload: SavedCardPaymentPayLoad
+    ) {
+        val intent = DojoCardPaymentResultContract().createIntent(
+            activity,
+            DojoCardPaymentParams(token, payload)
+        )
+        activity.startActivityForResult(intent, REQUEST_CODE_SAVED_CARD)
     }
 
     /**
@@ -110,7 +138,20 @@ object DojoSdk {
         resultCode: Int,
         intent: Intent?
     ): DojoPaymentResult? {
-        if (requestCode != REQUEST_CODE) return null
+        if (requestCode != REQUEST_CODE_CARD) return null
+        return DojoCardPaymentResultContract().parseResult(resultCode, intent)
+    }
+
+    /**
+     * Parses activity result to DojoCardPaymentResult for savedCard.
+     * If the result was not initiated by card payment, then null will be returned.
+     */
+    fun parseSavedCardPaymentResult(
+        requestCode: Int,
+        resultCode: Int,
+        intent: Intent?
+    ): DojoPaymentResult? {
+        if (requestCode != REQUEST_CODE_SAVED_CARD) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
     }
 }

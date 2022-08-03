@@ -20,7 +20,13 @@ internal interface CardPaymentApi {
     ): DeviceData
 
     @POST("payments/{token}")
-    suspend fun processPayment(
+    suspend fun processPaymentForFullCard(
+        @Path("token") token: String,
+        @Body payload: PaymentDetails
+    ): PaymentResponse
+
+    @POST("payments/recurring/{token}")
+    suspend fun processPaymentForSaverCard(
         @Path("token") token: String,
         @Body payload: PaymentDetails
     ): PaymentResponse
