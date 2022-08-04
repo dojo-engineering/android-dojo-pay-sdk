@@ -29,6 +29,13 @@ android {
             )
         }
     }
+    buildFeatures {
+        viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE_VERSION
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

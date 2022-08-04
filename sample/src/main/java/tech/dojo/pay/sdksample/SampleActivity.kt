@@ -16,5 +16,11 @@ class SampleActivity : AppCompatActivity() {
                 Intent(this, CardPaymentActivity::class.java)
             )
         }
+
+        findViewById<View>(R.id.btnUICardPayment).setOnClickListener {
+            startActivity(
+                Intent(this, UiSdkSampleActivity::class.java)
+            )
+        }
     }
 }
