@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_nav"
+    app:startDestination="@id/PaymentMethodCheckoutFragment">
+    <fragment
+        android:id="@+id/PaymentMethodCheckoutFragment"
+        android:name="tech.dojo.pay.uisdk.paymentflow.PaymentMethodCheckoutFragment"
+        android:label="fragment_city_list">
+    </fragment>
+</navigation>
