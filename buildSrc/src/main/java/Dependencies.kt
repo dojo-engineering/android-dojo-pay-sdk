@@ -28,8 +28,8 @@ object Versions {
     const val MATERIAL="1.5.0"
     const val DOJO_PAY_CORE="1.2.0"
     const val MOCKITO="4.0.0"
+    const val MOCKITO_IN_LINE= "4.3.1"
     const val navigation= "2.3.3"
-    const val SHOWKASE = "1.0.0-beta13"
 }
 
 object BuildPluginsVersion {
@@ -45,12 +45,12 @@ object Accompanist {
 }
 object MOCKITO{
     const val MOCKITO_KOTLIN = "org.mockito.kotlin:mockito-kotlin:${Versions.MOCKITO}"
-    const val MOCKITO_INLINE = "org.mockito:mockito-inline::${Versions.MOCKITO}"
+    const val MOCKITO_INLINE = "org.mockito:mockito-inline:${Versions.MOCKITO_IN_LINE}"
 
 }
 object Coroutines {
     const val COROUTINES_CORE = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINES}"
-    const val COROUTINES_Test = "\"org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.COROUTINES}"
+    const val COROUTINES_Test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.COROUTINES}"
 
 }
 
@@ -71,10 +71,6 @@ object Navigation{
     const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
 
-}
-object ShowKase {
-    const val showKase = "com.airbnb.android:showkase:${Versions.SHOWKASE}"
-    const val showkaseProcessor = "com.airbnb.android:showkase-processor:${Versions.SHOWKASE}"
 }
 
 object AndroidX {
