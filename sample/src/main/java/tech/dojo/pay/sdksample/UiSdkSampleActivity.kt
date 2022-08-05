@@ -7,11 +7,11 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
-import tech.dojo.pay.uisdk.DojoPayUISdk
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 
 class UiSdkSampleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUiSdkSampleBinding
-    private val cardPayment = DojoPayUISdk.startPaymentFLow(this)
+    private val dojoPayUI = DojoSDKDropInUI.createUIPaymentHandler(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,12 +19,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(binding.root)
         setTokenListener()
         binding.startPaymentFlow.setOnClickListener {
-            cardPayment.startPaymentFlow()
+            dojoPayUI.startPaymentFlow()
         }
     }
 
     private fun setTokenListener() {
-        DojoPayUISdk.sandbox = binding.checkboxSandbox.isChecked
+        DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
 
         binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
@@ -52,7 +52,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
     }
 
     private fun onSandboxChecked(isChecked: Boolean) {
-        DojoPayUISdk.sandbox = isChecked
+        DojoSDKDropInUI.sandbox = isChecked
     }
 
     private fun showLoading() {
