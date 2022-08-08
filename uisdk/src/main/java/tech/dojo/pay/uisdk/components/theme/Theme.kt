@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.components.theme
+package tech.dojo.pay.uisdk.components.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme

@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.components
+package tech.dojo.pay.uisdk.components
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size

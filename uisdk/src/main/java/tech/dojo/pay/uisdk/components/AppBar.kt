@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.components
+package tech.dojo.pay.uisdk.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.paymentflow.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.components.theme.DojoTheme
 
 @Composable
 internal fun DojoAppBar(

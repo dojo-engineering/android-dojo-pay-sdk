@@ -1,9 +1,9 @@
-package tech.dojo.pay.uisdk.paymentflow.components
+package tech.dojo.pay.uisdk.components
 
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import tech.dojo.pay.uisdk.paymentflow.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.components.theme.DojoTheme
 
 @Composable
 internal fun DojoPreview(

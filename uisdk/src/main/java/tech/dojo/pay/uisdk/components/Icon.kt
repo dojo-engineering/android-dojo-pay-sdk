@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.components
+package tech.dojo.pay.uisdk.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.Icon

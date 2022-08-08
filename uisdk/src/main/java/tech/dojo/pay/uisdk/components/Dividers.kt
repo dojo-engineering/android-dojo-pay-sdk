@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.components
+package tech.dojo.pay.uisdk.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import tech.dojo.pay.uisdk.paymentflow.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.components.theme.DojoTheme
 
 @Composable
 internal fun HorizontalDivider(
