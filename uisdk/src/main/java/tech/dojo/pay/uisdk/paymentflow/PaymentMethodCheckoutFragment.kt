@@ -90,7 +90,7 @@ class PaymentMethodCheckoutFragment : Fragment() {
             modifier = Modifier.height(60.dp),
             title = "Payment method",
             titleGravity = TitleGravity.LEFT,
-            actionIcon = AppBarIcon.close(isSecondary = true) {
+            actionIcon = AppBarIcon.close() {
                 coroutineScope.launch {
                     sheetState.hide()
                 }

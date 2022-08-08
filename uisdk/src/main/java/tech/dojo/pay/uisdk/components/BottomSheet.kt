@@ -9,11 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
+import androidx.compose.ui.graphics.Color
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
 internal fun DojoBottomSheet(
     modifier: Modifier = Modifier,
+    sheetBackgroundColor: Color? = null,
+    sheetContentColor: Color? = null,
+    scrimColor: Color? = null,
     sheetContent: @Composable ColumnScope.() -> Unit,
     sheetState: ModalBottomSheetState,
     content: @Composable () -> Unit
@@ -25,9 +29,9 @@ internal fun DojoBottomSheet(
             topStart = 16.dp,
             topEnd = 16.dp
         ),
-        sheetBackgroundColor = DojoTheme.colors.background,
-        sheetContentColor = DojoTheme.colors.onBackground,
-        scrimColor = DojoTheme.colors.onBackground.copy(alpha = 0.35f),
+        sheetBackgroundColor = sheetBackgroundColor ?: DojoTheme.colors.background,
+        sheetContentColor = sheetContentColor ?: DojoTheme.colors.onBackground,
+        scrimColor = scrimColor ?: DojoTheme.colors.onBackground.copy(alpha = 0.35f),
         sheetContent = {
             sheetContent()
         },

@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,6 +31,7 @@ import tech.dojo.pay.uisdk.components.theme.DojoTheme
 internal fun DojoAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
+    titleColor: Color? = null,
     titleGravity: TitleGravity = TitleGravity.CENTER,
     navigationIcon: AppBarIcon? = null,
     actionIcon: AppBarIcon? = null,
@@ -52,7 +54,7 @@ internal fun DojoAppBar(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                Title(title, titleGravity, onTitleClick)
+                Title(title,titleColor ,titleGravity, onTitleClick)
             }
 
             AppBarIconButton(actionIcon)
@@ -64,6 +66,7 @@ internal fun DojoAppBar(
 @Composable
 private fun BoxScope.Title(
     text: String,
+    titleColor: Color? = null,
     gravity: TitleGravity,
     onClick: (() -> Unit)?
 ) {
@@ -85,7 +88,7 @@ private fun BoxScope.Title(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = DojoTheme.typography.h5,
-            color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+            color = titleColor ?: LocalContentColor.current.copy(alpha = ContentAlpha.high)
         )
     }
 }
@@ -99,11 +102,7 @@ private fun AppBarIconButton(
             Icon(
                 painter = painterResource(id = icon.resId),
                 contentDescription = null,
-                tint = if (icon.isSecondary) {
-                    DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
-                } else {
-                    DojoTheme.colors.primary
-                }
+                tint = icon.tentColor ?: DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
             )
         }
     }
@@ -118,15 +117,17 @@ private fun AppBarIconButton(
 @Stable
 internal data class AppBarIcon(
     @DrawableRes val resId: Int,
-    val isSecondary: Boolean = false,
+    val tentColor: Color?= null,
     val onClick: () -> Unit
 ) {
 
+
     companion object {
         fun close(
-            isSecondary: Boolean = false,
+            tentColor: Color?= null,
             onClick: () -> Unit
-        ) = AppBarIcon(R.drawable.ic_close_green_24px, isSecondary, onClick)
+        ) = AppBarIcon(R.drawable.ic_close_green_24px,
+            tentColor , onClick)
     }
 }
 
@@ -150,7 +151,7 @@ internal fun PreviewDojoAppBarLeftGravity() = DojoPreview {
         title = "Title",
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.close { },
-        actionIcon = AppBarIcon.close(isSecondary = true) {}
+        actionIcon = AppBarIcon.close() {}
     )
 }
 
@@ -160,6 +161,6 @@ internal fun PreviewDojoAppBarOneIconLeftGravity() = DojoPreview {
     DojoAppBar(
         title = "Title",
         titleGravity = TitleGravity.LEFT,
-        actionIcon = AppBarIcon.close(isSecondary = true) {}
+        actionIcon = AppBarIcon.close() {}
     )
 }

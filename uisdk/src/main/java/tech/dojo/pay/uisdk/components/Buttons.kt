@@ -54,14 +54,14 @@ internal fun DojoFullGroundButton(
     text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = DojoTheme.colors.secondarySurface,
-    contentColor: Color = DojoTheme.colors.onPrimary,
+    backgroundColor: Color? = null,
+    contentColor: Color? = null,
     onClick: () -> Unit
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.secondarySurface,
+        contentColor = contentColor ?: DojoTheme.colors.onPrimary,
         borderStroke = null,
         modifier = modifier,
         enabled = enabled,
@@ -74,19 +74,19 @@ internal fun DojoOutlinedButton(
     text: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = DojoTheme.colors.background,
-    contentColor: Color = DojoTheme.colors.secondarySurface,
-    borderStroke: BorderStroke? = if (enabled) BorderStroke(
-        1.dp,
-        DojoTheme.colors.secondarySurface
-    ) else null,
+    backgroundColor: Color? = null,
+    contentColor: Color? = null,
+    borderStrokeColor: Color? = null,
     onClick: () -> Unit
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        borderStroke = borderStroke,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.background,
+        contentColor = contentColor ?: DojoTheme.colors.secondarySurface,
+        borderStroke = if (enabled) BorderStroke(
+            1.dp,
+            borderStrokeColor ?: DojoTheme.colors.secondarySurface
+        ) else null,
         modifier = modifier,
         enabled = enabled,
         onClick = onClick
