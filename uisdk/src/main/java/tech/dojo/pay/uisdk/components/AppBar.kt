@@ -54,7 +54,7 @@ internal fun DojoAppBar(
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                Title(title,titleColor ,titleGravity, onTitleClick)
+                Title(title, titleColor, titleGravity, onTitleClick)
             }
 
             AppBarIconButton(actionIcon)
@@ -117,17 +117,19 @@ private fun AppBarIconButton(
 @Stable
 internal data class AppBarIcon(
     @DrawableRes val resId: Int,
-    val tentColor: Color?= null,
+    val tentColor: Color? = null,
     val onClick: () -> Unit
 ) {
 
-
     companion object {
         fun close(
-            tentColor: Color?= null,
+            tentColor: Color? = null,
             onClick: () -> Unit
-        ) = AppBarIcon(R.drawable.ic_close_green_24px,
-            tentColor , onClick)
+        ) = AppBarIcon(
+            R.drawable.ic_close_green_24px,
+            tentColor,
+            onClick
+        )
     }
 }
 

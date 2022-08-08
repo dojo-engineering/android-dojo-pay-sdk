@@ -7,9 +7,9 @@ import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
-import androidx.compose.ui.graphics.Color
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)

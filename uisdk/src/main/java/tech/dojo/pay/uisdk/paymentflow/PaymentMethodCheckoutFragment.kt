@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.uisdk.components.*
 import tech.dojo.pay.uisdk.components.AppBarIcon
 import tech.dojo.pay.uisdk.components.DojoAppBar
 import tech.dojo.pay.uisdk.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.components.DojoFullGroundButton
+import tech.dojo.pay.uisdk.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.components.DojoPreview
 import tech.dojo.pay.uisdk.components.TitleGravity
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
@@ -100,15 +100,14 @@ class PaymentMethodCheckoutFragment : Fragment() {
         DojoFullGroundButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp,16.dp,24.dp,8.dp),
+                .padding(24.dp, 16.dp, 24.dp, 8.dp),
             text = "google pay"
         ) {}
         DojoOutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp,8.dp,24.dp,16.dp),
+                .padding(24.dp, 8.dp, 24.dp, 16.dp),
             text = "manage payment methods"
         ) {}
-
     }
 }
