@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -22,9 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.uisdk.components.*
 import tech.dojo.pay.uisdk.components.AppBarIcon
 import tech.dojo.pay.uisdk.components.DojoAppBar
 import tech.dojo.pay.uisdk.components.DojoBottomSheet
+import tech.dojo.pay.uisdk.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.components.DojoPreview
 import tech.dojo.pay.uisdk.components.TitleGravity
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
@@ -83,7 +87,7 @@ class PaymentMethodCheckoutFragment : Fragment() {
         sheetState: ModalBottomSheetState
     ) {
         DojoAppBar(
-            modifier = Modifier.height(200.dp),
+            modifier = Modifier.height(60.dp),
             title = "Payment method",
             titleGravity = TitleGravity.LEFT,
             actionIcon = AppBarIcon.close(isSecondary = true) {
@@ -93,5 +97,18 @@ class PaymentMethodCheckoutFragment : Fragment() {
                 this.activity?.finish()
             }
         )
+        DojoFullGroundButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp,16.dp,24.dp,8.dp),
+            text = "google pay"
+        ) {}
+        DojoOutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp,8.dp,24.dp,16.dp),
+            text = "manage payment methods"
+        ) {}
+
     }
 }
