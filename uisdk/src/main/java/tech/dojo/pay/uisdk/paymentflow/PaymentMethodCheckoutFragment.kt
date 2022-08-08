@@ -34,6 +34,8 @@ import tech.dojo.pay.uisdk.components.TitleGravity
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
 
 class PaymentMethodCheckoutFragment : Fragment() {
+    private val activityArguments: Bundle? by lazy { (activity as PaymentFlowContainerActivity).arguments }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
