@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.uisdk.paymentflow.PaymentFlowContainerActivity
 
-
 internal class DojoPaymentFlowHandlerImp(
     private val activity: ComponentActivity,
 ) : DojoPaymentFlowHandler {

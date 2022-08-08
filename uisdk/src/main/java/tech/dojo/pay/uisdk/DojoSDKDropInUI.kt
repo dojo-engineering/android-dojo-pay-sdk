@@ -6,6 +6,7 @@ import tech.dojo.pay.uisdk.paymentflow.handler.DojoPaymentFlowHandlerImp
 
 object DojoSDKDropInUI {
     var sandbox: Boolean = false
+
     /**
      * Returns handler which handle payment process with UI .
      */

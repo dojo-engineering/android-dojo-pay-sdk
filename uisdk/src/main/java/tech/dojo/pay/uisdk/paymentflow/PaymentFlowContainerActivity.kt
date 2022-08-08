@@ -1,7 +1,7 @@
 package tech.dojo.pay.uisdk.paymentflow
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import tech.dojo.pay.uisdk.R
 
 class PaymentFlowContainerActivity : AppCompatActivity() {
@@ -9,5 +9,4 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_screen)
     }
-
 }
