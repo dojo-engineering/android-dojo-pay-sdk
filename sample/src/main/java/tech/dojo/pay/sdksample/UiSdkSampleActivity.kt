@@ -2,16 +2,20 @@ package tech.dojo.pay.sdksample
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 
 class UiSdkSampleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUiSdkSampleBinding
-    private val dojoPayUI = DojoSDKDropInUI.createUIPaymentHandler(this)
+    private val dojoPayUI = DojoSDKDropInUI.createUIPaymentHandler(this) { result ->
+        showResult(result)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,8 +23,9 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(binding.root)
         setTokenListener()
         binding.startPaymentFlow.setOnClickListener {
-            dojoPayUI.startPaymentFlow()
+            dojoPayUI.startPaymentFlow(binding.token.text.toString())
         }
+        DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
     }
 
     private fun setTokenListener() {
@@ -66,5 +71,21 @@ class UiSdkSampleActivity : AppCompatActivity() {
     private fun showTokenError(e: Throwable) {
         binding.viewProgress.visibility = View.GONE
         binding.token.setText(e.message)
+    }
+
+    fun showResult(result: DojoPaymentResult) {
+        showDialog(
+            title = "Payment result",
+            message = "${result.name} (${result.code})"
+        )
+        displayToken("")
+    }
+
+    private fun showDialog(title: String, message: String) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .create()
+            .show()
     }
 }
