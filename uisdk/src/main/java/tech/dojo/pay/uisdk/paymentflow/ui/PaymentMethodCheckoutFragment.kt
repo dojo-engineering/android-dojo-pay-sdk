@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow
+package tech.dojo.pay.uisdk.paymentflow.ui
 
 import android.app.Activity
 import android.os.Bundle
@@ -24,6 +24,7 @@ import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.components.DojoPreview
 import tech.dojo.pay.uisdk.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.paymentflow.PaymentFlowContainerActivity
 import tech.dojo.pay.uisdk.paymentflow.contract.DojoPaymentFlowHandlerResultContract.Companion.KEY_PARAMS
 
 class PaymentMethodCheckoutFragment : Fragment() {

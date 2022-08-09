@@ -6,7 +6,7 @@
     app:startDestination="@id/PaymentMethodCheckoutFragment">
     <fragment
         android:id="@+id/PaymentMethodCheckoutFragment"
-        android:name="tech.dojo.pay.uisdk.paymentflow.PaymentMethodCheckoutFragment"
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.PaymentMethodCheckoutFragment"
         android:label="fragment_city_list">
     </fragment>
 </navigation>

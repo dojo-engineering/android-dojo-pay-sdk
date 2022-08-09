@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow
+package tech.dojo.pay.uisdk.paymentflow.ui
 
 import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
