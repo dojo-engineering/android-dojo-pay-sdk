@@ -23,7 +23,14 @@ internal class CardPaymentRequestMapperTest {
 
     @Test
     fun `calling mapToPaymentDetails with SAVED_CARD_PAYLOAD should return PaymentDetails for saved card `() {
-        val paymentDetailsForSavedCard = PaymentDetails(cV2 = "cvv", paymentMethodId = "paymentMethodId")
+        val paymentDetailsForSavedCard = PaymentDetails(
+            cV2 = "cvv",
+            paymentMethodId = "paymentMethodId",
+            userEmailAddress = "user@gmail.com",
+            userPhoneNumber = "123456789",
+            shippingDetails = SHIPPING_DETAILS,
+            metaData = mapOf("1" to "one")
+        )
         val actual = CardPaymentRequestMapper().mapToPaymentDetails(SAVED_CARD_PAYLOAD)
         Assert.assertEquals(paymentDetailsForSavedCard, actual)
     }
@@ -60,7 +67,11 @@ internal class CardPaymentRequestMapperTest {
         )
         val SAVED_CARD_PAYLOAD = DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
             cv2 = "cvv",
-            paymentMethodId = "paymentMethodId"
+            paymentMethodId = "paymentMethodId",
+            userEmailAddress = "user@gmail.com",
+            userPhoneNumber = "123456789",
+            shippingDetails = SHIPPING_DETAILS,
+            metaData = mapOf("1" to "one")
         )
         val paymentDetails = PaymentDetails(
             cardNumber = CARD_DETAILS.cardNumber,

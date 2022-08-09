@@ -28,7 +28,11 @@ class CardPaymentRequestMapper {
     private fun DojoCardPaymentPayLoad.SavedCardPaymentPayLoad.toPaymentDetails(): PaymentDetails =
         PaymentDetails(
             cV2 = cv2,
-            paymentMethodId = paymentMethodId
+            paymentMethodId = paymentMethodId,
+            userEmailAddress = userEmailAddress,
+            userPhoneNumber = userPhoneNumber,
+            shippingDetails = shippingDetails,
+            metaData = metaData
         )
 
     /**
