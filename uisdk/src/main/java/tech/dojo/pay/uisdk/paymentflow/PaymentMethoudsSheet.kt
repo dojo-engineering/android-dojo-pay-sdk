@@ -31,7 +31,7 @@ internal fun ShowPaymentMethodsSheet(
     attachedActivity: Activity,
     onGpayClicked: () -> Unit
 ) {
-    val sheetState =
+    val paymentMethodssheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Expanded,
             confirmStateChange = { false }
@@ -44,12 +44,12 @@ internal fun ShowPaymentMethodsSheet(
     DojoTheme {
         DojoBottomSheet(
             modifier = Modifier.fillMaxSize(),
-            sheetState = sheetState,
+            sheetState = paymentMethodssheetState,
             sheetContent = {
                 BottomSheetItems(
                     attachedActivity,
                     coroutineScope,
-                    sheetState,
+                    paymentMethodssheetState,
                     googlePayVisibility,
                     onGpayClicked
                 )
