@@ -4,9 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +28,8 @@ private fun DojoButton(
     borderStroke: BorderStroke?,
     modifier: Modifier,
     enabled: Boolean,
+    isLoading: Boolean,
+    loadingColor: Color,
     onClick: () -> Unit
 ) {
     Button(
@@ -41,12 +45,20 @@ private fun DojoButton(
         border = borderStroke,
         enabled = enabled
     ) {
-        Text(
-            text = text,
-            style = DojoTheme.typography.subtitle1,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = loadingColor,
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(15.dp)
+            )
+        } else {
+            Text(
+                text = text,
+                style = DojoTheme.typography.subtitle1,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        }
     }
 }
 
@@ -57,6 +69,8 @@ internal fun DojoFullGroundButton(
     enabled: Boolean = true,
     backgroundColor: Color? = null,
     contentColor: Color? = null,
+    isLoading: Boolean= false,
+    loadingColor: Color?= null,
     onClick: () -> Unit
 ) {
     DojoButton(
@@ -66,6 +80,8 @@ internal fun DojoFullGroundButton(
         borderStroke = null,
         modifier = modifier,
         enabled = enabled,
+        isLoading = isLoading,
+        loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
         onClick = onClick
     )
 }
@@ -78,6 +94,8 @@ internal fun DojoOutlinedButton(
     backgroundColor: Color? = null,
     contentColor: Color? = null,
     borderStrokeColor: Color? = null,
+    isLoading: Boolean= false,
+    loadingColor: Color?= null,
     onClick: () -> Unit
 ) {
     DojoButton(
@@ -90,6 +108,8 @@ internal fun DojoOutlinedButton(
         ) else null,
         modifier = modifier,
         enabled = enabled,
+        isLoading = isLoading,
+        loadingColor = loadingColor ?: DojoTheme.colors.secondarySurface,
         onClick = onClick
     )
 }

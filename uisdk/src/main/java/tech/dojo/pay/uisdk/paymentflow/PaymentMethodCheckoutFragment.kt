@@ -13,8 +13,7 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.components.AppBarIcon
 import tech.dojo.pay.uisdk.components.DojoAppBar
@@ -66,27 +66,38 @@ class PaymentMethodCheckoutFragment : Fragment() {
     @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
     @Composable
     fun ShowPaymentMethodsSheet() {
-        val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Expanded, confirmStateChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
-                this.activity?.finish()
-            }
-            true
-        })
+        val sheetState =
+            rememberModalBottomSheetState(ModalBottomSheetValue.Expanded, confirmStateChange = {
+                if (it == ModalBottomSheetValue.Hidden) {
+                    this.activity?.finish()
+                }
+                true
+            })
+        val progressIndicatorVisible = remember { mutableStateOf(false) }
+
         val coroutineScope = rememberCoroutineScope()
         DojoTheme {
             DojoBottomSheet(
                 modifier = Modifier.fillMaxSize(),
                 sheetState = sheetState,
-                sheetContent = { BottomSheetItems(coroutineScope, sheetState) }
+                sheetContent = {
+                    BottomSheetItems(
+                        coroutineScope,
+                        sheetState,
+                        progressIndicatorVisible
+                    )
+                }
             ) {}
         }
+
     }
 
     @ExperimentalMaterialApi
     @Composable
     private fun BottomSheetItems(
         coroutineScope: CoroutineScope,
-        sheetState: ModalBottomSheetState
+        sheetState: ModalBottomSheetState,
+        progressIndicatorVisible: MutableState<Boolean>
     ) {
         DojoAppBar(
             modifier = Modifier.height(60.dp),
@@ -103,13 +114,15 @@ class PaymentMethodCheckoutFragment : Fragment() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(24.dp, 16.dp, 24.dp, 8.dp),
-            text = "google pay"
+            text = "google pay",
+            isLoading = progressIndicatorVisible.value
         ) {}
         DojoOutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(24.dp, 8.dp, 24.dp, 16.dp),
-            text = "manage payment methods"
+            text = "manage payment methods",
+            isLoading = progressIndicatorVisible.value
         ) {}
     }
 }
