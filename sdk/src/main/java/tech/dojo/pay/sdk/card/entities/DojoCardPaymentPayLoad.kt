@@ -14,6 +14,10 @@ sealed class DojoCardPaymentPayLoad : Serializable {
 
     data class SavedCardPaymentPayLoad(
         val cv2: String,
-        val paymentMethodId: String
+        val paymentMethodId: String,
+        val userEmailAddress: String? = null,
+        val userPhoneNumber: String? = null,
+        val shippingDetails: DojoShippingDetails? = null,
+        val metaData: Map<String, String>? = null
     ) : Serializable, DojoCardPaymentPayLoad()
 }
