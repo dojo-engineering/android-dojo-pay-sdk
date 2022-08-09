@@ -70,7 +70,7 @@ object Material {
 object Navigation{
     const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
-
+    const val NavigationCompose="androidx.navigation:navigation-compose:${Versions.navigation}"
 }
 
 object AndroidX {
