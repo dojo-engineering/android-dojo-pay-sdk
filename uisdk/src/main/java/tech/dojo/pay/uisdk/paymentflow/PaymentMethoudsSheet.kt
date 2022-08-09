@@ -105,8 +105,8 @@ private fun BottomSheetItems(
         ) {
             coroutineScope.launch {
                 sheetState.hide()
+                onGpayClicked()
             }
-            onGpayClicked()
         }
     }
     DojoOutlinedButton(
