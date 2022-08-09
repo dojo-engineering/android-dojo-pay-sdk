@@ -67,12 +67,10 @@ class PaymentMethodCheckoutFragment : Fragment() {
     @Composable
     fun ShowPaymentMethodsSheet() {
         val sheetState =
-            rememberModalBottomSheetState(ModalBottomSheetValue.Expanded, confirmStateChange = {
-                if (it == ModalBottomSheetValue.Hidden) {
-                    this.activity?.finish()
-                }
-                true
-            })
+            rememberModalBottomSheetState(
+                initialValue = ModalBottomSheetValue.Expanded,
+                confirmStateChange = { false }
+            )
         val progressIndicatorVisible = remember { mutableStateOf(false) }
 
         val coroutineScope = rememberCoroutineScope()
@@ -116,7 +114,8 @@ class PaymentMethodCheckoutFragment : Fragment() {
                 .padding(24.dp, 16.dp, 24.dp, 8.dp),
             text = "google pay",
             isLoading = progressIndicatorVisible.value
-        ) {}
+        ) {
+        }
         DojoOutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
