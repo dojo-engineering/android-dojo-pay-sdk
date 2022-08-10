@@ -6,7 +6,25 @@
     app:startDestination="@id/PaymentMethodCheckoutFragment">
     <fragment
         android:id="@+id/PaymentMethodCheckoutFragment"
-        android:name="tech.dojo.pay.uisdk.paymentflow.ui.PaymentMethodCheckoutFragment"
-        android:label="fragment_city_list">
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout.PaymentMethodCheckoutFragment"
+        android:label="PaymentMethodCheckoutFragment">
+        <action
+            android:id="@+id/payment_method_checkout_fragment_to_payment_result"
+            app:destination="@id/PaymentResult"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/app_nav"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/PaymentResult"
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.result.PaymentResult"
+        android:label="PaymentResult">
+        <argument
+            android:name="resultCode"
+            android:defaultValue='151.0'
+            app:argType="string"
+            app:nullable="false" />
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.paymentflow.ui
+package tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,6 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
@@ -59,9 +64,11 @@ class PaymentMethodCheckoutFragment : Fragment() {
         DojoSdk.sandbox = DojoSDKDropInUI.sandbox
         gpayPaymentHandler = DojoSdk.createGPayHandler(activity as ComponentActivity) {
             (activity as PaymentFlowContainerActivity).returnResult(it)
-            this.activity?.finish()
+            this.view?.findNavController()?.navigate(getNavDirections(it))
         }
     }
+    private fun getNavDirections(result: DojoPaymentResult): NavDirections =
+        PaymentMethodCheckoutFragmentDirections.paymentMethodCheckoutFragmentToPaymentResult(resultCode =  result.code.toString())
 
     private fun getIntentParams() {
         paymentToken =
