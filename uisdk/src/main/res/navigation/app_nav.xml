@@ -22,9 +22,9 @@
         android:name="tech.dojo.pay.uisdk.paymentflow.ui.result.PaymentResult"
         android:label="PaymentResult">
         <argument
-            android:name="resultCode"
-            android:defaultValue='151.0'
-            app:argType="string"
+            android:name="result"
+            android:defaultValue="FAILED"
+            app:argType="tech.dojo.pay.sdk.DojoPaymentResult"
             app:nullable="false" />
     </fragment>
 </navigation>

@@ -30,7 +30,7 @@ class PaymentResult: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = Color.White
                     ) {
-                        Text(text = "resultScreen${args.resultCode}")
+                        Text(text = "resultScreen${args.result.name}")
                     }
                 }
             }

@@ -67,8 +67,11 @@ class PaymentMethodCheckoutFragment : Fragment() {
             this.view?.findNavController()?.navigate(getNavDirections(it))
         }
     }
+
     private fun getNavDirections(result: DojoPaymentResult): NavDirections =
-        PaymentMethodCheckoutFragmentDirections.paymentMethodCheckoutFragmentToPaymentResult(resultCode =  result.code.toString())
+        PaymentMethodCheckoutFragmentDirections.paymentMethodCheckoutFragmentToPaymentResult(
+            result = result
+        )
 
     private fun getIntentParams() {
         paymentToken =
