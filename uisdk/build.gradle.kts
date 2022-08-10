@@ -77,7 +77,6 @@ dependencies {
     implementation(Material.MATERIAL)
     implementation(Navigation.NavigationFragment)
     implementation(Navigation.NavigationUI)
-    implementation(Navigation.NavigationCompose)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     implementation(AndroidX.Compose.compiler)
     implementation(AndroidX.Compose.animation)
