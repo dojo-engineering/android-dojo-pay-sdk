@@ -26,7 +26,6 @@ import tech.dojo.pay.uisdk.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.paymentflow.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.paymentflow.ui.result.viewmodel.PaymentResultViewModel
 
-
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ShowResultSheet(

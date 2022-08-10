@@ -5,9 +5,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath( "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
-        classpath( "com.android.tools.build:gradle:7.2.0")
-        classpath( "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
+        classpath("com.android.tools.build:gradle:7.2.0")
+        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.5.0")
         classpath("org.jetbrains.dokka:dokka-core:1.5.0")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1")
     }

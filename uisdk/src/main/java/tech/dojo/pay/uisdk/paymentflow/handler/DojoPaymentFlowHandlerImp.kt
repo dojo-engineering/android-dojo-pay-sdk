@@ -17,5 +17,3 @@ internal class DojoPaymentFlowHandlerImp(
         paymentFlowLauncher.launch(DojoPaymentFlowParams(paymentToken))
     }
 }
-
-

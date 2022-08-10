@@ -69,8 +69,8 @@ internal fun DojoFullGroundButton(
     enabled: Boolean = true,
     backgroundColor: Color? = null,
     contentColor: Color? = null,
-    isLoading: Boolean= false,
-    loadingColor: Color?= null,
+    isLoading: Boolean = false,
+    loadingColor: Color? = null,
     onClick: () -> Unit
 ) {
     DojoButton(
@@ -94,18 +94,15 @@ internal fun DojoOutlinedButton(
     backgroundColor: Color? = null,
     contentColor: Color? = null,
     borderStrokeColor: Color? = null,
-    isLoading: Boolean= false,
-    loadingColor: Color?= null,
+    isLoading: Boolean = false,
+    loadingColor: Color? = null,
     onClick: () -> Unit
 ) {
     DojoButton(
         text = text,
         backgroundColor = backgroundColor ?: DojoTheme.colors.background,
         contentColor = contentColor ?: DojoTheme.colors.secondarySurface,
-        borderStroke = if (enabled) BorderStroke(
-            1.dp,
-            borderStrokeColor ?: DojoTheme.colors.secondarySurface
-        ) else null,
+        borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
@@ -113,6 +110,16 @@ internal fun DojoOutlinedButton(
         onClick = onClick
     )
 }
+
+@Composable
+private fun getBorderStroke(
+    enabled: Boolean,
+    borderStrokeColor: Color?
+) =
+    if (enabled) BorderStroke(
+        1.dp,
+        borderStrokeColor ?: DojoTheme.colors.secondarySurface
+    ) else null
 
 @Preview("Button", group = "Buttons")
 @Composable

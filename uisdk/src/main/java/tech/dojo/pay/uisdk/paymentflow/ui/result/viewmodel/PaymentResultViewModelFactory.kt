@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.paymentflow.ui.result.PaymentResultFragmentArgs
 
-
 class PaymentResultViewModelFactory(private val arguments: PaymentResultFragmentArgs) :
     ViewModelProvider.Factory {
 
@@ -12,5 +11,4 @@ class PaymentResultViewModelFactory(private val arguments: PaymentResultFragment
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return PaymentResultViewModel(arguments.result) as T
     }
-
 }

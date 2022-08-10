@@ -9,20 +9,20 @@ import tech.dojo.pay.uisdk.paymentflow.ui.result.state.PaymentResultState
 
 class PaymentResultViewModel(
     private val result: DojoPaymentResult
-) :ViewModel() {
+) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentResultState>()
     val state: LiveData<PaymentResultState>
         get() = mutableState
 
     init {
-      mutableState.postValue(
-          PaymentResultState(
-              imageId= getResultImage(),
-              status= result.name,
-              orderInfo= result.name,
-              description= result.name
-          )
-      )
+        mutableState.postValue(
+            PaymentResultState(
+                imageId = getResultImage(),
+                status = result.name,
+                orderInfo = result.name,
+                description = result.name
+            )
+        )
     }
 
     private fun getResultImage() = if (result == DojoPaymentResult.SUCCESSFUL) {
