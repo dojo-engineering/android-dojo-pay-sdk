@@ -37,20 +37,20 @@ internal fun ShowPaymentMethodsSheet(
         )
     val coroutineScope = rememberCoroutineScope()
     val googlePayVisibility = remember { mutableStateOf(true) }
-    CheckGooglePayAvailability(attachedActivity,googlePayVisibility)
-        DojoBottomSheet(
-            modifier = Modifier.fillMaxSize(),
-            sheetState = paymentMethodssheetState,
-            sheetContent = {
-                BottomSheetItems(
-                    attachedActivity,
-                    coroutineScope,
-                    paymentMethodssheetState,
-                    googlePayVisibility,
-                    onGpayClicked
-                )
-            }
-        ) {}
+    CheckGooglePayAvailability(attachedActivity, googlePayVisibility)
+    DojoBottomSheet(
+        modifier = Modifier.fillMaxSize(),
+        sheetState = paymentMethodssheetState,
+        sheetContent = {
+            BottomSheetItems(
+                attachedActivity,
+                coroutineScope,
+                paymentMethodssheetState,
+                googlePayVisibility,
+                onGpayClicked
+            )
+        }
+    ) {}
 }
 
 @Composable
@@ -79,6 +79,18 @@ private fun BottomSheetItems(
     googlePayVisibility: MutableState<Boolean>,
     onGpayClicked: () -> Unit
 ) {
+    AppBar(coroutineScope, sheetState, attachedActivity)
+    GooglePayButton(googlePayVisibility, coroutineScope, sheetState, onGpayClicked)
+    PaymentMethodsButton()
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun AppBar(
+    coroutineScope: CoroutineScope,
+    sheetState: ModalBottomSheetState,
+    attachedActivity: Activity
+) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
         title = "Payment method",
@@ -90,6 +102,16 @@ private fun BottomSheetItems(
             attachedActivity.finish()
         }
     )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun GooglePayButton(
+    googlePayVisibility: MutableState<Boolean>,
+    coroutineScope: CoroutineScope,
+    sheetState: ModalBottomSheetState,
+    onGpayClicked: () -> Unit
+) {
     if (googlePayVisibility.value) {
         DojoFullGroundButton(
             modifier = Modifier
@@ -103,6 +125,10 @@ private fun BottomSheetItems(
             }
         }
     }
+}
+
+@Composable
+private fun PaymentMethodsButton() {
     DojoOutlinedButton(
         modifier = Modifier
             .fillMaxWidth()

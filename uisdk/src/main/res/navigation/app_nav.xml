@@ -10,7 +10,7 @@
         android:label="PaymentMethodCheckoutFragment">
         <action
             android:id="@+id/payment_method_checkout_fragment_to_payment_result"
-            app:destination="@id/PaymentResult"
+            app:destination="@id/PaymentResultFragment"
             app:enterAnim="@anim/enter"
             app:exitAnim="@anim/exit"
             app:launchSingleTop="true"
@@ -18,8 +18,8 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/PaymentResult"
-        android:name="tech.dojo.pay.uisdk.paymentflow.ui.result.PaymentResult"
+        android:id="@+id/PaymentResultFragment"
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.result.PaymentResultFragment"
         android:label="PaymentResult">
         <argument
             android:name="result"
