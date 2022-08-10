@@ -5,6 +5,7 @@ version = "0.1.0"
 plugins {
     id("com.android.library")
     kotlin("android")
+    id("androidx.navigation.safeargs.kotlin")
     publish
 }
 
