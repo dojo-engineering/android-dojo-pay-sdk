@@ -76,6 +76,7 @@ dependencies {
     implementation(DojoPayCore.DOJO_PAY_CORE)
     implementation(Material.MATERIAL)
     implementation(Navigation.NavigationFragment)
+    implementation(Navigation.NavigationCompose)
     implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     implementation(AndroidX.Compose.compiler)

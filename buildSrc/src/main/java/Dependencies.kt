@@ -30,6 +30,7 @@ object Versions {
     const val MOCKITO="4.0.0"
     const val MOCKITO_IN_LINE= "4.3.1"
     const val navigation= "2.3.3"
+    const val composeNavigation = "2.4.2"
 }
 
 object BuildPluginsVersion {
@@ -70,7 +71,7 @@ object Material {
 object Navigation{
     const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
     const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
-    const val NavigationCompose="androidx.navigation:navigation-compose:${Versions.navigation}"
+    const val NavigationCompose="androidx.navigation:navigation-compose:${Versions.composeNavigation}"
 }
 
 object AndroidX {
