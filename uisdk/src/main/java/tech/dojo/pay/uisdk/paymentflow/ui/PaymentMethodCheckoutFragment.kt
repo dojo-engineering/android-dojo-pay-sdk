@@ -39,14 +39,8 @@ class PaymentMethodCheckoutFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        DojoSdk.sandbox = DojoSDKDropInUI.sandbox
-        paymentToken =
-            (activityArguments?.getSerializable(KEY_PARAMS) as? DojoPaymentFlowParams)?.paymentToken
-                ?: ""
-        gpayPaymentHandler = DojoSdk.createGPayHandler(activity as ComponentActivity) {
-            (activity as PaymentFlowContainerActivity).returnResult(it)
-            this.activity?.finish()
-        }
+        configureDojoPayCore()
+        getIntentParams()
         return ComposeView(requireContext()).apply {
             setContent {
                 DojoTheme {
@@ -61,14 +55,20 @@ class PaymentMethodCheckoutFragment : Fragment() {
         }
     }
 
-
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() = DojoPreview {
-        DojoTheme {
-            BuildPaymentMethodsSheet()
+    private fun configureDojoPayCore() {
+        DojoSdk.sandbox = DojoSDKDropInUI.sandbox
+        gpayPaymentHandler = DojoSdk.createGPayHandler(activity as ComponentActivity) {
+            (activity as PaymentFlowContainerActivity).returnResult(it)
+            this.activity?.finish()
         }
     }
+
+    private fun getIntentParams() {
+        paymentToken =
+            (activityArguments?.getSerializable(KEY_PARAMS) as? DojoPaymentFlowParams)?.paymentToken
+                ?: ""
+    }
+
     @Composable
     private fun BuildPaymentMethodsSheet() {
         ShowPaymentMethodsSheet(activity as Activity) {
@@ -85,6 +85,14 @@ class PaymentMethodCheckoutFragment : Fragment() {
                     totalAmount = DojoTotalAmount(10, "GBP")
                 )
             )
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() = DojoPreview {
+        DojoTheme {
+            BuildPaymentMethodsSheet()
         }
     }
 }

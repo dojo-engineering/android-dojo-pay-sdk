@@ -23,7 +23,6 @@ import tech.dojo.pay.uisdk.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.components.TitleGravity
-import tech.dojo.pay.uisdk.components.theme.DojoTheme
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -36,12 +35,9 @@ internal fun ShowPaymentMethodsSheet(
             initialValue = ModalBottomSheetValue.Expanded,
             confirmStateChange = { false }
         )
-
     val coroutineScope = rememberCoroutineScope()
     val googlePayVisibility = remember { mutableStateOf(true) }
     CheckGooglePayAvailability(attachedActivity,googlePayVisibility)
-
-    DojoTheme {
         DojoBottomSheet(
             modifier = Modifier.fillMaxSize(),
             sheetState = paymentMethodssheetState,
@@ -55,8 +51,6 @@ internal fun ShowPaymentMethodsSheet(
                 )
             }
         ) {}
-    }
-
 }
 
 @Composable
