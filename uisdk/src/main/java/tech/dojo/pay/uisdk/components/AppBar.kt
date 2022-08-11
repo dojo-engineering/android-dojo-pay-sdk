@@ -102,7 +102,7 @@ private fun AppBarIconButton(
             Icon(
                 painter = painterResource(id = icon.resId),
                 contentDescription = null,
-                tint = icon.tentColor ?: DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                tint = icon.tintColor ?: DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
             )
         }
     }
@@ -110,14 +110,13 @@ private fun AppBarIconButton(
 
 /**
  * @resId icon resource id
- * @isSecondary indicates which style should be applied to icon.
- * If false, then icon color will be primary. Otherwise, onbackground with medium alpha will be used.
+ * @tintColor add the tint color for the icon
  * @onClick will be called when user clicks on the element
  */
 @Stable
 internal data class AppBarIcon(
     @DrawableRes val resId: Int,
-    val tentColor: Color? = null,
+    val tintColor: Color? = null,
     val onClick: () -> Unit
 ) {
 

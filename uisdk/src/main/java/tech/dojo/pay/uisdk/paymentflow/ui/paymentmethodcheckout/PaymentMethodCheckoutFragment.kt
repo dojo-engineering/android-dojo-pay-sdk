@@ -61,8 +61,7 @@ class PaymentMethodCheckoutFragment : Fragment() {
     private fun configureDojoPayCore() {
         DojoSdk.sandbox = DojoSDKDropInUI.sandbox
         gpayPaymentHandler = DojoSdk.createGPayHandler(activity as ComponentActivity) {
-            (activity as PaymentFlowContainerActivity).returnResult(it)
-            this.view?.findNavController()?.navigate(getNavDirections(it))
+            navigateToResult(it)
         }
     }
 
@@ -73,6 +72,14 @@ class PaymentMethodCheckoutFragment : Fragment() {
         paymentToken =
             (activityArguments?.getSerializable(KEY_PARAMS) as? DojoPaymentFlowParams)?.paymentToken
                 ?: ""
+        if (paymentToken.isBlank()) {
+            navigateToResult(DojoPaymentResult.DECLINED)
+        }
+    }
+
+    private fun navigateToResult(it: DojoPaymentResult) {
+        (activity as PaymentFlowContainerActivity).returnResult(it)
+        this.view?.findNavController()?.navigate(getNavDirections(it))
     }
 
     @Composable
