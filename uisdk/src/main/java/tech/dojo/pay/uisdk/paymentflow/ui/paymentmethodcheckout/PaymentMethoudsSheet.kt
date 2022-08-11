@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout
 
-import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,79 +9,70 @@ import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.components.AppBarIcon
 import tech.dojo.pay.uisdk.components.DojoAppBar
 import tech.dojo.pay.uisdk.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.components.TitleGravity
+import tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
+import tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ShowPaymentMethodsSheet(
-    attachedActivity: Activity,
+    viewModel: PaymentMethodCheckoutViewModel,
+    onAppBarIconClicked: () -> Unit,
     onGpayClicked: () -> Unit
 ) {
     val paymentMethodssheetState =
         rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Expanded,
+            initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { false }
         )
     val coroutineScope = rememberCoroutineScope()
-    val googlePayVisibility = remember { mutableStateOf(true) }
-    CheckGooglePayAvailability(attachedActivity, googlePayVisibility)
+    val state = viewModel.state.observeAsState()
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodssheetState,
         sheetContent = {
             BottomSheetItems(
-                attachedActivity,
                 coroutineScope,
                 paymentMethodssheetState,
-                googlePayVisibility,
+                state,
+                onAppBarIconClicked,
                 onGpayClicked
             )
         }
-    ) {}
-}
-
-@Composable
-private fun CheckGooglePayAvailability(
-    attachedActivity: Activity,
-    googlePayVisibility: MutableState<Boolean>
-) {
-    DojoSdk.isGpayAvailable(
-        activity = attachedActivity,
-        dojoGPayConfig = DojoGPayConfig(
-            merchantName = "Dojo Cafe (Paymentsense)",
-            merchantId = "BCR2DN6T57R5ZI34",
-            gatewayMerchantId = "119784244252745"
-        ),
-        { googlePayVisibility.value = true },
-        { googlePayVisibility.value = false }
-    )
+    ) {
+        if (state.value?.isBottomSheetVisible == true) {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    paymentMethodssheetState.show()
+                }
+            }
+        }
+    }
 }
 
 @ExperimentalMaterialApi
 @Composable
 private fun BottomSheetItems(
-    attachedActivity: Activity,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    googlePayVisibility: MutableState<Boolean>,
+    googlePayVisibility: State<PaymentMethodCheckoutState?>,
+    onAppBarIconClicked: () -> Unit,
     onGpayClicked: () -> Unit
 ) {
-    AppBar(coroutineScope, sheetState, attachedActivity)
+    AppBar(coroutineScope, sheetState, onAppBarIconClicked)
     GooglePayButton(googlePayVisibility, coroutineScope, sheetState, onGpayClicked)
     PaymentMethodsButton()
 }
@@ -92,7 +82,7 @@ private fun BottomSheetItems(
 private fun AppBar(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    attachedActivity: Activity
+    onAppBarIconClicked: () -> Unit
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -102,7 +92,7 @@ private fun AppBar(
             coroutineScope.launch {
                 sheetState.hide()
             }
-            attachedActivity.finish()
+            onAppBarIconClicked()
         }
     )
 }
@@ -110,12 +100,12 @@ private fun AppBar(
 @ExperimentalMaterialApi
 @Composable
 private fun GooglePayButton(
-    googlePayVisibility: MutableState<Boolean>,
+    googlePayVisibility: State<PaymentMethodCheckoutState?>,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     onGpayClicked: () -> Unit
 ) {
-    if (googlePayVisibility.value) {
+    if (googlePayVisibility.value?.isGooglePayVisible == true) {
         DojoFullGroundButton(
             modifier = Modifier
                 .fillMaxWidth()
