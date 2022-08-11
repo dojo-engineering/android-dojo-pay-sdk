@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +25,7 @@ import tech.dojo.pay.uisdk.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.paymentflow.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.paymentflow.ui.result.viewmodel.PaymentResultViewModel
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ShowResultSheet(
     attachedActivity: Activity,

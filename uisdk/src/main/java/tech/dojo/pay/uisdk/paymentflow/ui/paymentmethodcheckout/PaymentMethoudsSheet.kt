@@ -14,7 +14,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +27,7 @@ import tech.dojo.pay.uisdk.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.components.TitleGravity
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun ShowPaymentMethodsSheet(
     attachedActivity: Activity,
