@@ -143,8 +143,8 @@ private fun BottomSheetItems(
         ) {
             coroutineScope.launch {
                 sheetState.hide()
-                attachedActivity.finish()
             }
+            attachedActivity.finish()
         }
     }
 }

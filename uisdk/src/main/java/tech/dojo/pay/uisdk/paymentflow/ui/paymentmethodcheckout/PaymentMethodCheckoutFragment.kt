@@ -42,12 +42,16 @@ class PaymentMethodCheckoutFragment : Fragment() {
     private lateinit var paymentToken: String
     private lateinit var gpayPaymentHandler: DojoGPayHandler
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        configureDojoPayCore()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        configureDojoPayCore()
         getIntentParams()
         checkGooglePayAvailability()
         return ComposeView(requireContext()).apply {
@@ -119,6 +123,11 @@ class PaymentMethodCheckoutFragment : Fragment() {
                         token = paymentToken,
                         totalAmount = DojoTotalAmount(10, "GBP")
                     )
+                )
+            },
+            {
+                this.view?.findNavController()?.navigate(
+                    PaymentMethodCheckoutFragmentDirections.paymentMethodCheckoutFragmentToManagePaymentMethodsFragment()
                 )
             }
         )
