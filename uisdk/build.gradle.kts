@@ -94,7 +94,7 @@ dependencies {
     implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT_COMPOSE)
     implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT)
-    implementation(project(mapOf("path" to ":sdk")))
+    implementation(project(":sdk"))
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
