@@ -122,11 +122,20 @@ internal data class AppBarIcon(
 
     companion object {
         fun close(
-            tentColor: Color? = null,
+            tintColor: Color? = null,
             onClick: () -> Unit
         ) = AppBarIcon(
             R.drawable.ic_close_green_24px,
-            tentColor,
+            tintColor,
+            onClick
+        )
+
+        fun back(
+            tintColor: Color? = null,
+            onClick: () -> Unit
+        ) = AppBarIcon(
+            R.drawable.ic_arrow_back_24_px,
+            tintColor,
             onClick
         )
     }

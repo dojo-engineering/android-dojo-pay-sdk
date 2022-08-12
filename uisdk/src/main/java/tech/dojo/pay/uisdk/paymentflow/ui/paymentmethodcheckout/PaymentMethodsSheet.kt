@@ -31,7 +31,8 @@ import tech.dojo.pay.uisdk.paymentflow.ui.paymentmethodcheckout.viewmodel.Paymen
 internal fun ShowPaymentMethodsSheet(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
-    onGpayClicked: () -> Unit
+    onGpayClicked: () -> Unit,
+    onManagePaymentClicked: () -> Unit
 ) {
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
@@ -49,7 +50,8 @@ internal fun ShowPaymentMethodsSheet(
                 paymentMethodsSheetState,
                 state,
                 onAppBarIconClicked,
-                onGpayClicked
+                onGpayClicked,
+                onManagePaymentClicked
             )
         }
     ) {
@@ -66,11 +68,12 @@ private fun BottomSheetItems(
     sheetState: ModalBottomSheetState,
     googlePayVisibility: State<PaymentMethodCheckoutState?>,
     onAppBarIconClicked: () -> Unit,
-    onGpayClicked: () -> Unit
+    onGpayClicked: () -> Unit,
+    onManagePaymentClicked: () -> Unit
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
     GooglePayButton(googlePayVisibility, coroutineScope, sheetState, onGpayClicked)
-    PaymentMethodsButton()
+    PaymentMethodsButton(onManagePaymentClicked)
 }
 
 @ExperimentalMaterialApi
@@ -117,11 +120,11 @@ private fun GooglePayButton(
 }
 
 @Composable
-private fun PaymentMethodsButton() {
+private fun PaymentMethodsButton(onManagePaymentClicked: () -> Unit) {
     DojoOutlinedButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp, 8.dp, 24.dp, 16.dp),
         text = "manage payment methods"
-    ) {}
+    ) { onManagePaymentClicked() }
 }
