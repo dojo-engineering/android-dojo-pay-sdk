@@ -17,6 +17,34 @@
             app:launchSingleTop="true"
             app:popUpTo="@+id/app_nav"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/payment_method_checkout_fragment_to_manage_payment_methods_fragment"
+            app:destination="@id/ManagePaymentMethodsFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/ManagePaymentMethodsFragment"
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.mangepaymentmethods.ManagePaymentMethodsFragment"
+        android:label="ManagePaymentMethods">
+        <action
+            android:id="@+id/manage_payment_methods_fragment_to_card_details_checkout_fragment"
+            app:destination="@id/CardDetailsCheckoutFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/CardDetailsCheckoutFragment"
+        android:name="tech.dojo.pay.uisdk.paymentflow.ui.carddetailscheckout.CardDetailsCheckoutFragment"
+        android:label="CardDetailsCheckoutFragment">
+        <action
+            android:id="@+id/card_details_checkout_fragment_to_payment_result"
+            app:destination="@id/PaymentResultFragment"
+            app:enterAnim="@anim/enter"
+            app:exitAnim="@anim/exit"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/app_nav"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/PaymentResultFragment"
