@@ -33,7 +33,7 @@ internal fun ShowPaymentMethodsSheet(
     onAppBarIconClicked: () -> Unit,
     onGpayClicked: () -> Unit
 ) {
-    val paymentMethodssheetState =
+    val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { false }
@@ -42,11 +42,11 @@ internal fun ShowPaymentMethodsSheet(
     val state = viewModel.state.observeAsState()
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
-        sheetState = paymentMethodssheetState,
+        sheetState = paymentMethodsSheetState,
         sheetContent = {
             BottomSheetItems(
                 coroutineScope,
-                paymentMethodssheetState,
+                paymentMethodsSheetState,
                 state,
                 onAppBarIconClicked,
                 onGpayClicked
@@ -54,11 +54,7 @@ internal fun ShowPaymentMethodsSheet(
         }
     ) {
         if (state.value?.isBottomSheetVisible == true) {
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    paymentMethodssheetState.show()
-                }
-            }
+            LaunchedEffect(Unit) { paymentMethodsSheetState.show() }
         }
     }
 }
