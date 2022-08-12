@@ -131,11 +131,11 @@ internal data class AppBarIcon(
         )
 
         fun back(
-            tentColor: Color? = null,
+            tintColor: Color? = null,
             onClick: () -> Unit
         ) = AppBarIcon(
             R.drawable.ic_arrow_back_24_px,
-            tentColor,
+            tintColor,
             onClick
         )
     }
