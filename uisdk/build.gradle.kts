@@ -5,6 +5,7 @@ version = "0.1.0"
 plugins {
     id("com.android.library")
     kotlin("android")
+    id("androidx.navigation.safeargs.kotlin")
     publish
 }
 
@@ -76,7 +77,8 @@ dependencies {
     implementation(DojoPayCore.DOJO_PAY_CORE)
     implementation(Material.MATERIAL)
     implementation(Navigation.NavigationFragment)
-    implementation (Navigation.NavigationUI)
+    implementation(Navigation.NavigationCompose)
+    implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     implementation(AndroidX.Compose.compiler)
     implementation(AndroidX.Compose.animation)

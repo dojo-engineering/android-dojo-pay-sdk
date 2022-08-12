@@ -1,14 +1,19 @@
 package tech.dojo.pay.uisdk.paymentflow.handler
 
-import android.content.Intent
 import androidx.activity.ComponentActivity
-import tech.dojo.pay.uisdk.paymentflow.PaymentFlowContainerActivity
-
+import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.paymentflow.contract.DojoPaymentFlowHandlerResultContract
 
 internal class DojoPaymentFlowHandlerImp(
-    private val activity: ComponentActivity,
+    activity: ComponentActivity,
+    onResult: (DojoPaymentResult) -> Unit
+
 ) : DojoPaymentFlowHandler {
-    override fun startPaymentFlow() {
-        activity.startActivity(Intent(activity, PaymentFlowContainerActivity::class.java))
+    private val paymentFlowLauncher =
+        activity.registerForActivityResult(DojoPaymentFlowHandlerResultContract(), onResult)
+
+    override fun startPaymentFlow(paymentToken: String) {
+        paymentFlowLauncher.launch(DojoPaymentFlowParams(paymentToken))
     }
 }

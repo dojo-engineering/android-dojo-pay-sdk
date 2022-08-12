@@ -29,7 +29,8 @@ object Versions {
     const val DOJO_PAY_CORE="1.2.0"
     const val MOCKITO="4.0.0"
     const val MOCKITO_IN_LINE= "4.3.1"
-    const val navigation= "2.3.3"
+    const val NAVIGATION= "2.3.3"
+    const val COMPOSE_NAVIGATION = "2.4.2"
 }
 
 object BuildPluginsVersion {
@@ -68,9 +69,9 @@ object Material {
     const val MATERIAL = "com.google.android.material:material:${Versions.MATERIAL}"
 }
 object Navigation{
-    const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
-    const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.navigation}"
-
+    const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
+    const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
+    const val NavigationCompose="androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
 }
 
 object AndroidX {
