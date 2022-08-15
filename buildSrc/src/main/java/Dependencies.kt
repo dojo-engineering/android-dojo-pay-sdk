@@ -31,6 +31,8 @@ object Versions {
     const val MOCKITO_IN_LINE= "4.3.1"
     const val NAVIGATION= "2.3.3"
     const val COMPOSE_NAVIGATION = "2.4.2"
+    const val TIMBER = "5.0.1"
+
 }
 
 object BuildPluginsVersion {
@@ -142,6 +144,10 @@ object AndroidX {
         const val ANDROIDX_TEST_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_TEST_EXT}"
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }
+    object Logging {
+        const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
+    }
+
 
 }
 
