@@ -2,8 +2,8 @@ package tech.dojo.pay.uisdk
 
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.DojoPaymentResult
-import tech.dojo.pay.uisdk.paymentflow.handler.DojoPaymentFlowHandler
-import tech.dojo.pay.uisdk.paymentflow.handler.DojoPaymentFlowHandlerImp
+import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandler
+import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerImp
 
 object DojoSDKDropInUI {
     var sandbox: Boolean = false
