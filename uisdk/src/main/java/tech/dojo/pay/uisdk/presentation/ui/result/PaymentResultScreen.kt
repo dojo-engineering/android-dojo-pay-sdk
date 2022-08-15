@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,8 +34,8 @@ import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewMod
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ShowResultSheet(
-    attachedActivity: Activity,
+fun ShowResultSheetScreen(
+    onCloseFlowClicker: () -> Unit,
     viewModel: PaymentResultViewModel
 ) {
     val paymentResultsheetState =
@@ -54,7 +53,7 @@ fun ShowResultSheet(
                 coroutineScope,
                 paymentResultsheetState,
                 state,
-                attachedActivity
+                onCloseFlowClicker
             )
         }
     ) {}
@@ -66,7 +65,7 @@ private fun BottomSheetItems(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     state: PaymentResultState,
-    attachedActivity: Activity
+    onCloseFlowClicker: () -> Unit
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -76,7 +75,7 @@ private fun BottomSheetItems(
             coroutineScope.launch {
                 sheetState.hide()
             }
-            attachedActivity.finish()
+            onCloseFlowClicker()
         }
     )
 
@@ -144,7 +143,7 @@ private fun BottomSheetItems(
             coroutineScope.launch {
                 sheetState.hide()
             }
-            attachedActivity.finish()
+            onCloseFlowClicker()
         }
     }
 }

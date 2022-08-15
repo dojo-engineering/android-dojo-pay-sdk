@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout
 
+import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,9 +15,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.uisdk.core.getActivity
+import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
@@ -28,12 +34,24 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun ShowPaymentMethodsSheet(
+internal fun PaymentMethodsCheckOutScreen(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
-    onGpayClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit
 ) {
+    val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
+    LaunchedEffect(Unit) {
+        DojoSdk.isGpayAvailable(
+            activity = activity as Activity,
+            dojoGPayConfig = DojoGPayConfig(
+                merchantName = "Dojo Cafe (Paymentsense)",
+                merchantId = "BCR2DN6T57R5ZI34",
+                gatewayMerchantId = "119784244252745"
+            ),
+            { viewModel.handleGooglePayAvailable() },
+            { viewModel.handleGooglePayUnAvailable() }
+        )
+    }
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -50,7 +68,7 @@ internal fun ShowPaymentMethodsSheet(
                 paymentMethodsSheetState,
                 state,
                 onAppBarIconClicked,
-                onGpayClicked,
+                viewModel::onGpayCLicked,
                 onManagePaymentClicked
             )
         }
