@@ -31,6 +31,9 @@ object Versions {
     const val MOCKITO_IN_LINE= "4.3.1"
     const val NAVIGATION= "2.3.3"
     const val COMPOSE_NAVIGATION = "2.4.2"
+    const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
+    const val TIMBER = "5.0.1"
+
 }
 
 object BuildPluginsVersion {
@@ -72,6 +75,8 @@ object Navigation{
     const val NavigationFragment="androidx.navigation:navigation-fragment-ktx:${Versions.NAVIGATION}"
     const val NavigationUI="androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     const val NavigationCompose="androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
+    const val NavigationAnimationCompose="com.google.accompanist:accompanist-navigation-animation:${Versions.COMPOSE_NAVIGATION_ANIMATION}"
+
 }
 
 object AndroidX {
@@ -142,6 +147,10 @@ object AndroidX {
         const val ANDROIDX_TEST_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_TEST_EXT}"
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }
+    object Logging {
+        const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
+    }
+
 
 }
 

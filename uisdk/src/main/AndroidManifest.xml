@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name=".paymentflow.PaymentFlowContainerActivity"
+            android:name=".presentation.PaymentFlowContainerActivity"
             android:theme="@style/Theme.Transparent" />
     </application>
 
