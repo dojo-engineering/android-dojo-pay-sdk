@@ -12,6 +12,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -38,25 +39,31 @@ fun ShowResultSheetScreen(
     onCloseFlowClicker: () -> Unit,
     viewModel: PaymentResultViewModel
 ) {
-    val paymentResultsheetState =
+    val paymentResultSheetState =
         rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Expanded,
+            initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { false }
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
-        sheetState = paymentResultsheetState,
+        sheetState = paymentResultSheetState,
         sheetContent = {
             BottomSheetItems(
                 coroutineScope,
-                paymentResultsheetState,
+                paymentResultSheetState,
                 state,
                 onCloseFlowClicker
             )
         }
-    ) {}
+    ) {
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                paymentResultSheetState.show()
+            }
+        }
+    }
 }
 
 @ExperimentalMaterialApi

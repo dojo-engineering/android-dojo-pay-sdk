@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -17,10 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.navArgument
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
@@ -47,6 +45,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
     private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory() }
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configureDojoPayCore()
@@ -56,7 +55,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.Black.copy(alpha = 0.2f)
                 ) {
-                    val navController = rememberNavController()
+                    val navController = rememberAnimatedNavController()
                     // Listen for navigation event
                     val viewLifecycleOwner = LocalLifecycleOwner.current
                     LaunchedEffect(Unit) {
@@ -104,16 +103,23 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalAnimationApi::class)
     @Composable
     fun PaymentFlowNavHost(
         navController: NavHostController,
         viewModel: PaymentFlowViewModel
     ) {
-        NavHost(
+        AnimatedNavHost(
             navController = navController,
-            startDestination = PaymentFlowScreens.PaymentMethodCheckout.rout
+            startDestination = PaymentFlowScreens.PaymentMethodCheckout.rout,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
         ) {
-            composable(route = PaymentFlowScreens.PaymentMethodCheckout.rout) {
+            composable(
+                route = PaymentFlowScreens.PaymentMethodCheckout.rout,
+            ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
                     PaymentMethodCheckoutViewModelFactory(
                         arguments,
@@ -137,7 +143,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         defaultValue = DojoPaymentResult.DECLINED
                         nullable = false
                     }
-                )
+                ),
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
                 val paymentResultViewModel: PaymentResultViewModel by viewModels {
