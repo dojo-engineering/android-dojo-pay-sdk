@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdksample
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +26,15 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setTokenListener()
         binding.startPaymentFlow.setOnClickListener {
             dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(binding.token.text.toString()))
+        }
+        binding.startPaymentFlow2.setOnClickListener {
+            dojoPayUI.startPaymentFlow(
+                DojoPaymentFlowParams(
+                    binding.token.text.toString(), DojoThemeSettings(
+                        "#036bfc", "#036bfc", "#036bfc", "#036bfc", "#036bfc"
+                    )
+                )
+            )
         }
         DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
     }
