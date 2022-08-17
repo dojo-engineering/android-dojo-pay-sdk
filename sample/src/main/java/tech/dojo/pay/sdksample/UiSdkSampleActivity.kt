@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdksample
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -10,6 +11,8 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
+import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 
 class UiSdkSampleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUiSdkSampleBinding
@@ -23,7 +26,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(binding.root)
         setTokenListener()
         binding.startPaymentFlow.setOnClickListener {
-            dojoPayUI.startPaymentFlow(binding.token.text.toString())
+            dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(binding.token.text.toString()))
         }
         DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
     }
