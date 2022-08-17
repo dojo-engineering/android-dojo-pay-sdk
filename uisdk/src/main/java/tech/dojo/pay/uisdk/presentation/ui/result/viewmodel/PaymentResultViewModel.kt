@@ -23,11 +23,10 @@ class PaymentResultViewModel(
                 description = result.name
             )
         } else {
-            PaymentResultState.SuccessfulResult(
+            PaymentResultState.FailedResult(
                 imageId = R.drawable.ic_error_circle,
                 status = result.name,
-                orderInfo = result.name,
-                description = result.name
+                details = result.name
             )
         }
         mutableState.postValue(resultState)

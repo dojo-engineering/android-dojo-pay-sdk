@@ -41,7 +41,8 @@ import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewMod
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ShowResultSheetScreen(
-    onCloseFlowClicker: () -> Unit,
+    onCloseFlowClicked: () -> Unit,
+    onTryAgainClicked:()->Unit,
     viewModel: PaymentResultViewModel
 ) {
     val paymentResultSheetState =
@@ -59,7 +60,8 @@ fun ShowResultSheetScreen(
                 coroutineScope,
                 paymentResultSheetState,
                 state,
-                onCloseFlowClicker
+                onCloseFlowClicked,
+                onTryAgainClicked
             )
         }
     ) {
@@ -77,7 +79,8 @@ private fun BottomSheetItems(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     state: PaymentResultState,
-    onCloseFlowClicker: () -> Unit
+    onCloseFlowClicker: () -> Unit,
+    onTryAgainClicked: () -> Unit
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -101,7 +104,8 @@ private fun BottomSheetItems(
             state,
             coroutineScope,
             sheetState,
-            onCloseFlowClicker
+            onCloseFlowClicker,
+            onTryAgainClicked
         )
     }
 }
@@ -196,7 +200,8 @@ private fun FailedResult(
     state: PaymentResultState.FailedResult,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    onCloseFlowClicker: () -> Unit
+    onCloseFlowClicker: () -> Unit,
+    onTryAgainClicked: () -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -249,8 +254,8 @@ private fun FailedResult(
         ) {
             coroutineScope.launch {
                 sheetState.hide()
+                onTryAgainClicked()
             }
-            onCloseFlowClicker()
         }
         DojoOutlinedButton(
             modifier = Modifier.constrainAs(doneBtn) {

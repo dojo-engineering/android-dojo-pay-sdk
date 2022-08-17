@@ -91,7 +91,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.PaymentResult -> {
                 returnResult(event.dojoPaymentResult)
                 navController.navigate(PaymentFlowScreens.PaymentResult.createRoute(event.dojoPaymentResult)) {
-                    popUpTo(0)
+                    if (event.popBackStack) {
+                        popUpTo(0)
+                    }
                 }
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
@@ -156,6 +158,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 ) {
                     ShowResultSheetScreen(
                         viewModel::onCloseFlowClicked,
+                        viewModel::onBackClicked,
                         paymentResultViewModel
                     )
                 }
