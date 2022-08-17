@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
 internal fun DojoAppBar(
@@ -87,7 +88,7 @@ private fun BoxScope.Title(
             text = text,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            style = DojoTheme.typography.h5,
+            style = DojoTheme.typography.h5.medium,
             color = titleColor ?: LocalContentColor.current.copy(alpha = ContentAlpha.high)
         )
     }
