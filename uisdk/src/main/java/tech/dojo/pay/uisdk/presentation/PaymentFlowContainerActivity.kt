@@ -24,8 +24,6 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
-import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
-import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
@@ -153,15 +151,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val paymentResultViewModel: PaymentResultViewModel by viewModels {
                     PaymentResultViewModelFactory(result)
                 }
-                val dojoThemeSettings: DojoThemeSettings? =
-                    (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.dojoThemeSettings
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
                     ShowResultSheetScreen(
-                        dojoThemeSettings,
+                        DojoSDKDropInUI.dojoThemeSettings,
                         viewModel::onCloseFlowClicked,
                         viewModel::onBackClicked,
                         paymentResultViewModel

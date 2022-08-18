@@ -28,11 +28,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()))
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
+                "#036bfc", "#036bfc", "#036bfc", "#036bfc", "#036bfc"
+            )
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
-                    uiSdkSampleBinding.token.text.toString(), DojoThemeSettings(
-                        "#036bfc", "#036bfc", "#036bfc", "#036bfc", "#036bfc"
-                    )
+                    uiSdkSampleBinding.token.text.toString()
                 )
             )
         }
@@ -43,7 +44,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
         DojoSDKDropInUI.sandbox = uiSdkSampleBinding.checkboxSandbox.isChecked
 
         uiSdkSampleBinding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
-            uiSdkSampleBinding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
+            uiSdkSampleBinding.btnGenerateToken.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
             displayToken("")
             onSandboxChecked(isChecked)
         }
