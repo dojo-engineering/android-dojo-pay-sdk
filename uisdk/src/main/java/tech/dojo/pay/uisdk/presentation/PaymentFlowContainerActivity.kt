@@ -148,9 +148,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 ),
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
-                val paymentResultViewModel: PaymentResultViewModel by viewModels {
-                    PaymentResultViewModelFactory(result)
-                }
+                val paymentResultViewModel = PaymentResultViewModel(result)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
