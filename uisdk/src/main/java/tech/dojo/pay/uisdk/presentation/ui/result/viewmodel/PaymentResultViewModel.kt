@@ -33,5 +33,4 @@ class PaymentResultViewModel(
         }
         mutableState.postValue(resultState)
     }
-
 }

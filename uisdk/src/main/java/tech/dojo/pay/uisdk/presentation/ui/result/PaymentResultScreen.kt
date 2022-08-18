@@ -12,7 +12,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,18 +26,15 @@ import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.entities.DojoThemeSettings
-import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
-import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
+import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
-import tech.dojo.pay.uisdk.presentation.components.theme.customColorPalette
-import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
@@ -46,12 +42,10 @@ import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewMod
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ShowResultSheetScreen(
-    dojoThemeSettings: DojoThemeSettings?,
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel
 ) {
-    val customColorPalette = customColorPalette(dojoThemeSettings)
     val paymentResultSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -59,24 +53,22 @@ fun ShowResultSheetScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
-    CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
-        DojoBottomSheet(
-            modifier = Modifier.fillMaxSize(),
-            sheetState = paymentResultSheetState,
-            sheetContent = {
-                BottomSheetItems(
-                    coroutineScope,
-                    paymentResultSheetState,
-                    state,
-                    onCloseFlowClicked,
-                    onTryAgainClicked
-                )
-            }
-        ) {
-            LaunchedEffect(Unit) {
-                coroutineScope.launch {
-                    paymentResultSheetState.show()
-                }
+    DojoBottomSheet(
+        modifier = Modifier.fillMaxSize(),
+        sheetState = paymentResultSheetState,
+        sheetContent = {
+            BottomSheetItems(
+                coroutineScope,
+                paymentResultSheetState,
+                state,
+                onCloseFlowClicked,
+                onTryAgainClicked
+            )
+        }
+    ) {
+        LaunchedEffect(Unit) {
+            coroutineScope.launch {
+                paymentResultSheetState.show()
             }
         }
     }
@@ -204,7 +196,8 @@ private fun SuccessfulResult(
                 top.linkTo(doneBtn.bottom, 8.dp)
                 bottom.linkTo(parent.bottom, 32.dp)
                 width = Dimension.fillToConstraints
-            })
+            }
+        )
     }
 }
 
@@ -250,8 +243,8 @@ private fun FailedResult(
 
         Text(
             text = state.details,
-            style = DojoTheme.typography.subtitle1.medium,
-            color = DojoTheme.colors.primaryLabelTextColor,
+            style = DojoTheme.typography.subtitle1,
+            color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(details) {
                 top.linkTo(status.bottom, 16.dp)
@@ -297,6 +290,7 @@ private fun FailedResult(
                 top.linkTo(doneBtn.bottom, 8.dp)
                 bottom.linkTo(parent.bottom, 32.dp)
                 width = Dimension.fillToConstraints
-            })
+            }
+        )
     }
 }

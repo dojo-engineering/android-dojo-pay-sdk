@@ -20,7 +20,6 @@ internal fun DojoBrandFooter(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -31,7 +30,7 @@ internal fun DojoBrandFooter(
 
         ) {
             Text(
-                text =  stringResource(id = R.string.dojo_brand_footer_text_powered_by),
+                text = stringResource(id = R.string.dojo_brand_footer_text_powered_by),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body2,
@@ -39,7 +38,7 @@ internal fun DojoBrandFooter(
             )
             Text(
                 text = stringResource(id = R.string.dojo_brand_footer_text_dojo),
-                modifier= Modifier.padding(4.dp),
+                modifier = Modifier.padding(4.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body1.bold,
@@ -48,7 +47,6 @@ internal fun DojoBrandFooter(
         }
     }
 }
-
 
 @Preview("DojoBrandFooter", group = "Footer")
 @Composable

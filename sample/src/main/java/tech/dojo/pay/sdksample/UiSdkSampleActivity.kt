@@ -25,11 +25,16 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(uiSdkSampleBinding.root)
         setTokenListener()
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = null
             dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()))
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
-                "#036bfc", "#036bfc", "#036bfc", "#036bfc", "#036bfc"
+                "#036bfc",
+                "#036bfc",
+                "#036bfc",
+                "#036bfc",
+                "#036bfc"
             )
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(

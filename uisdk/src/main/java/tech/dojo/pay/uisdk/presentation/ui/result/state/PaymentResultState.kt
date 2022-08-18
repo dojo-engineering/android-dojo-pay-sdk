@@ -17,7 +17,6 @@ sealed class PaymentResultState(
         val description: String = "",
     ) : PaymentResultState(appBarTitleId)
 
-
     data class FailedResult(
         @StringRes
         override val appBarTitleId: Int,

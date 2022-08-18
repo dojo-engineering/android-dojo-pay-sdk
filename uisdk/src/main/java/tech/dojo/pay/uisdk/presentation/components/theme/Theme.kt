@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.entities.color
 
-private val LightColorPalette = DojoColors(
+internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
     primary = Color(0xFF00857D),
     onPrimary = Color.White,
     background = Color.White,
@@ -23,11 +23,13 @@ private val LightColorPalette = DojoColors(
     surface = Color(0xFFF5F5F5),
     onSurface = Color.Black,
     secondarySurface = Color(0xFF262626),
-    headerButtonTintColor = Color(0xDE000000),
-    headerTintColor = Color(0x99000000),
-    secondaryLabelTextColor = Color(0xDE000000),
-    primaryLabelTextColor = Color(0xDE000000),
-    primaryCTAButtonActiveBackgroundColor = Color.Black,
+    primaryLabelTextColor = dojoThemeSettings?.primaryLabelTextColor?.color ?: Color(0xFF262626),
+    headerButtonTintColor = dojoThemeSettings?.headerButtonTintColor?.color ?: Color(0xDE000000),
+    headerTintColor = dojoThemeSettings?.headerTintColor?.color ?: Color(0xFF262626),
+    secondaryLabelTextColor = dojoThemeSettings?.secondaryLabelTextColor?.color
+        ?: Color(0xDE000000),
+    primaryCTAButtonActiveBackgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
+        ?: Color.Black,
     onSecondarySurface = Color.White,
     success = Color(0xFF2C7B32),
     onSuccess = Color.White,
@@ -35,7 +37,6 @@ private val LightColorPalette = DojoColors(
     onError = Color.White,
     honey = Color(0xFFFF8D02)
 )
-
 private val DarkColorPalette = DojoColors(
     primary = Color(0xFF00857D),
     onPrimary = Color.White,
@@ -57,36 +58,12 @@ private val DarkColorPalette = DojoColors(
     honey = Color(0xFFFF8D02)
 )
 
-internal fun customColorPalette(dojoThemeSettings: DojoThemeSettings?) = DojoColors(
-    primary = Color(0xFF00857D),
-    onPrimary = Color.White,
-    background = Color.White,
-    onBackground = Color.Black,
-    surface = Color(0xFFF5F5F5),
-    onSurface = Color.Black,
-    secondarySurface = Color(0xFF262626),
-    primaryLabelTextColor = dojoThemeSettings?.primaryLabelTextColor?.color ?: Color(0xFF262626),
-    headerButtonTintColor = dojoThemeSettings?.headerButtonTintColor?.color ?: Color(0xDE000000),
-    headerTintColor = dojoThemeSettings?.headerTintColor?.color ?: Color(0x99000000),
-    secondaryLabelTextColor = dojoThemeSettings?.secondaryLabelTextColor?.color
-        ?: Color(0xDE000000),
-    primaryCTAButtonActiveBackgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
-        ?: Color.Black,
-    onSecondarySurface = Color.White,
-    success = Color(0xFF2C7B32),
-    onSuccess = Color.White,
-    error = Color(0xFFB00020),
-    onError = Color.White,
-    honey = Color(0xFFFF8D02)
-)
-
-
 @Composable
 fun DojoTheme(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
+    val colors = if (darkTheme) DarkColorPalette else lightColorPalette()
 
     CompositionLocalProvider(LocalDojoColors provides colors) {
         MaterialTheme(
