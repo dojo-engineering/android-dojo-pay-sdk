@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.entities.color
-import tech.dojo.pay.uisdk.presentation.components.*
+import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
@@ -152,7 +153,8 @@ private fun SuccessfulResult(
         Text(
             text = state.description,
             style = DojoTheme.typography.h5.bold,
-            color = dojoThemeSettings?.primaryLabelTextColor ?.color?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
+            color = dojoThemeSettings?.primaryLabelTextColor?.color
+                ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
             modifier = Modifier.constrainAs(status) {
                 top.linkTo(img.bottom, 24.dp)
                 start.linkTo(parent.start)
@@ -163,7 +165,8 @@ private fun SuccessfulResult(
         Text(
             text = state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
-            color = dojoThemeSettings?.primaryLabelTextColor?.color ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
+            color = dojoThemeSettings?.primaryLabelTextColor?.color
+                ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(orderInfo) {
                 top.linkTo(status.bottom, 16.dp)
@@ -174,7 +177,8 @@ private fun SuccessfulResult(
         Text(
             text = state.status,
             style = DojoTheme.typography.subtitle1,
-            color = dojoThemeSettings?.secondaryLabelTextColor?.color?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
+            color = dojoThemeSettings?.secondaryLabelTextColor?.color
+                ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(description) {
                 top.linkTo(orderInfo.bottom, 8.dp)
@@ -190,7 +194,7 @@ private fun SuccessfulResult(
                 width = Dimension.fillToConstraints
             },
             text = stringResource(id = R.string.dojo_payment_result_text_done),
-            backgroundColor= dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
+            backgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
         ) {
             coroutineScope.launch {
                 sheetState.hide()
@@ -242,7 +246,8 @@ private fun FailedResult(
         Text(
             text = state.status,
             style = DojoTheme.typography.h5.bold,
-            color = dojoThemeSettings?.primaryLabelTextColor?.color ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
+            color = dojoThemeSettings?.primaryLabelTextColor?.color
+                ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
             modifier = Modifier.constrainAs(status) {
                 top.linkTo(img.bottom, 24.dp)
                 start.linkTo(parent.start)
@@ -253,7 +258,8 @@ private fun FailedResult(
         Text(
             text = state.details,
             style = DojoTheme.typography.subtitle1.medium,
-            color = dojoThemeSettings?.primaryLabelTextColor?.color ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
+            color = dojoThemeSettings?.primaryLabelTextColor?.color
+                ?: LocalContentColor.current.copy(alpha = ContentAlpha.high),
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(details) {
                 top.linkTo(status.bottom, 16.dp)
@@ -269,7 +275,7 @@ private fun FailedResult(
                 width = Dimension.fillToConstraints
             },
             text = stringResource(id = R.string.dojo_payment_result_text_try_again),
-            backgroundColor= dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
+            backgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
         ) {
             coroutineScope.launch {
                 sheetState.hide()
@@ -284,7 +290,7 @@ private fun FailedResult(
                 width = Dimension.fillToConstraints
             },
             text = stringResource(id = R.string.dojo_payment_result_text_done),
-            borderStrokeColor= dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
+            borderStrokeColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
         ) {
             coroutineScope.launch {
                 sheetState.hide()
