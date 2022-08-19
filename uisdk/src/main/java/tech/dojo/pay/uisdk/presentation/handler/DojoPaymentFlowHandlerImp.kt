@@ -13,7 +13,7 @@ internal class DojoPaymentFlowHandlerImp(
     private val paymentFlowLauncher =
         activity.registerForActivityResult(DojoPaymentFlowHandlerResultContract(), onResult)
 
-    override fun startPaymentFlow(paymentToken: String) {
-        paymentFlowLauncher.launch(DojoPaymentFlowParams(paymentToken))
+    override fun startPaymentFlow(dojoPaymentFlowParams: DojoPaymentFlowParams) {
+        paymentFlowLauncher.launch(dojoPaymentFlowParams)
     }
 }

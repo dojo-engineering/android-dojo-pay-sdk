@@ -9,15 +9,16 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import com.google.accompanist.navigation.animation.composable
 import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
@@ -25,6 +26,8 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
+import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
@@ -37,7 +40,6 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.result.ShowResultSheetScreen
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
-import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModelFactory
 
 class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
@@ -51,19 +53,22 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         configureDojoPayCore()
         setContent {
             DojoTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Black.copy(alpha = 0.2f)
-                ) {
-                    val navController = rememberAnimatedNavController()
-                    // Listen for navigation event
-                    val viewLifecycleOwner = LocalLifecycleOwner.current
-                    LaunchedEffect(Unit) {
-                        viewModel.navigationEvent.observe(viewLifecycleOwner) {
-                            onNavigationEvent(it, navController)
+                val customColorPalette = lightColorPalette(DojoSDKDropInUI.dojoThemeSettings)
+                CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = Color.Black.copy(alpha = 0.2f)
+                    ) {
+                        val navController = rememberAnimatedNavController()
+                        // Listen for navigation event
+                        val viewLifecycleOwner = LocalLifecycleOwner.current
+                        LaunchedEffect(Unit) {
+                            viewModel.navigationEvent.observe(viewLifecycleOwner) {
+                                onNavigationEvent(it, navController)
+                            }
                         }
+                        PaymentFlowNavHost(navController, viewModel)
                     }
-                    PaymentFlowNavHost(navController, viewModel)
                 }
             }
         }
@@ -91,7 +96,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.PaymentResult -> {
                 returnResult(event.dojoPaymentResult)
                 navController.navigate(PaymentFlowScreens.PaymentResult.createRoute(event.dojoPaymentResult)) {
-                    popUpTo(0)
+                    if (event.popBackStack) {
+                        popUpTo(0)
+                    }
                 }
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
@@ -146,9 +153,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 ),
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
-                val paymentResultViewModel: PaymentResultViewModel by viewModels {
-                    PaymentResultViewModelFactory(result)
-                }
+                val paymentResultViewModel = PaymentResultViewModel(result)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
@@ -156,6 +161,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 ) {
                     ShowResultSheetScreen(
                         viewModel::onCloseFlowClicked,
+                        viewModel::onBackClicked,
                         paymentResultViewModel
                     )
                 }

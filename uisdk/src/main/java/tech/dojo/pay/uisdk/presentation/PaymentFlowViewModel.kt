@@ -18,7 +18,8 @@ class PaymentFlowViewModel() : ViewModel() {
     }
 
     fun navigateToPaymentResult(dojoPaymentResult: DojoPaymentResult) {
-        navigationEvent.value = PaymentFlowNavigationEvents.PaymentResult(dojoPaymentResult)
+        val popBackStack = dojoPaymentResult == DojoPaymentResult.SUCCESSFUL
+        navigationEvent.value = PaymentFlowNavigationEvents.PaymentResult(dojoPaymentResult, popBackStack)
     }
     fun navigateToManagePaymentMethods() {
         navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods

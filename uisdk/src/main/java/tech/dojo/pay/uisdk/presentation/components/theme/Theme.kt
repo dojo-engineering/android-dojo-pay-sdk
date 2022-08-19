@@ -12,8 +12,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import tech.dojo.pay.uisdk.entities.DojoThemeSettings
+import tech.dojo.pay.uisdk.entities.color
 
-private val LightColorPalette = DojoColors(
+internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
     primary = Color(0xFF00857D),
     onPrimary = Color.White,
     background = Color.White,
@@ -21,6 +23,13 @@ private val LightColorPalette = DojoColors(
     surface = Color(0xFFF5F5F5),
     onSurface = Color.Black,
     secondarySurface = Color(0xFF262626),
+    primaryLabelTextColor = dojoThemeSettings?.primaryLabelTextColor?.color ?: Color(0xFF262626),
+    headerButtonTintColor = dojoThemeSettings?.headerButtonTintColor?.color ?: Color(0xDE000000),
+    headerTintColor = dojoThemeSettings?.headerTintColor?.color ?: Color(0xFF262626),
+    secondaryLabelTextColor = dojoThemeSettings?.secondaryLabelTextColor?.color
+        ?: Color(0xDE000000),
+    primaryCTAButtonActiveBackgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
+        ?: Color.Black,
     onSecondarySurface = Color.White,
     success = Color(0xFF2C7B32),
     onSuccess = Color.White,
@@ -28,7 +37,6 @@ private val LightColorPalette = DojoColors(
     onError = Color.White,
     honey = Color(0xFFFF8D02)
 )
-
 private val DarkColorPalette = DojoColors(
     primary = Color(0xFF00857D),
     onPrimary = Color.White,
@@ -36,6 +44,11 @@ private val DarkColorPalette = DojoColors(
     onBackground = Color.White,
     surface = Color(0xFF1e1e1e),
     onSurface = Color.White,
+    headerButtonTintColor = Color.White,
+    headerTintColor = Color.White,
+    secondaryLabelTextColor = Color.White,
+    primaryLabelTextColor = Color.White,
+    primaryCTAButtonActiveBackgroundColor = Color.Black,
     secondarySurface = Color.White,
     onSecondarySurface = Color.Black,
     success = Color(0xFF88B484),
@@ -50,7 +63,7 @@ fun DojoTheme(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
+    val colors = if (darkTheme) DarkColorPalette else lightColorPalette()
 
     CompositionLocalProvider(LocalDojoColors provides colors) {
         MaterialTheme(
@@ -89,6 +102,11 @@ class DojoColors(
     onSuccess: Color,
     error: Color,
     onError: Color,
+    headerButtonTintColor: Color,
+    headerTintColor: Color,
+    secondaryLabelTextColor: Color,
+    primaryLabelTextColor: Color,
+    primaryCTAButtonActiveBackgroundColor: Color,
     honey: Color
 ) {
     var primary by mutableStateOf(primary)
@@ -117,9 +135,21 @@ class DojoColors(
         private set
     var honey by mutableStateOf(honey)
         private set
+    var headerButtonTintColor by mutableStateOf(headerButtonTintColor)
+        private set
+    var headerTintColor by mutableStateOf(headerTintColor)
+        private set
+    var secondaryLabelTextColor by mutableStateOf(secondaryLabelTextColor)
+        private set
+    var primaryLabelTextColor by mutableStateOf(primaryLabelTextColor)
+        private set
+    var primaryCTAButtonActiveBackgroundColor by mutableStateOf(
+        primaryCTAButtonActiveBackgroundColor
+    )
+        private set
 }
 
-private val LocalDojoColors = staticCompositionLocalOf<DojoColors> {
+internal val LocalDojoColors = staticCompositionLocalOf<DojoColors> {
     error("No DojoColorPalette provided")
 }
 

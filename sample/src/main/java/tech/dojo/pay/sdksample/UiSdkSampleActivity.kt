@@ -10,34 +10,52 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
+import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 
 class UiSdkSampleActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityUiSdkSampleBinding
+    private lateinit var uiSdkSampleBinding: ActivityUiSdkSampleBinding
     private val dojoPayUI = DojoSDKDropInUI.createUIPaymentHandler(this) { result ->
         showResult(result)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityUiSdkSampleBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        uiSdkSampleBinding = ActivityUiSdkSampleBinding.inflate(layoutInflater)
+        setContentView(uiSdkSampleBinding.root)
         setTokenListener()
-        binding.startPaymentFlow.setOnClickListener {
-            dojoPayUI.startPaymentFlow(binding.token.text.toString())
+        uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = null
+            dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()))
         }
-        DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
+        uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
+                "#036bfc",
+                "#036bfc",
+                "#036bfc",
+                "#036bfc",
+                "#036bfc"
+            )
+            dojoPayUI.startPaymentFlow(
+                DojoPaymentFlowParams(
+                    uiSdkSampleBinding.token.text.toString()
+                )
+            )
+        }
+        DojoSDKDropInUI.sandbox = uiSdkSampleBinding.checkboxSandbox.isChecked
     }
 
     private fun setTokenListener() {
-        DojoSDKDropInUI.sandbox = binding.checkboxSandbox.isChecked
+        DojoSDKDropInUI.sandbox = uiSdkSampleBinding.checkboxSandbox.isChecked
 
-        binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
-            binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
+        uiSdkSampleBinding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
+            uiSdkSampleBinding.btnGenerateToken.visibility =
+                if (isChecked) View.VISIBLE else View.GONE
             displayToken("")
             onSandboxChecked(isChecked)
         }
 
-        binding.btnGenerateToken.setOnClickListener {
+        uiSdkSampleBinding.btnGenerateToken.setOnClickListener {
             lifecycleScope.launch {
                 showLoading()
                 try {
@@ -52,8 +70,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
     }
 
     private fun displayToken(token: String) {
-        binding.token.setText(token)
-        binding.token.visibility = View.VISIBLE
+        uiSdkSampleBinding.token.setText(token)
+        uiSdkSampleBinding.token.visibility = View.VISIBLE
     }
 
     private fun onSandboxChecked(isChecked: Boolean) {
@@ -61,16 +79,16 @@ class UiSdkSampleActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        binding.viewProgress.visibility = View.VISIBLE
+        uiSdkSampleBinding.viewProgress.visibility = View.VISIBLE
     }
 
     private fun hideLoading() {
-        binding.viewProgress.visibility = View.GONE
+        uiSdkSampleBinding.viewProgress.visibility = View.GONE
     }
 
     private fun showTokenError(e: Throwable) {
-        binding.viewProgress.visibility = View.GONE
-        binding.token.setText(e.message)
+        uiSdkSampleBinding.viewProgress.visibility = View.GONE
+        uiSdkSampleBinding.token.setText(e.message)
     }
 
     fun showResult(result: DojoPaymentResult) {
