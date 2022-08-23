@@ -25,12 +25,7 @@ class CardPaymentActivity : CardPaymentBaseActivity() {
 
     override fun onPayClicked(token: String, payload: DojoCardPaymentPayLoad.FullCardPaymentPayload) {
         setProgressIndicatorVisible(true)
-//        cardPayment.executeCardPayment(token, payload)
-        DojoSdk.fetchPaymentIntent("pi_sandbox_ONH5tKT6YU2JY8_AqhB3og",::onPaymentIntentGreen,{ println("=====================red")})
-    }
-
-    private fun onPaymentIntentGreen(json:String){
-        println("================================${json}")
+        cardPayment.executeCardPayment(token, payload)
     }
 
     override fun onPaySavedCardClicked(
