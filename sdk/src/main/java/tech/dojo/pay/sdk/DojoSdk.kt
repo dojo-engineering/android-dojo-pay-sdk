@@ -5,8 +5,8 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
-import tech.dojo.pay.sdk.card.data.PaymentIntentRepository
-import tech.dojo.pay.sdk.card.data.remote.paymentintent.PaymentIntentApiBuilder
+import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
+import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentApiBuilder
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
@@ -14,7 +14,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
-import tech.dojo.pay.sdk.card.presentation.PaymentIntentProvider
+import tech.dojo.pay.sdk.payemntintent.PaymentIntentProvider
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
@@ -158,6 +158,9 @@ object DojoSdk {
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
     }
 
+    /**
+     * fetch payment intent object in format of json for specific payment id
+     */
     fun fetchPaymentIntent(
         paymentId: String,
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,

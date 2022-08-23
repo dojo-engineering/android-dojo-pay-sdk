@@ -1,7 +1,6 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.payemntintent.data
 
 import tech.dojo.pay.sdk.DojoPaymentIntentResult
-import tech.dojo.pay.sdk.card.data.remote.paymentintent.PaymentIntentApi
 
 class PaymentIntentRepository(
     private val api: PaymentIntentApi

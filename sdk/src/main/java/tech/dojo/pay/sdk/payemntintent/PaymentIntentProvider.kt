@@ -1,10 +1,10 @@
-package tech.dojo.pay.sdk.card.presentation
+package tech.dojo.pay.sdk.payemntintent
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentIntentResult
-import tech.dojo.pay.sdk.card.data.PaymentIntentRepository
+import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
 
 internal class PaymentIntentProvider(
     private val paymentId: String,

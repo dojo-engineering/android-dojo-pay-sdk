@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data.remote.paymentintent
+package tech.dojo.pay.sdk.payemntintent.data
 
 import com.google.gson.JsonObject
 import retrofit2.Response
