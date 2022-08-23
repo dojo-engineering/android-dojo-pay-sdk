@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.remote.cardpayment
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

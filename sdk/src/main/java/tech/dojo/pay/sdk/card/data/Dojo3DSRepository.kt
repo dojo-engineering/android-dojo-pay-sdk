@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card.data
 
+import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 internal class Dojo3DSRepository(private val api: CardPaymentApi) {

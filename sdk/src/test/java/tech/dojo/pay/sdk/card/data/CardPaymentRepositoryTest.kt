@@ -14,6 +14,7 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
+import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
