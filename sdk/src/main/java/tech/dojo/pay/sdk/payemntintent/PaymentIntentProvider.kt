@@ -7,10 +7,10 @@ import tech.dojo.pay.sdk.DojoPaymentIntentResult
 import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
 
 internal class PaymentIntentProvider(
-    private val paymentId: String,
     private val paymentIntentRepository: PaymentIntentRepository
 ) {
     fun fetchPaymentIntent(
+        paymentId: String,
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
         onPaymentIntentFailed: () -> Unit
     ) {

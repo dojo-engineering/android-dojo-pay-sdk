@@ -166,11 +166,7 @@ object DojoSdk {
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
         onPaymentIntentFailed: () -> Unit
     ) {
-        return PaymentIntentProvider(
-            paymentId,
-            PaymentIntentRepository(PaymentIntentApiBuilder().create())
-        ).fetchPaymentIntent(
-            onPaymentIntentSuccess, onPaymentIntentFailed
-        )
+        return PaymentIntentProvider(PaymentIntentRepository(PaymentIntentApiBuilder().create()))
+            .fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
     }
 }
