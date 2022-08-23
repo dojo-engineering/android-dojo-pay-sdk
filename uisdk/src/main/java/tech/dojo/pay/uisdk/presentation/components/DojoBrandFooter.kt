@@ -57,7 +57,7 @@ internal fun DojoBrandFooter(
                         .width(1.dp)
                 )
                 Text(
-                    text = "terms",
+                    text = stringResource(id = R.string.dojo_brand_footer_text_terms),
                     modifier = Modifier
                         .padding(
                             start = 12.dp,
@@ -72,7 +72,7 @@ internal fun DojoBrandFooter(
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
                 )
                 Text(
-                    text = "privacy",
+                    text = stringResource(id = R.string.dojo_brand_footer_text_privacy),
                     modifier = Modifier
                         .padding(4.dp)
                         .clickable { onPrivacyClicked.invoke() },
