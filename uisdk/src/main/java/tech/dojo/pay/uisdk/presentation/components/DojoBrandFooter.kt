@@ -1,5 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
@@ -9,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,13 +20,14 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 
+
 @Composable
 internal fun DojoBrandFooter(
     modifier: Modifier = Modifier,
-    withTermsAndPrivacy: Boolean = false,
-    onTermsClicked: () -> Unit = {},
-    onPrivacyClicked: () -> Unit = {}
+    withTermsAndPrivacy: Boolean = false
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -65,7 +69,14 @@ internal fun DojoBrandFooter(
                             bottom = 4.dp,
                             end = 12.dp
                         )
-                        .clickable { onTermsClicked.invoke() },
+                        .clickable {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://pay.dojo.tech/terms")
+                                )
+                            )
+                        },
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,
@@ -75,7 +86,14 @@ internal fun DojoBrandFooter(
                     text = stringResource(id = R.string.dojo_brand_footer_text_privacy),
                     modifier = Modifier
                         .padding(4.dp)
-                        .clickable { onPrivacyClicked.invoke() },
+                        .clickable {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("https://dojo.tech/legal/privacy/")
+                                )
+                            )
+                        },
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,

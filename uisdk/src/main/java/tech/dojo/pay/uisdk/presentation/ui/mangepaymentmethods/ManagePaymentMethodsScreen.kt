@@ -9,10 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
-import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
-import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
-import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.*
+
 
 @Composable
 fun ManagePaymentMethods(
@@ -37,16 +35,26 @@ fun ManagePaymentMethods(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            val (doneBtn) = createRefs()
+            val (doneBtn, footer) = createRefs()
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(doneBtn) {
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
-                    bottom.linkTo(parent.bottom, 32.dp)
+                    bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
                 text = "pay using new card"
             ) { onNewCardButtonClicked() }
+
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    bottom.linkTo(parent.bottom, 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+                withTermsAndPrivacy = true
+            )
         }
     }
 }

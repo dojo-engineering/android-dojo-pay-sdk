@@ -9,8 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
@@ -21,7 +23,7 @@ fun CardDetailsCheckoutScreen(
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    androidx.compose.material.Surface(
+    Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
@@ -36,16 +38,26 @@ fun CardDetailsCheckoutScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            val (doneBtn) = createRefs()
+            val (doneBtn,footer) = createRefs()
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(doneBtn) {
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
-                    bottom.linkTo(parent.bottom, 32.dp)
+                    bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
                 text = "pay"
             ) { viewModel.onPayWithCardClicked() }
+
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    bottom.linkTo(parent.bottom, 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+                withTermsAndPrivacy = true
+            )
         }
     }
 }

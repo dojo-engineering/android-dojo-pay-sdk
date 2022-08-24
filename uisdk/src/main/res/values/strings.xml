@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="dojo_brand_footer_text_powered_by" tools:ignore="ExtraTranslation">Powered by</string>
-    <string name="dojo_brand_footer_text_dojo" tools:ignore="ExtraTranslation">Dojo</string>
+    <string name="dojo_brand_footer_text_dojo" tools:ignore="ExtraTranslation">dojo</string>
     <string name="dojo_brand_footer_text_terms" tools:ignore="ExtraTranslation">Terms</string>
     <string name="dojo_brand_footer_text_privacy" tools:ignore="ExtraTranslation">Privacy</string>
     <string name="dojo_payment_result_text_done" tools:ignore="ExtraTranslation">Done</string>
