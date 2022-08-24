@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.verify
+import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 @OptIn(ExperimentalCoroutinesApi::class)

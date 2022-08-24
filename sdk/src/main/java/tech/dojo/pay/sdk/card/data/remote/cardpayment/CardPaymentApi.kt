@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.remote.cardpayment
 
 import retrofit2.http.Body
 import retrofit2.http.Field
