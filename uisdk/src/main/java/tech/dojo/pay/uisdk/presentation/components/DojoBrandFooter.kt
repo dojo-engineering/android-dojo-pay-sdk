@@ -80,7 +80,7 @@ internal fun DojoBrandFooter(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                 )
                 Text(
                     text = stringResource(id = R.string.dojo_brand_footer_text_privacy),
@@ -97,7 +97,7 @@ internal fun DojoBrandFooter(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                 )
             }
         }
