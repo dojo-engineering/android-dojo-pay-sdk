@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.data.CardPaymentApiBuilder
+import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
