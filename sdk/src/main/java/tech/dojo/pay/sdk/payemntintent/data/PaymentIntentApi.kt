@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
- interface PaymentIntentApi {
+interface PaymentIntentApi {
     @GET("payment/{paymentId}")
     suspend fun fetchPaymentIntent(
         @Path("paymentId") paymentId: String

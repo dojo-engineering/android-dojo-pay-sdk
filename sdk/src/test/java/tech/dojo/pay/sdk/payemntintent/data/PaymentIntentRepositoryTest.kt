@@ -30,11 +30,11 @@ class PaymentIntentRepositoryTest {
             whenever(response.isSuccessful).thenReturn(true)
             whenever(response.body()).thenReturn(result)
             whenever(api.fetchPaymentIntent(any())).thenReturn(response)
-            val expected= DojoPaymentIntentResult.Success("{\"test_key\":\"test\"}")
+            val expected = DojoPaymentIntentResult.Success("{\"test_key\":\"test\"}")
             // act
-            val actual= PaymentIntentRepository(api).getPaymentIntent("test")
-            //assert
-            Assert.assertEquals(expected,actual)
+            val actual = PaymentIntentRepository(api).getPaymentIntent("test")
+            // assert
+            Assert.assertEquals(expected, actual)
         }
 
     @Test
@@ -44,11 +44,10 @@ class PaymentIntentRepositoryTest {
             val response: Response<JsonObject> = mock()
             whenever(response.isSuccessful).thenReturn(false)
             whenever(api.fetchPaymentIntent(any())).thenReturn(response)
-            val expected= DojoPaymentIntentResult.Failed
+            val expected = DojoPaymentIntentResult.Failed
             // act
-            val actual= PaymentIntentRepository(api).getPaymentIntent("test")
-            //assert
-            Assert.assertEquals(expected,actual)
+            val actual = PaymentIntentRepository(api).getPaymentIntent("test")
+            // assert
+            Assert.assertEquals(expected, actual)
         }
-
 }

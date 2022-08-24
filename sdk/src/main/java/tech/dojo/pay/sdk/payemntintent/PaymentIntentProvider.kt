@@ -25,5 +25,4 @@ internal class PaymentIntentProvider(
             }
         }
     }
-
 }
