@@ -9,9 +9,10 @@ class PaymentIntentRepository(
     private val dataSource: PaymentIntentDataSource = PaymentIntentDataSource(),
     private val gson: Gson = Gson()
 ) {
-    private val paymentIntentResult: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+    private lateinit var paymentIntentResult: MutableStateFlow<PaymentIntentResult?>
 
     fun fetchPaymentIntent(paymentId: String) {
+        paymentIntentResult = MutableStateFlow(null)
         dataSource.fetchPaymentIntent(
             paymentId,
             { paymentIntentResult.tryEmit(PaymentIntentResult.Success(mapToPaymentIntentPayLoad(it))) },

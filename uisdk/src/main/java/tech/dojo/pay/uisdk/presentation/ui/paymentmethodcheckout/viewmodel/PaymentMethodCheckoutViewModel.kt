@@ -24,33 +24,45 @@ class PaymentMethodCheckoutViewModel(
     private lateinit var paymentToken: String
 
     init {
-        viewModelScope.launch { observePaymentIntent() }
+        mutableState.postValue(
+            PaymentMethodCheckoutState(
+                isGooglePayVisible = false,
+                isBottomSheetVisible = true,
+                isLoading = true
+            )
+        )
     }
 
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect {
             it?.let {
                 when (it) {
-                    is PaymentIntentResult.Success -> paymentToken = it.result.clientSessionSecret
+                    is PaymentIntentResult.Success -> {
+                        println("=======================${it.result.id}")
+                        paymentToken = it.result.clientSessionSecret
+                        mutableState.postValue(
+                            PaymentMethodCheckoutState(
+                                isGooglePayVisible = true,
+                                isBottomSheetVisible = true,
+                                isLoading = false
+                            )
+                        )
+                    }
                 }
             }
         }
     }
 
     fun handleGooglePayAvailable() {
-        mutableState.postValue(
-            PaymentMethodCheckoutState(
-                isGooglePayVisible = true,
-                isBottomSheetVisible = true
-            )
-        )
+        viewModelScope.launch { observePaymentIntent() }
     }
 
     fun handleGooglePayUnAvailable() {
         mutableState.postValue(
             PaymentMethodCheckoutState(
                 isGooglePayVisible = false,
-                isBottomSheetVisible = true
+                isBottomSheetVisible = true,
+                isLoading = false
             )
         )
     }
