@@ -25,11 +25,16 @@ class PaymentFlowViewModel(
             observePaymentIntent.observePaymentIntent().collect {
                 it?.let {
                     when (it) {
-                        is PaymentIntentResult.Failure -> navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                        is PaymentIntentResult.Failure -> closeFLowWithInternalError()
                     }
                 }
             }
         }
+    }
+
+    private fun closeFLowWithInternalError(){
+        navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
+
     }
 
     fun onBackClicked() {
