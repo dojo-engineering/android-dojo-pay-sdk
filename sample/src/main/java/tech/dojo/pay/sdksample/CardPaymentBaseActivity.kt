@@ -134,7 +134,8 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     private fun setTokenListener() {
-        DojoSdk.sandbox = binding.checkboxSandbox.isChecked
+        DojoSdk.cardSandbox = binding.checkboxSandbox.isChecked
+        DojoSdk.walletSandBox = binding.checkboxSandbox.isChecked
 
         binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
