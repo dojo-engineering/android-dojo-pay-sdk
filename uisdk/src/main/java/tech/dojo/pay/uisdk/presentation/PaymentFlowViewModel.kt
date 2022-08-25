@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 
 class PaymentFlowViewModel(
+    paymentId: String,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent
 ) : ViewModel() {
@@ -18,7 +19,7 @@ class PaymentFlowViewModel(
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
     init {
         viewModelScope.launch {
-            fetchPaymentIntentUseCase.fetchPaymentIntent("pi_sandbox_s32UwXuEukmC_DA1IgmtfQ")
+            fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
             observePaymentIntent.observePaymentIntent().collect {
                 println("==========================$it")
             }

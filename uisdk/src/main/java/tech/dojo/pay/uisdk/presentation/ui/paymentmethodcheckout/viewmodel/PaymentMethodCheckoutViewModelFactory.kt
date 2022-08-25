@@ -13,7 +13,7 @@ class PaymentMethodCheckoutViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val paymentToken =
-            (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.paymentToken
+            (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.paymentId
                 ?: ""
         return PaymentMethodCheckoutViewModel(paymentToken, gpayPaymentHandler) as T
     }

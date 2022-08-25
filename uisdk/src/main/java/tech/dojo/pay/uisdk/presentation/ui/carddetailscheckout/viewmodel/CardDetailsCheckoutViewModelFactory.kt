@@ -11,7 +11,7 @@ class CardDetailsCheckoutViewModelFactory(
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val observePaymentIntent = ObservePaymentIntent(PaymentFlowViewModelFactory.repo)
+        val observePaymentIntent = ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
         return CardDetailsCheckoutViewModel(observePaymentIntent, dojoCardPaymentHandler) as T
     }
 }
