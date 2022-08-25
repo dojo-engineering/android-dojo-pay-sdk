@@ -45,7 +45,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
-    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory() }
+    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
