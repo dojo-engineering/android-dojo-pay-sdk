@@ -53,7 +53,7 @@ fun CardDetailsCheckoutScreen(
                 modifier = Modifier.constrainAs(footer) {
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
-                    bottom.linkTo(parent.bottom, 16.dp)
+                    bottom.linkTo(parent.bottom, 24.dp)
                     width = Dimension.fillToConstraints
                 },
                 withTermsAndPrivacy = true

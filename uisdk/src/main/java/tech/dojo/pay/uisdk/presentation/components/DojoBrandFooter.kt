@@ -73,7 +73,7 @@ internal fun DojoBrandFooter(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://pay.dojo.tech/terms")
+                                    Uri.parse(TERMS_URL)
                                 )
                             )
                         },
@@ -90,7 +90,7 @@ internal fun DojoBrandFooter(
                             context.startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
-                                    Uri.parse("https://dojo.tech/legal/privacy/")
+                                    Uri.parse(PRIVACY_URL)
                                 )
                             )
                         },
@@ -115,3 +115,5 @@ internal fun PreviewDojoBrandFooter() = DojoPreview {
 internal fun PreviewDojoBrandFooterWithTermsAndPrivacy() = DojoPreview {
     DojoBrandFooter(withTermsAndPrivacy = true)
 }
+private const val TERMS_URL="https://pay.dojo.tech/terms"
+private const val PRIVACY_URL="https://dojo.tech/legal/privacy/"
