@@ -18,7 +18,7 @@ class PaymentFlowViewModel(
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
     init {
         viewModelScope.launch {
-            fetchPaymentIntentUseCase.fetchPaymentIntent("pi_sandbox_OAzUNy08c0WdnpMHuKYQBg")
+            fetchPaymentIntentUseCase.fetchPaymentIntent("pi_sandbox_s32UwXuEukmC_DA1IgmtfQ")
             observePaymentIntent.observePaymentIntent().collect {
                 println("==========================$it")
             }

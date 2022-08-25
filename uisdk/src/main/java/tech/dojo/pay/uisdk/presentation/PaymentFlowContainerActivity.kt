@@ -75,7 +75,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun configureDojoPayCore() {
-        DojoSdk.sandbox = DojoSDKDropInUI.sandbox
+        DojoSdk.sandbox = false
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             viewModel.navigateToPaymentResult(it)
         }
@@ -185,7 +185,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(arguments, cardPaymentHandler)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler)
                 }
                 AnimatedVisibility(
                     visible = true,

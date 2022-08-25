@@ -7,11 +7,15 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 
 class PaymentFlowViewModelFactory : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        val repo = PaymentIntentRepository()
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(repo)
         val observePaymentIntent = ObservePaymentIntent(repo)
         return PaymentFlowViewModel(fetchPaymentIntentUseCase, observePaymentIntent) as T
+    }
+
+    companion object {
+        val repo by lazy { PaymentIntentRepository() }
     }
 }
