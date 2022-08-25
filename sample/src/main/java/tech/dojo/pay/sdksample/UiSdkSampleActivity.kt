@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
+import tech.dojo.pay.sdksample.token.PaymentIDGenerator
 import tech.dojo.pay.sdksample.token.TokenGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
@@ -59,7 +60,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(TokenGenerator.generateToken())
+                    displayToken(PaymentIDGenerator.generatePaymentId())
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
