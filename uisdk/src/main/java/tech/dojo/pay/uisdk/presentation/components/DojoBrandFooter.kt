@@ -1,12 +1,17 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,10 +20,14 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 
+
 @Composable
 internal fun DojoBrandFooter(
     modifier: Modifier = Modifier,
+    withTermsAndPrivacy: Boolean = false
 ) {
+    val context = LocalContext.current
+
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -38,12 +47,59 @@ internal fun DojoBrandFooter(
             )
             Text(
                 text = stringResource(id = R.string.dojo_brand_footer_text_dojo),
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 4.dp, end = 12.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body1.bold,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
             )
+            if (withTermsAndPrivacy) {
+                Divider(
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high),
+                    modifier = Modifier
+                        .height(20.dp)
+                        .width(1.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.dojo_brand_footer_text_terms),
+                    modifier = Modifier
+                        .padding(
+                            start = 12.dp,
+                            top = 4.dp,
+                            bottom = 4.dp,
+                            end = 12.dp
+                        )
+                        .clickable {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(TERMS_URL)
+                                )
+                            )
+                        },
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = DojoTheme.typography.subtitle1,
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                )
+                Text(
+                    text = stringResource(id = R.string.dojo_brand_footer_text_privacy),
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .clickable {
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(PRIVACY_URL)
+                                )
+                            )
+                        },
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = DojoTheme.typography.subtitle1,
+                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                )
+            }
         }
     }
 }
@@ -53,3 +109,11 @@ internal fun DojoBrandFooter(
 internal fun PreviewDojoBrandFooter() = DojoPreview {
     DojoBrandFooter()
 }
+
+@Preview("DojoBrandFooter With Terms and privacy", group = "Footer")
+@Composable
+internal fun PreviewDojoBrandFooterWithTermsAndPrivacy() = DojoPreview {
+    DojoBrandFooter(withTermsAndPrivacy = true)
+}
+private const val TERMS_URL="https://pay.dojo.tech/terms"
+private const val PRIVACY_URL="https://dojo.tech/legal/privacy/"
