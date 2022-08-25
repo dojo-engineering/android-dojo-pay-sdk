@@ -22,6 +22,7 @@ sealed class PaymentResultState(
         override val appBarTitleId: Int,
         @DrawableRes
         val imageId: Int,
+        val showTryAgain: Boolean = true,
         val status: String = "",
         val details: String = ""
     ) : PaymentResultState(appBarTitleId)

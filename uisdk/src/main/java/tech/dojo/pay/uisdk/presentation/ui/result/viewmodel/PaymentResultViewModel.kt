@@ -27,6 +27,7 @@ class PaymentResultViewModel(
             PaymentResultState.FailedResult(
                 appBarTitleId = R.string.dojo_payment_result_text_payment_failed,
                 imageId = R.drawable.ic_error_circle,
+                showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
                 status = result.name,
                 details = result.name
             )
