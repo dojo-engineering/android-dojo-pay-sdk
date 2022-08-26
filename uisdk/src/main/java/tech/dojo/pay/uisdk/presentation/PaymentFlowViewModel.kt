@@ -38,7 +38,6 @@ class PaymentFlowViewModel(
 
     private fun closeFLowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
-
     }
 
     fun onBackClicked() {

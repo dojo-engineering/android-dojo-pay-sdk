@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
-import tech.dojo.pay.sdksample.token.TokenGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoThemeSettings

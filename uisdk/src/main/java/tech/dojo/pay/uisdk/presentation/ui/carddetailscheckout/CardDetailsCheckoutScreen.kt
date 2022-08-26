@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
@@ -38,7 +37,7 @@ fun CardDetailsCheckoutScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            val (doneBtn,footer) = createRefs()
+            val (doneBtn, footer) = createRefs()
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(doneBtn) {
                     start.linkTo(parent.start, 8.dp)

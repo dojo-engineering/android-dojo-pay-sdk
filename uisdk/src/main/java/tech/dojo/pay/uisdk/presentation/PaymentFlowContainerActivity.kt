@@ -91,8 +91,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     ) {
         when (event) {
             is PaymentFlowNavigationEvents.OnBack -> navController.popBackStack()
-            is PaymentFlowNavigationEvents.OnCloseFlow ->  this.finish()
-            is PaymentFlowNavigationEvents.CLoseFlowWithInternalError->{
+            is PaymentFlowNavigationEvents.OnCloseFlow -> this.finish()
+            is PaymentFlowNavigationEvents.CLoseFlowWithInternalError -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
                 this.finish()
             }

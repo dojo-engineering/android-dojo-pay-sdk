@@ -14,4 +14,3 @@ interface PaymentIntentApi {
     @POST("payment-intents")
     suspend fun getToken(@Body params: PaymentIdBody): PaymentIdResponse
 }
-

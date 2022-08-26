@@ -18,7 +18,7 @@ class PaymentFlowViewModelFactory(private val arguments: Bundle?) : ViewModelPro
                 ?: ""
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
-        return PaymentFlowViewModel(paymentId,fetchPaymentIntentUseCase, observePaymentIntent) as T
+        return PaymentFlowViewModel(paymentId, fetchPaymentIntentUseCase, observePaymentIntent) as T
     }
 
     companion object {
