@@ -21,18 +21,22 @@ class PaymentFlowViewModel(
 
     init {
         viewModelScope.launch {
-            fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
-            observePaymentIntent.observePaymentIntent().collect {
-                it?.let {
-                    when (it) {
-                        is PaymentIntentResult.Failure -> closeFLowWithInternalError()
+            try {
+                fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
+                observePaymentIntent.observePaymentIntent().collect {
+                    it?.let {
+                        when (it) {
+                            is PaymentIntentResult.Failure -> closeFLowWithInternalError()
+                        }
                     }
                 }
+            } catch (error: Throwable) {
+                closeFLowWithInternalError()
             }
         }
     }
 
-    private fun closeFLowWithInternalError(){
+    private fun closeFLowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
 
     }

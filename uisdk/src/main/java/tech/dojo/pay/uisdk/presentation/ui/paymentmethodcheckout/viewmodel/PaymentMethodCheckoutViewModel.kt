@@ -33,38 +33,39 @@ class PaymentMethodCheckoutViewModel(
         )
     }
 
-    private suspend fun observePaymentIntent() {
+    private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
         observePaymentIntent.observePaymentIntent().collect {
             it?.let {
                 when (it) {
-                    is PaymentIntentResult.Success -> {
-                        println("=======================${it.result.id}")
-                        paymentToken = it.result.clientSessionSecret
-                        mutableState.postValue(
-                            PaymentMethodCheckoutState(
-                                isGooglePayVisible = true,
-                                isBottomSheetVisible = true,
-                                isLoading = false
-                            )
-                        )
-                    }
+                    is PaymentIntentResult.Success -> handleSuccessPaymentIntent(
+                        it,
+                        isGooglePayEnabled
+                    )
                 }
             }
         }
     }
 
-    fun handleGooglePayAvailable() {
-        viewModelScope.launch { observePaymentIntent() }
-    }
-
-    fun handleGooglePayUnAvailable() {
+    private fun handleSuccessPaymentIntent(
+        paymentIntentResult: PaymentIntentResult.Success,
+        isGooglePayEnabled: Boolean
+    ) {
+        paymentToken = paymentIntentResult.result.clientSessionSecret
         mutableState.postValue(
             PaymentMethodCheckoutState(
-                isGooglePayVisible = false,
+                isGooglePayVisible = isGooglePayEnabled,
                 isBottomSheetVisible = true,
                 isLoading = false
             )
         )
+    }
+
+    fun handleGooglePayAvailable() {
+        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabled = true) }
+    }
+
+    fun handleGooglePayUnAvailable() {
+        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabled = false) }
     }
 
     fun onGpayCLicked() {
