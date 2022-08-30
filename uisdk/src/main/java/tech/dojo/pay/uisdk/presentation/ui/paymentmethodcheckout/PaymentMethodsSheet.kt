@@ -21,11 +21,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.getActivity
 import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
@@ -113,7 +115,7 @@ private fun AppBar(
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
-        title = "Payment method",
+        title = stringResource(id = R.string.dojo_ui_sdk_payment_method_checkout_title),
         titleGravity = TitleGravity.LEFT,
         actionIcon = AppBarIcon.close() {
             coroutineScope.launch {
@@ -170,6 +172,6 @@ private fun PaymentMethodsButton(onManagePaymentClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp, 8.dp, 24.dp, 16.dp),
-        text = "manage payment methods"
+        text =stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title)
     ) { onManagePaymentClicked() }
 }

@@ -17,7 +17,7 @@ class PaymentResultViewModel(
     init {
         val resultState = if (result == DojoPaymentResult.SUCCESSFUL) {
             PaymentResultState.SuccessfulResult(
-                appBarTitleId = R.string.dojo_payment_result_text_payment_complete,
+                appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
                 imageId = R.drawable.ic_success_circle,
                 status = result.name,
                 orderInfo = result.name,
@@ -25,7 +25,7 @@ class PaymentResultViewModel(
             )
         } else {
             PaymentResultState.FailedResult(
-                appBarTitleId = R.string.dojo_payment_result_text_payment_failed,
+                appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
                 imageId = R.drawable.ic_error_circle,
                 showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
                 status = result.name,

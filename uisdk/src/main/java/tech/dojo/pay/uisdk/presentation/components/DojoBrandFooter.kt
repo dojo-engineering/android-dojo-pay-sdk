@@ -38,14 +38,14 @@ internal fun DojoBrandFooter(
 
         ) {
             Text(
-                text = stringResource(id = R.string.dojo_brand_footer_text_powered_by),
+                text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_title),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body2,
                 color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
             )
             Text(
-                text = stringResource(id = R.string.dojo_brand_footer_text_dojo),
+                text = stringResource(id = R.string.dojo_ui_sdk_footer_dojo),
                 modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 4.dp, end = 12.dp),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
@@ -60,7 +60,7 @@ internal fun DojoBrandFooter(
                         .width(1.dp)
                 )
                 Text(
-                    text = stringResource(id = R.string.dojo_brand_footer_text_terms),
+                    text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_terms),
                     modifier = Modifier
                         .padding(
                             start = 12.dp,
@@ -82,7 +82,7 @@ internal fun DojoBrandFooter(
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                 )
                 Text(
-                    text = stringResource(id = R.string.dojo_brand_footer_text_privacy),
+                    text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_privacy),
                     modifier = Modifier
                         .padding(4.dp)
                         .clickable {

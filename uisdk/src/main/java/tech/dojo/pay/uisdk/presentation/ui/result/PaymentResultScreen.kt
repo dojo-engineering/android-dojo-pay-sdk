@@ -210,7 +210,7 @@ private fun SuccessfulResult(
                 top.linkTo(description.bottom, 40.dp)
                 width = Dimension.fillToConstraints
             },
-            text = stringResource(id = R.string.dojo_payment_result_text_done),
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
         ) {
             coroutineScope.launch {
@@ -289,7 +289,7 @@ private fun FailedResult(
                 top.linkTo(details.bottom, 40.dp)
                 width = Dimension.fillToConstraints
             },
-            text = stringResource(id = R.string.dojo_payment_result_text_try_again),
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
         ) {
             coroutineScope.launch {
@@ -304,7 +304,7 @@ private fun FailedResult(
                 top.linkTo(tryAgainBtn.bottom, 16.dp)
                 width = Dimension.fillToConstraints
             },
-            text = stringResource(id = R.string.dojo_payment_result_text_done),
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
         ) {
             coroutineScope.launch {
