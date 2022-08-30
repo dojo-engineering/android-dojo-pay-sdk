@@ -6,9 +6,11 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
@@ -27,7 +29,7 @@ fun CardDetailsCheckoutScreen(
         color = Color.White
     ) {
         DojoAppBar(
-            title = "Pay With New Card",
+            title =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
             titleGravity = TitleGravity.LEFT,
             navigationIcon = AppBarIcon.back { onBackClicked() },
             actionIcon = AppBarIcon.close { onCloseClicked() }
@@ -45,7 +47,7 @@ fun CardDetailsCheckoutScreen(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text = "pay"
+                text =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay)
             ) { viewModel.onPayWithCardClicked() }
 
             DojoBrandFooter(

@@ -382,7 +382,7 @@ private fun FailedResultWithOutTryAgain(
                 top.linkTo(details.bottom, 40.dp)
                 width = Dimension.fillToConstraints
             },
-            text = stringResource(id = R.string.dojo_payment_result_text_done)
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done)
         ) {
             coroutineScope.launch {
                 sheetState.hide()
