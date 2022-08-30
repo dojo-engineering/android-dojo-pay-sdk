@@ -9,8 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import tech.dojo.pay.uisdk.presentation.components.*
-
+import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
+import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
+import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 
 @Composable
 fun ManagePaymentMethods(

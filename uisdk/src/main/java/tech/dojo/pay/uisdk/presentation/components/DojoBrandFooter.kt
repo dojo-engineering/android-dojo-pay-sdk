@@ -20,7 +20,6 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 
-
 @Composable
 internal fun DojoBrandFooter(
     modifier: Modifier = Modifier,
@@ -115,5 +114,5 @@ internal fun PreviewDojoBrandFooter() = DojoPreview {
 internal fun PreviewDojoBrandFooterWithTermsAndPrivacy() = DojoPreview {
     DojoBrandFooter(withTermsAndPrivacy = true)
 }
-private const val TERMS_URL="https://pay.dojo.tech/terms"
-private const val PRIVACY_URL="https://dojo.tech/legal/privacy/"
+private const val TERMS_URL = "https://pay.dojo.tech/terms"
+private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"

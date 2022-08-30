@@ -45,7 +45,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
-    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory() }
+    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun configureDojoPayCore() {
-        DojoSdk.sandbox = DojoSDKDropInUI.sandbox
+        DojoSdk.cardSandbox = false
+        DojoSdk.walletSandBox = DojoSDKDropInUI.sandbox
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             viewModel.navigateToPaymentResult(it)
         }
@@ -90,7 +91,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     ) {
         when (event) {
             is PaymentFlowNavigationEvents.OnBack -> navController.popBackStack()
-            is PaymentFlowNavigationEvents.OnCloseFlow -> {
+            is PaymentFlowNavigationEvents.OnCloseFlow -> this.finish()
+            is PaymentFlowNavigationEvents.CLoseFlowWithInternalError -> {
+                returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
                 this.finish()
             }
             is PaymentFlowNavigationEvents.PaymentResult -> {
@@ -128,10 +131,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(
-                        arguments,
-                        gpayPaymentHandler
-                    )
+                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler)
                 }
                 PaymentMethodsCheckOutScreen(
                     paymentMethodCheckoutViewModel,
@@ -185,7 +185,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(arguments, cardPaymentHandler)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler)
                 }
                 AnimatedVisibility(
                     visible = true,

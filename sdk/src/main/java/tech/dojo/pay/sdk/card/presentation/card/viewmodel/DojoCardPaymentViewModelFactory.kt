@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
+import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 
 internal class DojoCardPaymentViewModelFactory(
@@ -19,7 +19,7 @@ internal class DojoCardPaymentViewModelFactory(
         val args = requireNotNull(arguments)
         val params =
             args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
-        val api = CardPaymentApiBuilder(DojoSdk.sandbox).create()
+        val api = CardPaymentApiBuilder(DojoSdk.cardSandbox).create()
         val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
         val dojo3DSRepository = Dojo3DSRepository(api)
         return DojoCardPaymentViewModel(repo, dojo3DSRepository) as T

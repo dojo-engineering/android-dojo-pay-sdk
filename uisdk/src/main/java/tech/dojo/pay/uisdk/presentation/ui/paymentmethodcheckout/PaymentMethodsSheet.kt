@@ -1,10 +1,14 @@
 package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout
 
 import android.app.Activity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -14,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -29,6 +34,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 
@@ -84,14 +90,18 @@ internal fun PaymentMethodsCheckOutScreen(
 private fun BottomSheetItems(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    googlePayVisibility: State<PaymentMethodCheckoutState?>,
+    contentState: State<PaymentMethodCheckoutState?>,
     onAppBarIconClicked: () -> Unit,
     onGpayClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
-    GooglePayButton(googlePayVisibility, coroutineScope, sheetState, onGpayClicked)
-    PaymentMethodsButton(onManagePaymentClicked)
+    if (contentState.value?.isLoading == true) {
+        Loading()
+    } else {
+        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked)
+        PaymentMethodsButton(onManagePaymentClicked)
+    }
 }
 
 @ExperimentalMaterialApi
@@ -112,6 +122,23 @@ private fun AppBar(
             onAppBarIconClicked()
         }
     )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun Loading() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .background(DojoTheme.colors.background.copy(alpha = 0.8f))
+            .clickable(false) {},
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = DojoTheme.colors.primaryLabelTextColor
+        )
+    }
 }
 
 @ExperimentalMaterialApi

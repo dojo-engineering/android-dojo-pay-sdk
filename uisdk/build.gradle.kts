@@ -96,6 +96,7 @@ dependencies {
     implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT_COMPOSE)
     implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT)
     implementation(AndroidX.Logging.TIMBER)
+    implementation(AndroidX.Network.GSON)
     implementation(project(":sdk"))
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
