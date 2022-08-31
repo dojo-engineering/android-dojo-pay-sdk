@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,12 +25,14 @@ fun CardDetailsCheckoutScreen(
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
 ) {
+    val state = viewModel.state.observeAsState()
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
         DojoAppBar(
-            title =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+            title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
             titleGravity = TitleGravity.LEFT,
             navigationIcon = AppBarIcon.back { onBackClicked() },
             actionIcon = AppBarIcon.close { onCloseClicked() }
@@ -47,8 +50,13 @@ fun CardDetailsCheckoutScreen(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay)
-            ) { viewModel.onPayWithCardClicked() }
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay),
+                isLoading = state.value?.isLoading ?: false
+            ) {
+                if (state.value?.isLoading != true) {
+                    viewModel.onPayWithCardClicked()
+                }
+            }
 
             DojoBrandFooter(
                 modifier = Modifier.constrainAs(footer) {
