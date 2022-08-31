@@ -12,11 +12,14 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
+import tech.dojo.pay.uisdk.presentation.components.AmountBanner
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
 @Composable
@@ -31,18 +34,36 @@ fun CardDetailsCheckoutScreen(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        DojoAppBar(
-            title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
-            titleGravity = TitleGravity.LEFT,
-            navigationIcon = AppBarIcon.back { onBackClicked() },
-            actionIcon = AppBarIcon.close { onCloseClicked() }
-        )
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            val (payBtn, footer) = createRefs()
+            val (appBar, banner, payBtn, footer) = createRefs()
+
+            DojoAppBar(
+                modifier = Modifier.constrainAs(appBar) {
+                    start.linkTo(parent.start, 0.dp)
+                    end.linkTo(parent.end, 0.dp)
+                    top.linkTo(parent.top, 0.dp)
+                    width = Dimension.fillToConstraints
+                },
+                title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+                titleGravity = TitleGravity.LEFT,
+                navigationIcon = AppBarIcon.back { onBackClicked() },
+                actionIcon = AppBarIcon.close { onCloseClicked() }
+            )
+            AmountBanner(
+                modifier = Modifier.constrainAs(banner) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(appBar.bottom, 8.dp)
+                    width = Dimension.fillToConstraints
+                },
+                amount = state.value?.totalAmount ?: "",
+                currencyLogo = state.value?.amountCurrency ?: ""
+            )
+
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 8.dp)

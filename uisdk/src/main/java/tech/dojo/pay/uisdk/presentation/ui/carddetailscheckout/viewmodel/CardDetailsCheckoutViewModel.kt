@@ -11,15 +11,18 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
+import java.util.*
 
 class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val dojoCardPaymentHandler: DojoCardPaymentHandler
 ) : ViewModel() {
     private lateinit var paymentToken: String
+    private lateinit var currentState: CardDetailsCheckoutState
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
+
     init {
         viewModelScope.launch { observePaymentIntent() }
     }
@@ -28,18 +31,32 @@ class CardDetailsCheckoutViewModel(
         observePaymentIntent.observePaymentIntent().collect {
             it?.let {
                 when (it) {
-                    is PaymentIntentResult.Success -> paymentToken = it.result.clientSessionSecret
+                    is PaymentIntentResult.Success -> {
+                        paymentToken = it.result.clientSessionSecret
+                        currentState = CardDetailsCheckoutState(
+                            totalAmount = it.result.amount.value.toString(),
+                            amountCurrency = Currency.getInstance(it.result.amount.currencyCode).symbol,
+                            isLoading = false
+
+                        )
+                        pushStateToUi(currentState)
+                    }
                 }
             }
         }
     }
 
     fun onPayWithCardClicked() {
-        mutableState.postValue(CardDetailsCheckoutState(isLoading= true))
+        pushStateToUi(currentState.copy(isLoading = true))
         dojoCardPaymentHandler.executeCardPayment(
             paymentToken,
             getPaymentPayLoad()
         )
+    }
+
+    private fun pushStateToUi(state: CardDetailsCheckoutState) {
+        mutableState.postValue(state)
+
     }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
