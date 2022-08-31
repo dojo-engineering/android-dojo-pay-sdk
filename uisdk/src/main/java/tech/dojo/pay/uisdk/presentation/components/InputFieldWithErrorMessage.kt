@@ -45,7 +45,7 @@ fun InputFieldWithErrorMessage(
     )
 }
 
-@Preview("PrefixInputField", group = "Input")
+@Preview("InputFieldWithErrorMessage", group = "Input")
 @Composable
 fun PrefixInputFieldPreview() {
     var value: String by remember { mutableStateOf("") }
