@@ -42,9 +42,9 @@ fun CardDetailsCheckoutScreen(
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            val (doneBtn, footer) = createRefs()
+            val (payBtn, footer) = createRefs()
             DojoFullGroundButton(
-                modifier = Modifier.constrainAs(doneBtn) {
+                modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
                     bottom.linkTo(footer.bottom, 46.dp)
