@@ -11,7 +11,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
-import java.util.*
+import java.util.Currency
 
 class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
@@ -32,7 +32,7 @@ class CardDetailsCheckoutViewModel(
             it?.let {
                 when (it) {
                     is PaymentIntentResult.Success -> {
-                        paymentToken = it.result.clientSessionSecret
+                        paymentToken = it.result.paymentToken
                         currentState = CardDetailsCheckoutState(
                             totalAmount = it.result.amount.value.toString(),
                             amountCurrency = Currency.getInstance(it.result.amount.currencyCode).symbol,
@@ -56,7 +56,6 @@ class CardDetailsCheckoutViewModel(
 
     private fun pushStateToUi(state: CardDetailsCheckoutState) {
         mutableState.postValue(state)
-
     }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =

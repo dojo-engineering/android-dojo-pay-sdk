@@ -48,7 +48,7 @@ fun ManagePaymentMethods(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
             ) { onNewCardButtonClicked() }
 
             DojoBrandFooter(

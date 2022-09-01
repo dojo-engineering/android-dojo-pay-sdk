@@ -50,7 +50,7 @@ class PaymentMethodCheckoutViewModel(
         paymentIntentResult: PaymentIntentResult.Success,
         isGooglePayEnabled: Boolean
     ) {
-        paymentToken = paymentIntentResult.result.clientSessionSecret
+        paymentToken = paymentIntentResult.result.paymentToken
         mutableState.postValue(
             PaymentMethodCheckoutState(
                 isGooglePayVisible = isGooglePayEnabled,

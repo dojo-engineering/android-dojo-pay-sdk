@@ -49,7 +49,7 @@ fun InputFieldWithErrorMessage(
 @Composable
 fun PrefixInputFieldPreview() {
     var value: String by remember { mutableStateOf("") }
-    var error:Boolean by remember {
+    var error: Boolean by remember {
         mutableStateOf(true)
     }
     DojoPreview() {
@@ -57,7 +57,7 @@ fun PrefixInputFieldPreview() {
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
             value = value,
             onValueChange = {
-                error= false
+                error = false
                 value = it
             },
             placeholder = "Placeholder",
@@ -68,7 +68,7 @@ fun PrefixInputFieldPreview() {
                 }
             },
             isError = error,
-            assistiveText =if(error) AnnotatedString("error must not be Empty ") else AnnotatedString("")
+            assistiveText = if (error) AnnotatedString("error must not be Empty ") else AnnotatedString("")
         )
     }
 }

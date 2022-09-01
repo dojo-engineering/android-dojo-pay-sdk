@@ -172,6 +172,6 @@ private fun PaymentMethodsButton(onManagePaymentClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp, 8.dp, 24.dp, 16.dp),
-        text =stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title)
+        text = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title)
     ) { onManagePaymentClicked() }
 }
