@@ -22,14 +22,12 @@ class PaymentFlowViewModelFactory(private val arguments: Bundle?) : ViewModelPro
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
         val updatePaymentStateUseCase = UpdatePaymentStateUseCase(paymentStatusRepository)
-        val observePaymentStatus = ObservePaymentStatus(paymentStatusRepository)
 
         return PaymentFlowViewModel(
             paymentId,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
-            updatePaymentStateUseCase,
-            observePaymentStatus
+            updatePaymentStateUseCase
         ) as T
     }
 

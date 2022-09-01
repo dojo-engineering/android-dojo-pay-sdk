@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.core.SingleLiveData
@@ -17,7 +18,6 @@ class PaymentFlowViewModel(
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
-    private val observePaymentStatus: ObservePaymentStatus
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
@@ -39,7 +39,7 @@ class PaymentFlowViewModel(
         }
     }
     fun  updatePaymentState(isActivity: Boolean){
-        updatePaymentStateUseCase.updatePaymentSate(isActivity)
+         updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
     private fun closeFLowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
