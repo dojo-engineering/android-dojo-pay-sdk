@@ -37,7 +37,6 @@ fun CardDetailsCheckoutScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
         ) {
             val (appBar, banner, payBtn, footer) = createRefs()
 
@@ -57,7 +56,7 @@ fun CardDetailsCheckoutScreen(
                 modifier = Modifier.constrainAs(banner) {
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
-                    top.linkTo(appBar.bottom, 8.dp)
+                    top.linkTo(appBar.bottom, 16.dp)
                     width = Dimension.fillToConstraints
                 },
                 amount = state.value?.totalAmount ?: "",
@@ -66,8 +65,8 @@ fun CardDetailsCheckoutScreen(
 
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
+                    start.linkTo(parent.start, 24.dp)
+                    end.linkTo(parent.end, 24.dp)
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
@@ -81,8 +80,8 @@ fun CardDetailsCheckoutScreen(
 
             DojoBrandFooter(
                 modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
+                    start.linkTo(parent.start, 24.dp)
+                    end.linkTo(parent.end, 24.dp)
                     bottom.linkTo(parent.bottom, 24.dp)
                     width = Dimension.fillToConstraints
                 },
