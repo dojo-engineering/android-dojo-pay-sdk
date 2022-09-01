@@ -10,12 +10,14 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import java.util.Currency
 
 class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
-    private val dojoCardPaymentHandler: DojoCardPaymentHandler
+    private val dojoCardPaymentHandler: DojoCardPaymentHandler,
+    private val observePaymentStatus: ObservePaymentStatus
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private lateinit var currentState: CardDetailsCheckoutState
@@ -24,7 +26,10 @@ class CardDetailsCheckoutViewModel(
         get() = mutableState
 
     init {
-        viewModelScope.launch { observePaymentIntent() }
+        viewModelScope.launch {
+            observePaymentIntent()
+            observePaymentStatus()
+        }
     }
 
     private suspend fun observePaymentIntent() {
@@ -44,6 +49,13 @@ class CardDetailsCheckoutViewModel(
                 }
             }
         }
+    }
+
+    private suspend fun observePaymentStatus() {
+        observePaymentStatus.observePaymentStates().collect {
+            if (!it) { pushStateToUi(currentState.copy(isLoading = false)) }
+        }
+
     }
 
     fun onPayWithCardClicked() {

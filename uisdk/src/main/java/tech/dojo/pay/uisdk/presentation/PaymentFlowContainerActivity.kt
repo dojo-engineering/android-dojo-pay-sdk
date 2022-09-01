@@ -50,7 +50,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
-    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
+    private val viewModel: PaymentFlowViewModel by viewModels {
+        PaymentFlowViewModelFactory(
+            arguments
+        )
+    }
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,9 +87,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         DojoSdk.cardSandbox = false
         DojoSdk.walletSandBox = DojoSDKDropInUI.sandbox
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
+            viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
         cardPaymentHandler = DojoSdk.createCardPaymentHandler(this) {
+            viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
     }
