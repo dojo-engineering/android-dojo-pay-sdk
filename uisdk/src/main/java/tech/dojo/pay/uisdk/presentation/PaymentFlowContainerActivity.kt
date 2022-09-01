@@ -34,6 +34,7 @@ import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsCheckoutScreen
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.ManagePaymentMethods
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.PaymentMethodsCheckOutScreen
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
@@ -184,11 +185,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
-                val cardDetailsCheckoutViewModel = CardDetailsCheckoutViewModel(
-                    ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository),
-                    cardPaymentHandler
-                )
-
+                val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler)
+                }
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
