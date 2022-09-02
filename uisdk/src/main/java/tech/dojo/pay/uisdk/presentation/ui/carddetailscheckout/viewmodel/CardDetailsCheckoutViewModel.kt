@@ -22,12 +22,18 @@ class CardDetailsCheckoutViewModel(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
 ) : ViewModel() {
     private lateinit var paymentToken: String
-    private lateinit var currentState: CardDetailsCheckoutState
+    private var currentState: CardDetailsCheckoutState
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
 
     init {
+        currentState = CardDetailsCheckoutState(
+            totalAmount ="",
+            amountCurrency ="",
+            isLoading = false
+        )
+        pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
         viewModelScope.launch { observePaymentStatus() }
     }
