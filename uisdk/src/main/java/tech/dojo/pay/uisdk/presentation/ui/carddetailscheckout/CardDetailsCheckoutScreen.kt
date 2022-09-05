@@ -13,8 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
@@ -25,6 +27,8 @@ import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
 @Composable
@@ -76,7 +80,15 @@ fun CardDetailsCheckoutScreen(
                 },
                 value = state.cardHolderInputField.value,
                 onValueChange = { viewModel.onCardHolderValueChanged(it) },
-                label = buildAnnotatedString { append(stringResource(state.cardHolderInputField.labelStringId)) },
+                label = buildAnnotatedString {
+                    withStyle(SpanStyle(
+                        color= Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        letterSpacing = 0.15.sp),
+                    ) {
+                        append(stringResource(state.cardHolderInputField.labelStringId))
+                    } },
             )
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
