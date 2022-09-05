@@ -1,8 +1,7 @@
-package tech.dojo.pay.uisdk.presentation
+package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -13,14 +12,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import tech.dojo.pay.uisdk.presentation.components.DojoPreview
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
@@ -38,11 +41,12 @@ fun BasicCardInformationField(
     maxLines: Int = Int.MAX_VALUE,
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val maxCardNumberChar = 19
 
     Column(
         modifier = modifier
@@ -70,7 +74,10 @@ fun BasicCardInformationField(
 
             BasicTextField(
                 value = cardNumberValue,
-                onValueChange = { onValueChange(it) },
+                onValueChange = {
+                    if (it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) onValueChange(it)
+                },
+                visualTransformation = { creditCardFilter(it) },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                 maxLines = maxLines,
                 enabled = enabled,
@@ -170,16 +177,53 @@ fun BasicCardInformationField(
     }
 }
 
-@Preview("DojoBrandFooter", group = "Footer")
+
+fun creditCardFilter(text: AnnotatedString): TransformedText {
+    val trimmed = if (text.text.length >= 16) text.text.substring(0..15) else text.text
+
+    val annotatedString = AnnotatedString.Builder().run {
+        for (i in trimmed.indices) {
+            append(trimmed[i])
+            if (i % 4 == 3 && i != 15) {
+                append(" ")
+            }
+        }
+        pushStyle(SpanStyle(color = Color.LightGray))
+        toAnnotatedString()
+    }
+
+    val creditCardOffsetTranslator = object : OffsetMapping {
+        override fun originalToTransformed(offset: Int): Int {
+            if (offset <= 3) return offset
+            if (offset <= 7) return offset + 1
+            if (offset <= 11) return offset + 2
+            if (offset <= 16) return offset + 3
+            return 19
+        }
+
+        override fun transformedToOriginal(offset: Int): Int {
+            if (offset <= 4) return offset
+            if (offset <= 9) return offset - 1
+            if (offset <= 14) return offset - 2
+            if (offset <= 19) return offset - 3
+            return 16
+        }
+    }
+
+    return TransformedText(annotatedString, creditCardOffsetTranslator)
+}
+
+@Preview("App bar with two icons and title aligned to left", group = "AppBar")
 @Composable
-internal fun PreviewDojoBrandFooter() = DojoPreview {
+internal fun PreviewBasicCardInformationField() = DojoPreview {
+    val value by remember { mutableStateOf("") }
     var textFieldValueState by remember {
-        mutableStateOf(TextFieldValue(text = "", selection = TextRange("".length)))
+        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
     }
     BasicCardInformationField(
         cardNumberValue = textFieldValueState,
         onValueChange = { textFieldValueState = it },
-        cardNumberPlaceholder = "1234 1234 1234 1234",
+        cardNumberPlaceholder = "1234  5678  1234  5678",
         cvvPlaceholder = "cvv",
         expireDaterPlaceholder = "MM/YY"
 
