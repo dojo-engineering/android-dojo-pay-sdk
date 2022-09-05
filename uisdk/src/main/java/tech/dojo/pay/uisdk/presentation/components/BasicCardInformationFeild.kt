@@ -27,6 +27,79 @@ import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
+fun BasicCardInputField(
+    cardNumberValue: String,
+    cvvValue: String,
+    expireDateValue: String,
+    cardNumberPlaceholder: String?,
+    cvvPlaceholder: String?,
+    expireDaterPlaceholder: String?,
+    onCardNumberValueChanged: (String) -> Unit,
+    onExpireDateValueChanged: (String) -> Unit,
+    onCvvValueChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester? = null,
+    isError: Boolean = false,
+    enabled: Boolean = true,
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    textHorizontalPadding: Dp = 16.dp,
+    textVerticalPadding: Dp = 12.dp,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+    keyboardActions: KeyboardActions = KeyboardActions()
+) {
+    var cardNumberValueState by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = cardNumberValue,
+                selection = TextRange(cardNumberValue.length)
+            )
+        )
+    }
+    var cvvValueState by remember {
+        mutableStateOf(TextFieldValue(text = cvvValue, selection = TextRange(cvvValue.length)))
+    }
+    var expireDateValueState by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = expireDateValue,
+                selection = TextRange(expireDateValue.length)
+            )
+        )
+    }
+    BasicCardInformationField(
+        cardNumberValue = cardNumberValueState,
+        cvvValue = cvvValueState,
+        expireDateValue = expireDateValueState,
+        cardNumberPlaceholder = cardNumberPlaceholder,
+        cvvPlaceholder = cvvPlaceholder,
+        expireDaterPlaceholder = expireDaterPlaceholder,
+        onCvvValueChanged = {
+            cvvValueState = it
+            onCvvValueChanged(it.text)
+        },
+        onCardNumberValueChanged = {
+            cardNumberValueState = it
+            onCardNumberValueChanged(it.text)
+        },
+        onExpireDateValueChanged = {
+            expireDateValueState = it
+            onExpireDateValueChanged(it.text)
+        },
+        modifier = modifier,
+        focusRequester = focusRequester,
+        isError = isError,
+        enabled = enabled,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        textHorizontalPadding = textHorizontalPadding,
+        textVerticalPadding = textVerticalPadding,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions
+    )
+}
+
+@Composable
 fun BasicCardInformationField(
     cardNumberValue: TextFieldValue,
     cvvValue: TextFieldValue,
@@ -232,7 +305,7 @@ fun dateFilter(text: AnnotatedString): TransformedText {
     var out = ""
     for (i in trimmed.indices) {
         out += trimmed[i]
-        if (i % 2 == 1 && i <3) out += "/"
+        if (i % 2 == 1 && i < 3) out += "/"
     }
 
     val numberOffsetTranslator = object : OffsetMapping {

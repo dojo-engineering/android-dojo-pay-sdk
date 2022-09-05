@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
@@ -47,7 +48,7 @@ fun CardDetailsCheckoutScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val (appBar, banner, cardHolderName, payBtn, footer) = createRefs()
+            val (appBar, banner, cardHolderName, cardInputField, payBtn, footer) = createRefs()
 
             DojoAppBar(
                 modifier = Modifier.constrainAs(appBar) {
@@ -81,15 +82,54 @@ fun CardDetailsCheckoutScreen(
                 value = state.cardHolderInputField.value,
                 onValueChange = { viewModel.onCardHolderValueChanged(it) },
                 label = buildAnnotatedString {
-                    withStyle(SpanStyle(
-                        color= Color.Black,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.15.sp),
+                    withStyle(
+                        SpanStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            letterSpacing = 0.15.sp
+                        ),
                     ) {
                         append(stringResource(state.cardHolderInputField.labelStringId))
-                    } },
+                    }
+                },
             )
+            CardInputField(
+                modifier = Modifier.constrainAs(cardInputField) {
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    top.linkTo(cardHolderName.bottom, 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+                label =
+                buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            letterSpacing = 0.15.sp
+                        ),
+                    ) {
+                        append(
+                            stringResource(
+                                state.cardDetailsInPutField.inputFieldLabel,
+                            )
+                        )
+                    }
+                },
+                cardNumberPlaceholder = stringResource(state.cardDetailsInPutField.cardNumberLabel),
+                cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
+                onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
+                cvvPlaceholder = stringResource(state.cardDetailsInPutField.cvvLabel),
+                cvvValue = state.cardDetailsInPutField.cvvValue,
+                onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
+                expireDaterPlaceholder = stringResource(state.cardDetailsInPutField.expireDateLabel),
+                expireDateValue = state.cardDetailsInPutField.expireDateValueValue,
+                onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
+            )
+
+
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 24.dp)

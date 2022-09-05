@@ -14,6 +14,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import java.util.Currency
 
@@ -37,6 +38,15 @@ class CardDetailsCheckoutViewModel(
                 labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
                 value = "",
             ),
+            cardDetailsInPutField = CardDetailsInputFieldState(
+                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
+                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
+                cardNumberValue = "",
+                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
+                cvvValue = "",
+                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
+                expireDateValueValue = "",
+            ),
             isLoading = false
         )
         pushStateToUi(currentState)
@@ -45,14 +55,59 @@ class CardDetailsCheckoutViewModel(
     }
 
     fun onCardHolderValueChanged(newValue: String) {
-        pushStateToUi(
-            currentState.copy(
-                cardHolderInputField = InputFieldState(
-                    labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
-                    value = newValue,
-                )
+        currentState = currentState.copy(
+            cardHolderInputField = InputFieldState(
+                labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
+                value = newValue,
             )
         )
+        pushStateToUi(currentState)
+    }
+
+    fun onCardNumberValueChanged(newValue: String) {
+        currentState = currentState.copy(
+            cardDetailsInPutField = CardDetailsInputFieldState(
+                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
+                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
+                cardNumberValue = newValue,
+                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
+                cvvValue = currentState.cardDetailsInPutField.cvvValue,
+                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
+                expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+            )
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun onCvvValueChanged(newValue: String) {
+        currentState =
+            currentState.copy(
+                cardDetailsInPutField = CardDetailsInputFieldState(
+                    inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
+                    cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
+                    cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
+                    cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
+                    cvvValue = newValue,
+                    expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
+                    expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+                )
+            )
+        pushStateToUi(currentState)
+    }
+
+    fun onExpireDareValueChanged(newValue: String) {
+        currentState = currentState.copy(
+            cardDetailsInPutField = CardDetailsInputFieldState(
+                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
+                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
+                cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
+                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
+                cvvValue = currentState.cardDetailsInPutField.cvvValue,
+                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
+                expireDateValueValue = newValue,
+            )
+        )
+        pushStateToUi(currentState)
     }
 
     private suspend fun observePaymentIntent() {
@@ -68,6 +123,15 @@ class CardDetailsCheckoutViewModel(
                 cardHolderInputField = InputFieldState(
                     labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
                     value = "",
+                ),
+                cardDetailsInPutField = CardDetailsInputFieldState(
+                    inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
+                    cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
+                    cardNumberValue = "",
+                    cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
+                    cvvValue = "",
+                    expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
+                    expireDateValueValue = "",
                 ),
                 isLoading = false
             )
@@ -100,11 +164,11 @@ class CardDetailsCheckoutViewModel(
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
         DojoCardPaymentPayLoad.FullCardPaymentPayload(
             DojoCardDetails(
-                cardNumber = "4456530000001096",
-                cardName = "Card holder",
-                expiryMonth = "12",
-                expiryYear = "24",
-                cv2 = "020"
+                cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
+                cardName = currentState.cardHolderInputField.value,
+                expiryMonth = currentState.cardDetailsInPutField.expireDateValueValue.substring(0,2),
+                expiryYear = currentState.cardDetailsInPutField.expireDateValueValue.substring(2,4),
+                cv2 = currentState.cardDetailsInPutField.cvvValue
             )
         )
 }
