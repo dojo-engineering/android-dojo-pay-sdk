@@ -121,6 +121,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
             }
+            null -> {
+                returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                this.finish()
+            }
         }
     }
 

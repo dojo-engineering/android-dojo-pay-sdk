@@ -6,7 +6,6 @@ sealed class PaymentFlowNavigationEvents {
     object OnBack : PaymentFlowNavigationEvents()
     object OnCloseFlow : PaymentFlowNavigationEvents()
     object CLoseFlowWithInternalError : PaymentFlowNavigationEvents()
-    object PaymentMethodCheckout : PaymentFlowNavigationEvents()
     data class PaymentResult(val dojoPaymentResult: DojoPaymentResult, val popBackStack: Boolean) :
         PaymentFlowNavigationEvents()
 

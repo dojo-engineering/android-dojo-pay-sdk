@@ -46,7 +46,8 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = listOf(
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xjvm-default=compatibility"
         )
     }
     testOptions {

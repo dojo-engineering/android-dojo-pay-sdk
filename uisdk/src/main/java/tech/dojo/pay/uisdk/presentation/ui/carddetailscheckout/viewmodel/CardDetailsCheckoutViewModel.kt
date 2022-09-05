@@ -60,20 +60,19 @@ class CardDetailsCheckoutViewModel(
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
-        when (paymentIntentResult) {
-            is PaymentIntentResult.Success -> {
-                paymentToken = paymentIntentResult.result.paymentToken
-                currentState = CardDetailsCheckoutState(
-                    totalAmount = paymentIntentResult.result.amount.value.toString(),
-                    amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                    cardHolderInputField = InputFieldState(
-                        labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
-                        value = "",
-                    ),
-                    isLoading = false
-                )
-                pushStateToUi(currentState)
-            }
+        if (paymentIntentResult is PaymentIntentResult.Success) {
+            paymentToken = paymentIntentResult.result.paymentToken
+            currentState = CardDetailsCheckoutState(
+                totalAmount = paymentIntentResult.result.amount.value.toString(),
+                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                cardHolderInputField = InputFieldState(
+                    labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
+                    value = "",
+                ),
+                isLoading = false
+            )
+            pushStateToUi(currentState)
+
         }
     }
 

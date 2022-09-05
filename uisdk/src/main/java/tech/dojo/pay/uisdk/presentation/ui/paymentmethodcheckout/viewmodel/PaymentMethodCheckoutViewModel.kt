@@ -36,11 +36,8 @@ class PaymentMethodCheckoutViewModel(
     private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
         observePaymentIntent.observePaymentIntent().collect {
             it?.let {
-                when (it) {
-                    is PaymentIntentResult.Success -> handleSuccessPaymentIntent(
-                        it,
-                        isGooglePayEnabled
-                    )
+                if (it is PaymentIntentResult.Success) {
+                    handleSuccessPaymentIntent(it, isGooglePayEnabled)
                 }
             }
         }
