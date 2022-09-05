@@ -49,9 +49,7 @@ fun InputFieldWithErrorMessage(
 @Composable
 fun PrefixInputFieldPreview() {
     var value: String by remember { mutableStateOf("") }
-    var error: Boolean by remember {
-        mutableStateOf(true)
-    }
+    var error: Boolean by remember { mutableStateOf(true) }
     DojoPreview() {
         InputFieldWithErrorMessage(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),

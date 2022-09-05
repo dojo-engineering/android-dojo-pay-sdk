@@ -1,16 +1,24 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AmountBanner
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
@@ -25,7 +33,7 @@ fun CardDetailsCheckoutScreen(
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    val state = viewModel.state.observeAsState()
+    val state = viewModel.state.observeAsState().value ?: return
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -35,7 +43,7 @@ fun CardDetailsCheckoutScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val (appBar, banner, payBtn, footer) = createRefs()
+            val (appBar, banner, cardHolderName, payBtn, footer) = createRefs()
 
             DojoAppBar(
                 modifier = Modifier.constrainAs(appBar) {
@@ -56,10 +64,20 @@ fun CardDetailsCheckoutScreen(
                     top.linkTo(appBar.bottom, 16.dp)
                     width = Dimension.fillToConstraints
                 },
-                amount = state.value?.totalAmount ?: "",
-                currencyLogo = state.value?.amountCurrency ?: ""
+                amount = state.totalAmount,
+                currencyLogo = state.amountCurrency
             )
-
+            InputFieldWithErrorMessage(
+                modifier = Modifier.constrainAs(cardHolderName) {
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    top.linkTo(banner.bottom, 16.dp)
+                    width = Dimension.fillToConstraints
+                },
+                value = state.cardHolderInputField.value,
+                onValueChange = { viewModel.onCardHolderValueChanged(it) },
+                label = buildAnnotatedString { append(stringResource(state.cardHolderInputField.labelStringId)) },
+            )
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 24.dp)
@@ -68,9 +86,9 @@ fun CardDetailsCheckoutScreen(
                     width = Dimension.fillToConstraints
                 },
                 text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay),
-                isLoading = state.value?.isLoading ?: false
+                isLoading = state.isLoading
             ) {
-                if (state.value?.isLoading != true) {
+                if (!state.isLoading) {
                     viewModel.onPayWithCardClicked()
                 }
             }

@@ -8,11 +8,13 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import java.util.Currency
 
 class CardDetailsCheckoutViewModel(
@@ -29,13 +31,28 @@ class CardDetailsCheckoutViewModel(
 
     init {
         currentState = CardDetailsCheckoutState(
-            totalAmount ="",
-            amountCurrency ="",
+            totalAmount = "",
+            amountCurrency = "",
+            cardHolderInputField = InputFieldState(
+                labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
+                value = "",
+            ),
             isLoading = false
         )
         pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
         viewModelScope.launch { observePaymentStatus() }
+    }
+
+    fun onCardHolderValueChanged(newValue: String) {
+        pushStateToUi(
+            currentState.copy(
+                cardHolderInputField = InputFieldState(
+                    labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
+                    value = newValue,
+                )
+            )
+        )
     }
 
     private suspend fun observePaymentIntent() {
@@ -49,6 +66,10 @@ class CardDetailsCheckoutViewModel(
                 currentState = CardDetailsCheckoutState(
                     totalAmount = paymentIntentResult.result.amount.value.toString(),
                     amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                    cardHolderInputField = InputFieldState(
+                        labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
+                        value = "",
+                    ),
                     isLoading = false
                 )
                 pushStateToUi(currentState)
@@ -58,7 +79,9 @@ class CardDetailsCheckoutViewModel(
 
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
-            if (!it) { pushStateToUi(currentState.copy(isLoading = false)) }
+            if (!it) {
+                pushStateToUi(currentState.copy(isLoading = false))
+            }
         }
     }
 
@@ -72,7 +95,7 @@ class CardDetailsCheckoutViewModel(
     }
 
     private fun pushStateToUi(state: CardDetailsCheckoutState) {
-        mutableState.postValue(state)
+        mutableState.value = state
     }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
