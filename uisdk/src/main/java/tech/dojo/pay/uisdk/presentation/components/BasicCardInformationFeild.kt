@@ -29,7 +29,9 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 @Composable
 fun BasicCardInformationField(
     cardNumberValue: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    cvvValue: TextFieldValue,
+    onCardNumberValueChanged: (TextFieldValue) -> Unit,
+    onCvvValueChanged: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     cardNumberPlaceholder: String?,
     expireDaterPlaceholder: String?,
@@ -42,11 +44,12 @@ fun BasicCardInformationField(
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors()
-    val maxCardNumberChar = 19
+    val maxCardNumberChar = 16
+    val maxCvvChar = 3
 
     Column(
         modifier = modifier
@@ -75,7 +78,9 @@ fun BasicCardInformationField(
             BasicTextField(
                 value = cardNumberValue,
                 onValueChange = {
-                    if (it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) onValueChange(it)
+                    if (it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) onCardNumberValueChanged(
+                        it
+                    )
                 },
                 visualTransformation = { creditCardFilter(it) },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
@@ -118,7 +123,7 @@ fun BasicCardInformationField(
                 BasicTextField(
                     value = cardNumberValue,
                     onValueChange = {
-                        onValueChange(it)
+                        onCardNumberValueChanged(it)
                     },
                     textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                     maxLines = maxLines,
@@ -147,7 +152,7 @@ fun BasicCardInformationField(
                     .fillMaxHeight()
                     .weight(1f)
             ) {
-                if (cardNumberValue.text.isEmpty() && !cvvPlaceholder.isNullOrEmpty()) {
+                if (cvvValue.text.isEmpty() && !cvvPlaceholder.isNullOrEmpty()) {
                     Text(
                         text = cvvPlaceholder,
                         style = DojoTheme.typography.subtitle1,
@@ -156,9 +161,9 @@ fun BasicCardInformationField(
                 }
 
                 BasicTextField(
-                    value = cardNumberValue,
+                    value = cvvValue,
                     onValueChange = {
-                        onValueChange(it)
+                        if (it.text.length < maxCvvChar || it.text.length == maxCvvChar) onCvvValueChanged(it)
                     },
                     textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                     maxLines = maxLines,
@@ -217,12 +222,17 @@ fun creditCardFilter(text: AnnotatedString): TransformedText {
 @Composable
 internal fun PreviewBasicCardInformationField() = DojoPreview {
     val value by remember { mutableStateOf("") }
-    var textFieldValueState by remember {
+    var cardNumberValueState by remember {
+        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
+    }
+    var cvvValueState by remember {
         mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
     }
     BasicCardInformationField(
-        cardNumberValue = textFieldValueState,
-        onValueChange = { textFieldValueState = it },
+        cardNumberValue = cardNumberValueState,
+        cvvValue = cvvValueState,
+        onCvvValueChanged = { cvvValueState = it },
+        onCardNumberValueChanged = { cardNumberValueState = it },
         cardNumberPlaceholder = "1234  5678  1234  5678",
         cvvPlaceholder = "cvv",
         expireDaterPlaceholder = "MM/YY"
