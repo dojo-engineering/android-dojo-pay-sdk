@@ -30,7 +30,9 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 fun BasicCardInformationField(
     cardNumberValue: TextFieldValue,
     cvvValue: TextFieldValue,
+    expireDateValue: TextFieldValue,
     onCardNumberValueChanged: (TextFieldValue) -> Unit,
+    onExpireDateValueChanged: (TextFieldValue) -> Unit,
     onCvvValueChanged: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     cardNumberPlaceholder: String?,
@@ -49,6 +51,7 @@ fun BasicCardInformationField(
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors()
     val maxCardNumberChar = 16
+    val expireDataCharLength = 4
     val maxCvvChar = 3
 
     Column(
@@ -112,7 +115,7 @@ fun BasicCardInformationField(
                     .fillMaxHeight()
                     .weight(1f)
             ) {
-                if (cardNumberValue.text.isEmpty() && !expireDaterPlaceholder.isNullOrEmpty()) {
+                if (expireDateValue.text.isEmpty() && !expireDaterPlaceholder.isNullOrEmpty()) {
                     Text(
                         text = expireDaterPlaceholder,
                         style = DojoTheme.typography.subtitle1,
@@ -121,12 +124,15 @@ fun BasicCardInformationField(
                 }
 
                 BasicTextField(
-                    value = cardNumberValue,
+                    value = expireDateValue,
                     onValueChange = {
-                        onCardNumberValueChanged(it)
+                        if (it.text.length < expireDataCharLength || it.text.length == expireDataCharLength) onExpireDateValueChanged(
+                            it
+                        )
                     },
                     textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                     maxLines = maxLines,
+                    visualTransformation = { dateFilter(it) },
                     enabled = enabled,
                     singleLine = singleLine,
                     interactionSource = interactionSource,
@@ -163,7 +169,9 @@ fun BasicCardInformationField(
                 BasicTextField(
                     value = cvvValue,
                     onValueChange = {
-                        if (it.text.length < maxCvvChar || it.text.length == maxCvvChar) onCvvValueChanged(it)
+                        if (it.text.length < maxCvvChar || it.text.length == maxCvvChar) onCvvValueChanged(
+                            it
+                        )
                     },
                     textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                     maxLines = maxLines,
@@ -181,7 +189,6 @@ fun BasicCardInformationField(
         }
     }
 }
-
 
 fun creditCardFilter(text: AnnotatedString): TransformedText {
     val trimmed = if (text.text.length >= 16) text.text.substring(0..15) else text.text
@@ -218,6 +225,34 @@ fun creditCardFilter(text: AnnotatedString): TransformedText {
     return TransformedText(annotatedString, creditCardOffsetTranslator)
 }
 
+
+fun dateFilter(text: AnnotatedString): TransformedText {
+
+    val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
+    var out = ""
+    for (i in trimmed.indices) {
+        out += trimmed[i]
+        if (i % 2 == 1 && i <3) out += "/"
+    }
+
+    val numberOffsetTranslator = object : OffsetMapping {
+        override fun originalToTransformed(offset: Int): Int {
+            if (offset <= 1) return offset
+            if (offset <= 3) return offset + 1
+            return 5
+        }
+
+        override fun transformedToOriginal(offset: Int): Int {
+            if (offset <= 2) return offset
+            if (offset <= 5) return offset - 1
+            if (offset <= 10) return offset - 2
+            return 4
+        }
+    }
+
+    return TransformedText(AnnotatedString(out), numberOffsetTranslator)
+}
+
 @Preview("App bar with two icons and title aligned to left", group = "AppBar")
 @Composable
 internal fun PreviewBasicCardInformationField() = DojoPreview {
@@ -228,14 +263,18 @@ internal fun PreviewBasicCardInformationField() = DojoPreview {
     var cvvValueState by remember {
         mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
     }
+    var expireDateValueState by remember {
+        mutableStateOf(TextFieldValue(text = value, selection = TextRange(value.length)))
+    }
     BasicCardInformationField(
         cardNumberValue = cardNumberValueState,
         cvvValue = cvvValueState,
+        expireDateValue = expireDateValueState,
         onCvvValueChanged = { cvvValueState = it },
         onCardNumberValueChanged = { cardNumberValueState = it },
+        onExpireDateValueChanged = { expireDateValueState = it },
         cardNumberPlaceholder = "1234  5678  1234  5678",
         cvvPlaceholder = "cvv",
         expireDaterPlaceholder = "MM/YY"
-
     )
 }
