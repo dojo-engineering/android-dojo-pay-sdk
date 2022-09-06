@@ -95,7 +95,6 @@ fun BasicInputField(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val isFocused = interactionSource.collectIsFocusedAsState().value
     val colors = TextFieldDefaults.outlinedTextFieldColors()
 
     Row(
@@ -104,7 +103,7 @@ fun BasicInputField(
             .defaultMinSize(minHeight = 48.dp)
             .height(IntrinsicSize.Min)
             .border(
-                width = if (isFocused) 2.dp else 1.dp,
+                width =   1.dp,
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )

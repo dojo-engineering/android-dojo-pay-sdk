@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
-import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -34,17 +33,10 @@ class CardDetailsCheckoutViewModel(
         currentState = CardDetailsCheckoutState(
             totalAmount = "",
             amountCurrency = "",
-            cardHolderInputField = InputFieldState(
-                labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
-                value = "",
-            ),
+            cardHolderInputField = InputFieldState(value = ""),
             cardDetailsInPutField = CardDetailsInputFieldState(
-                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
-                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
                 cardNumberValue = "",
-                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
                 cvvValue = "",
-                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
                 expireDateValueValue = "",
             ),
             isLoading = false
@@ -56,10 +48,7 @@ class CardDetailsCheckoutViewModel(
 
     fun onCardHolderValueChanged(newValue: String) {
         currentState = currentState.copy(
-            cardHolderInputField = InputFieldState(
-                labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
-                value = newValue,
-            )
+            cardHolderInputField = InputFieldState(value = newValue)
         )
         pushStateToUi(currentState)
     }
@@ -67,12 +56,8 @@ class CardDetailsCheckoutViewModel(
     fun onCardNumberValueChanged(newValue: String) {
         currentState = currentState.copy(
             cardDetailsInPutField = CardDetailsInputFieldState(
-                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
-                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
                 cardNumberValue = newValue,
-                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
-                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
                 expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
             )
         )
@@ -83,12 +68,8 @@ class CardDetailsCheckoutViewModel(
         currentState =
             currentState.copy(
                 cardDetailsInPutField = CardDetailsInputFieldState(
-                    inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
-                    cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
                     cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
-                    cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
                     cvvValue = newValue,
-                    expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
                     expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
                 )
             )
@@ -98,12 +79,8 @@ class CardDetailsCheckoutViewModel(
     fun onExpireDareValueChanged(newValue: String) {
         currentState = currentState.copy(
             cardDetailsInPutField = CardDetailsInputFieldState(
-                inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
-                cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
                 cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
-                cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
-                expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
                 expireDateValueValue = newValue,
             )
         )
@@ -120,17 +97,10 @@ class CardDetailsCheckoutViewModel(
             currentState = CardDetailsCheckoutState(
                 totalAmount = paymentIntentResult.result.amount.value.toString(),
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                cardHolderInputField = InputFieldState(
-                    labelStringId = R.string.dojo_ui_sdk_card_details_checkout_field_card_name,
-                    value = "",
-                ),
+                cardHolderInputField = InputFieldState(value = ""),
                 cardDetailsInPutField = CardDetailsInputFieldState(
-                    inputFieldLabel = R.string.dojo_ui_sdk_card_details_checkout_field_pan,
-                    cardNumberLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan,
                     cardNumberValue = "",
-                    cvvLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv,
                     cvvValue = "",
-                    expireDateLabel = R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry,
                     expireDateValueValue = "",
                 ),
                 isLoading = false
@@ -142,32 +112,31 @@ class CardDetailsCheckoutViewModel(
 
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
-            if (!it) {
-                pushStateToUi(currentState.copy(isLoading = false))
-            }
+            if (!it) { pushStateToUi(currentState.copy(isLoading = false)) }
         }
     }
 
     fun onPayWithCardClicked() {
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         pushStateToUi(currentState.copy(isLoading = true))
-        dojoCardPaymentHandler.executeCardPayment(
-            paymentToken,
-            getPaymentPayLoad()
-        )
+        dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
     }
 
-    private fun pushStateToUi(state: CardDetailsCheckoutState) {
-        mutableState.value = state
-    }
+    private fun pushStateToUi(state: CardDetailsCheckoutState) { mutableState.postValue(state) }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
         DojoCardPaymentPayLoad.FullCardPaymentPayload(
             DojoCardDetails(
                 cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
                 cardName = currentState.cardHolderInputField.value,
-                expiryMonth = currentState.cardDetailsInPutField.expireDateValueValue.substring(0,2),
-                expiryYear = currentState.cardDetailsInPutField.expireDateValueValue.substring(2,4),
+                expiryMonth = currentState.cardDetailsInPutField.expireDateValueValue.substring(
+                    0,
+                    2
+                ),
+                expiryYear = currentState.cardDetailsInPutField.expireDateValueValue.substring(
+                    2,
+                    4
+                ),
                 cv2 = currentState.cardDetailsInPutField.cvvValue
             )
         )

@@ -1,17 +1,12 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,8 +23,6 @@ import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
-import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
-import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
 @Composable
@@ -90,7 +83,7 @@ fun CardDetailsCheckoutScreen(
                             letterSpacing = 0.15.sp
                         ),
                     ) {
-                        append(stringResource(state.cardHolderInputField.labelStringId))
+                        append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name))
                     }
                 },
             )
@@ -113,18 +106,19 @@ fun CardDetailsCheckoutScreen(
                     ) {
                         append(
                             stringResource(
-                                state.cardDetailsInPutField.inputFieldLabel,
+                                R.string.dojo_ui_sdk_card_details_checkout_field_pan
                             )
                         )
                     }
                 },
-                cardNumberPlaceholder = stringResource(state.cardDetailsInPutField.cardNumberLabel),
+                maxLines= 1,
+                cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
                 cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
                 onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
-                cvvPlaceholder = stringResource(state.cardDetailsInPutField.cvvLabel),
+                cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
                 cvvValue = state.cardDetailsInPutField.cvvValue,
                 onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
-                expireDaterPlaceholder = stringResource(state.cardDetailsInPutField.expireDateLabel),
+                expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
                 expireDateValue = state.cardDetailsInPutField.expireDateValueValue,
                 onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
             )
@@ -137,7 +131,7 @@ fun CardDetailsCheckoutScreen(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay),
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay)+" "+state.amountCurrency+" "+state.totalAmount,
                 isLoading = state.isLoading
             ) {
                 if (!state.isLoading) {
