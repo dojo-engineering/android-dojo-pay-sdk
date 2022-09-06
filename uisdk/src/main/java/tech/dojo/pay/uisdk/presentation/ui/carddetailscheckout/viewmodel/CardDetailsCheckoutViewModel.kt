@@ -112,7 +112,9 @@ class CardDetailsCheckoutViewModel(
 
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
-            if (!it) { pushStateToUi(currentState.copy(isLoading = false)) }
+            if (!it) {
+                pushStateToUi(currentState.copy(isLoading = false))
+            }
         }
     }
 
@@ -122,22 +124,32 @@ class CardDetailsCheckoutViewModel(
         dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
     }
 
-    private fun pushStateToUi(state: CardDetailsCheckoutState) { mutableState.postValue(state) }
+    private fun pushStateToUi(state: CardDetailsCheckoutState) {
+        mutableState.postValue(state)
+    }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
         DojoCardPaymentPayLoad.FullCardPaymentPayload(
             DojoCardDetails(
                 cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
                 cardName = currentState.cardHolderInputField.value,
-                expiryMonth = currentState.cardDetailsInPutField.expireDateValueValue.substring(
-                    0,
-                    2
-                ),
-                expiryYear = currentState.cardDetailsInPutField.expireDateValueValue.substring(
-                    2,
-                    4
-                ),
+                expiryMonth = getExpiryMonth(currentState.cardDetailsInPutField.expireDateValueValue),
+                expiryYear = getExpiryYear(currentState.cardDetailsInPutField.expireDateValueValue),
                 cv2 = currentState.cardDetailsInPutField.cvvValue
             )
         )
+
+    private fun getExpiryMonth(expireDateValueValue: String) =
+        if (expireDateValueValue.isNotBlank()) {
+            currentState.cardDetailsInPutField.expireDateValueValue.substring(0, 2)
+        } else {
+            ""
+        }
+
+    private fun getExpiryYear(expireDateValueValue: String) =
+        if (expireDateValueValue.isNotBlank()) {
+            currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
+        } else {
+            ""
+        }
 }
