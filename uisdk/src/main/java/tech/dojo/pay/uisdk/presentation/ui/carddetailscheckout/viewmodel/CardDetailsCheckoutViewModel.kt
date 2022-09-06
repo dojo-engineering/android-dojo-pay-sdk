@@ -95,7 +95,7 @@ class CardDetailsCheckoutViewModel(
         if (paymentIntentResult is PaymentIntentResult.Success) {
             paymentToken = paymentIntentResult.result.paymentToken
             currentState = CardDetailsCheckoutState(
-                totalAmount = paymentIntentResult.result.amount.value.toString(),
+                totalAmount = paymentIntentResult.result.amount.value,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
                 cardHolderInputField = InputFieldState(value = ""),
                 cardDetailsInPutField = CardDetailsInputFieldState(
@@ -147,7 +147,7 @@ class CardDetailsCheckoutViewModel(
         }
 
     private fun getExpiryYear(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank()) {
+        if (expireDateValueValue.isNotBlank()&& expireDateValueValue.length>2) {
             currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
         } else {
             ""
