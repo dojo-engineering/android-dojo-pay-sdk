@@ -6,6 +6,6 @@ data class PaymentIntentDomainEntity(
 )
 
 data class AmountDomainEntity(
-    val value: Long,
+    val value: String,
     val currencyCode: String
 )

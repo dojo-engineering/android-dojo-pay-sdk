@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.domain.mapper
 
+import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
@@ -11,11 +12,12 @@ class PaymentIntentDomainEntityMapper {
         return PaymentIntentDomainEntity(
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
-                value = raw.amount.value,
+                value = raw.amount.value.centsToString(),
                 currencyCode = raw.amount.currencyCode
             )
         )
     }
+
     private fun checkInvalidParameters(raw: PaymentIntentPayload) {
         val invalidParams: MutableList<String> = mutableListOf()
         if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
