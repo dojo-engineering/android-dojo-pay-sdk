@@ -1,15 +1,21 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +31,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CardDetailsCheckoutScreen(
     viewModel: CardDetailsCheckoutViewModel,
@@ -32,6 +39,8 @@ fun CardDetailsCheckoutScreen(
     onBackClicked: () -> Unit,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
+    val keyboardController = LocalSoftwareKeyboardController.current
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -72,6 +81,8 @@ fun CardDetailsCheckoutScreen(
                     top.linkTo(banner.bottom, 16.dp)
                     width = Dimension.fillToConstraints
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()}),
                 value = state.cardHolderInputField.value,
                 onValueChange = { viewModel.onCardHolderValueChanged(it) },
                 label = buildAnnotatedString {
@@ -112,6 +123,7 @@ fun CardDetailsCheckoutScreen(
                     }
                 },
                 maxLines= 1,
+                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()}),
                 cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
                 cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
                 onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
