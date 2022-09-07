@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.test
+package tech.dojo.pay.uisdk.core
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher

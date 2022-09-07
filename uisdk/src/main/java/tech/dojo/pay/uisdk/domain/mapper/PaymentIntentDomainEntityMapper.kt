@@ -12,8 +12,8 @@ class PaymentIntentDomainEntityMapper {
         return PaymentIntentDomainEntity(
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
-                value = raw.amount.value.centsToString(),
-                currencyCode = raw.amount.currencyCode
+                value = requireNotNull(raw.amount?.value?.centsToString()),
+                currencyCode = requireNotNull(raw.amount?.currencyCode)
             )
         )
     }
@@ -21,6 +21,7 @@ class PaymentIntentDomainEntityMapper {
     private fun checkInvalidParameters(raw: PaymentIntentPayload) {
         val invalidParams: MutableList<String> = mutableListOf()
         if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
+        if (raw.amount == null) invalidParams.add("amount")
         if (invalidParams.isNotEmpty()) throw EssentialParamMissingException(invalidParams)
     }
 }
