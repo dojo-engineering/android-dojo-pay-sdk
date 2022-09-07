@@ -16,7 +16,7 @@ import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.entities.color
 
 internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
-    primary = Color(0xFF00857D),
+    primary = Color(0xFF262626),
     onPrimary = Color.White,
     background = Color.White,
     onBackground = Color.Black,
@@ -38,7 +38,7 @@ internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = D
     honey = Color(0xFFFF8D02)
 )
 private val DarkColorPalette = DojoColors(
-    primary = Color(0xFF00857D),
+    primary = Color(0xFF262626),
     onPrimary = Color.White,
     background = Color(0xFF121212),
     onBackground = Color.White,

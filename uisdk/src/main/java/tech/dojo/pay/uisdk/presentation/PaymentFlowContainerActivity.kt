@@ -5,7 +5,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -45,7 +50,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
-    private val viewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
+    private val viewModel: PaymentFlowViewModel by viewModels {
+        PaymentFlowViewModelFactory(
+            arguments
+        )
+    }
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,9 +87,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         DojoSdk.cardSandbox = false
         DojoSdk.walletSandBox = DojoSDKDropInUI.sandbox
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
+            viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
         cardPaymentHandler = DojoSdk.createCardPaymentHandler(this) {
+            viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
     }
@@ -109,6 +120,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
+            }
+            null -> {
+                returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                this.finish()
             }
         }
     }

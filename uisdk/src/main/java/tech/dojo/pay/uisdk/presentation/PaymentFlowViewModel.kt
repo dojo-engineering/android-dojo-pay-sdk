@@ -9,12 +9,14 @@ import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 
 class PaymentFlowViewModel(
     paymentId: String,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
-    private val observePaymentIntent: ObservePaymentIntent
+    private val observePaymentIntent: ObservePaymentIntent,
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
@@ -25,15 +27,17 @@ class PaymentFlowViewModel(
                 fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
                     it?.let {
-                        when (it) {
-                            is PaymentIntentResult.Failure -> closeFLowWithInternalError()
-                        }
+                        if (it is PaymentIntentResult.Failure) { closeFLowWithInternalError() }
                     }
                 }
             } catch (error: Throwable) {
                 closeFLowWithInternalError()
             }
         }
+    }
+
+    fun updatePaymentState(isActivity: Boolean) {
+        updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
 
     private fun closeFLowWithInternalError() {

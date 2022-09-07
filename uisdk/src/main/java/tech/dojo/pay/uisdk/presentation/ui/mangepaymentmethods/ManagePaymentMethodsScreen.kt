@@ -43,12 +43,12 @@ fun ManagePaymentMethods(
             val (doneBtn, footer) = createRefs()
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(doneBtn) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
+                    start.linkTo(parent.start, 0.dp)
+                    end.linkTo(parent.end, 0.dp)
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text =  stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
             ) { onNewCardButtonClicked() }
 
             DojoBrandFooter(

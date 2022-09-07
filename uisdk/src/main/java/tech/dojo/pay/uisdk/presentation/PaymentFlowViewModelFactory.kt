@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.data.PaymentIntentRepository
+import tech.dojo.pay.uisdk.data.PaymentStateRepository
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 
@@ -18,10 +20,18 @@ class PaymentFlowViewModelFactory(private val arguments: Bundle?) : ViewModelPro
                 ?: ""
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
-        return PaymentFlowViewModel(paymentId, fetchPaymentIntentUseCase, observePaymentIntent) as T
+        val updatePaymentStateUseCase = UpdatePaymentStateUseCase(paymentStatusRepository)
+
+        return PaymentFlowViewModel(
+            paymentId,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            updatePaymentStateUseCase
+        ) as T
     }
 
     companion object {
         val paymentIntentRepository by lazy { PaymentIntentRepository() }
+        val paymentStatusRepository by lazy { PaymentStateRepository() }
     }
 }

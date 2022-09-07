@@ -1,21 +1,24 @@
 package tech.dojo.pay.uisdk.data.entities
 
 data class PaymentIntentPayload(
-    val id: String,
-    val captureMode: String,
-    val clientSessionSecret: String,
-    val clientSessionSecretExpirationDate: String,
-    val status: String,
-    val paymentMethods: List<String>,
-    val amount: Amount,
-    val totalAmount: Amount,
-    val refundedAmount: Long,
-    val createdAt: String,
-    val updatedAt: String,
-    val reference: String,
-    val description: String,
-    val config: Config,
-    val metadata: Metadata
+    val id: String? = null,
+    val captureMode: String? = null,
+    val transactionSource: String? = null,
+    val clientSessionSecret: String? = null,
+    val clientSessionSecretExpirationDate: String? = null,
+    val status: String? = null,
+    val paymentMethods: List<String>? = null,
+    val amount: Amount? = null,
+    val tipsAmount: Amount? = null,
+    val requestedAmount: Amount? = null,
+    val totalAmount: Amount? = null,
+    val refundedAmount: Long? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val reference: String? = null,
+    val description: String? = null,
+    val config: Config? = null,
+    val metadata: Metadata? = null
 )
 
 data class Amount(

@@ -46,6 +46,13 @@ private fun DojoButton(
         enabled = enabled
     ) {
         if (isLoading) {
+            Text(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                text = "Processing...",
+                style = DojoTheme.typography.subtitle1,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
             CircularProgressIndicator(
                 color = loadingColor,
                 strokeWidth = 2.dp,

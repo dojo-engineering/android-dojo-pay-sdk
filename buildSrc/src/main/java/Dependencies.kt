@@ -23,7 +23,7 @@ object Versions {
     const val ESPRESSO_CORE = "3.4.0"
     const val JUNIT = "4.13.2"
     const val KTLINT = "0.43.2"
-    const val COMPOSE_VERSION = "1.1.0"
+    const val COMPOSE_VERSION = "1.2.0"
     const val KOTLIN = "1.7.0"
     const val ACCOMPANIST = "0.23.0"
     const val COROUTINES = "1.6.1"
