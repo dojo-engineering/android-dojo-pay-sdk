@@ -135,8 +135,8 @@ fun CardDetailsCheckoutScreen(
 
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
-                    start.linkTo(parent.start, 24.dp)
-                    end.linkTo(parent.end, 24.dp)
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
