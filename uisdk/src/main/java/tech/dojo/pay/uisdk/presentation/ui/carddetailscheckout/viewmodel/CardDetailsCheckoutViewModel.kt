@@ -106,7 +106,6 @@ class CardDetailsCheckoutViewModel(
                 isLoading = false
             )
             pushStateToUi(currentState)
-
         }
     }
 
@@ -147,7 +146,7 @@ class CardDetailsCheckoutViewModel(
         }
 
     private fun getExpiryYear(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank()&& expireDateValueValue.length>2) {
+        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length> 2) {
             currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
         } else {
             ""

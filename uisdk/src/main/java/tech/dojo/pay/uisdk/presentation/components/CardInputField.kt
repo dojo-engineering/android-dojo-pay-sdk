@@ -38,7 +38,6 @@ fun CardInputField(
     ),
     keyboardActions: KeyboardActions = KeyboardActions()
 ) {
-
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
         label = label,

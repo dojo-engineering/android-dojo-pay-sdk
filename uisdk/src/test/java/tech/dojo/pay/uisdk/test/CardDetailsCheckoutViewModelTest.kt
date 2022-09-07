@@ -147,7 +147,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user clicks on pay button` ()= runTest{
+    fun `test state when user clicks on pay button`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -188,7 +188,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user update card holder field ` ()= runTest{
+    fun `test state when user update card holder field `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -227,7 +227,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user update card number field ` ()= runTest{
+    fun `test state when user update card number field `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -264,8 +264,9 @@ class CardDetailsCheckoutViewModelTest {
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
     }
+
     @Test
-    fun `test state when user update cvv field ` ()= runTest{
+    fun `test state when user update cvv field `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -304,7 +305,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user update expire date field ` ()= runTest{
+    fun `test state when user update expire date field `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)

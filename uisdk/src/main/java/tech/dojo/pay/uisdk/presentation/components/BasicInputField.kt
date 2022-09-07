@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -103,7 +102,7 @@ fun BasicInputField(
             .defaultMinSize(minHeight = 48.dp)
             .height(IntrinsicSize.Min)
             .border(
-                width =   1.dp,
+                width = 1.dp,
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )

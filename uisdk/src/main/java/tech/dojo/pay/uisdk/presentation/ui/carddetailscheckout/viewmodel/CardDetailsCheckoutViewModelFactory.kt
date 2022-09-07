@@ -19,6 +19,6 @@ class CardDetailsCheckoutViewModelFactory(
             ObservePaymentStatus(PaymentFlowViewModelFactory.paymentStatusRepository)
         val updatePaymentStateUseCase = UpdatePaymentStateUseCase(PaymentFlowViewModelFactory.paymentStatusRepository)
 
-        return CardDetailsCheckoutViewModel(observePaymentIntent, dojoCardPaymentHandler,observePaymentStatus,updatePaymentStateUseCase) as T
+        return CardDetailsCheckoutViewModel(observePaymentIntent, dojoCardPaymentHandler, observePaymentStatus, updatePaymentStateUseCase) as T
     }
 }

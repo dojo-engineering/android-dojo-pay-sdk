@@ -15,7 +15,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +39,6 @@ fun CardDetailsCheckoutScreen(
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     val keyboardController = LocalSoftwareKeyboardController.current
-
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -82,7 +80,7 @@ fun CardDetailsCheckoutScreen(
                     width = Dimension.fillToConstraints
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()}),
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 value = state.cardHolderInputField.value,
                 onValueChange = { viewModel.onCardHolderValueChanged(it) },
                 label = buildAnnotatedString {
@@ -122,8 +120,8 @@ fun CardDetailsCheckoutScreen(
                         )
                     }
                 },
-                maxLines= 1,
-                keyboardActions = KeyboardActions(onDone = {keyboardController?.hide()}),
+                maxLines = 1,
+                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
                 cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
                 cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
                 onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
@@ -135,7 +133,6 @@ fun CardDetailsCheckoutScreen(
                 onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
             )
 
-
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 24.dp)
@@ -143,7 +140,7 @@ fun CardDetailsCheckoutScreen(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay)+" "+state.amountCurrency+" "+state.totalAmount,
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
                 isLoading = state.isLoading
             ) {
                 if (!state.isLoading) {

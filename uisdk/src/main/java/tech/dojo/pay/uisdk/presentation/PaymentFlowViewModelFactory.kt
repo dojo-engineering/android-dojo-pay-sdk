@@ -7,7 +7,6 @@ import tech.dojo.pay.uisdk.data.PaymentIntentRepository
 import tech.dojo.pay.uisdk.data.PaymentStateRepository
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
-import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract

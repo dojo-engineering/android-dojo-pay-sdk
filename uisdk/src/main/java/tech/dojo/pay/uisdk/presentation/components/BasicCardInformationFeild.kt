@@ -137,7 +137,6 @@ fun BasicCardInformationField(
                 shape = DojoTheme.shapes.small
             )
     ) {
-
         Box(
             modifier = Modifier
                 .padding(horizontal = textHorizontalPadding, vertical = textVerticalPadding)
@@ -173,7 +172,6 @@ fun BasicCardInformationField(
             )
         }
 
-
         Divider(
             color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
             thickness = 1.dp
@@ -181,7 +179,6 @@ fun BasicCardInformationField(
         Row(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-
             Box(
                 modifier = Modifier
                     .padding(horizontal = textHorizontalPadding, vertical = textVerticalPadding)
@@ -298,9 +295,7 @@ fun creditCardFilter(text: AnnotatedString): TransformedText {
     return TransformedText(annotatedString, creditCardOffsetTranslator)
 }
 
-
 fun dateFilter(text: AnnotatedString): TransformedText {
-
     val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
     var out = ""
     for (i in trimmed.indices) {
