@@ -30,6 +30,7 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
+import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
@@ -168,7 +169,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 ),
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
-                val paymentResultViewModel = PaymentResultViewModel(result)
+                val observePaymentIntent =
+                    ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
+                val paymentResultViewModel = PaymentResultViewModel(result, observePaymentIntent)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),

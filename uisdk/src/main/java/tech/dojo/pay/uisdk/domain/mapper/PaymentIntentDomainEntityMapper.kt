@@ -10,6 +10,7 @@ class PaymentIntentDomainEntityMapper {
     fun apply(raw: PaymentIntentPayload): PaymentIntentDomainEntity {
         checkInvalidParameters(raw)
         return PaymentIntentDomainEntity(
+            id = requireNotNull(raw.id),
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
                 value = requireNotNull(raw.amount?.value?.centsToString()),

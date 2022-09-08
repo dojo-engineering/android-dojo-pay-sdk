@@ -102,7 +102,7 @@ private fun BottomSheetItems(
             sheetState,
             onCloseFlowClicker
         )
-        is PaymentResultState.FailedResult -> HandleFaledResult(
+        is PaymentResultState.FailedResult -> HandleFailedResult(
             state,
             coroutineScope,
             sheetState,
@@ -114,7 +114,7 @@ private fun BottomSheetItems(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun HandleFaledResult(
+private fun HandleFailedResult(
     state: PaymentResultState.FailedResult,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
@@ -171,7 +171,7 @@ private fun SuccessfulResult(
         )
 
         Text(
-            text = state.description,
+            text =  stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.constrainAs(status) {
@@ -193,12 +193,12 @@ private fun SuccessfulResult(
             }
         )
         Text(
-            text = state.status,
+            text = state.description,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(description) {
-                top.linkTo(orderInfo.bottom, 8.dp)
+            modifier = Modifier.constrainAs(orderInfo) {
+                top.linkTo(status.bottom, 16.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
@@ -245,7 +245,7 @@ private fun FailedResult(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        val (img, status, details, tryAgainBtn, doneBtn, footer) = createRefs()
+        val (img, status, details, orderInfo, tryAgainBtn, doneBtn, footer) = createRefs()
 
         Image(
             painter = painterResource(id = state.imageId),
@@ -261,8 +261,9 @@ private fun FailedResult(
         )
 
         Text(
-            text = state.status,
+            text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
+            textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.constrainAs(status) {
                 top.linkTo(img.bottom, 24.dp)
@@ -270,14 +271,24 @@ private fun FailedResult(
                 end.linkTo(parent.end)
             }
         )
-
+        Text(
+            text = state.orderInfo,
+            style = DojoTheme.typography.subtitle1.medium,
+            textAlign = TextAlign.Center,
+            color = DojoTheme.colors.primaryLabelTextColor,
+            modifier = Modifier.constrainAs(orderInfo) {
+                top.linkTo(status.bottom, 8.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
         Text(
             text = state.details,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(details) {
-                top.linkTo(status.bottom, 16.dp)
+                top.linkTo(orderInfo.bottom, 8.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
@@ -354,7 +365,7 @@ private fun FailedResultWithOutTryAgain(
         )
 
         Text(
-            text = state.status,
+            text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.constrainAs(status) {
