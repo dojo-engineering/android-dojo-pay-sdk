@@ -32,14 +32,13 @@ class PaymentResultViewModel(
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
-            val state=    if (result == DojoPaymentResult.SUCCESSFUL) {
+            val state = if (result == DojoPaymentResult.SUCCESSFUL) {
                 PaymentResultState.SuccessfulResult(
                     appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
                     imageId = R.drawable.ic_success_circle,
                     status = R.string.dojo_ui_sdk_payment_result_title_success,
-                    orderInfo ="payment ID "+ paymentIntentResult.result.id,
-                    description = "you have payed " +
-                            Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol+
+                    orderInfo = paymentIntentResult.result.id,
+                    description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
                             paymentIntentResult.result.amount.value
                 )
             } else {
@@ -53,7 +52,7 @@ class PaymentResultViewModel(
                 )
             }
 
-            currentState= state
+            currentState = state
             postStateToUi(currentState)
         }
     }
