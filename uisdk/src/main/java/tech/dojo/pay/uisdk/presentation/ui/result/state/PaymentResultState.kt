@@ -27,6 +27,7 @@ sealed class PaymentResultState(
         @StringRes
         val status: Int,
         val orderInfo: String,
-        val details: String
+        @StringRes
+        val details: Int
     ) : PaymentResultState(appBarTitleId)
 }

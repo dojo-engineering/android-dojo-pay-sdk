@@ -1,7 +1,6 @@
 <resources >
     <string name = "dojo_ui_sdk_payment_method_checkout_title">Payment method</string>
     <string name = "dojo_ui_sdk_footer_powered_by_title">Powered by</string>
-    <string name = "dojo_ui_sdk_footer_dojo">Dojo</string>
     <string name = "dojo_ui_sdk_footer_powered_by_terms">Terms</string>
     <string name = "dojo_ui_sdk_footer_powered_by_privacy">Privacy</string>
     <string name = "dojo_ui_sdk_manage_payment_methods_title">Change payment method</string>
@@ -20,4 +19,8 @@
     <string name = "dojo_ui_sdk_payment_result_main_title_fail">Payment failed</string>
     <string name = "dojo_ui_sdk_payment_result_button_done">Done</string>
     <string name = "dojo_ui_sdk_payment_result_button_try_again">Try again</string>
+    <string name = "dojo_ui_sdk_footer_dojo">Dojo</string>
+    <string name = "dojo_ui_sdk_payment_result_order_info">payment Id:\n </string>
+    <string name = "dojo_ui_sdk_payment_result_successful_description">you have paid </string>
+    <string name = "dojo_ui_sdk_payment_result_failed_description">We could not verify your payment details</string>
 </resources>

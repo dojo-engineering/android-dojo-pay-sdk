@@ -4,15 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import java.util.*
 
@@ -52,8 +48,8 @@ class PaymentResultViewModel(
                     imageId = R.drawable.ic_error_circle,
                     showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
                     status = R.string.dojo_ui_sdk_payment_result_title_fail,
-                    orderInfo ="payment ID "+ paymentIntentResult.result.id,
-                    details = "We could not verify your payment details"
+                    orderInfo = paymentIntentResult.result.id,
+                    details = R.string.dojo_ui_sdk_payment_result_failed_description
                 )
             }
 
@@ -78,7 +74,7 @@ class PaymentResultViewModel(
                 showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
                 orderInfo = "",
-                details = ""
+                details = R.string.dojo_ui_sdk_payment_result_failed_description
             )
         }
 

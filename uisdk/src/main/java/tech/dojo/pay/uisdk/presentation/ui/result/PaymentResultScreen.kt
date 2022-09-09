@@ -171,7 +171,7 @@ private fun SuccessfulResult(
         )
 
         Text(
-            text =  stringResource(id = state.status),
+            text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.constrainAs(status) {
@@ -272,7 +272,7 @@ private fun FailedResult(
             }
         )
         Text(
-            text = state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info)+state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
@@ -283,7 +283,7 @@ private fun FailedResult(
             }
         )
         Text(
-            text = state.details,
+            text = stringResource(id = state.details),
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -376,7 +376,7 @@ private fun FailedResultWithOutTryAgain(
         )
 
         Text(
-            text = state.details,
+            text = stringResource(id = state.details),
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
