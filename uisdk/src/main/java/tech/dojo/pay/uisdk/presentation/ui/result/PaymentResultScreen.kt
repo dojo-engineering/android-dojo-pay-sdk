@@ -197,8 +197,8 @@ private fun SuccessfulResult(
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(orderInfo) {
-                top.linkTo(status.bottom, 16.dp)
+            modifier = Modifier.constrainAs(description) {
+                top.linkTo(orderInfo.bottom, 16.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
