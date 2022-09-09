@@ -79,6 +79,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -117,6 +118,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -156,6 +158,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -197,6 +200,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -236,6 +240,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -275,6 +280,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )
@@ -314,6 +320,7 @@ class CardDetailsCheckoutViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
+                    "id",
                     "token",
                     AmountDomainEntity("100", "GBP")
                 )

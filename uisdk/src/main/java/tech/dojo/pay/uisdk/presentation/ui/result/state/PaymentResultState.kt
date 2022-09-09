@@ -12,9 +12,10 @@ sealed class PaymentResultState(
         override val appBarTitleId: Int,
         @DrawableRes
         val imageId: Int,
-        val status: String = "",
-        val orderInfo: String = "",
-        val description: String = "",
+        @StringRes
+        val status: Int,
+        val orderInfo: String,
+        val description: String,
     ) : PaymentResultState(appBarTitleId)
 
     data class FailedResult(
@@ -23,7 +24,10 @@ sealed class PaymentResultState(
         @DrawableRes
         val imageId: Int,
         val showTryAgain: Boolean = true,
-        val status: String = "",
-        val details: String = ""
+        @StringRes
+        val status: Int,
+        val orderInfo: String,
+        @StringRes
+        val details: Int
     ) : PaymentResultState(appBarTitleId)
 }
