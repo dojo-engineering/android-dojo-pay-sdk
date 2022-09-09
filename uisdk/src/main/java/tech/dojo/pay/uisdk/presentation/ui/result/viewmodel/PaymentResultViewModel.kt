@@ -10,11 +10,11 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
-import java.util.*
+import java.util.Currency
 
 class PaymentResultViewModel(
     private val result: DojoPaymentResult,
-    observePaymentIntent: ObservePaymentIntent
+    private val observePaymentIntent: ObservePaymentIntent
 ) : ViewModel() {
     private var currentState: PaymentResultState
     private val mutableState = MutableLiveData<PaymentResultState>()
