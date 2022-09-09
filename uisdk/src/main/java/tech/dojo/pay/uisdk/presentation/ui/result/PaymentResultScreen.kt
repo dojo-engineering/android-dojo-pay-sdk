@@ -277,7 +277,7 @@ private fun FailedResult(
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.constrainAs(orderInfo) {
-                top.linkTo(status.bottom, 8.dp)
+                top.linkTo(status.bottom, 16.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
@@ -288,7 +288,7 @@ private fun FailedResult(
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.constrainAs(details) {
-                top.linkTo(orderInfo.bottom, 8.dp)
+                top.linkTo(orderInfo.bottom, 16.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
