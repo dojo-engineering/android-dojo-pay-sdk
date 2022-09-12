@@ -10,4 +10,11 @@ class PaymentIntentDataSource {
     ) {
         DojoSdk.fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
     }
+    fun refreshPaymentIntent(
+        paymentId: String,
+        onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onPaymentIntentFailed: () -> Unit
+    ) {
+        DojoSdk.refreshPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
+    }
 }

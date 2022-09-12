@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 
 class PaymentResultViewModelFactory(private val result: DojoPaymentResult) :
@@ -13,6 +14,8 @@ class PaymentResultViewModelFactory(private val result: DojoPaymentResult) :
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val observePaymentIntent =
             ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-        return PaymentResultViewModel(result, observePaymentIntent) as T
+        val refreshPaymentIntent =
+            RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
+        return PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent) as T
     }
 }
