@@ -77,8 +77,6 @@ class PaymentResultViewModel(
             )
         }
 
-    fun postStateToUi(currentState: PaymentResultState) {
+    private fun postStateToUi(currentState: PaymentResultState) =
         mutableState.postValue(currentState)
-
-    }
 }

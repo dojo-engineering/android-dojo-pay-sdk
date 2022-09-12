@@ -25,4 +25,21 @@ internal class PaymentIntentProvider(
             }
         }
     }
+
+    fun refreshPaymentIntent(
+        paymentId: String,
+        onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onPaymentIntentFailed: () -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                when (val result = paymentIntentRepository.refreshPaymentIntent(paymentId)) {
+                    is DojoPaymentIntentResult.Success -> onPaymentIntentSuccess(result.paymentIntentJson)
+                    is DojoPaymentIntentResult.Failed -> onPaymentIntentFailed()
+                }
+            } catch (throwable: Throwable) {
+                onPaymentIntentFailed()
+            }
+        }
+    }
 }
