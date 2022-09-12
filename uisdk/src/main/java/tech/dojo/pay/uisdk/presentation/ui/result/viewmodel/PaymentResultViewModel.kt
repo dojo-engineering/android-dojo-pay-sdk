@@ -47,35 +47,53 @@ class PaymentResultViewModel(
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
-        if (paymentIntentResult is PaymentIntentResult.Success) {
-            currentPaymentId = paymentIntentResult.result.id
-            var state = if (result == DojoPaymentResult.SUCCESSFUL) {
-                PaymentResultState.SuccessfulResult(
-                    appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
-                    imageId = R.drawable.ic_success_circle,
-                    status = R.string.dojo_ui_sdk_payment_result_title_success,
-                    orderInfo = paymentIntentResult.result.id,
-                    description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
-                            paymentIntentResult.result.amount.value
-                )
-            } else {
-                PaymentResultState.FailedResult(
-                    appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
-                    imageId = R.drawable.ic_error_circle,
-                    showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
-                    status = R.string.dojo_ui_sdk_payment_result_title_fail,
-                    orderInfo = paymentIntentResult.result.id,
-                    isTryAgainLoading = false,
-                    shouldNavigateToPreviousScreen = false,
-                    details = R.string.dojo_ui_sdk_payment_result_failed_description
-                )
-            }
-            if (currentState is PaymentResultState.FailedResult && (currentState as PaymentResultState.FailedResult).isTryAgainLoading) {
-               state= (state as PaymentResultState.FailedResult).copy(shouldNavigateToPreviousScreen = true)
-            }
-            currentState = state
-            postStateToUi(currentState)
+        if (paymentIntentResult is PaymentIntentResult.Success) { handlePaymentIntentSuccess(paymentIntentResult) }
+        else if(paymentIntentResult is PaymentIntentResult.RefreshFailure){ handlePaymentIntentRefreshFailure() }
+    }
+
+    private fun handlePaymentIntentSuccess(paymentIntentResult: PaymentIntentResult.Success) {
+        currentPaymentId = paymentIntentResult.result.id
+        var state = if (result == DojoPaymentResult.SUCCESSFUL) {
+            PaymentResultState.SuccessfulResult(
+                appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
+                imageId = R.drawable.ic_success_circle,
+                status = R.string.dojo_ui_sdk_payment_result_title_success,
+                orderInfo = paymentIntentResult.result.id,
+                description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
+                        paymentIntentResult.result.amount.value
+            )
+        } else {
+            PaymentResultState.FailedResult(
+                appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
+                imageId = R.drawable.ic_error_circle,
+                showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+                status = R.string.dojo_ui_sdk_payment_result_title_fail,
+                orderInfo = paymentIntentResult.result.id,
+                isTryAgainLoading = false,
+                shouldNavigateToPreviousScreen = false,
+                details = R.string.dojo_ui_sdk_payment_result_failed_description
+            )
         }
+        if (currentState is PaymentResultState.FailedResult && (currentState as PaymentResultState.FailedResult).isTryAgainLoading) {
+            state =
+                (state as PaymentResultState.FailedResult).copy(shouldNavigateToPreviousScreen = true)
+        }
+        currentState = state
+        postStateToUi(currentState)
+    }
+    private fun handlePaymentIntentRefreshFailure() {
+        val state = PaymentResultState.FailedResult(
+            appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
+            imageId = R.drawable.ic_error_circle,
+            showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen = false,
+            status = R.string.dojo_ui_sdk_payment_result_title_fail,
+            orderInfo = currentPaymentId,
+            details = R.string.dojo_ui_sdk_payment_result_failed_description
+        )
+        currentState = state
+        postStateToUi(currentState)
     }
 
     private fun buildInitStateWithPaymentResult(result: DojoPaymentResult) =
