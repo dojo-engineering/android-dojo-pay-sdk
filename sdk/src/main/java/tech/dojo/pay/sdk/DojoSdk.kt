@@ -170,4 +170,16 @@ object DojoSdk {
         return PaymentIntentProvider(PaymentIntentRepository(PaymentIntentApiBuilder().create()))
             .fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
     }
+
+    /**
+     * refresh payment intent object in format of json for specific payment id
+     */
+    fun refreshPaymentIntent(
+        paymentId: String,
+        onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onPaymentIntentFailed: () -> Unit
+    ) {
+        return PaymentIntentProvider(PaymentIntentRepository(PaymentIntentApiBuilder().create()))
+            .refreshPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
+    }
 }

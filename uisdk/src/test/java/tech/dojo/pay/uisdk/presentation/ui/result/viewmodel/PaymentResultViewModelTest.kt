@@ -16,6 +16,7 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 
@@ -32,7 +33,7 @@ internal class PaymentResultViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val observePaymentIntent: ObservePaymentIntent = mock()
-
+    private val refreshPaymentIntent: RefreshPaymentIntentUseCase = mock()
     @Test
     fun `test initial state in case of success result`() = runTest {
         // arrange
@@ -47,7 +48,7 @@ internal class PaymentResultViewModelTest {
             description = ""
         )
         // act
-        val actual = PaymentResultViewModel(result, observePaymentIntent).state.value
+        val actual = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -64,10 +65,12 @@ internal class PaymentResultViewModelTest {
             showTryAgain = true,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
             orderInfo = "",
-            details = R.string.dojo_ui_sdk_payment_result_failed_description
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen= false
         )
         // act
-        val actual = PaymentResultViewModel(result, observePaymentIntent).state.value
+        val actual = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -78,6 +81,7 @@ internal class PaymentResultViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+
         val result: DojoPaymentResult = DojoPaymentResult.SDK_INTERNAL_ERROR
         val expected = PaymentResultState.FailedResult(
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
@@ -85,16 +89,18 @@ internal class PaymentResultViewModelTest {
             showTryAgain = false,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
             orderInfo = "",
-            details = R.string.dojo_ui_sdk_payment_result_failed_description
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen= false
         )
         // act
-        val actual = PaymentResultViewModel(result, observePaymentIntent).state.value
+        val actual = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
 
     @Test
-    fun `test  tate when paymentIntent emits and success result`() = runTest {
+    fun `test  state when paymentIntent emits and success result`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -116,13 +122,13 @@ internal class PaymentResultViewModelTest {
             description = "£100"
         )
         // act
-        val actual = PaymentResultViewModel(result, observePaymentIntent).state.value
+        val actual = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
 
     @Test
-    fun `test  tate when paymentIntent emits and failure result`() = runTest {
+    fun `test state when paymentIntent emits and failure result`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -142,10 +148,78 @@ internal class PaymentResultViewModelTest {
             showTryAgain = true,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
             orderInfo = "id",
-            details = R.string.dojo_ui_sdk_payment_result_failed_description
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen= false
         )
         // act
-        val actual = PaymentResultViewModel(result, observePaymentIntent).state.value
+        val actual = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `test state when press on try again button  and refresh the payment intent Success`() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity("100", "GBP")
+                )
+            )
+        )
+        val result: DojoPaymentResult = DojoPaymentResult.DECLINED
+        val expected = PaymentResultState.FailedResult(
+            appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
+            imageId = R.drawable.ic_error_circle,
+            showTryAgain = true,
+            status = R.string.dojo_ui_sdk_payment_result_title_fail,
+            orderInfo = "id",
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen= true
+        )
+        // act
+        val viewModel = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+        viewModel.onTryAgainClicked()
+        val actual= viewModel.state.value
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+    @Test
+    fun `test state when press on try again button  and refresh the payment intent failed`() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity("100", "GBP")
+                )
+            )
+        )
+        val result: DojoPaymentResult = DojoPaymentResult.DECLINED
+        val expected = PaymentResultState.FailedResult(
+            appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
+            imageId = R.drawable.ic_error_circle,
+            showTryAgain = true,
+            status = R.string.dojo_ui_sdk_payment_result_title_fail,
+            orderInfo = "id",
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen= false
+        )
+        // act
+        val viewModel = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+        viewModel.onTryAgainClicked()
+        paymentIntentFakeFlow.tryEmit(PaymentIntentResult.RefreshFailure)
+        val actual= viewModel.state.value
         // assert
         Assert.assertEquals(expected, actual)
     }

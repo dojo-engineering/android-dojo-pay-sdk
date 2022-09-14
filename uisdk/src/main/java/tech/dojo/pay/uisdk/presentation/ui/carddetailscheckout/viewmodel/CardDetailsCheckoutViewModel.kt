@@ -94,17 +94,9 @@ class CardDetailsCheckoutViewModel(
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
             paymentToken = paymentIntentResult.result.paymentToken
-            currentState = CardDetailsCheckoutState(
+            currentState= currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.value,
-                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                cardHolderInputField = InputFieldState(value = ""),
-                cardDetailsInPutField = CardDetailsInputFieldState(
-                    cardNumberValue = "",
-                    cvvValue = "",
-                    expireDateValueValue = "",
-                ),
-                isLoading = false
-            )
+                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol)
             pushStateToUi(currentState)
         }
     }
@@ -118,6 +110,7 @@ class CardDetailsCheckoutViewModel(
     }
 
     fun onPayWithCardClicked() {
+        viewModelScope.launch { observePaymentIntent() }
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         pushStateToUi(currentState.copy(isLoading = true))
         dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())

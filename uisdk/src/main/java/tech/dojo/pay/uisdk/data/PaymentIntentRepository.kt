@@ -18,8 +18,26 @@ class PaymentIntentRepository(
         dataSource.fetchPaymentIntent(
             paymentId,
             { handleSuccessPaymentIntent(it) },
-            { paymentIntentResult.tryEmit(PaymentIntentResult.Failure) }
+            { paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure) }
         )
+    }
+
+    fun refreshPaymentIntent(paymentId: String) {
+        paymentIntentResult = MutableStateFlow(null)
+        dataSource.refreshPaymentIntent(
+            paymentId,
+            { handleSuccessRefresh(it) },
+            { paymentIntentResult.tryEmit(PaymentIntentResult.RefreshFailure) }
+        )
+    }
+
+    private fun handleSuccessRefresh(it: String) {
+        try {
+            val domainEntity = mapper.apply(mapToPaymentIntentPayLoad(it))
+            paymentIntentResult.tryEmit(PaymentIntentResult.Success(domainEntity))
+        } catch (e: Exception) {
+            paymentIntentResult.tryEmit(PaymentIntentResult.RefreshFailure)
+        }
     }
 
     private fun handleSuccessPaymentIntent(it: String) {
@@ -27,7 +45,7 @@ class PaymentIntentRepository(
             val domainEntity = mapper.apply(mapToPaymentIntentPayLoad(it))
             paymentIntentResult.tryEmit(PaymentIntentResult.Success(domainEntity))
         } catch (e: Exception) {
-            paymentIntentResult.tryEmit(PaymentIntentResult.Failure)
+            paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure)
         }
     }
 

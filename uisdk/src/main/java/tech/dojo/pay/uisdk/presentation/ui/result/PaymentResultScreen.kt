@@ -62,7 +62,8 @@ fun ShowResultSheetScreen(
                 paymentResultSheetState,
                 state,
                 onCloseFlowClicked,
-                onTryAgainClicked
+                onTryAgainClicked,
+                viewModel
             )
         }
     ) {
@@ -81,7 +82,8 @@ private fun BottomSheetItems(
     sheetState: ModalBottomSheetState,
     state: PaymentResultState,
     onCloseFlowClicker: () -> Unit,
-    onTryAgainClicked: () -> Unit
+    onTryAgainClicked: () -> Unit,
+    viewModel: PaymentResultViewModel
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -107,7 +109,8 @@ private fun BottomSheetItems(
             coroutineScope,
             sheetState,
             onCloseFlowClicker,
-            onTryAgainClicked
+            onTryAgainClicked,
+            viewModel
         )
     }
 }
@@ -119,7 +122,8 @@ private fun HandleFailedResult(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     onCloseFlowClicker: () -> Unit,
-    onTryAgainClicked: () -> Unit
+    onTryAgainClicked: () -> Unit,
+    viewModel: PaymentResultViewModel
 ) {
     when (state.showTryAgain) {
         true -> {
@@ -128,7 +132,8 @@ private fun HandleFailedResult(
                 coroutineScope,
                 sheetState,
                 onCloseFlowClicker,
-                onTryAgainClicked
+                onTryAgainClicked,
+                viewModel
             )
         }
         else -> {
@@ -239,6 +244,7 @@ private fun FailedResult(
     sheetState: ModalBottomSheetState,
     onCloseFlowClicker: () -> Unit,
     onTryAgainClicked: () -> Unit,
+    viewModel: PaymentResultViewModel,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -301,11 +307,11 @@ private fun FailedResult(
                 width = Dimension.fillToConstraints
             },
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
+            isLoading = state.isTryAgainLoading,
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
         ) {
-            coroutineScope.launch {
-                sheetState.hide()
-                onTryAgainClicked()
+            if (!state.isTryAgainLoading) {
+                viewModel.onTryAgainClicked()
             }
         }
         DojoOutlinedButton(
@@ -333,6 +339,14 @@ private fun FailedResult(
                 width = Dimension.fillToConstraints
             }
         )
+    }
+    if (state.shouldNavigateToPreviousScreen){
+        LaunchedEffect(Unit){
+            coroutineScope.launch {
+                sheetState.hide()
+                onTryAgainClicked()
+            }
+        }
     }
 }
 

@@ -50,4 +50,35 @@ class PaymentIntentRepositoryTest {
             // assert
             Assert.assertEquals(expected, actual)
         }
+
+    @Test
+    fun `calling refreshPaymentIntent with Successful response should return Success DojoPaymentIntentResult `() =
+        runTest {
+            // arrange
+            val result = JsonObject()
+            result.addProperty("test_key", "test")
+            val response: Response<JsonObject> = mock()
+            whenever(response.isSuccessful).thenReturn(true)
+            whenever(response.body()).thenReturn(result)
+            whenever(api.refreshPaymentIntent(any())).thenReturn(response)
+            val expected = DojoPaymentIntentResult.Success("{\"test_key\":\"test\"}")
+            // act
+            val actual = PaymentIntentRepository(api).refreshPaymentIntent("test")
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `calling refreshPaymentIntent with Failed response should return Failed DojoPaymentIntentResult `() =
+        runTest {
+            // arrange
+            val response: Response<JsonObject> = mock()
+            whenever(response.isSuccessful).thenReturn(false)
+            whenever(api.refreshPaymentIntent(any())).thenReturn(response)
+            val expected = DojoPaymentIntentResult.Failed
+            // act
+            val actual = PaymentIntentRepository(api).refreshPaymentIntent("test")
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 }

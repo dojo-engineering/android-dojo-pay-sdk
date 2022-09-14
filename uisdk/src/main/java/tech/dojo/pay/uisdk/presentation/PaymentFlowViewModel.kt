@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.core.SingleLiveData
@@ -27,7 +26,7 @@ class PaymentFlowViewModel(
                 fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
                     it?.let {
-                        if (it is PaymentIntentResult.Failure) { closeFLowWithInternalError() }
+                        if (it is PaymentIntentResult.FetchFailure) { closeFLowWithInternalError() }
                     }
                 }
             } catch (error: Throwable) {
