@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
@@ -29,27 +30,26 @@ internal fun AmountBreakDownItems(
         modifier = modifier
             .height(heightValue.dp)
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(0.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items) { item ->
             Row(
-                modifier = modifier.height(40.dp),
+                modifier = modifier.height(20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 DojoSpacer(width = 16.dp)
                 Text(
-                    modifier = Modifier.weight(1f),
                     text = item.caption,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.body1
                 )
-
+                Spacer(Modifier.weight(4f))
                 Text(
                     text = item.amount,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(end=16.dp),
                     style = DojoTheme.typography.body1
                 )
             }
@@ -57,7 +57,7 @@ internal fun AmountBreakDownItems(
     }
 }
 private fun getItemHeight(listSize:Int) =
-    if(listSize>3 || listSize==3){ 120 }else{ listSize*40 }
+    if(listSize>3 || listSize==3){ 80 }else{ listSize*24 }
 
 data class AmountBreakDownItem(
     val caption: String,
@@ -72,6 +72,10 @@ internal fun PreviewAmountBreakDownItems() = DojoPreview {
             items = listOf(
                 AmountBreakDownItem("Subtotal", "£74.63"),
                 AmountBreakDownItem("VAT", "£14.93"),
+                AmountBreakDownItem("VAT", "£14.93"),
+                AmountBreakDownItem("VAT", "£14.93"),
+                AmountBreakDownItem("VAT", "£14.93"),
+
                 )
         )
         TotalDueItem(amount="£89.55")
