@@ -20,14 +20,13 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-fun WalletItem(
+internal fun WalletItem(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
-
-    ) {
+) {
     Row(
         modifier = modifier
-            .clickable(onClick =  onClick?:{})
+            .clickable(onClick = onClick ?: {})
             .heightIn(60.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -36,7 +35,10 @@ fun WalletItem(
             painter = painterResource(id = R.drawable.ic_google_pay_card),
             contentDescription = "",
             tint = Color.Unspecified,
-            modifier = Modifier.padding(top = 2.dp).width(25.dp).heightIn(15.dp)
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .width(25.dp)
+                .heightIn(15.dp)
         )
 
         DojoSpacer(width = 8.dp)
