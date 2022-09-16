@@ -6,7 +6,7 @@ data class PaymentIntentDomainEntity(
     val id :String,
     val paymentToken: String,
     val amount: AmountDomainEntity,
-    val itemLines:List<ItemLinesDomainEntity?>?= null
+    val itemLines:List<ItemLinesDomainEntity>?= null
 )
 
 data class AmountDomainEntity(

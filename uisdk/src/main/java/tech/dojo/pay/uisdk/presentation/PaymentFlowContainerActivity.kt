@@ -156,7 +156,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
                     },
-                    viewModel::navigateToManagePaymentMethods
+                    viewModel::navigateToManagePaymentMethods,
+                    viewModel::navigateToCardDetailsCheckoutScreen
                 )
             }
             composable(

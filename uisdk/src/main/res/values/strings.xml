@@ -24,5 +24,6 @@
     <string name = "dojo_ui_sdk_payment_result_successful_description">you have paid &#160;</string>
     <string name = "dojo_ui_sdk_payment_result_failed_description">We could not verify your payment details</string>
     <string name = "dojo_ui_sdk_google_pay_string">Google pay</string>
+    <string name = "dojo_ui_sdk_pay_with_card_string">Pay by card</string>
 
 </resources>

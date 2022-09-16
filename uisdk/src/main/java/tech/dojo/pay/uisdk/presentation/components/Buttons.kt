@@ -74,7 +74,7 @@ private fun DojoButton(
 }
 
 @Composable
-private fun GooglePayButton(
+fun GooglePayButton(
     modifier: Modifier = Modifier,
     backgroundColor: Color = DojoTheme.colors.secondarySurface,
     contentColor: Color = DojoTheme.colors.onPrimary,
