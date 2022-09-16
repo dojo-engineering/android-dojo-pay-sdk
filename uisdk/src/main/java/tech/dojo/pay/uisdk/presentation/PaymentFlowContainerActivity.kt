@@ -148,7 +148,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler)
+                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler,arguments,true)
                 }
                 PaymentMethodsCheckOutScreen(
                     paymentMethodCheckoutViewModel,
