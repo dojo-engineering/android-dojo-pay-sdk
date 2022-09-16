@@ -14,7 +14,8 @@ class PaymentIntentDomainEntityMapper {
             id = requireNotNull(raw.id),
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
-                value = requireNotNull(raw.amount?.value?.centsToString()),
+                valueLong = requireNotNull(raw.amount?.value),
+                valueString = requireNotNull(raw.amount?.value?.centsToString()),
                 currencyCode = requireNotNull(raw.amount?.currencyCode)
             ),
             itemLines = raw.itemLines?.map {

@@ -81,7 +81,7 @@ class PaymentMethodCheckoutViewModel(
             isGpayItemVisible = isMangePaymentEnabled,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
-                    paymentIntent.amount.value,
+                    paymentIntent.amount.valueString,
 
             payWithCarButtonState = getPayWithCarButtonState(isGooglePayEnabled)
         )

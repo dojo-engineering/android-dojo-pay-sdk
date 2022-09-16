@@ -10,7 +10,8 @@ data class PaymentIntentDomainEntity(
 )
 
 data class AmountDomainEntity(
-    val value: String,
+    val valueLong:Long,
+    val valueString: String,
     val currencyCode: String
 )
 data class ItemLinesDomainEntity(
