@@ -18,8 +18,32 @@ object PaymentIDGenerator {
                 value = 10L,
                 currencyCode = "GBP"
             ),
+            itemLines = listOf(
+                ItemLines(
+                    amountTotal = Amount(
+                        10L,
+                        currencyCode = "GBP"
+                    ),
+                    caption = "Pixel 5"
+                ),
+                ItemLines(
+                    amountTotal = Amount(
+                        10L,
+                        currencyCode = "GBP"
+                    ),
+                    caption = "Pixel 6"
+                ),
+                ItemLines(
+                    amountTotal = Amount(
+                        10L,
+                        currencyCode = "GBP"
+                    ),
+                    caption = "Pixel 6 pro"
+                ),
+            ),
             reference = "Order 234",
             description = "Demo payment intent"
         )
     ).id
 }
+

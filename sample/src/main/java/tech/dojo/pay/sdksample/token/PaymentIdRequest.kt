@@ -3,7 +3,8 @@ package tech.dojo.pay.sdksample.token
 data class PaymentIdBody(
     val amount: Amount,
     val reference: String,
-    val description: String
+    val description: String,
+    val itemLines: List<ItemLines>
 )
 
 data class Amount(
@@ -13,4 +14,11 @@ data class Amount(
 
 data class PaymentIdResponse(
     val id: String
+)
+
+data class ItemLines(
+    val id :String="",
+    val quantity:String="",
+    val caption:String="",
+    val amountTotal:Amount
 )

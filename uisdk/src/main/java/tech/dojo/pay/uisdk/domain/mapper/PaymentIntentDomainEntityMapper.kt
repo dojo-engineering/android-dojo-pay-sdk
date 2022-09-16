@@ -20,7 +20,7 @@ class PaymentIntentDomainEntityMapper {
             ),
             itemLines = raw.itemLines?.map {
                 ItemLinesDomainEntity(
-                    amount = it.amount,
+                    amount = it.amountTotal,
                     caption = it.caption
                 )
             }

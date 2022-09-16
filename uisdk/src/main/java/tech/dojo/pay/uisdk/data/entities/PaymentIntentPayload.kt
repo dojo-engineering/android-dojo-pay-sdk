@@ -23,7 +23,7 @@ data class PaymentIntentPayload(
 )
 data class ItemLines(
     val caption:String,
-    val amount:Amount
+    val amountTotal:Amount
 )
 data class Amount(
     val value: Long,
