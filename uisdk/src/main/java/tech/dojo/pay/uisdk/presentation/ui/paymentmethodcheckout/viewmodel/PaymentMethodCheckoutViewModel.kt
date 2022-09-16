@@ -130,19 +130,18 @@ class PaymentMethodCheckoutViewModel(
     }
 
     fun onGpayCLicked() {
-        gpayPaymentHandler.executeGPay(
-            GPayPayload = DojoGPayPayload(
-                DojoGPayConfig(
-                    merchantName = "Dojo Cafe (Paymentsense)",
-                    merchantId = "BCR2DN6T57R5ZI34",
-                    gatewayMerchantId = "119784244252745"
+        gPayConfig?.let {
+            gpayPaymentHandler.executeGPay(
+                GPayPayload = DojoGPayPayload(dojoGPayConfig = it),
+                paymentIntent = DojoPaymentIntent(
+                    token = paymentIntent.paymentToken,
+                    totalAmount = DojoTotalAmount(
+                        paymentIntent.amount.valueLong,
+                        paymentIntent.amount.currencyCode
+                    )
                 )
-            ),
-            paymentIntent = DojoPaymentIntent(
-                token = paymentIntent.paymentToken,
-                totalAmount = DojoTotalAmount(10, "GBP")
             )
-        )
+        }
     }
 
     private fun postStateToUI() {
