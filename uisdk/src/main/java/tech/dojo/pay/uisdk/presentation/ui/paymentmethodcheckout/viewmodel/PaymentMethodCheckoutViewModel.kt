@@ -78,7 +78,7 @@ class PaymentMethodCheckoutViewModel(
             isGooglePayVisible = isGooglePayEnabled && gPayConfig != null,
             isBottomSheetVisible = true,
             isLoading = false,
-            isGpayItemVisible = isMangePaymentEnabled,
+            isGpayItemVisible = isMangePaymentEnabled && isGooglePayEnabled && gPayConfig != null,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
                     paymentIntent.amount.valueString,
