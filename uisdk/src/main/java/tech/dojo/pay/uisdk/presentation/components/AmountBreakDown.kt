@@ -15,7 +15,6 @@ fun AmountBreakDown(
 ) {
     Column(
         modifier = modifier
-
     ) {
         if (items.isNotEmpty()){ AmountBreakDownItems(items = items) }
         TotalDueItem(amount = totalAmount)
