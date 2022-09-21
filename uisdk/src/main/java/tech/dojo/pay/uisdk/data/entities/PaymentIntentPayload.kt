@@ -18,7 +18,13 @@ data class PaymentIntentPayload(
     val reference: String? = null,
     val description: String? = null,
     val config: Config? = null,
+    val itemLines: List<ItemLines>? = null,
     val metadata: Metadata? = null
+)
+
+data class ItemLines(
+    val caption: String,
+    val amountTotal: Amount
 )
 
 data class Amount(

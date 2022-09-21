@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
@@ -26,7 +27,16 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setTokenListener()
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = null
-            dojoPayUI.startPaymentFlow(DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()))
+            dojoPayUI.startPaymentFlow(
+                DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString(),
+                    GPayConfig =  DojoGPayConfig(
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "BCR2DN6T57R5ZI34",
+                        gatewayMerchantId = "119784244252745"
+                    )
+                ),
+
+            )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
@@ -38,7 +48,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
             )
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
-                    uiSdkSampleBinding.token.text.toString()
+                    uiSdkSampleBinding.token.text.toString(),
+                    GPayConfig =  DojoGPayConfig(
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "BCR2DN6T57R5ZI34",
+                        gatewayMerchantId = "119784244252745"
+                    )
                 )
             )
         }

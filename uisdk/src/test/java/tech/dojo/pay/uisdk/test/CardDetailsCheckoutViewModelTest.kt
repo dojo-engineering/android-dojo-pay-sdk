@@ -81,7 +81,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -120,7 +123,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -160,7 +166,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -202,7 +211,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -242,7 +254,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -282,7 +297,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )
@@ -322,7 +340,10 @@ class CardDetailsCheckoutViewModelTest {
                 result = PaymentIntentDomainEntity(
                     "id",
                     "token",
-                    AmountDomainEntity("100", "GBP")
+                    AmountDomainEntity(
+                        10L,
+                        "100", "GBP"
+                    )
                 )
             )
         )

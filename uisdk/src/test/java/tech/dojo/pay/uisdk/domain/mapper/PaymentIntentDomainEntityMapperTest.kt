@@ -33,6 +33,7 @@ internal class PaymentIntentDomainEntityMapperTest {
                 id="id",
                 paymentToken = "clientSessionSecret",
                 amount = AmountDomainEntity(
+                    10L,
                     "0.10",
                     "GBP"
                 )

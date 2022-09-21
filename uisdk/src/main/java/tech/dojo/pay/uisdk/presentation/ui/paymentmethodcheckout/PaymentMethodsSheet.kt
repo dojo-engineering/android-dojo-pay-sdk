@@ -15,7 +15,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,10 +29,10 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.getActivity
 import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
-import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -45,7 +44,8 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 internal fun PaymentMethodsCheckOutScreen(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
-    onManagePaymentClicked: () -> Unit
+    onManagePaymentClicked: () -> Unit,
+    onPayByCard: () -> Unit
 ) {
     val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
     LaunchedEffect(Unit) {
@@ -66,7 +66,7 @@ internal fun PaymentMethodsCheckOutScreen(
             confirmStateChange = { false }
         )
     val coroutineScope = rememberCoroutineScope()
-    val state = viewModel.state.observeAsState()
+    val state = viewModel.state.observeAsState().value ?: return
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
@@ -77,11 +77,13 @@ internal fun PaymentMethodsCheckOutScreen(
                 state,
                 onAppBarIconClicked,
                 viewModel::onGpayCLicked,
-                onManagePaymentClicked
+                onManagePaymentClicked,
+                onPayByCard,
+                viewModel::observePaymentIntent
             )
         }
     ) {
-        if (state.value?.isBottomSheetVisible == true) {
+        if (state.isBottomSheetVisible) {
             LaunchedEffect(Unit) { paymentMethodsSheetState.show() }
         }
     }
@@ -92,17 +94,49 @@ internal fun PaymentMethodsCheckOutScreen(
 private fun BottomSheetItems(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    contentState: State<PaymentMethodCheckoutState?>,
+    contentState: PaymentMethodCheckoutState,
     onAppBarIconClicked: () -> Unit,
     onGpayClicked: () -> Unit,
-    onManagePaymentClicked: () -> Unit
+    onManagePaymentClicked: () -> Unit,
+    onPayByCard: () -> Unit,
+    observePaymentIntent: () -> Unit
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
-    if (contentState.value?.isLoading == true) {
+    if (contentState.isLoading) {
         Loading()
     } else {
-        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked)
-        PaymentMethodsButton(onManagePaymentClicked)
+        GPayItem(contentState, onManagePaymentClicked)
+        AmountBreakDownItem(contentState)
+        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked,observePaymentIntent)
+        PaymentMethodsButton(contentState, onPayByCard)
+        FooterItem()
+    }
+}
+
+@Composable
+private fun FooterItem() {
+    DojoBrandFooter(
+        modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 24.dp),
+    )
+}
+
+@Composable
+private fun AmountBreakDownItem(contentState: PaymentMethodCheckoutState) {
+    AmountBreakDown(
+        modifier = Modifier.padding(top = 16.dp),
+        items = contentState.amountBreakDownList,
+        totalAmount = contentState.totalAmount
+    )
+}
+
+@Composable
+private fun GPayItem(contentState: PaymentMethodCheckoutState, onManagePaymentClicked: () -> Unit) {
+    if (contentState.isGpayItemVisible) {
+        WalletItem(
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            onManagePaymentClicked()
+        }
     }
 }
 
@@ -146,19 +180,20 @@ private fun Loading() {
 @ExperimentalMaterialApi
 @Composable
 private fun GooglePayButton(
-    googlePayVisibility: State<PaymentMethodCheckoutState?>,
+    googlePayVisibility: PaymentMethodCheckoutState,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    onGpayClicked: () -> Unit
+    onGpayClicked: () -> Unit,
+    observePaymentIntent: () -> Unit
 ) {
-    if (googlePayVisibility.value?.isGooglePayVisible == true) {
-        DojoFullGroundButton(
+    if (googlePayVisibility.isGooglePayVisible) {
+        GooglePayButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp, 16.dp, 24.dp, 8.dp),
-            text = "google pay"
+                .padding(16.dp, 16.dp, 16.dp, 8.dp),
         ) {
             coroutineScope.launch {
+                observePaymentIntent()
                 sheetState.hide()
                 onGpayClicked()
             }
@@ -167,11 +202,25 @@ private fun GooglePayButton(
 }
 
 @Composable
-private fun PaymentMethodsButton(onManagePaymentClicked: () -> Unit) {
-    DojoOutlinedButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp, 8.dp, 24.dp, 16.dp),
-        text = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title)
-    ) { onManagePaymentClicked() }
+private fun PaymentMethodsButton(
+    contentState: PaymentMethodCheckoutState,
+    onPayByCard: () -> Unit
+) {
+    if (contentState.payWithCarButtonState.isVisibleL) {
+        if (contentState.payWithCarButtonState.isPrimary) {
+            DojoFullGroundButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 8.dp, 16.dp, 8.dp),
+                text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
+            ) { onPayByCard() }
+        } else {
+            DojoOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 8.dp, 16.dp, 8.dp),
+                text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
+            ) { onPayByCard() }
+        }
+    }
 }

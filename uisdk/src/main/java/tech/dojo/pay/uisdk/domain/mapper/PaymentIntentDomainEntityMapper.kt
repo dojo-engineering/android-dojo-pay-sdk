@@ -4,6 +4,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
+import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 
 class PaymentIntentDomainEntityMapper {
@@ -13,9 +14,16 @@ class PaymentIntentDomainEntityMapper {
             id = requireNotNull(raw.id),
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
-                value = requireNotNull(raw.amount?.value?.centsToString()),
+                valueLong = requireNotNull(raw.amount?.value),
+                valueString = requireNotNull(raw.amount?.value?.centsToString()),
                 currencyCode = requireNotNull(raw.amount?.currencyCode)
-            )
+            ),
+            itemLines = raw.itemLines?.map {
+                ItemLinesDomainEntity(
+                    amount = it.amountTotal,
+                    caption = it.caption
+                )
+            }
         )
     }
 

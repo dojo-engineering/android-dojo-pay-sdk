@@ -148,7 +148,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler)
+                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler,arguments,false)
                 }
                 PaymentMethodsCheckOutScreen(
                     paymentMethodCheckoutViewModel,
@@ -156,7 +156,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
                     },
-                    viewModel::navigateToManagePaymentMethods
+                    viewModel::navigateToManagePaymentMethods,
+                    viewModel::navigateToCardDetailsCheckoutScreen
                 )
             }
             composable(
