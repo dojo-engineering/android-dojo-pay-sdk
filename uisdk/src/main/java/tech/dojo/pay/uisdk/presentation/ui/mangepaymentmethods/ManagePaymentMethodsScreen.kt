@@ -10,12 +10,13 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
+import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.WalletItemWithRadioButton
 
 @Composable
 fun ManagePaymentMethods(
@@ -23,7 +24,6 @@ fun ManagePaymentMethods(
     onBackClicked: () -> Unit,
     onNewCardButtonClicked: () -> Unit
 ) {
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
