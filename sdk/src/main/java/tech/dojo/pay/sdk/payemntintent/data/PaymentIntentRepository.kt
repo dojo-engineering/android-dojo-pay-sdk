@@ -22,5 +22,4 @@ class PaymentIntentRepository(
             DojoPaymentIntentResult.Failed
         }
     }
-
 }

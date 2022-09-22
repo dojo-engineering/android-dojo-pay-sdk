@@ -16,7 +16,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.bold
 @Composable
 internal fun TotalDueItem(
     modifier: Modifier = Modifier,
-    amount:String
+    amount: String
 ) {
     Row(
         modifier = modifier.heightIn(30.dp),
@@ -32,7 +32,7 @@ internal fun TotalDueItem(
         )
 
         Text(
-            text =amount,
+            text = amount,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(16.dp),
@@ -41,9 +41,8 @@ internal fun TotalDueItem(
     }
 }
 
-
 @Preview("TotalDueItem", group = "TotalDueItem")
 @Composable
 internal fun PreviewTotalDueItem() = DojoPreview {
-    TotalDueItem(amount="£89.55")
+    TotalDueItem(amount = "£89.55")
 }

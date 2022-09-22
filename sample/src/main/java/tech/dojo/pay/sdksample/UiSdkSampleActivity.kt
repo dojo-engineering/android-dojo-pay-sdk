@@ -28,8 +28,9 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = null
             dojoPayUI.startPaymentFlow(
-                DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString(),
-                    GPayConfig =  DojoGPayConfig(
+                DojoPaymentFlowParams(
+                    uiSdkSampleBinding.token.text.toString(),
+                    GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
                         gatewayMerchantId = "119784244252745"
@@ -49,7 +50,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
-                    GPayConfig =  DojoGPayConfig(
+                    GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
                         gatewayMerchantId = "119784244252745"

@@ -94,9 +94,10 @@ class CardDetailsCheckoutViewModel(
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
             paymentToken = paymentIntentResult.result.paymentToken
-            currentState= currentState.copy(
+            currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
-                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol)
+                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol
+            )
             pushStateToUi(currentState)
         }
     }

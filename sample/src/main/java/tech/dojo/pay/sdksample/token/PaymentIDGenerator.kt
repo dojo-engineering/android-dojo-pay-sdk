@@ -46,4 +46,3 @@ object PaymentIDGenerator {
         )
     ).id
 }
-
