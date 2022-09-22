@@ -1,7 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
@@ -23,6 +23,7 @@ fun ManagePaymentMethods(
     onBackClicked: () -> Unit,
     onNewCardButtonClicked: () -> Unit
 ) {
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -38,18 +39,37 @@ fun ManagePaymentMethods(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
         ) {
-            val (doneBtn, footer) = createRefs()
-            DojoFullGroundButton(
-                modifier = Modifier.constrainAs(doneBtn) {
+            val (walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
+            WalletItemWithRadioButton(
+                modifier = Modifier.constrainAs(walletItem) {
                     start.linkTo(parent.start, 0.dp)
                     end.linkTo(parent.end, 0.dp)
-                    bottom.linkTo(footer.bottom, 46.dp)
+                    top.linkTo(parent.top, 46.dp)
+                    width = Dimension.fillToConstraints
+                },
+                selected = true,
+                onClick = { }
+            )
+
+            DojoOutlinedButton(
+                modifier = Modifier.constrainAs(selectPaymentMethod) {
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    bottom.linkTo(payWithNewCard.bottom, 56.dp)
                     width = Dimension.fillToConstraints
                 },
                 text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
             ) { onNewCardButtonClicked() }
+            DojoFullGroundButton(
+                modifier = Modifier.constrainAs(payWithNewCard) {
+                    start.linkTo(parent.start, 16.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    bottom.linkTo(footer.bottom, 46.dp)
+                    width = Dimension.fillToConstraints
+                },
+                text = stringResource(id = R.string.dojo_ui_sdk_pay_with_this_method)
+            ) { onBackClicked() }
 
             DojoBrandFooter(
                 modifier = Modifier.constrainAs(footer) {
