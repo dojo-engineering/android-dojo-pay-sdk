@@ -107,7 +107,7 @@ private fun BottomSheetItems(
     } else {
         GPayItem(contentState, onManagePaymentClicked)
         AmountBreakDownItem(contentState)
-        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked,observePaymentIntent)
+        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked, observePaymentIntent)
         PaymentMethodsButton(contentState, onPayByCard)
         FooterItem()
     }

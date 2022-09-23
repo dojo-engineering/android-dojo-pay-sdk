@@ -83,7 +83,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -125,7 +126,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -168,7 +170,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -213,7 +216,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -256,7 +260,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -299,7 +304,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -342,7 +348,8 @@ class CardDetailsCheckoutViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )

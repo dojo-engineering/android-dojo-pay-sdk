@@ -340,8 +340,8 @@ private fun FailedResult(
             }
         )
     }
-    if (state.shouldNavigateToPreviousScreen){
-        LaunchedEffect(Unit){
+    if (state.shouldNavigateToPreviousScreen) {
+        LaunchedEffect(Unit) {
             coroutineScope.launch {
                 sheetState.hide()
                 onTryAgainClicked()

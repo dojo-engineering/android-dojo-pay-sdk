@@ -17,8 +17,8 @@ data class PaymentIdResponse(
 )
 
 data class ItemLines(
-    val id :String="",
-    val quantity:String="",
-    val caption:String="",
-    val amountTotal:Amount
+    val id: String = "",
+    val quantity: String = "",
+    val caption: String = "",
+    val amountTotal: Amount
 )

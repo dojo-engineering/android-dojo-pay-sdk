@@ -1,13 +1,17 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-import androidx.compose.foundation.clickable
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,14 +24,13 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-internal fun WalletItem(
+fun WalletItemWithRadioButton(
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
+    selected: Boolean,
+    onClick: (() -> Unit)?,
 ) {
     Row(
-        modifier = modifier
-            .clickable(onClick = onClick ?: {})
-            .heightIn(50.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         DojoSpacer(width = 16.dp)
@@ -49,16 +52,30 @@ internal fun WalletItem(
             maxLines = 1,
             style = DojoTheme.typography.body1,
         )
-        Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            modifier = Modifier.padding(8.dp),
-            contentDescription = null
+
+        RadioButton(
+            modifier = Modifier.padding(16.dp),
+            selected = selected,
+            onClick = onClick,
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Color(0xFF00857D),
+                unselectedColor = Color(0xFF262626),
+                disabledColor = Color.LightGray
+            )
         )
     }
 }
 
-@Preview("WalletItem", group = "WalletItem")
+@SuppressLint("WalletItemWithRadioButton")
+@Preview("WalletItemWithRadioButton", group = "WalletItemWithRadioButton")
 @Composable
-internal fun PreviewWalletItem() = DojoPreview {
-    WalletItem()
+fun WalletItemWithRadioButton() {
+    val radioState = remember { mutableStateOf(true) }
+
+    DojoPreview {
+        WalletItemWithRadioButton(
+            selected = radioState.value,
+            onClick = { radioState.value = !radioState.value }
+        )
+    }
 }

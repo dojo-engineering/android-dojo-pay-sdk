@@ -6,13 +6,13 @@ data class PaymentMethodCheckoutState(
     val isGooglePayVisible: Boolean,
     val isBottomSheetVisible: Boolean,
     val isLoading: Boolean,
-    val isGpayItemVisible:Boolean,
-    val amountBreakDownList:List<AmountBreakDownItem>,
-    val totalAmount:String,
-    val payWithCarButtonState:PayWithCarButtonState
+    val isGpayItemVisible: Boolean,
+    val amountBreakDownList: List<AmountBreakDownItem>,
+    val totalAmount: String,
+    val payWithCarButtonState: PayWithCarButtonState
 )
 data class PayWithCarButtonState(
-    val isVisibleL:Boolean,
-    val isPrimary:Boolean,
+    val isVisibleL: Boolean,
+    val isPrimary: Boolean,
 
-    )
+)

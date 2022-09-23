@@ -22,7 +22,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         runTest {
             // arrange
             val raw = PaymentIntentPayload(
-                id= "id",
+                id = "id",
                 clientSessionSecret = "clientSessionSecret",
                 amount = Amount(
                     10L,
@@ -30,7 +30,7 @@ internal class PaymentIntentDomainEntityMapperTest {
                 )
             )
             val expected = PaymentIntentDomainEntity(
-                id="id",
+                id = "id",
                 paymentToken = "clientSessionSecret",
                 amount = AmountDomainEntity(
                     10L,

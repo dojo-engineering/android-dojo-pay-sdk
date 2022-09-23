@@ -19,7 +19,6 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
-
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -77,7 +76,6 @@ internal class PaymentResultViewModelTest {
         // assert
         Assert.assertEquals(expected, actual)
     }
-
 
     @Test
     fun `test initial state in case of internal SKD Error result`() = runTest {
@@ -148,7 +146,8 @@ internal class PaymentResultViewModelTest {
                     "token",
                     AmountDomainEntity(
                         10L,
-                        "100", "GBP"
+                        "100",
+                        "GBP"
                     )
                 )
             )
@@ -185,7 +184,8 @@ internal class PaymentResultViewModelTest {
                         "token",
                         AmountDomainEntity(
                             10L,
-                            "100", "GBP"
+                            "100",
+                            "GBP"
                         )
                     )
                 )
@@ -224,7 +224,8 @@ internal class PaymentResultViewModelTest {
                         "token",
                         AmountDomainEntity(
                             10L,
-                            "100", "GBP"
+                            "100",
+                            "GBP"
                         )
                     )
                 )

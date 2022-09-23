@@ -27,8 +27,8 @@ sealed class PaymentResultState(
         @StringRes
         val status: Int,
         val orderInfo: String,
-        val isTryAgainLoading:Boolean,
-        val shouldNavigateToPreviousScreen:Boolean,
+        val isTryAgainLoading: Boolean,
+        val shouldNavigateToPreviousScreen: Boolean,
         @StringRes
         val details: Int
     ) : PaymentResultState(appBarTitleId)

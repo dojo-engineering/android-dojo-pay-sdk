@@ -148,7 +148,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler,arguments,false)
+                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler, arguments, true)
                 }
                 PaymentMethodsCheckOutScreen(
                     paymentMethodCheckoutViewModel,
@@ -175,7 +175,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-                val paymentResultViewModel = PaymentResultViewModel(result, observePaymentIntent,refreshPaymentIntent)
+                val paymentResultViewModel = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
