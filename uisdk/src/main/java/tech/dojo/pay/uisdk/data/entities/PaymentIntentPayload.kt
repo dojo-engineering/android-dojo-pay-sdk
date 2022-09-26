@@ -34,7 +34,17 @@ data class Amount(
 
 data class Config(
     val tradingName: String,
-    val branding: Branding
+    val branding: Branding,
+    val customerEmail: CustomerEmail,
+    val billingAddress: BillingAddress
+)
+
+data class CustomerEmail(
+    val collectionRequired: Boolean
+)
+
+data class BillingAddress(
+    val collectionRequired: Boolean
 )
 
 data class Branding(
