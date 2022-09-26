@@ -39,7 +39,8 @@ class CardDetailsCheckoutViewModel(
                 cvvValue = "",
                 expireDateValueValue = "",
             ),
-            isLoading = false
+            isLoading = false,
+            isEnabled = false
         )
         pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
@@ -48,7 +49,13 @@ class CardDetailsCheckoutViewModel(
 
     fun onCardHolderValueChanged(newValue: String) {
         currentState = currentState.copy(
-            cardHolderInputField = InputFieldState(value = newValue)
+            cardHolderInputField = InputFieldState(value = newValue),
+            isEnabled = isPayButtonEnabled(
+                newValue,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue
+            )
         )
         pushStateToUi(currentState)
     }
@@ -59,6 +66,12 @@ class CardDetailsCheckoutViewModel(
                 cardNumberValue = newValue,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
                 expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+            ),
+            isEnabled = isPayButtonEnabled(
+                currentState.cardHolderInputField.value,
+                newValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue
             )
         )
         pushStateToUi(currentState)
@@ -71,6 +84,12 @@ class CardDetailsCheckoutViewModel(
                     cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
                     cvvValue = newValue,
                     expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+                ),
+                isEnabled = isPayButtonEnabled(
+                    currentState.cardHolderInputField.value,
+                    currentState.cardDetailsInPutField.cardNumberValue,
+                    newValue,
+                    currentState.cardDetailsInPutField.expireDateValueValue
                 )
             )
         pushStateToUi(currentState)
@@ -82,10 +101,24 @@ class CardDetailsCheckoutViewModel(
                 cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
                 expireDateValueValue = newValue,
+            ),
+            isEnabled = isPayButtonEnabled(
+                currentState.cardHolderInputField.value,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                newValue
             )
         )
         pushStateToUi(currentState)
     }
+
+    private fun isPayButtonEnabled(
+        cardHolder: String,
+        cardNumber: String,
+        cvv: String,
+        expireDateValue: String
+    ) =
+        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank()
 
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
@@ -140,7 +173,7 @@ class CardDetailsCheckoutViewModel(
         }
 
     private fun getExpiryYear(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length> 2) {
+        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length > 2) {
             currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
         } else {
             ""

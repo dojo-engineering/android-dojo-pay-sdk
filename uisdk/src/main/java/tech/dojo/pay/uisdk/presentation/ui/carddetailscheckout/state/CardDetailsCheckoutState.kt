@@ -5,7 +5,8 @@ data class CardDetailsCheckoutState(
     val amountCurrency: String,
     val cardHolderInputField: InputFieldState,
     val cardDetailsInPutField: CardDetailsInputFieldState,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val isEnabled: Boolean
 )
 
 data class InputFieldState(val value: String)

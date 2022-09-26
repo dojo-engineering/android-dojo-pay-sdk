@@ -142,7 +142,8 @@ fun CardDetailsCheckoutScreen(
                     width = Dimension.fillToConstraints
                 },
                 text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+                enabled = state.isEnabled
             ) {
                 if (!state.isLoading) {
                     viewModel.onPayWithCardClicked()
