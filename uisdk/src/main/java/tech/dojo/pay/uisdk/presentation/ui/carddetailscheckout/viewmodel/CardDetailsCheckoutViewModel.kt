@@ -34,6 +34,8 @@ class CardDetailsCheckoutViewModel(
             totalAmount = "",
             amountCurrency = "",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -50,6 +52,19 @@ class CardDetailsCheckoutViewModel(
     fun onCardHolderValueChanged(newValue: String) {
         currentState = currentState.copy(
             cardHolderInputField = InputFieldState(value = newValue),
+            isEnabled = isPayButtonEnabled(
+                newValue,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue
+            )
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun onEmailValueChanged(newValue: String) {
+        currentState = currentState.copy(
+            emailInputField = InputFieldState(value = newValue),
             isEnabled = isPayButtonEnabled(
                 newValue,
                 currentState.cardDetailsInPutField.cardNumberValue,
@@ -116,7 +131,7 @@ class CardDetailsCheckoutViewModel(
         cardHolder: String,
         cardNumber: String,
         cvv: String,
-        expireDateValue: String
+        expireDateValue: String,
     ) =
         cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank()
 
@@ -129,7 +144,8 @@ class CardDetailsCheckoutViewModel(
             paymentToken = paymentIntentResult.result.paymentToken
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
-                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol
+                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired
             )
             pushStateToUi(currentState)
         }

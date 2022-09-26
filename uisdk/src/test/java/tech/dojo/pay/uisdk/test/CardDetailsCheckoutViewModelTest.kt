@@ -51,6 +51,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "",
             amountCurrency = "",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -95,6 +97,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -139,6 +143,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -186,6 +192,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -234,6 +242,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = "new"),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -280,6 +290,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "new",
                 cvvValue = "",
@@ -326,6 +338,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "new",
@@ -371,6 +385,8 @@ class CardDetailsCheckoutViewModelTest {
             totalAmount = "100",
             amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -392,7 +408,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when all field are not empty `() = runTest {
+    fun `test state when user update email address  field `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -415,7 +431,58 @@ class CardDetailsCheckoutViewModelTest {
         val expected = CardDetailsCheckoutState(
             totalAmount = "100",
             amountCurrency = "£",
+            cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = "new"),
+            isEmailInputFieldRequired = false,
+            cardDetailsInPutField = CardDetailsInputFieldState(
+                cardNumberValue = "",
+                cvvValue = "",
+                expireDateValueValue = "",
+            ),
+            isLoading = false,
+            isEnabled = false
+        )
+        // act
+        val viewModel = CardDetailsCheckoutViewModel(
+            observePaymentIntent,
+            dojoCardPaymentHandler,
+            observePaymentStatus,
+            updatePaymentStateUseCase
+        )
+        viewModel.onEmailValueChanged("new")
+        // assert
+        Assert.assertEquals(expected, viewModel.state.value)
+    }
+
+    @Test
+    fun `test state when all field are not empty `() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+        whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity(
+                        10L,
+                        "100",
+                        "GBP"
+                    ),
+                    null,
+                    true
+                )
+            )
+        )
+        paymentStateFakeFlow.tryEmit(true)
+        val expected = CardDetailsCheckoutState(
+            totalAmount = "100",
+            amountCurrency = "£",
             cardHolderInputField = InputFieldState(value = "new"),
+            emailInputField = InputFieldState(value = "new"),
+            isEmailInputFieldRequired = true,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "new",
                 cvvValue = "new",
@@ -435,6 +502,7 @@ class CardDetailsCheckoutViewModelTest {
         viewModel.onCardHolderValueChanged("new")
         viewModel.onCvvValueChanged("new")
         viewModel.onCardNumberValueChanged("new")
+        viewModel.onEmailValueChanged("new")
 
         // assert
         Assert.assertEquals(expected, viewModel.state.value)

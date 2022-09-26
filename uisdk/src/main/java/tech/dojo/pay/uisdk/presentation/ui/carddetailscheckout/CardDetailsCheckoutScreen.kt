@@ -1,8 +1,11 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -48,8 +51,9 @@ fun CardDetailsCheckoutScreen(
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            val (appBar, banner, cardHolderName, cardInputField, payBtn, footer) = createRefs()
+            val (appBar, banner, cardHolderName, cardInputField, emailField, payBtn, footer) = createRefs()
 
             DojoAppBar(
                 modifier = Modifier.constrainAs(appBar) {
@@ -133,6 +137,33 @@ fun CardDetailsCheckoutScreen(
                 expireDateValue = state.cardDetailsInPutField.expireDateValueValue,
                 onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
             )
+            if (state.isEmailInputFieldRequired) {
+                InputFieldWithErrorMessage(
+                    modifier = Modifier.constrainAs(emailField) {
+                        start.linkTo(parent.start, 16.dp)
+                        end.linkTo(parent.end, 16.dp)
+                        top.linkTo(cardInputField.bottom, 16.dp)
+                        width = Dimension.fillToConstraints
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                    value = state.emailInputField.value,
+                    onValueChange = { viewModel.onEmailValueChanged(it) },
+                    label = buildAnnotatedString {
+                        withStyle(
+                            SpanStyle(
+                                color = Color.Black,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                letterSpacing = 0.15.sp
+                            ),
+                        ) {
+                            append(stringResource(R.string.dojo_ui_sdk_card_details_email_field))
+                        }
+                    }
+                )
+
+            }
 
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
