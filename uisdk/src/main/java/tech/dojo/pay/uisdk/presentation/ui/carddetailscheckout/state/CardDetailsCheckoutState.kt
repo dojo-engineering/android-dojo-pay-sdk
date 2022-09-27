@@ -4,8 +4,11 @@ data class CardDetailsCheckoutState(
     val totalAmount: String,
     val amountCurrency: String,
     val cardHolderInputField: InputFieldState,
+    val emailInputField: InputFieldState,
+    val isEmailInputFieldRequired:Boolean,
     val cardDetailsInPutField: CardDetailsInputFieldState,
-    val isLoading: Boolean
+    val isLoading: Boolean,
+    val isEnabled: Boolean
 )
 
 data class InputFieldState(val value: String)

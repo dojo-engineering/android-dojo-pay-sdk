@@ -34,12 +34,15 @@ class CardDetailsCheckoutViewModel(
             totalAmount = "",
             amountCurrency = "",
             cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
                 expireDateValueValue = "",
             ),
-            isLoading = false
+            isLoading = false,
+            isEnabled = false
         )
         pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
@@ -48,7 +51,14 @@ class CardDetailsCheckoutViewModel(
 
     fun onCardHolderValueChanged(newValue: String) {
         currentState = currentState.copy(
-            cardHolderInputField = InputFieldState(value = newValue)
+            cardHolderInputField = InputFieldState(value = newValue),
+            isEnabled = isPayButtonEnabled(
+                newValue,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue,
+                currentState.emailInputField.value
+            )
         )
         pushStateToUi(currentState)
     }
@@ -59,6 +69,13 @@ class CardDetailsCheckoutViewModel(
                 cardNumberValue = newValue,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
                 expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+            ),
+            isEnabled = isPayButtonEnabled(
+                currentState.cardHolderInputField.value,
+                newValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue,
+                currentState.emailInputField.value
             )
         )
         pushStateToUi(currentState)
@@ -71,6 +88,14 @@ class CardDetailsCheckoutViewModel(
                     cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
                     cvvValue = newValue,
                     expireDateValueValue = currentState.cardDetailsInPutField.expireDateValueValue,
+                ),
+                isEnabled = isPayButtonEnabled(
+                    currentState.cardHolderInputField.value,
+                    currentState.cardDetailsInPutField.cardNumberValue,
+                    newValue,
+                    currentState.cardDetailsInPutField.expireDateValueValue,
+                    currentState.emailInputField.value
+
                 )
             )
         pushStateToUi(currentState)
@@ -82,9 +107,48 @@ class CardDetailsCheckoutViewModel(
                 cardNumberValue = currentState.cardDetailsInPutField.cardNumberValue,
                 cvvValue = currentState.cardDetailsInPutField.cvvValue,
                 expireDateValueValue = newValue,
+            ),
+            isEnabled = isPayButtonEnabled(
+                currentState.cardHolderInputField.value,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                newValue,
+                currentState.emailInputField.value
             )
         )
         pushStateToUi(currentState)
+    }
+
+    fun onEmailValueChanged(newValue: String) {
+        currentState = currentState.copy(
+            emailInputField = InputFieldState(value = newValue),
+            isEnabled = isPayButtonEnabled(
+                currentState.cardHolderInputField.value,
+                currentState.cardDetailsInPutField.cardNumberValue,
+                currentState.cardDetailsInPutField.cvvValue,
+                currentState.cardDetailsInPutField.expireDateValueValue,
+                newValue
+            )
+        )
+        pushStateToUi(currentState)
+    }
+
+
+    private fun isPayButtonEnabled(
+        cardHolder: String,
+        cardNumber: String,
+        cvv: String,
+        expireDateValue: String,
+        emailAddressValue: String
+    ) =
+        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank() && isMailFieldValid(emailAddressValue)
+
+    private fun isMailFieldValid(emailAddressValue: String): Boolean {
+        return if (currentState.isEmailInputFieldRequired) {
+            emailAddressValue.isNotBlank()
+        } else {
+            true
+        }
     }
 
     private suspend fun observePaymentIntent() {
@@ -96,7 +160,8 @@ class CardDetailsCheckoutViewModel(
             paymentToken = paymentIntentResult.result.paymentToken
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
-                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol
+                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired
             )
             pushStateToUi(currentState)
         }
@@ -140,7 +205,7 @@ class CardDetailsCheckoutViewModel(
         }
 
     private fun getExpiryYear(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length> 2) {
+        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length > 2) {
             currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
         } else {
             ""

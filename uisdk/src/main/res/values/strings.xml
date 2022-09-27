@@ -7,6 +7,7 @@
     <string name = "dojo_ui_sdk_manage_payment_methods_button_add_new_card">Add new card</string>
     <string name = "dojo_ui_sdk_card_details_checkout_title">Pay with new card</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_card_name">Name on card</string>
+    <string name = "dojo_ui_sdk_card_details_email_field">email</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_pan">Debit/Credit Card information</string>
     <string name = "dojo_ui_sdk_card_details_checkout_placeholder_pan">1234 1234 1234 1234</string>
     <string name = "dojo_ui_sdk_card_details_checkout_placeholder_expiry">MM/YY</string>

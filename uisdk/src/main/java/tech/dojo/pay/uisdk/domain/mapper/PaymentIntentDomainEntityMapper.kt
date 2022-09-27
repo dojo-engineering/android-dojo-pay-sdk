@@ -23,7 +23,10 @@ class PaymentIntentDomainEntityMapper {
                     amount = it.amountTotal,
                     caption = it.caption
                 )
-            }
+            },
+            collectionEmailRequired = raw.config?.customerEmail?.collectionRequired ?: false,
+            collectionBillingAddressRequired = raw.config?.billingAddress?.collectionRequired
+                ?: false
         )
     }
 
