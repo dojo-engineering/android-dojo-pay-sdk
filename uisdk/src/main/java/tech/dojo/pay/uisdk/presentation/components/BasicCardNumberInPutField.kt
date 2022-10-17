@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
@@ -103,6 +104,7 @@ internal fun BasicCardNumberInputField(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val isFocused = interactionSource.collectIsFocusedAsState().value
     val maxCardNumberChar = when (isAmexCardScheme(cardNumberValue.text)) {
         true -> 15
         else -> 16
@@ -114,7 +116,7 @@ internal fun BasicCardNumberInputField(
             .defaultMinSize(minHeight = 48.dp)
             .height(IntrinsicSize.Min)
             .border(
-                width = 1.dp,
+                width = if (isFocused) 2.dp else 1.dp,
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )

@@ -16,7 +16,7 @@ import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.entities.color
 
 internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
-    primary = Color(0xFF262626),
+    primary =   Color(0xFF00857D)  ,
     onPrimary = Color.White,
     background = Color.White,
     onBackground = Color.Black,
