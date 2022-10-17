@@ -29,22 +29,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-fun BasicCardInputField(
+internal fun BasicCardInputField(
     cardNumberValue: String,
     cvvValue: String,
     expireDateValue: String,
@@ -117,7 +112,7 @@ fun BasicCardInputField(
 }
 
 @Composable
-fun BasicCardInformationField(
+internal fun BasicCardInformationField(
     cardNumberValue: TextFieldValue,
     cvvValue: TextFieldValue,
     expireDateValue: TextFieldValue,
@@ -174,7 +169,7 @@ fun BasicCardInformationField(
                         it
                     )
                 },
-                visualTransformation = { creditCardFilter(it) },
+                visualTransformation = { formatNormalCard(it) },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                 maxLines = maxLines,
                 enabled = enabled,
@@ -277,68 +272,7 @@ fun BasicCardInformationField(
     }
 }
 
-fun creditCardFilter(text: AnnotatedString): TransformedText {
-    val trimmed = if (text.text.length >= 16) text.text.substring(0..15) else text.text
-
-    val annotatedString = AnnotatedString.Builder().run {
-        for (i in trimmed.indices) {
-            append(trimmed[i])
-            if (i % 4 == 3 && i != 15) {
-                append(" ")
-            }
-        }
-        pushStyle(SpanStyle(color = Color.LightGray))
-        toAnnotatedString()
-    }
-
-    val creditCardOffsetTranslator = object : OffsetMapping {
-        override fun originalToTransformed(offset: Int): Int {
-            if (offset <= 3) return offset
-            if (offset <= 7) return offset + 1
-            if (offset <= 11) return offset + 2
-            if (offset <= 16) return offset + 3
-            return 19
-        }
-
-        override fun transformedToOriginal(offset: Int): Int {
-            if (offset <= 4) return offset
-            if (offset <= 9) return offset - 1
-            if (offset <= 14) return offset - 2
-            if (offset <= 19) return offset - 3
-            return 16
-        }
-    }
-
-    return TransformedText(annotatedString, creditCardOffsetTranslator)
-}
-
-fun dateFilter(text: AnnotatedString): TransformedText {
-    val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
-    var out = ""
-    for (i in trimmed.indices) {
-        out += trimmed[i]
-        if (i % 2 == 1 && i < 3) out += "/"
-    }
-
-    val numberOffsetTranslator = object : OffsetMapping {
-        override fun originalToTransformed(offset: Int): Int {
-            if (offset <= 1) return offset
-            if (offset <= 3) return offset + 1
-            return 5
-        }
-
-        override fun transformedToOriginal(offset: Int): Int {
-            if (offset <= 2) return offset
-            if (offset <= 5) return offset - 1
-            if (offset <= 10) return offset - 2
-            return 4
-        }
-    }
-
-    return TransformedText(AnnotatedString(out), numberOffsetTranslator)
-}
-
-@Preview("App bar with two icons and title aligned to left", group = "AppBar")
+@Preview("card Details Group", group = "CardDetails")
 @Composable
 internal fun PreviewBasicCardInformationField() = DojoPreview {
     val value by remember { mutableStateOf("") }
