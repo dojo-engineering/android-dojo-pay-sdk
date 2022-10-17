@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardNumberInPutField(
+internal fun CardNumberInPutField(
     cardNumberValue: String,
     cardNumberPlaceholder: String?,
     onCardNumberValueChanged: (String) -> Unit,

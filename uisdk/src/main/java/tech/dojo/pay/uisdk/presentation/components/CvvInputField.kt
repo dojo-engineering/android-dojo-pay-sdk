@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CvvInputField(
+internal fun CvvInputField(
     cvvValue: String,
     cvvPlaceholder: String?,
     onCvvValueChanged: (String) -> Unit,
