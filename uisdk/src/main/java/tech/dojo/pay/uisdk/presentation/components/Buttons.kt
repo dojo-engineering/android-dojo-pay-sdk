@@ -1,16 +1,15 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -155,6 +154,80 @@ internal fun DojoOutlinedButton(
         loadingColor = loadingColor ?: DojoTheme.colors.secondarySurface,
         onClick = onClick
     )
+}
+
+@Composable
+internal fun SingleButtonView(
+    text: String,
+    modifier: Modifier = Modifier,
+    contentColor: Color? = null,
+    backgroundColor: Color? = null,
+    borderStroke: BorderStroke? = null,
+    loadingColor: Color? = null,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
+    scrollState: ScrollState? = null,
+    onClick: () -> Unit
+) {
+    if (scrollState != null) {
+        ScrollHintLayout(
+            modifier = modifier,
+            scrollState = scrollState
+        ) {
+            SingleButton(
+                Modifier,
+                text,
+                enabled,
+                isLoading,
+                contentColor,
+                backgroundColor,
+                borderStroke,
+                loadingColor,
+                onClick
+            )
+        }
+    } else {
+        SingleButton(
+            Modifier,
+            text,
+            enabled,
+            isLoading,
+            contentColor,
+            backgroundColor,
+            borderStroke,
+            loadingColor,
+            onClick
+        )
+    }
+}
+
+@Composable
+private fun SingleButton(
+    modifier: Modifier,
+    text: String,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
+    contentColor: Color? = null,
+    backgroundColor: Color? = null,
+    borderStrokeColor: BorderStroke? = null,
+    loadingColor: Color? = null,
+    onClick: () -> Unit
+) {
+    Box(modifier = modifier.background(DojoTheme.colors.background)) {
+        DojoButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            text = text,
+            enabled = enabled,
+            onClick = onClick,
+            backgroundColor = backgroundColor ?: DojoTheme.colors.secondarySurface,
+            contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+            borderStroke = borderStrokeColor,
+            isLoading = isLoading,
+            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+        )
+    }
 }
 
 @Composable
