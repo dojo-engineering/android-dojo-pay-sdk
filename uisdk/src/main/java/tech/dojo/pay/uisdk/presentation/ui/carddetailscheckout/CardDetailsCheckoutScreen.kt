@@ -78,6 +78,7 @@ fun CardDetailsCheckoutScreen(
                     top.linkTo(appBar.bottom, 16.dp)
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
+                    bottom.linkTo(payBtn.top,32.dp)
                     width = Dimension.fillToConstraints
                 }, verticalArrangement = Arrangement.spacedBy(32.dp)
 
@@ -197,7 +198,6 @@ fun CardDetailsCheckoutScreen(
                             onCvvValueChanged = { viewModel.onCvvValueChanged(it) })
                     }
                 }
-
             }
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
@@ -210,9 +210,7 @@ fun CardDetailsCheckoutScreen(
                 isLoading = state.isLoading,
                 enabled = state.isEnabled
             ) {
-                if (!state.isLoading) {
-                    viewModel.onPayWithCardClicked()
-                }
+                if (!state.isLoading) { viewModel.onPayWithCardClicked() }
             }
 
             DojoBrandFooter(
