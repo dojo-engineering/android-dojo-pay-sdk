@@ -205,7 +205,7 @@ fun CardDetailsCheckoutScreen(
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp),
-                    modifier = Modifier.align(Alignment.BottomCenter).background(Color.White).bringIntoViewRequester(bringIntoViewRequester)
+                    modifier = Modifier.align(Alignment.BottomCenter).background(Color.White)
                 ) {
                     SingleButtonView(
                         modifier= Modifier.bringIntoViewRequester(bringIntoViewRequester),
