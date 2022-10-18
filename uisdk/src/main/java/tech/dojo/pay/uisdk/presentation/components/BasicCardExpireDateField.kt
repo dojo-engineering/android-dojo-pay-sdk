@@ -98,7 +98,6 @@ internal fun BasicCardExpireDateField(
     val expireDataCharLength = 4
     Column(
         modifier = modifier
-            .defaultMinSize(minHeight = 48.dp)
             .height(IntrinsicSize.Min)
             .border(
                 width = 1.dp,

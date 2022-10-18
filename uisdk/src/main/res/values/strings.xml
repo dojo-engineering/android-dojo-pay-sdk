@@ -12,6 +12,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_placeholder_pan">1234 1234 1234 1234</string>
     <string name = "dojo_ui_sdk_card_details_checkout_placeholder_expiry">MM/YY</string>
     <string name = "dojo_ui_sdk_card_details_checkout_placeholder_cvv">CVV</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_label_expiry">Expiry date</string>
     <string name = "dojo_ui_sdk_card_details_checkout_you_pay">You pay</string>
     <string name = "dojo_ui_sdk_card_details_checkout_button_pay">Pay</string>
     <string name = "dojo_ui_sdk_payment_result_title_success">Payment completed</string>
