@@ -1,7 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,13 +25,14 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AmountBanner
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardInputField
+import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
-import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
@@ -48,6 +50,7 @@ fun CardDetailsCheckoutScreen(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,88 +70,48 @@ fun CardDetailsCheckoutScreen(
                 navigationIcon = AppBarIcon.back { onBackClicked() },
                 actionIcon = AppBarIcon.close { onCloseClicked() }
             )
-            AmountBanner(
+            Column(
                 modifier = Modifier.constrainAs(banner) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
                     top.linkTo(appBar.bottom, 16.dp)
-                    width = Dimension.fillToConstraints
-                },
-                amount = state.totalAmount,
-                currencyLogo = state.amountCurrency
-            )
-            InputFieldWithErrorMessage(
-                modifier = Modifier.constrainAs(cardHolderName) {
                     start.linkTo(parent.start, 16.dp)
                     end.linkTo(parent.end, 16.dp)
-                    top.linkTo(banner.bottom, 16.dp)
                     width = Dimension.fillToConstraints
                 },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                value = state.cardHolderInputField.value,
-                onValueChange = { viewModel.onCardHolderValueChanged(it) },
-                label = buildAnnotatedString {
-                    withStyle(
-                        SpanStyle(
-                            color = Color.Black,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                            letterSpacing = 0.15.sp
-                        ),
-                    ) {
-                        append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name))
-                    }
-                },
-            )
-            CardInputField(
-                modifier = Modifier.constrainAs(cardInputField) {
-                    start.linkTo(parent.start, 16.dp)
-                    end.linkTo(parent.end, 16.dp)
-                    top.linkTo(cardHolderName.bottom, 16.dp)
-                    width = Dimension.fillToConstraints
-                },
-                label =
-                buildAnnotatedString {
-                    withStyle(
-                        SpanStyle(
-                            color = Color.Black,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 16.sp,
-                            letterSpacing = 0.15.sp
-                        ),
-                    ) {
-                        append(
-                            stringResource(
-                                R.string.dojo_ui_sdk_card_details_checkout_field_pan
-                            )
-                        )
-                    }
-                },
-                maxLines = 1,
-                keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
-                cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
-                onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
-                cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
-                cvvValue = state.cardDetailsInPutField.cvvValue,
-                onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
-                expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
-                expireDateValue = state.cardDetailsInPutField.expireDateValueValue,
-                onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
-            )
-            if (state.isEmailInputFieldRequired) {
+                verticalArrangement = Arrangement.spacedBy(32.dp)
+
+            ) {
+                AmountBanner(
+                    amount = state.totalAmount,
+                    currencyLogo = state.amountCurrency
+                )
+
+
+                if (true) {
+                    InputFieldWithErrorMessage(
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+                        value = state.emailInputField.value,
+                        onValueChange = { viewModel.onEmailValueChanged(it) },
+                        label = buildAnnotatedString {
+                            withStyle(
+                                SpanStyle(
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 16.sp,
+                                    letterSpacing = 0.15.sp
+                                ),
+                            ) {
+                                append(stringResource(R.string.dojo_ui_sdk_card_details_email_field))
+                            }
+                        }
+                    )
+                }
+
                 InputFieldWithErrorMessage(
-                    modifier = Modifier.constrainAs(emailField) {
-                        start.linkTo(parent.start, 16.dp)
-                        end.linkTo(parent.end, 16.dp)
-                        top.linkTo(cardInputField.bottom, 16.dp)
-                        width = Dimension.fillToConstraints
-                    },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-                    value = state.emailInputField.value,
-                    onValueChange = { viewModel.onEmailValueChanged(it) },
+                    value = state.cardHolderInputField.value,
+                    onValueChange = { viewModel.onCardHolderValueChanged(it) },
                     label = buildAnnotatedString {
                         withStyle(
                             SpanStyle(
@@ -158,13 +121,31 @@ fun CardDetailsCheckoutScreen(
                                 letterSpacing = 0.15.sp
                             ),
                         ) {
-                            append(stringResource(R.string.dojo_ui_sdk_card_details_email_field))
+                            append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name))
                         }
                     }
                 )
 
-            }
+                CardNumberInPutField(
+                    label = buildAnnotatedString {
+                        withStyle(
+                            SpanStyle(
+                                color = Color.Black,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
+                                letterSpacing = 0.15.sp
+                            ),
+                        ) {
+                            append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan))
+                        }
+                    },
+                    cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
+                    cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
+                    onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) }
+                )
 
+
+            }
             DojoFullGroundButton(
                 modifier = Modifier.constrainAs(payBtn) {
                     start.linkTo(parent.start, 16.dp)

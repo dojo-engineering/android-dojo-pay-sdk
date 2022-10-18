@@ -94,14 +94,13 @@ internal fun BasicCvvInputField(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors()
-    val isFocused = interactionSource.collectIsFocusedAsState().value
     val maxCvvChar = 4
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .height(IntrinsicSize.Min)
             .border(
-                width = if (isFocused) 2.dp else 1.dp,
+                width = 1.dp,
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
