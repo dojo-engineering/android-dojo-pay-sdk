@@ -79,6 +79,8 @@ internal fun CardDetailsCheckoutScreen(
                 ) {
                     AmountBannerItem(state)
                     EmailField(state, keyboardController, viewModel)
+                    BillingCountryField(state,keyboardController,viewModel)
+                    PostalCodeField(state,keyboardController,viewModel)
                     CardHolderNameField(keyboardController, state, viewModel)
                     CardNumberField(keyboardController, state, viewModel)
                     Row(
@@ -296,6 +298,61 @@ private fun EmailField(
                     ),
                 ) {
                     append(stringResource(R.string.dojo_ui_sdk_card_details_email_field))
+                }
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun BillingCountryField(
+    state: CardDetailsCheckoutState,
+    keyboardController: SoftwareKeyboardController?,
+    viewModel: CardDetailsCheckoutViewModel
+) {
+    if (state.isBillingCountryFieldRequired) {
+        CountrySelectorField(
+            label=buildAnnotatedString {
+                withStyle(
+                    SpanStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        letterSpacing = 0.15.sp
+                    ),
+                ) {
+                    append(stringResource(R.string.dojo_ui_sdk_card_details_billing_country_field))
+                }
+            },
+            supportedCountriesViewEntity = state.supportedCountriesList,
+            onCountrySelected = { viewModel.onCountrySelected(it) })
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun PostalCodeField(
+    state: CardDetailsCheckoutState,
+    keyboardController: SoftwareKeyboardController?,
+    viewModel: CardDetailsCheckoutViewModel
+) {
+    if (state.isPostalCodeFieldRequired) {
+        InputFieldWithErrorMessage(
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+            value = state.postalCodeField.value,
+            onValueChange = { viewModel.onPostalCodeValueChanged(it) },
+            label = buildAnnotatedString {
+                withStyle(
+                    SpanStyle(
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        letterSpacing = 0.15.sp
+                    ),
+                ) {
+                    append(stringResource(R.string.dojo_ui_sdk_card_details_postcode_field))
                 }
             }
         )

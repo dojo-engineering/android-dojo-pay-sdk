@@ -9,9 +9,12 @@ import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
@@ -21,7 +24,9 @@ internal class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
+    private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
+    private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private var currentState: CardDetailsCheckoutState
@@ -36,6 +41,11 @@ internal class CardDetailsCheckoutViewModel(
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
+            isBillingCountryFieldRequired = false,
+            supportedCountriesList = emptyList(),
+            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            isPostalCodeFieldRequired = false,
+            postalCodeField = InputFieldState(value = ""),
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -60,6 +70,11 @@ internal class CardDetailsCheckoutViewModel(
                 currentState.emailInputField.value
             )
         )
+        pushStateToUi(currentState)
+    }
+
+    fun onPostalCodeValueChanged(newValue: String) {
+        currentState = currentState.copy(postalCodeField = InputFieldState(value = newValue),)
         pushStateToUi(currentState)
     }
 
@@ -133,6 +148,14 @@ internal class CardDetailsCheckoutViewModel(
         pushStateToUi(currentState)
     }
 
+    fun onCountrySelected(newValue: SupportedCountriesViewEntity) {
+        currentState = currentState.copy(
+            currentSelectedCountry = newValue,
+            isPostalCodeFieldRequired = applyIsPostalCodeFieldRequiredLogic(
+                newValue, currentState.isBillingCountryFieldRequired
+            )
+        )
+    }
 
     private fun isPayButtonEnabled(
         cardHolder: String,
@@ -141,7 +164,9 @@ internal class CardDetailsCheckoutViewModel(
         expireDateValue: String,
         emailAddressValue: String
     ) =
-        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank() && isMailFieldValid(emailAddressValue)
+        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank() && isMailFieldValid(
+            emailAddressValue
+        )
 
     private fun isMailFieldValid(emailAddressValue: String): Boolean {
         return if (currentState.isEmailInputFieldRequired) {
@@ -161,10 +186,26 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired
+                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
+                isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
+                supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
+                isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired
             )
             pushStateToUi(currentState)
         }
+    }
+
+    private fun getSupportedCountriesList(collectionBillingAddressRequired: Boolean): List<SupportedCountriesViewEntity> {
+        return if (collectionBillingAddressRequired) getSupportedCountriesUseCase
+            .getSupportedCountries()
+            .map { supportedCountriesViewEntityMapper.apply(it) } else emptyList()
+    }
+
+    private fun applyIsPostalCodeFieldRequiredLogic(
+        SupportedCountryItem: SupportedCountriesViewEntity,
+        collectionBillingAddressRequired: Boolean
+    ): Boolean {
+        return SupportedCountryItem.isPostalCodeEnabled && collectionBillingAddressRequired
     }
 
     private suspend fun observePaymentStatus() {
