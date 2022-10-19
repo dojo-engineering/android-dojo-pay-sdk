@@ -48,7 +48,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDet
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun CardDetailsCheckoutScreen(
+internal fun CardDetailsCheckoutScreen(
     viewModel: CardDetailsCheckoutViewModel,
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
