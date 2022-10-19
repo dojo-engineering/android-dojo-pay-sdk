@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
-import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
