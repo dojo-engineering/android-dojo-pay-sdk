@@ -2,6 +2,8 @@ package tech.dojo.pay.sdksample.token
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import tech.dojo.pay.uisdk.data.entities.BillingAddress
+import tech.dojo.pay.uisdk.data.entities.CustomerEmail
 
 object PaymentIDGenerator {
     private val paymentIntentApi by lazy {
@@ -17,6 +19,10 @@ object PaymentIDGenerator {
             amount = Amount(
                 value = 10L,
                 currencyCode = "GBP"
+            ),
+            config = Config(
+                customerEmail = CustomerEmail(true),
+                billingAddress = BillingAddress(true)
             ),
             itemLines = listOf(
                 ItemLines(
