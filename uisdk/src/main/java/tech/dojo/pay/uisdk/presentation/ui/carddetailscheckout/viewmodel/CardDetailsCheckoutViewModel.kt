@@ -17,7 +17,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetails
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import java.util.Currency
 
-class CardDetailsCheckoutViewModel(
+internal class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val observePaymentStatus: ObservePaymentStatus,
