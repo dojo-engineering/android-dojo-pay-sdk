@@ -155,6 +155,7 @@ internal class CardDetailsCheckoutViewModel(
                 newValue, currentState.isBillingCountryFieldRequired
             )
         )
+        pushStateToUi(currentState)
     }
 
     private fun isPayButtonEnabled(
