@@ -9,12 +9,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +51,7 @@ private fun DojoButton(
         if (isLoading) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                text = "Processing...",
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_processing),
                 style = DojoTheme.typography.subtitle1,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
