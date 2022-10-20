@@ -8,6 +8,7 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdk.card.presentation.gpay.util.GPayConstants.CENTS
@@ -34,16 +35,6 @@ object GooglePayJsonFactory {
         put("apiVersion", 2)
         put("apiVersionMinor", 0)
     }
-
-    /**
-     * Card networks supported by your app and your gateway.
-     *
-     *
-     *
-     * @return Allowed card networks
-     * @see [CardParameters](https://developers.google.com/pay/api/android/reference/object.CardParameters)
-     */
-    private val allowedCardNetworks = JSONArray(GPayConstants.SUPPORTED_NETWORKS)
 
     /**
      * Card authentication methods supported by your app and your gateway.
@@ -88,7 +79,7 @@ object GooglePayJsonFactory {
             put("type", "CARD")
             put(
                 "parameters",
-                createPaymentParamsJson(dojoGPayConfig.collectBilling)
+                createPaymentParamsJson(dojoGPayConfig.collectBilling, dojoGPayConfig.allowedCardNetworks)
             )
             put(
                 "tokenizationSpecification",
@@ -98,12 +89,14 @@ object GooglePayJsonFactory {
     }
 
     private fun createPaymentParamsJson(
-        collectBilling: Boolean
+        collectBilling: Boolean,
+        allowedCardNetworks: List<CardsSchemes>
     ): JSONObject {
+        val supportedCards= allowedCardNetworks.map { it.cardsSchemes }
         return JSONObject()
             .apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)
-                put("allowedCardNetworks", allowedCardNetworks)
+                put("allowedCardNetworks", JSONArray(supportedCards))
                 if (collectBilling) {
                     put("billingAddressRequired", true)
                     put(

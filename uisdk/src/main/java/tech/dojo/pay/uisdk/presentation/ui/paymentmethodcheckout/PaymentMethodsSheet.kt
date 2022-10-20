@@ -44,22 +44,12 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 internal fun PaymentMethodsCheckOutScreen(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
+    gPayConfig: DojoGPayConfig?,
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit
 ) {
     val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
-    LaunchedEffect(Unit) {
-        DojoSdk.isGpayAvailable(
-            activity = activity as Activity,
-            dojoGPayConfig = DojoGPayConfig(
-                merchantName = "Dojo Cafe (Paymentsense)",
-                merchantId = "BCR2DN6T57R5ZI34",
-                gatewayMerchantId = "119784244252745"
-            ),
-            { viewModel.handleGooglePayAvailable() },
-            { viewModel.handleGooglePayUnAvailable() }
-        )
-    }
+    CheckGPayAvailability(gPayConfig, activity, viewModel)
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -86,6 +76,31 @@ internal fun PaymentMethodsCheckOutScreen(
         if (state.isBottomSheetVisible) {
             LaunchedEffect(Unit) { paymentMethodsSheetState.show() }
         }
+    }
+}
+
+@Composable
+private fun CheckGPayAvailability(
+    gPayConfig: DojoGPayConfig?,
+    activity: PaymentFlowContainerActivity?,
+    viewModel: PaymentMethodCheckoutViewModel
+) {
+    if (gPayConfig != null) {
+        LaunchedEffect(Unit) {
+            DojoSdk.isGpayAvailable(
+                activity = activity as Activity,
+                dojoGPayConfig = DojoGPayConfig(
+                    merchantName = gPayConfig.merchantName,
+                    merchantId = gPayConfig.merchantId,
+                    gatewayMerchantId = gPayConfig.gatewayMerchantId,
+                    allowedCardNetworks = gPayConfig.allowedCardNetworks
+                ),
+                { viewModel.handleGooglePayAvailable() },
+                { viewModel.handleGooglePayUnAvailable() }
+            )
+        }
+    } else {
+        LaunchedEffect(Unit) { viewModel.handleGooglePayUnAvailable() }
     }
 }
 

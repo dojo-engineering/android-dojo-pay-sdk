@@ -8,13 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.*
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
-import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
-import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
-import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
@@ -90,7 +86,13 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 collectEmailAddress = binding.checkboxEmail.isChecked,
                 merchantName = "Dojo Cafe (Paymentsense)",
                 merchantId = "BCR2DN6T57R5ZI34",
-                gatewayMerchantId = "119784244252745"
+                gatewayMerchantId = "119784244252745",
+                allowedCardNetworks = listOf(
+                    CardsSchemes.AMEX,
+                    CardsSchemes.VISA,
+                    CardsSchemes.MAESTRO,
+                    CardsSchemes.MASTER_CARD
+                )
             ),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
@@ -108,7 +110,13 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         collectEmailAddress = binding.checkboxEmail.isChecked,
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
-                        gatewayMerchantId = "119784244252745"
+                        gatewayMerchantId = "119784244252745",
+                        allowedCardNetworks = listOf(
+                            CardsSchemes.AMEX,
+                            CardsSchemes.VISA,
+                            CardsSchemes.MAESTRO,
+                            CardsSchemes.MASTER_CARD
+                        )
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(
