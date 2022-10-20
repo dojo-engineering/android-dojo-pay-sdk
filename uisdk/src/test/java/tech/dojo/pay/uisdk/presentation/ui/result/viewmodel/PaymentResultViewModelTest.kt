@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -115,7 +116,8 @@ internal class PaymentResultViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -148,7 +150,8 @@ internal class PaymentResultViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -186,7 +189,8 @@ internal class PaymentResultViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )
@@ -226,7 +230,8 @@ internal class PaymentResultViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )

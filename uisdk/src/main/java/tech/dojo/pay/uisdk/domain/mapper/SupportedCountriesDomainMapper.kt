@@ -6,10 +6,10 @@ import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 
 internal class SupportedCountriesDomainMapper {
     fun apply(raw: SupportedCountryRaw): SupportedCountriesDomainEntity {
-            return SupportedCountriesDomainEntity(
-                countryName = raw.countryName,
-                countryCode = raw.countryCode,
-                isPostalCodeEnabled = PostalCodeSupportedCountries.fromCountryCode(raw.countryCode) != PostalCodeSupportedCountries.NOT_SUPPORTED
-            )
+        return SupportedCountriesDomainEntity(
+            countryName = raw.countryName,
+            countryCode = raw.countryCode,
+            isPostalCodeEnabled = PostalCodeSupportedCountries.fromCountryCode(raw.countryCode) != PostalCodeSupportedCountries.NOT_SUPPORTED
+        )
     }
 }

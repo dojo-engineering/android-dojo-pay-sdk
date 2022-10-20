@@ -2,7 +2,7 @@ package tech.dojo.pay.sdk.card.entities
 
 enum class CardsSchemes(val cardsSchemes: String) {
     VISA("VISA"),
-    MASTER_CARD("MASTERCARD"),
+    MASTERCARD("MASTERCARD"),
     MAESTRO("MAESTRO"),
     AMEX("AMEX"),
     NOT_SUPPORTED("");
@@ -13,5 +13,3 @@ enum class CardsSchemes(val cardsSchemes: String) {
                 .find { it.cardsSchemes == countryCode } ?: NOT_SUPPORTED
     }
 }
-
-

@@ -10,14 +10,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 
-
 @Composable
 internal fun SupportedPaymentMethods(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
-    ){
+    ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_visa),
             contentDescription = "",

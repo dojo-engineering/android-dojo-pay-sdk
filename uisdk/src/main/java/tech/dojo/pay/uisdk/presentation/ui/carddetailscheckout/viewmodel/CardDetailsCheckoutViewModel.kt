@@ -153,7 +153,8 @@ internal class CardDetailsCheckoutViewModel(
         currentState = currentState.copy(
             currentSelectedCountry = newValue,
             isPostalCodeFieldRequired = applyIsPostalCodeFieldRequiredLogic(
-                newValue, currentState.isBillingCountryFieldRequired
+                newValue,
+                currentState.isBillingCountryFieldRequired
             )
         )
         pushStateToUi(currentState)

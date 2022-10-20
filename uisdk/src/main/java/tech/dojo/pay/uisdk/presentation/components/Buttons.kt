@@ -3,7 +3,12 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -145,7 +150,7 @@ internal fun DojoOutlinedButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?:  DojoTheme.colors.background,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.background,
         contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,

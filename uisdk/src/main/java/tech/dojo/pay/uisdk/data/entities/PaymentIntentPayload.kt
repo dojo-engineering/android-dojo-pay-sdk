@@ -1,5 +1,8 @@
 package tech.dojo.pay.uisdk.data.entities
 
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
+
 data class PaymentIntentPayload(
     val id: String? = null,
     val captureMode: String? = null,
@@ -17,6 +20,7 @@ data class PaymentIntentPayload(
     val updatedAt: String? = null,
     val reference: String? = null,
     val description: String? = null,
+    val merchantConfig: MerchantConfig? = null,
     val config: Config? = null,
     val itemLines: List<ItemLines>? = null,
     val metadata: Metadata? = null
@@ -50,6 +54,15 @@ data class BillingAddress(
 data class Branding(
     val logoURL: String,
     val faviconURL: String
+)
+
+data class MerchantConfig(
+    val supportedPaymentMethods: SupportedPaymentMethods?
+)
+
+data class SupportedPaymentMethods(
+    val cardSchemes: List<CardsSchemes>?,
+    val wallets: List<WalletSchemes>? = null
 )
 
 data class Metadata(

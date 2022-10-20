@@ -11,6 +11,7 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
@@ -75,7 +76,8 @@ class PaymentMethodCheckoutViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -122,7 +124,8 @@ class PaymentMethodCheckoutViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -169,7 +172,8 @@ class PaymentMethodCheckoutViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -216,7 +220,8 @@ class PaymentMethodCheckoutViewModelTest {
                         10L,
                         "100",
                         "GBP"
-                    )
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
         )
@@ -265,7 +270,8 @@ class PaymentMethodCheckoutViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )
@@ -310,7 +316,8 @@ class PaymentMethodCheckoutViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )
@@ -355,7 +362,8 @@ class PaymentMethodCheckoutViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )
@@ -400,7 +408,8 @@ class PaymentMethodCheckoutViewModelTest {
                             10L,
                             "100",
                             "GBP"
-                        )
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
             )

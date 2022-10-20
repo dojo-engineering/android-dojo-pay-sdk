@@ -3,7 +3,15 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
@@ -36,12 +44,16 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AmountWithPaymentMethodsHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
+import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
+import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
+import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -79,8 +91,8 @@ internal fun CardDetailsCheckoutScreen(
                 ) {
                     AmountWithPaymentMethodsHeader(state)
                     EmailField(state, keyboardController, viewModel)
-                    BillingCountryField(state,keyboardController,viewModel)
-                    PostalCodeField(state,keyboardController,viewModel)
+                    BillingCountryField(state, keyboardController, viewModel)
+                    PostalCodeField(state, keyboardController, viewModel)
                     CardHolderNameField(keyboardController, state, viewModel)
                     CardNumberField(keyboardController, state, viewModel)
                     Row(
@@ -93,8 +105,7 @@ internal fun CardDetailsCheckoutScreen(
                         ) { CardExpireDateField(keyboardController, state, viewModel) }
 
                         Divider(modifier = Modifier.width(32.dp))
-                        Box(modifier = Modifier.weight(1f))
-                        {
+                        Box(modifier = Modifier.weight(1f)) {
                             CvvField(
                                 coroutineScope,
                                 bringIntoViewRequester,
@@ -180,7 +191,8 @@ private fun CvvField(
         cvvValue = state.cardDetailsInPutField.cvvValue,
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
-        onCvvValueChanged = { viewModel.onCvvValueChanged(it) })
+        onCvvValueChanged = { viewModel.onCvvValueChanged(it) }
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -313,7 +325,7 @@ private fun BillingCountryField(
 ) {
     if (state.isBillingCountryFieldRequired) {
         CountrySelectorField(
-            label=buildAnnotatedString {
+            label = buildAnnotatedString {
                 withStyle(
                     SpanStyle(
                         color = Color.Black,
@@ -326,7 +338,8 @@ private fun BillingCountryField(
                 }
             },
             supportedCountriesViewEntity = state.supportedCountriesList,
-            onCountrySelected = { viewModel.onCountrySelected(it) })
+            onCountrySelected = { viewModel.onCountrySelected(it) }
+        )
     }
 }
 

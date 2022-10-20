@@ -16,16 +16,16 @@ fun isAmexCardScheme(cardNumber: String): Boolean {
     return trimmedCardNumber.matches(ameRegex)
 }
 
-fun isVisaCardScheme(cardNumber: String): Boolean{
+fun isVisaCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(visaRegex)
 }
-fun isMasterCardScheme(cardNumber: String): Boolean{
+fun isMasterCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(masterCardRegex)
 }
 
-fun isMaestroCardScheme(cardNumber: String): Boolean{
+fun isMaestroCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(maestroCardRegex)
 }
