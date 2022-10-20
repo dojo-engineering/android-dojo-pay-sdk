@@ -17,6 +17,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WalletItemWithRadioButton
+import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
 fun ManagePaymentMethods(
@@ -31,8 +32,8 @@ fun ManagePaymentMethods(
         DojoAppBar(
             title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
             titleGravity = TitleGravity.LEFT,
-            navigationIcon = AppBarIcon.back { onBackClicked() },
-            actionIcon = AppBarIcon.close {
+            navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
+            actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) {
                 onCloseClicked()
             }
         )

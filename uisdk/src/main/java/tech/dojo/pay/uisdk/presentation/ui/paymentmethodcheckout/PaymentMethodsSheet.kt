@@ -151,7 +151,7 @@ private fun AppBar(
         modifier = Modifier.height(60.dp),
         title = stringResource(id = R.string.dojo_ui_sdk_payment_method_checkout_title),
         titleGravity = TitleGravity.LEFT,
-        actionIcon = AppBarIcon.close() {
+        actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) {
             coroutineScope.launch {
                 sheetState.hide()
             }

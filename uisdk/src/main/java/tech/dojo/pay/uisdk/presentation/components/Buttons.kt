@@ -120,13 +120,13 @@ internal fun DojoFullGroundButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.secondarySurface,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
         contentColor = contentColor ?: DojoTheme.colors.onPrimary,
         borderStroke = null,
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
         onClick = onClick
     )
 }
@@ -145,13 +145,13 @@ internal fun DojoOutlinedButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.background,
-        contentColor = contentColor ?: DojoTheme.colors.secondarySurface,
+        backgroundColor = backgroundColor ?:  DojoTheme.colors.background,
+        contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.secondarySurface,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
         onClick = onClick
     )
 }
@@ -221,11 +221,11 @@ private fun SingleButton(
             text = text,
             enabled = enabled,
             onClick = onClick,
-            backgroundColor = backgroundColor ?: DojoTheme.colors.secondarySurface,
+            backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             contentColor = contentColor ?: DojoTheme.colors.onPrimary,
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
-            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+            loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
         )
     }
 }
@@ -237,7 +237,7 @@ private fun getBorderStroke(
 ) =
     if (enabled) BorderStroke(
         1.dp,
-        borderStrokeColor ?: DojoTheme.colors.secondarySurface
+        borderStrokeColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
     ) else null
 
 @Preview("Button", group = "Buttons")

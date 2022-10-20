@@ -44,7 +44,8 @@ internal fun AmountBreakDownItems(
                     text = item.caption,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = DojoTheme.typography.body1
+                    style = DojoTheme.typography.body1,
+                    color = DojoTheme.colors.secondaryLabelTextColor
                 )
                 Spacer(Modifier.weight(4f))
                 Text(
@@ -52,7 +53,8 @@ internal fun AmountBreakDownItems(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     modifier = Modifier.padding(end = 16.dp),
-                    style = DojoTheme.typography.body1
+                    style = DojoTheme.typography.body1,
+                    color = DojoTheme.colors.secondaryLabelTextColor
                 )
             }
         }

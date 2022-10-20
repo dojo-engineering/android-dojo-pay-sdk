@@ -28,7 +28,8 @@ internal fun TotalDueItem(
             text = "Total Due",
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            style = DojoTheme.typography.body1.bold
+            style = DojoTheme.typography.body1.bold,
+            color = DojoTheme.colors.primaryLabelTextColor
         )
 
         Text(
@@ -36,7 +37,8 @@ internal fun TotalDueItem(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(16.dp),
-            style = DojoTheme.typography.body1.bold
+            style = DojoTheme.typography.body1.bold,
+            color = DojoTheme.colors.primaryLabelTextColor
         )
     }
 }

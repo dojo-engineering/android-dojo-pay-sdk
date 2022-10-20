@@ -43,6 +43,7 @@ import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
@@ -55,7 +56,6 @@ internal fun CardDetailsCheckoutScreen(
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     val keyboardController = LocalSoftwareKeyboardController.current
-
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     val bringIntoViewRequester = BringIntoViewRequester()
@@ -372,7 +372,7 @@ private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit) {
     DojoAppBar(
         title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
-        navigationIcon = AppBarIcon.back { onBackClicked() },
-        actionIcon = AppBarIcon.close { onCloseClicked() }
+        navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
+        actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
     )
 }
