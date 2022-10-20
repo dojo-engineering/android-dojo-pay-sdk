@@ -126,7 +126,7 @@ internal fun DojoFullGroundButton(
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
+        loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
         onClick = onClick
     )
 }
@@ -225,7 +225,7 @@ private fun SingleButton(
             contentColor = contentColor ?: DojoTheme.colors.onPrimary,
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
-            loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
+            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
         )
     }
 }
