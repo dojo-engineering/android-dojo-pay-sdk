@@ -156,8 +156,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
-                    },
-                    (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig,
+                    } ,
                     viewModel::navigateToManagePaymentMethods,
                     viewModel::navigateToCardDetailsCheckoutScreen
                 )

@@ -44,12 +44,10 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 internal fun PaymentMethodsCheckOutScreen(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
-    gPayConfig: DojoGPayConfig?,
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit
 ) {
     val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
-    CheckGPayAvailability(gPayConfig, activity, viewModel)
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -57,6 +55,7 @@ internal fun PaymentMethodsCheckOutScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
+    if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true){ CheckGPayAvailability(state.gPayConfig, activity, viewModel) }
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
