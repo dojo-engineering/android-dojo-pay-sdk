@@ -6,11 +6,28 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 
+private val ameRegex = Regex("^3[47][0-9]{0,}\$")
+private val visaRegex = Regex("^4[0-9]{0,}\$")
+private val masterCardRegex = Regex("^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[01]|2720)[0-9]{0,}\$")
+private val maestroCardRegex = Regex("^(5[06789]|6)[0-9]{0,}\$")
 
 fun isAmexCardScheme(cardNumber: String): Boolean {
-    val ameRegex = Regex("^3[47][0-9]{0,}\$")
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(ameRegex)
+}
+
+fun isVisaCardScheme(cardNumber: String): Boolean{
+    val trimmedCardNumber = cardNumber.replace(" ", "")
+    return trimmedCardNumber.matches(visaRegex)
+}
+fun isMasterCardScheme(cardNumber: String): Boolean{
+    val trimmedCardNumber = cardNumber.replace(" ", "")
+    return trimmedCardNumber.matches(masterCardRegex)
+}
+
+fun isMaestroCardScheme(cardNumber: String): Boolean{
+    val trimmedCardNumber = cardNumber.replace(" ", "")
+    return trimmedCardNumber.matches(maestroCardRegex)
 }
 fun formatAmex(text: AnnotatedString): TransformedText {
     val trimmed = if (text.text.length >= 15) text.text.substring(0..14) else text.text
@@ -18,20 +35,20 @@ fun formatAmex(text: AnnotatedString): TransformedText {
 
     for (i in trimmed.indices) {
         out += trimmed[i]
-        if (i ==3 || i == 9 && i != 14) out += " "
+        if (i == 3 || i == 9 && i != 14) out += " "
     }
     val creditCardOffsetTranslator = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
             if (offset <= 3) return offset
             if (offset <= 9) return offset + 1
-            if(offset <= 15) return offset + 2
+            if (offset <= 15) return offset + 2
             return 17
         }
 
         override fun transformedToOriginal(offset: Int): Int {
             if (offset <= 4) return offset
             if (offset <= 11) return offset - 1
-            if(offset <= 17) return offset - 2
+            if (offset <= 17) return offset - 2
             return 15
         }
     }

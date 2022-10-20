@@ -3,16 +3,11 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -24,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
@@ -158,7 +156,31 @@ internal fun BasicCardNumberInputField(
                     .fillMaxWidth()
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
+            if (cardNumberValue.text.isNotBlank()) {
+                getCardTypeIcon(cardNumberValue.text)?.let {
+                    Icon(
+                        painter = painterResource(id = it),
+                        contentDescription = "",
+                        tint = Color.Unspecified,
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .width(25.dp)
+                            .heightIn(15.dp)
+                            .align(Alignment.CenterEnd)
+                    )
+                }
+            }
         }
+    }
+}
+
+private fun getCardTypeIcon(cardNumberValue: String): Int? {
+    return when {
+        isAmexCardScheme(cardNumberValue) -> R.drawable.ic_amex
+        isMaestroCardScheme(cardNumberValue) -> R.drawable.ic_maestro
+        isMasterCardScheme(cardNumberValue) -> R.drawable.ic_mastercard
+        isVisaCardScheme(cardNumberValue) -> R.drawable.ic_visa
+        else -> null
     }
 }
 
