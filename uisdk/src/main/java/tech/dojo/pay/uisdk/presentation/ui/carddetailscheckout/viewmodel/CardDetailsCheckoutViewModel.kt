@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
@@ -74,7 +75,7 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onPostalCodeValueChanged(newValue: String) {
-        currentState = currentState.copy(postalCodeField = InputFieldState(value = newValue),)
+        currentState = currentState.copy(postalCodeField = InputFieldState(value = newValue))
         pushStateToUi(currentState)
     }
 
@@ -224,13 +225,16 @@ internal class CardDetailsCheckoutViewModel(
         dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
     }
 
-    private fun pushStateToUi(state: CardDetailsCheckoutState) {
-        mutableState.postValue(state)
-    }
+    private fun pushStateToUi(state: CardDetailsCheckoutState) { mutableState.postValue(state) }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
         DojoCardPaymentPayLoad.FullCardPaymentPayload(
-            DojoCardDetails(
+            userEmailAddress = if (currentState.isEmailInputFieldRequired) currentState.emailInputField.value else null,
+            billingAddress = DojoAddressDetails(
+                countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
+                postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null
+            ),
+            cardDetails = DojoCardDetails(
                 cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
                 cardName = currentState.cardHolderInputField.value,
                 expiryMonth = getExpiryMonth(currentState.cardDetailsInPutField.expireDateValueValue),
