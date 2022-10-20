@@ -37,7 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.*
-import tech.dojo.pay.uisdk.presentation.components.AmountBanner
+import tech.dojo.pay.uisdk.presentation.components.AmountWithPaymentMethodsHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
@@ -77,7 +77,7 @@ internal fun CardDetailsCheckoutScreen(
                         .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
                 ) {
-                    AmountBannerItem(state)
+                    AmountWithPaymentMethodsHeader(state)
                     EmailField(state, keyboardController, viewModel)
                     BillingCountryField(state,keyboardController,viewModel)
                     PostalCodeField(state,keyboardController,viewModel)
@@ -360,8 +360,8 @@ private fun PostalCodeField(
 }
 
 @Composable
-private fun AmountBannerItem(state: CardDetailsCheckoutState) {
-    AmountBanner(
+private fun AmountWithPaymentMethodsHeader(state: CardDetailsCheckoutState) {
+    AmountWithPaymentMethodsHeader(
         amount = state.totalAmount,
         currencyLogo = state.amountCurrency
     )

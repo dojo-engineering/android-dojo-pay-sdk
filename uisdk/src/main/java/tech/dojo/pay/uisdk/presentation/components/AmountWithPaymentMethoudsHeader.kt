@@ -1,12 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
@@ -22,7 +16,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun AmountBanner(
+internal fun AmountWithPaymentMethodsHeader(
     modifier: Modifier = Modifier,
     amount: String,
     currencyLogo: String
@@ -72,6 +66,7 @@ internal fun AmountBanner(
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
                 )
             }
+            SupportedPaymentMethods(Modifier.padding(vertical = 16.dp, horizontal = 32.dp))
         }
     }
 }
@@ -79,5 +74,5 @@ internal fun AmountBanner(
 @Preview("AmountBanner", group = "Footer")
 @Composable
 internal fun PreviewAmountBanner() = DojoPreview {
-    AmountBanner(amount = "95.70", currencyLogo = "£")
+    AmountWithPaymentMethodsHeader(amount = "95.70", currencyLogo = "£")
 }
