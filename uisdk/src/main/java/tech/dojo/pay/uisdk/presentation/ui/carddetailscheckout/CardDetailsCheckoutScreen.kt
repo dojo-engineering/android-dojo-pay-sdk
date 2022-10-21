@@ -376,7 +376,8 @@ private fun PostalCodeField(
 private fun AmountWithPaymentMethodsHeader(state: CardDetailsCheckoutState) {
     AmountWithPaymentMethodsHeader(
         amount = state.totalAmount,
-        currencyLogo = state.amountCurrency
+        currencyLogo = state.amountCurrency,
+        allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons
     )
 }
 

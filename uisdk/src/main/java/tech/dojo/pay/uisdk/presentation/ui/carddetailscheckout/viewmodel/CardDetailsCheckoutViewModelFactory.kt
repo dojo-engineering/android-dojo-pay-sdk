@@ -8,6 +8,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 
 class CardDetailsCheckoutViewModelFactory(
@@ -25,6 +26,8 @@ class CardDetailsCheckoutViewModelFactory(
             GetSupportedCountriesUseCase()
         val supportedCountriesViewEntityMapper =
             SupportedCountriesViewEntityMapper()
+        val allowedPaymentMethodsViewEntityMapper =
+            AllowedPaymentMethodsViewEntityMapper()
 
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
@@ -32,7 +35,8 @@ class CardDetailsCheckoutViewModelFactory(
             observePaymentStatus,
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper
+            supportedCountriesViewEntityMapper,
+            allowedPaymentMethodsViewEntityMapper
         ) as T
     }
 }

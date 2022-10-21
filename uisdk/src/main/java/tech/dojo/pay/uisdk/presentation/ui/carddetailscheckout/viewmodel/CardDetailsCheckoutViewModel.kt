@@ -15,6 +15,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
@@ -27,7 +28,8 @@ internal class CardDetailsCheckoutViewModel(
     private val observePaymentStatus: ObservePaymentStatus,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
-    private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper
+    private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
+    private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private var currentState: CardDetailsCheckoutState
@@ -39,6 +41,7 @@ internal class CardDetailsCheckoutViewModel(
         currentState = CardDetailsCheckoutState(
             totalAmount = "",
             amountCurrency = "",
+            allowedPaymentMethodsIcons= emptyList(),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
@@ -189,6 +192,7 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                allowedPaymentMethodsIcons= allowedPaymentMethodsViewEntityMapper.apply(paymentIntentResult.result.supportedCardsSchemes),
                 isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
                 isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
                 supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),

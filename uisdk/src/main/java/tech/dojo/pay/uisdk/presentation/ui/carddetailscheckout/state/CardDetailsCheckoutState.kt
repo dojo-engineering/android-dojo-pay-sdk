@@ -5,6 +5,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 internal data class CardDetailsCheckoutState(
     val totalAmount: String,
     val amountCurrency: String,
+    val allowedPaymentMethodsIcons: List<Int>,
     val cardHolderInputField: InputFieldState,
     val emailInputField: InputFieldState,
     val isEmailInputFieldRequired: Boolean,
