@@ -62,20 +62,25 @@ class PaymentMethodCheckoutViewModel(
                 it?.let {
                     if (it is PaymentIntentResult.Success) {
                         paymentIntent = it.result
-                        if (currentState.isLoading) {
-                            if (it.result.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY) && gPayConfig != null) {
-                                val gPayConfigWithSupportedCardsSchemes =
-                                    gPayConfig.copy(allowedCardNetworks = it.result.supportedCardsSchemes)
-                                currentState =
-                                    currentState.copy(gPayConfig = gPayConfigWithSupportedCardsSchemes)
-                                postStateToUI()
-                            } else {
-                                handleGooglePayUnAvailable()
-                            }
-                        }
+                        if (currentState.isLoading) { applyInitialFlowRules(it, gPayConfig) }
                     }
                 }
             }
+        }
+    }
+
+    private fun applyInitialFlowRules(
+        it: PaymentIntentResult.Success,
+        gPayConfig: DojoGPayConfig?
+    ) {
+        if (it.result.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY) && gPayConfig != null) {
+            val gPayConfigWithSupportedCardsSchemes =
+                gPayConfig.copy(allowedCardNetworks = it.result.supportedCardsSchemes)
+            currentState =
+                currentState.copy(gPayConfig = gPayConfigWithSupportedCardsSchemes)
+            postStateToUI()
+        } else {
+            handleGooglePayUnAvailable()
         }
     }
 
@@ -144,7 +149,6 @@ class PaymentMethodCheckoutViewModel(
         gPayConfig?.let {
             val gPayConfigWithSupportedCardsSchemes =
                 gPayConfig.copy(allowedCardNetworks = paymentIntent.supportedCardsSchemes)
-            println("=========== $gPayConfigWithSupportedCardsSchemes")
             gpayPaymentHandler.executeGPay(
                 GPayPayload = DojoGPayPayload(dojoGPayConfig = gPayConfigWithSupportedCardsSchemes),
                 paymentIntent = DojoPaymentIntent(
