@@ -36,6 +36,7 @@ object Versions {
     const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
     const val TIMBER = "5.0.1"
     const val GSON = "2.8.7"
+    const val csvReader= "1.6.0"
 }
 
 object BuildPluginsVersion {
@@ -91,7 +92,9 @@ object Navigation {
         "com.google.accompanist:accompanist-navigation-animation:${Versions.COMPOSE_NAVIGATION_ANIMATION}"
 
 }
-
+object CsvReader{
+    const val csvReader = "com.github.doyaaaaaken:kotlin-csv-jvm:${Versions.csvReader}"
+}
 object AndroidX {
 
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
@@ -171,6 +174,8 @@ object AndroidX {
         const val ANDROIDX_TEST_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_TEST_EXT}"
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }
+
+
 
     object Logging {
         const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"

@@ -32,7 +32,6 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
-import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
@@ -156,7 +155,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
-                    } ,
+                    },
                     viewModel::navigateToManagePaymentMethods,
                     viewModel::navigateToCardDetailsCheckoutScreen
                 )

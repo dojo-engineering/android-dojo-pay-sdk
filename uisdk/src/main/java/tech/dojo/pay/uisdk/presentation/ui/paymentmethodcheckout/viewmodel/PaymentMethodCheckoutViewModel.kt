@@ -5,7 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -14,7 +18,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
-import java.util.*
+import java.util.Currency
 
 class PaymentMethodCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
@@ -97,7 +101,7 @@ class PaymentMethodCheckoutViewModel(
             isGpayItemVisible = isMangePaymentEnabled && isGooglePayEnabled && gPayConfig != null,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
-                    paymentIntent.amount.valueString,
+                paymentIntent.amount.valueString,
 
             payWithCarButtonState = getPayWithCarButtonState(isGooglePayEnabled)
         )
@@ -109,7 +113,7 @@ class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                        it.amount.value.centsToString()
+                    it.amount.value.centsToString()
             )
         }
     }

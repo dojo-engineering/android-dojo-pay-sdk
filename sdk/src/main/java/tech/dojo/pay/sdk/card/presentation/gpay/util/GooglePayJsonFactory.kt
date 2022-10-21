@@ -92,7 +92,7 @@ object GooglePayJsonFactory {
         collectBilling: Boolean,
         allowedCardNetworks: List<CardsSchemes>
     ): JSONObject {
-        val supportedCards = allowedCardNetworks.filter { it!= CardsSchemes.MAESTRO}.map { it.cardsSchemes }
+        val supportedCards = allowedCardNetworks.filter { it != CardsSchemes.MAESTRO }.map { it.cardsSchemes }
         return JSONObject()
             .apply {
                 put("allowedAuthMethods", allowedCardAuthMethods)

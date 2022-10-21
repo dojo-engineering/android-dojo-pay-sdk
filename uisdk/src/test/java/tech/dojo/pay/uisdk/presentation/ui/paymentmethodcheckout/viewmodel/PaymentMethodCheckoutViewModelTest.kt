@@ -12,7 +12,12 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -101,7 +106,6 @@ class PaymentMethodCheckoutViewModelTest {
                 isPrimary = false
             )
         )
-
 
         val actual = PaymentMethodCheckoutViewModel(
             observePaymentIntent,
