@@ -41,7 +41,7 @@ internal class CardDetailsCheckoutViewModel(
         currentState = CardDetailsCheckoutState(
             totalAmount = "",
             amountCurrency = "",
-            allowedPaymentMethodsIcons= emptyList(),
+            allowedPaymentMethodsIcons = emptyList(),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
@@ -192,7 +192,7 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                allowedPaymentMethodsIcons= allowedPaymentMethodsViewEntityMapper.apply(paymentIntentResult.result.supportedCardsSchemes),
+                allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(paymentIntentResult.result.supportedCardsSchemes),
                 isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
                 isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
                 supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
