@@ -5,5 +5,6 @@ import java.io.Serializable
 
 data class DojoPaymentFlowParams(
     val paymentId: String,
+    val clientSecret: String? = null,
     val GPayConfig: DojoGPayConfig? = null
 ) : Serializable
