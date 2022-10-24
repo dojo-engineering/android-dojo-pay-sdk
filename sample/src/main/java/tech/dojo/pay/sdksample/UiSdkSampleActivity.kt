@@ -58,11 +58,11 @@ class UiSdkSampleActivity : AppCompatActivity() {
                 )
             )
         }
-        DojoSDKDropInUI.sandbox = uiSdkSampleBinding.checkboxSandbox.isChecked
+        DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
     }
 
     private fun setTokenListener() {
-        DojoSDKDropInUI.sandbox = uiSdkSampleBinding.checkboxSandbox.isChecked
+        DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
 
         uiSdkSampleBinding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             uiSdkSampleBinding.btnGenerateToken.visibility =
@@ -75,7 +75,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(PaymentIDGenerator.generatePaymentId())
+                    displayToken(PaymentIDGenerator.generatePaymentId().id)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
@@ -91,7 +91,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
     }
 
     private fun onSandboxChecked(isChecked: Boolean) {
-        DojoSDKDropInUI.sandbox = isChecked
+        DojoSDKDropInUI.isWalletSandBox = isChecked
     }
 
     private fun showLoading() {

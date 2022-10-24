@@ -7,7 +7,7 @@ import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandler
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerImp
 
 object DojoSDKDropInUI {
-    var sandbox: Boolean = false
+    var isWalletSandBox: Boolean = false
     var dojoThemeSettings: DojoThemeSettings? = null
 
     /**
