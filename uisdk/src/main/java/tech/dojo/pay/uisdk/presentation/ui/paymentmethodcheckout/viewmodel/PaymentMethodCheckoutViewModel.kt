@@ -152,7 +152,11 @@ class PaymentMethodCheckoutViewModel(
     fun onGpayCLicked() {
         gPayConfig?.let {
             val gPayConfigWithSupportedCardsSchemes =
-                gPayConfig.copy(allowedCardNetworks = paymentIntent.supportedCardsSchemes)
+                gPayConfig.copy(
+                    allowedCardNetworks = paymentIntent.supportedCardsSchemes,
+                    collectEmailAddress = paymentIntent.collectionEmailRequired,
+                    collectBilling = paymentIntent.collectionEmailRequired
+                )
             gpayPaymentHandler.executeGPay(
                 GPayPayload = DojoGPayPayload(dojoGPayConfig = gPayConfigWithSupportedCardsSchemes),
                 paymentIntent = DojoPaymentIntent(
