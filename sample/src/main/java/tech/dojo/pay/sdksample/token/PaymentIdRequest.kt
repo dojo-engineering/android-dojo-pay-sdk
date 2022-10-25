@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdksample.token
 
-
 data class PaymentIdBody(
     val amount: Amount,
     val reference: String,

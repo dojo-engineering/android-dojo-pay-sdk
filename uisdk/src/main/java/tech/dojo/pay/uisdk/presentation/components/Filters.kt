@@ -18,6 +18,7 @@ fun isAmexCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(ameRegex)
 }
+
 /**
  * This will match if the card number is Visa card or not
  */
@@ -25,6 +26,7 @@ fun isVisaCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(visaRegex)
 }
+
 /**
  * This will match if the card number is MasterCard card or not
  */
@@ -32,6 +34,7 @@ fun isMasterCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(masterCardRegex)
 }
+
 /**
  * This will match if the card number is MaestroCard card or not
  */
