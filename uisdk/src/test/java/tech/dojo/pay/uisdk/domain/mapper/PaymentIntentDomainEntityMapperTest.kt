@@ -8,8 +8,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.data.entities.Amount
+import tech.dojo.pay.uisdk.data.entities.MerchantConfig
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
+import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -27,7 +30,8 @@ internal class PaymentIntentDomainEntityMapperTest {
                 amount = Amount(
                     10L,
                     "GBP"
-                )
+                ),
+                merchantConfig = MerchantConfig(supportedPaymentMethods = SupportedPaymentMethods(cardSchemes = listOf(CardsSchemes.MASTERCARD)))
             )
             val expected = PaymentIntentDomainEntity(
                 id = "id",
@@ -36,7 +40,8 @@ internal class PaymentIntentDomainEntityMapperTest {
                     10L,
                     "0.10",
                     "GBP"
-                )
+                ),
+                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
             )
             // act
             val actual = PaymentIntentDomainEntityMapper().apply(raw)
@@ -57,5 +62,6 @@ internal class PaymentIntentDomainEntityMapperTest {
             assertTrue(actual.message?.contains("clientSessionSecret") ?: false)
             assertTrue(actual.message?.contains("amount") ?: false)
             assertTrue(actual.message?.contains("id") ?: false)
+            assertTrue(actual.message?.contains("merchantConfig") ?: false)
         }
 }

@@ -29,12 +29,16 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.getActivity
 import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
-import tech.dojo.pay.uisdk.presentation.components.*
+import tech.dojo.pay.uisdk.presentation.components.AmountBreakDown
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
+import tech.dojo.pay.uisdk.presentation.components.GooglePayButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.WalletItem
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
@@ -48,18 +52,6 @@ internal fun PaymentMethodsCheckOutScreen(
     onPayByCard: () -> Unit
 ) {
     val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
-    LaunchedEffect(Unit) {
-        DojoSdk.isGpayAvailable(
-            activity = activity as Activity,
-            dojoGPayConfig = DojoGPayConfig(
-                merchantName = "Dojo Cafe (Paymentsense)",
-                merchantId = "BCR2DN6T57R5ZI34",
-                gatewayMerchantId = "119784244252745"
-            ),
-            { viewModel.handleGooglePayAvailable() },
-            { viewModel.handleGooglePayUnAvailable() }
-        )
-    }
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -67,6 +59,9 @@ internal fun PaymentMethodsCheckOutScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
+    if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true) {
+        CheckGPayAvailability(state.gPayConfig, activity, viewModel)
+    }
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
@@ -89,6 +84,31 @@ internal fun PaymentMethodsCheckOutScreen(
     }
 }
 
+@Composable
+private fun CheckGPayAvailability(
+    gPayConfig: DojoGPayConfig?,
+    activity: PaymentFlowContainerActivity?,
+    viewModel: PaymentMethodCheckoutViewModel
+) {
+    if (gPayConfig != null) {
+        LaunchedEffect(Unit) {
+            DojoSdk.isGpayAvailable(
+                activity = activity as Activity,
+                dojoGPayConfig = DojoGPayConfig(
+                    merchantName = gPayConfig.merchantName,
+                    merchantId = gPayConfig.merchantId,
+                    gatewayMerchantId = gPayConfig.gatewayMerchantId,
+                    allowedCardNetworks = gPayConfig.allowedCardNetworks
+                ),
+                { viewModel.handleGooglePayAvailable() },
+                { viewModel.handleGooglePayUnAvailable() }
+            )
+        }
+    } else {
+        LaunchedEffect(Unit) { viewModel.handleGooglePayUnAvailable() }
+    }
+}
+
 @ExperimentalMaterialApi
 @Composable
 private fun BottomSheetItems(
@@ -107,7 +127,13 @@ private fun BottomSheetItems(
     } else {
         GPayItem(contentState, onManagePaymentClicked)
         AmountBreakDownItem(contentState)
-        GooglePayButton(contentState, coroutineScope, sheetState, onGpayClicked, observePaymentIntent)
+        GooglePayButton(
+            contentState,
+            coroutineScope,
+            sheetState,
+            onGpayClicked,
+            observePaymentIntent
+        )
         PaymentMethodsButton(contentState, onPayByCard)
         FooterItem()
     }
@@ -151,7 +177,7 @@ private fun AppBar(
         modifier = Modifier.height(60.dp),
         title = stringResource(id = R.string.dojo_ui_sdk_payment_method_checkout_title),
         titleGravity = TitleGravity.LEFT,
-        actionIcon = AppBarIcon.close() {
+        actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) {
             coroutineScope.launch {
                 sheetState.hide()
             }

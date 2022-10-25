@@ -5,23 +5,31 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import java.util.Currency
 
-class CardDetailsCheckoutViewModel(
+internal class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
+    private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
+    private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
+    private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private var currentState: CardDetailsCheckoutState
@@ -33,9 +41,15 @@ class CardDetailsCheckoutViewModel(
         currentState = CardDetailsCheckoutState(
             totalAmount = "",
             amountCurrency = "",
+            allowedPaymentMethodsIcons = emptyList(),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
+            isBillingCountryFieldRequired = false,
+            supportedCountriesList = emptyList(),
+            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            isPostalCodeFieldRequired = false,
+            postalCodeField = InputFieldState(value = ""),
             cardDetailsInPutField = CardDetailsInputFieldState(
                 cardNumberValue = "",
                 cvvValue = "",
@@ -60,6 +74,11 @@ class CardDetailsCheckoutViewModel(
                 currentState.emailInputField.value
             )
         )
+        pushStateToUi(currentState)
+    }
+
+    fun onPostalCodeValueChanged(newValue: String) {
+        currentState = currentState.copy(postalCodeField = InputFieldState(value = newValue))
         pushStateToUi(currentState)
     }
 
@@ -95,7 +114,6 @@ class CardDetailsCheckoutViewModel(
                     newValue,
                     currentState.cardDetailsInPutField.expireDateValueValue,
                     currentState.emailInputField.value
-
                 )
             )
         pushStateToUi(currentState)
@@ -133,6 +151,16 @@ class CardDetailsCheckoutViewModel(
         pushStateToUi(currentState)
     }
 
+    fun onCountrySelected(newValue: SupportedCountriesViewEntity) {
+        currentState = currentState.copy(
+            currentSelectedCountry = newValue,
+            isPostalCodeFieldRequired = applyIsPostalCodeFieldRequiredLogic(
+                newValue,
+                currentState.isBillingCountryFieldRequired
+            )
+        )
+        pushStateToUi(currentState)
+    }
 
     private fun isPayButtonEnabled(
         cardHolder: String,
@@ -161,10 +189,27 @@ class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired
+                allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(paymentIntentResult.result.supportedCardsSchemes),
+                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
+                isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
+                supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
+                isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired
             )
             pushStateToUi(currentState)
         }
+    }
+
+    private fun getSupportedCountriesList(collectionBillingAddressRequired: Boolean): List<SupportedCountriesViewEntity> {
+        return if (collectionBillingAddressRequired) getSupportedCountriesUseCase
+            .getSupportedCountries()
+            .map { supportedCountriesViewEntityMapper.apply(it) } else emptyList()
+    }
+
+    private fun applyIsPostalCodeFieldRequiredLogic(
+        SupportedCountryItem: SupportedCountriesViewEntity,
+        collectionBillingAddressRequired: Boolean
+    ): Boolean {
+        return SupportedCountryItem.isPostalCodeEnabled && collectionBillingAddressRequired
     }
 
     private suspend fun observePaymentStatus() {
@@ -182,13 +227,16 @@ class CardDetailsCheckoutViewModel(
         dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
     }
 
-    private fun pushStateToUi(state: CardDetailsCheckoutState) {
-        mutableState.postValue(state)
-    }
+    private fun pushStateToUi(state: CardDetailsCheckoutState) { mutableState.postValue(state) }
 
     private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
         DojoCardPaymentPayLoad.FullCardPaymentPayload(
-            DojoCardDetails(
+            userEmailAddress = if (currentState.isEmailInputFieldRequired) currentState.emailInputField.value else null,
+            billingAddress = DojoAddressDetails(
+                countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
+                postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null
+            ),
+            cardDetails = DojoCardDetails(
                 cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
                 cardName = currentState.cardHolderInputField.value,
                 expiryMonth = getExpiryMonth(currentState.cardDetailsInPutField.expireDateValueValue),

@@ -5,7 +5,7 @@
     <application>
         <activity
             android:name=".presentation.PaymentFlowContainerActivity"
-            android:theme="@style/Theme.Transparent" />
+        android:theme="@style/Theme.Transparent" />
     </application>
 
 </manifest>

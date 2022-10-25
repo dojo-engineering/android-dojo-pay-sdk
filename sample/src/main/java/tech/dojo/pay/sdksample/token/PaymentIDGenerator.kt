@@ -18,6 +18,10 @@ object PaymentIDGenerator {
                 value = 10L,
                 currencyCode = "GBP"
             ),
+            config = Config(
+                customerEmail = CustomerEmail(true),
+                billingAddress = BillingAddress(true)
+            ),
             itemLines = listOf(
                 ItemLines(
                     amountTotal = Amount(

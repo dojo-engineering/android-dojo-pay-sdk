@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-import androidx.compose.compiler.plugins.kotlin.ComposeFqNames.remember
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,7 +43,8 @@ internal fun AmountBreakDownItems(
                     text = item.caption,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = DojoTheme.typography.body1
+                    style = DojoTheme.typography.body1,
+                    color = DojoTheme.colors.secondaryLabelTextColor
                 )
                 Spacer(Modifier.weight(4f))
                 Text(
@@ -52,7 +52,8 @@ internal fun AmountBreakDownItems(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     modifier = Modifier.padding(end = 16.dp),
-                    style = DojoTheme.typography.body1
+                    style = DojoTheme.typography.body1,
+                    color = DojoTheme.colors.secondaryLabelTextColor
                 )
             }
         }

@@ -18,6 +18,9 @@ class PaymentIntentDomainEntityMapper {
                 valueString = requireNotNull(raw.amount?.value?.centsToString()),
                 currencyCode = requireNotNull(raw.amount?.currencyCode)
             ),
+            supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes),
+            supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets
+                ?: emptyList(),
             itemLines = raw.itemLines?.map {
                 ItemLinesDomainEntity(
                     amount = it.amountTotal,
@@ -35,6 +38,9 @@ class PaymentIntentDomainEntityMapper {
         if (raw.id == null) invalidParams.add("id")
         if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
         if (raw.amount == null) invalidParams.add("amount")
+        if (raw.merchantConfig == null) invalidParams.add("merchantConfig")
+        if (raw.merchantConfig?.supportedPaymentMethods == null) invalidParams.add("supportedPaymentMethods")
+        if (raw.merchantConfig?.supportedPaymentMethods?.cardSchemes == null) invalidParams.add("cardSchemes")
         if (invalidParams.isNotEmpty()) throw EssentialParamMissingException(invalidParams)
     }
 }

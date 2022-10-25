@@ -100,6 +100,7 @@ dependencies {
     implementation(AndroidX.Network.GSON)
     implementation(project(":sdk"))
     testImplementation(TestingLib.JUNIT)
+    implementation(CsvReader.csvReader)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
     testImplementation(Coroutines.COROUTINES_Test)

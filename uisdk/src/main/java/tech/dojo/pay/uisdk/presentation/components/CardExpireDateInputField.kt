@@ -12,16 +12,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardInputField(
-    cardNumberValue: String,
-    cvvValue: String,
+internal fun CardExpireDateInputField(
     expireDateValue: String,
-    cardNumberPlaceholder: String?,
-    cvvPlaceholder: String?,
     expireDaterPlaceholder: String?,
-    onCardNumberValueChanged: (String) -> Unit,
     onExpireDateValueChanged: (String) -> Unit,
-    onCvvValueChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     focusRequester: FocusRequester? = null,
     label: AnnotatedString? = null,
@@ -45,16 +39,10 @@ fun CardInputField(
         isError = isError,
         enabled = enabled
     ) {
-        BasicCardInputField(
-            cardNumberValue,
-            cvvValue,
+        BasicCardExpireDateField(
             expireDateValue,
-            cardNumberPlaceholder,
-            cvvPlaceholder,
             expireDaterPlaceholder,
-            onCardNumberValueChanged,
             onExpireDateValueChanged,
-            onCvvValueChanged,
             modifier,
             focusRequester,
             isError,

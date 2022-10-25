@@ -32,7 +32,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.medium
 internal fun DojoAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
-    titleColor: Color? = null,
+    titleColor: Color? = DojoTheme.colors.headerTintColor,
     titleGravity: TitleGravity = TitleGravity.CENTER,
     navigationIcon: AppBarIcon? = null,
     actionIcon: AppBarIcon? = null,

@@ -22,10 +22,11 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun AmountBanner(
+internal fun AmountWithPaymentMethodsHeader(
     modifier: Modifier = Modifier,
     amount: String,
-    currencyLogo: String
+    currencyLogo: String,
+    allowedPaymentMethodsIcons: List<Int>
 ) {
     Box(modifier = modifier) {
         Column(
@@ -72,6 +73,7 @@ internal fun AmountBanner(
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
                 )
             }
+            SupportedPaymentMethods(Modifier.padding(vertical = 16.dp, horizontal = 16.dp), allowedPaymentMethodsIcons)
         }
     }
 }
@@ -79,5 +81,5 @@ internal fun AmountBanner(
 @Preview("AmountBanner", group = "Footer")
 @Composable
 internal fun PreviewAmountBanner() = DojoPreview {
-    AmountBanner(amount = "95.70", currencyLogo = "£")
+    AmountWithPaymentMethodsHeader(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
 }

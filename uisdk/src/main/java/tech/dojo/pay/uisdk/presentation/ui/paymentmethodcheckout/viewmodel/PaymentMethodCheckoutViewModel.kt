@@ -9,6 +9,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -17,7 +18,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
-import java.util.*
+import java.util.Currency
 
 class PaymentMethodCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
@@ -33,6 +34,7 @@ class PaymentMethodCheckoutViewModel(
 
     init {
         currentState = PaymentMethodCheckoutState(
+            gPayConfig = gPayConfig,
             isGooglePayVisible = false,
             isBottomSheetVisible = true,
             isLoading = true,
@@ -45,6 +47,7 @@ class PaymentMethodCheckoutViewModel(
             )
         )
         postStateToUI()
+        observePaymentIntent()
     }
 
     private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
@@ -63,9 +66,25 @@ class PaymentMethodCheckoutViewModel(
                 it?.let {
                     if (it is PaymentIntentResult.Success) {
                         paymentIntent = it.result
+                        if (currentState.isLoading) { applyInitialFlowRules(it, gPayConfig) }
                     }
                 }
             }
+        }
+    }
+
+    private fun applyInitialFlowRules(
+        it: PaymentIntentResult.Success,
+        gPayConfig: DojoGPayConfig?
+    ) {
+        if (it.result.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY) && gPayConfig != null) {
+            val gPayConfigWithSupportedCardsSchemes =
+                gPayConfig.copy(allowedCardNetworks = it.result.supportedCardsSchemes)
+            currentState =
+                currentState.copy(gPayConfig = gPayConfigWithSupportedCardsSchemes)
+            postStateToUI()
+        } else {
+            handleGooglePayUnAvailable()
         }
     }
 
@@ -75,6 +94,7 @@ class PaymentMethodCheckoutViewModel(
     ) {
         paymentIntent = paymentIntentResult.result
         currentState = PaymentMethodCheckoutState(
+            gPayConfig = gPayConfig,
             isGooglePayVisible = isGooglePayEnabled && gPayConfig != null,
             isBottomSheetVisible = true,
             isLoading = false,
@@ -131,8 +151,14 @@ class PaymentMethodCheckoutViewModel(
 
     fun onGpayCLicked() {
         gPayConfig?.let {
+            val gPayConfigWithSupportedCardsSchemes =
+                gPayConfig.copy(
+                    allowedCardNetworks = paymentIntent.supportedCardsSchemes,
+                    collectEmailAddress = paymentIntent.collectionEmailRequired,
+                    collectBilling = paymentIntent.collectionEmailRequired
+                )
             gpayPaymentHandler.executeGPay(
-                GPayPayload = DojoGPayPayload(dojoGPayConfig = it),
+                GPayPayload = DojoGPayPayload(dojoGPayConfig = gPayConfigWithSupportedCardsSchemes),
                 paymentIntent = DojoPaymentIntent(
                     token = paymentIntent.paymentToken,
                     totalAmount = DojoTotalAmount(

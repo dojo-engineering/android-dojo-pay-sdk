@@ -1,6 +1,9 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,7 +56,7 @@ private fun DojoButton(
         if (isLoading) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                text = "Processing...",
+                text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_processing),
                 style = DojoTheme.typography.subtitle1,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
@@ -121,7 +125,7 @@ internal fun DojoFullGroundButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.secondarySurface,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
         contentColor = contentColor ?: DojoTheme.colors.onPrimary,
         borderStroke = null,
         modifier = modifier,
@@ -147,14 +151,88 @@ internal fun DojoOutlinedButton(
     DojoButton(
         text = text,
         backgroundColor = backgroundColor ?: DojoTheme.colors.background,
-        contentColor = contentColor ?: DojoTheme.colors.secondarySurface,
+        contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.secondarySurface,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
         onClick = onClick
     )
+}
+
+@Composable
+internal fun SingleButtonView(
+    text: String,
+    modifier: Modifier = Modifier,
+    contentColor: Color? = null,
+    backgroundColor: Color? = null,
+    borderStroke: BorderStroke? = null,
+    loadingColor: Color? = null,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
+    scrollState: ScrollState? = null,
+    onClick: () -> Unit
+) {
+    if (scrollState != null) {
+        ScrollHintLayout(
+            modifier = modifier,
+            scrollState = scrollState
+        ) {
+            SingleButton(
+                Modifier,
+                text,
+                enabled,
+                isLoading,
+                contentColor,
+                backgroundColor,
+                borderStroke,
+                loadingColor,
+                onClick
+            )
+        }
+    } else {
+        SingleButton(
+            Modifier,
+            text,
+            enabled,
+            isLoading,
+            contentColor,
+            backgroundColor,
+            borderStroke,
+            loadingColor,
+            onClick
+        )
+    }
+}
+
+@Composable
+private fun SingleButton(
+    modifier: Modifier,
+    text: String,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
+    contentColor: Color? = null,
+    backgroundColor: Color? = null,
+    borderStrokeColor: BorderStroke? = null,
+    loadingColor: Color? = null,
+    onClick: () -> Unit
+) {
+    Box(modifier = modifier.background(DojoTheme.colors.background)) {
+        DojoButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            text = text,
+            enabled = enabled,
+            onClick = onClick,
+            backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+            borderStroke = borderStrokeColor,
+            isLoading = isLoading,
+            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+        )
+    }
 }
 
 @Composable
@@ -164,7 +242,7 @@ private fun getBorderStroke(
 ) =
     if (enabled) BorderStroke(
         1.dp,
-        borderStrokeColor ?: DojoTheme.colors.secondarySurface
+        borderStrokeColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
     ) else null
 
 @Preview("Button", group = "Buttons")
