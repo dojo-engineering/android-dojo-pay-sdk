@@ -1,7 +1,5 @@
 package tech.dojo.pay.sdksample.token
 
-import tech.dojo.pay.uisdk.data.entities.BillingAddress
-import tech.dojo.pay.uisdk.data.entities.CustomerEmail
 
 data class PaymentIdBody(
     val amount: Amount,

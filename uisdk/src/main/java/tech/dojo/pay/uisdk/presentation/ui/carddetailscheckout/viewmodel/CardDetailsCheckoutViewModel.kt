@@ -114,7 +114,6 @@ internal class CardDetailsCheckoutViewModel(
                     newValue,
                     currentState.cardDetailsInPutField.expireDateValueValue,
                     currentState.emailInputField.value
-
                 )
             )
         pushStateToUi(currentState)
@@ -170,9 +169,7 @@ internal class CardDetailsCheckoutViewModel(
         expireDateValue: String,
         emailAddressValue: String
     ) =
-        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank() && isMailFieldValid(
-            emailAddressValue
-        )
+        cardHolder.isNotBlank() && cardNumber.isNotBlank() && cvv.isNotBlank() && expireDateValue.isNotBlank() && isMailFieldValid(emailAddressValue)
 
     private fun isMailFieldValid(emailAddressValue: String): Boolean {
         return if (currentState.isEmailInputFieldRequired) {
