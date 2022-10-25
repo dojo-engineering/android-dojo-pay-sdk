@@ -57,11 +57,11 @@ data class Branding(
 )
 
 data class MerchantConfig(
-    val supportedPaymentMethods: SupportedPaymentMethods?
+    val supportedPaymentMethods: SupportedPaymentMethods? = null
 )
 
 data class SupportedPaymentMethods(
-    val cardSchemes: List<CardsSchemes>?,
+    val cardSchemes: List<CardsSchemes>? = null,
     val wallets: List<WalletSchemes>? = null
 )
 
