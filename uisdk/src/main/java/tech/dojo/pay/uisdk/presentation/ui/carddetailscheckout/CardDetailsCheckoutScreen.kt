@@ -212,7 +212,7 @@ private fun CardExpireDateField(
                     letterSpacing = 0.15.sp
                 ),
             ) {
-                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_label_expiry))
+                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date))
             }
         },
         keyboardOptions =
@@ -309,7 +309,7 @@ private fun EmailField(
                         letterSpacing = 0.15.sp
                     ),
                 ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_email_field))
+                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email))
                 }
             }
         )
@@ -334,7 +334,7 @@ private fun BillingCountryField(
                         letterSpacing = 0.15.sp
                     ),
                 ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_billing_country_field))
+                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country))
                 }
             },
             supportedCountriesViewEntity = state.supportedCountriesList,
@@ -365,7 +365,7 @@ private fun PostalCodeField(
                         letterSpacing = 0.15.sp
                     ),
                 ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_postcode_field))
+                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode))
                 }
             }
         )
