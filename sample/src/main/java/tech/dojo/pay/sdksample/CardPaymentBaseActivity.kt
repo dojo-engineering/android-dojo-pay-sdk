@@ -17,6 +17,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
+import tech.dojo.pay.sdksample.token.PaymentIDGenerator
 import tech.dojo.pay.sdksample.token.TokenGenerator
 
 abstract class CardPaymentBaseActivity : AppCompatActivity() {
@@ -147,7 +148,6 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     private fun setTokenListener() {
-        DojoSdk.cardSandbox = binding.checkboxSandbox.isChecked
         DojoSdk.walletSandBox = binding.checkboxSandbox.isChecked
 
         binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
@@ -160,7 +160,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(TokenGenerator.generateToken())
+                    displayToken(PaymentIDGenerator.generatePaymentId().clientSessionSecret)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {

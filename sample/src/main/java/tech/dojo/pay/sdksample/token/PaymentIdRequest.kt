@@ -14,7 +14,8 @@ data class Amount(
 )
 
 data class PaymentIdResponse(
-    val id: String
+    val id: String,
+    val clientSessionSecret:String
 )
 
 data class ItemLines(

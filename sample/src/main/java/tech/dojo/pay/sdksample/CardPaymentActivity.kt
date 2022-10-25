@@ -20,7 +20,6 @@ class CardPaymentActivity : CardPaymentBaseActivity() {
     }
 
     override fun onSandboxChecked(isChecked: Boolean) {
-        DojoSdk.cardSandbox = isChecked
         DojoSdk.walletSandBox = isChecked
     }
 

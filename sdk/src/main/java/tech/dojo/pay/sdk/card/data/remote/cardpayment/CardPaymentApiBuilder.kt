@@ -6,24 +6,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-internal class CardPaymentApiBuilder(
-    private val sandboxMode: Boolean
-) {
+internal class CardPaymentApiBuilder {
 
     fun create(): CardPaymentApi =
         createRetrofit().create(CardPaymentApi::class.java)
 
     private fun createRetrofit(): Retrofit =
         Retrofit.Builder()
-            .baseUrl(getBaseUrl(sandboxMode))
+            .baseUrl(getBaseUrl())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(createHttpClient())
             .build()
 
-    private fun getBaseUrl(sandboxMode: Boolean): String {
-        val extaPart = if (sandboxMode) "test." else ""
-        return "https://web.e.${extaPart}connect.paymentsense.cloud/api/"
+    private fun getBaseUrl(): String {
+        return "https://web.e.connect.paymentsense.cloud/api/"
     }
 
     private fun createHttpClient(): OkHttpClient =

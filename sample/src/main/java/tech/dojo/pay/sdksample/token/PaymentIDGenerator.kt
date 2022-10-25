@@ -12,7 +12,7 @@ object PaymentIDGenerator {
             .create(PaymentIntentApi::class.java)
     }
 
-    suspend fun generatePaymentId(): String = paymentIntentApi.getToken(
+    suspend fun generatePaymentId(): PaymentIdResponse = paymentIntentApi.getToken(
         PaymentIdBody(
             amount = Amount(
                 value = 10L,
@@ -48,5 +48,5 @@ object PaymentIDGenerator {
             reference = "Order 234",
             description = "Demo payment intent"
         )
-    ).id
+    )
 }
