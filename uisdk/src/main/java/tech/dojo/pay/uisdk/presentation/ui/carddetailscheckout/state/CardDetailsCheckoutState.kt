@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
+import androidx.annotation.StringRes
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
@@ -9,6 +10,9 @@ internal data class CardDetailsCheckoutState(
     val cardHolderInputField: InputFieldState,
     val emailInputField: InputFieldState,
     val isEmailInputFieldRequired: Boolean,
+    val cardNumberInputField: InputFieldState,
+    val cardExpireDateInputField: InputFieldState,
+    val cvvInputFieldState: InputFieldState,
     val cardDetailsInPutField: CardDetailsInputFieldState,
     val isBillingCountryFieldRequired: Boolean,
     val supportedCountriesList: List<SupportedCountriesViewEntity>,
@@ -19,7 +23,11 @@ internal data class CardDetailsCheckoutState(
     val isEnabled: Boolean
 )
 
-data class InputFieldState(val value: String)
+data class InputFieldState(
+    val value: String,
+    @StringRes val errorMessages: Int? = null,
+    val isError: Boolean = false
+)
 
 data class CardDetailsInputFieldState(
     val cardNumberValue: String,

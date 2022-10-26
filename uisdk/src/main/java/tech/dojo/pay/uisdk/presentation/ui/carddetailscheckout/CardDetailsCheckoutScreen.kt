@@ -27,12 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -169,13 +171,20 @@ private fun CvvField(
     viewModel: CardDetailsCheckoutViewModel
 ) {
     CvvInputField(
-        modifier = Modifier.onFocusEvent {
-            if (it.hasFocus) {
-                coroutineScope.launch {
-                    bringIntoViewRequester.bringIntoView()
+        modifier = Modifier
+            .onFocusEvent {
+                if (it.hasFocus) {
+                    coroutineScope.launch {
+                        bringIntoViewRequester.bringIntoView()
+                    }
                 }
             }
-        },
+            .onFocusChanged {
+                viewModel.validateCvv(
+                    state.cvvInputFieldState.value,
+                    it.isFocused
+                )
+            },
         label = buildAnnotatedString {
             withStyle(
                 SpanStyle(
@@ -188,14 +197,18 @@ private fun CvvField(
                 append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv))
             }
         },
-        cvvValue = state.cardDetailsInPutField.cvvValue,
+        cvvValue = state.cvvInputFieldState.value,
+        isError = state.cvvInputFieldState.isError,
+        assistiveText = state.cvvInputFieldState.errorMessages?.let {
+            AnnotatedString(stringResource(id = it))
+        },
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCvvValueChanged(it) }
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun CardExpireDateField(
     keyboardController: SoftwareKeyboardController?,
@@ -203,6 +216,13 @@ private fun CardExpireDateField(
     viewModel: CardDetailsCheckoutViewModel
 ) {
     CardExpireDateInputField(
+        modifier = Modifier
+            .onFocusChanged {
+                viewModel.validateExpireDate(
+                    state.cardExpireDateInputField.value,
+                    it.isFocused
+                )
+            },
         label = buildAnnotatedString {
             withStyle(
                 SpanStyle(
@@ -220,11 +240,16 @@ private fun CardExpireDateField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-
-        expireDateValue = state.cardDetailsInPutField.expireDateValueValue,
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }),
+        isError = state.cardExpireDateInputField.isError,
+        assistiveText = state.cardExpireDateInputField.errorMessages?.let {
+            AnnotatedString(stringResource(id = it))
+        },
+        expireDateValue = state.cardExpireDateInputField.value,
         expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
-        onExpireDateValueChanged = { viewModel.onExpireDareValueChanged(it) }
+        onExpireDateValueChanged = { viewModel.onExpireDateValueChanged(it) }
     )
 }
 
@@ -236,6 +261,12 @@ private fun CardNumberField(
     viewModel: CardDetailsCheckoutViewModel
 ) {
     CardNumberInPutField(
+        modifier = Modifier.onFocusChanged {
+            viewModel.validateCardNumber(
+                state.cardNumberInputField.value,
+                it.isFocused
+            )
+        },
         label = buildAnnotatedString {
             withStyle(
                 SpanStyle(
@@ -254,7 +285,13 @@ private fun CardNumberField(
             imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
-        cardNumberValue = state.cardDetailsInPutField.cardNumberValue,
+        isError = state.cardNumberInputField.isError,
+        assistiveText = state.cardNumberInputField.errorMessages?.let {
+            AnnotatedString(
+                stringResource(id = it)
+            )
+        },
+        cardNumberValue = state.cardNumberInputField.value,
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
         onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) }
     )
@@ -271,6 +308,12 @@ private fun CardHolderNameField(
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = state.cardHolderInputField.value,
+        isError = state.cardHolderInputField.isError,
+        assistiveText = state.cardHolderInputField.errorMessages?.let {
+            AnnotatedString(
+                stringResource(id = it)
+            )
+        },
         onValueChange = { viewModel.onCardHolderValueChanged(it) },
         label = buildAnnotatedString {
             withStyle(
@@ -296,6 +339,18 @@ private fun EmailField(
 ) {
     if (state.isEmailInputFieldRequired) {
         InputFieldWithErrorMessage(
+            modifier = Modifier.onFocusChanged {
+                viewModel.validateEmailValue(
+                    state.emailInputField.value,
+                    it.isFocused
+                )
+            },
+            isError = state.emailInputField.isError,
+            assistiveText = state.emailInputField.errorMessages?.let {
+                AnnotatedString(
+                    stringResource(id = it)
+                )
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = state.emailInputField.value,
@@ -355,6 +410,9 @@ private fun PostalCodeField(
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = state.postalCodeField.value,
+            isError = state.postalCodeField.isError,
+            assistiveText =
+            state.postalCodeField.errorMessages?.let { AnnotatedString(stringResource(id = it)) },
             onValueChange = { viewModel.onPostalCodeValueChanged(it) },
             label = buildAnnotatedString {
                 withStyle(
