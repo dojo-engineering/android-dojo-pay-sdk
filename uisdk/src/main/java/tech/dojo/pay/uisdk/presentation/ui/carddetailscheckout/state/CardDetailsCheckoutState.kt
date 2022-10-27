@@ -13,7 +13,6 @@ internal data class CardDetailsCheckoutState(
     val cardNumberInputField: InputFieldState,
     val cardExpireDateInputField: InputFieldState,
     val cvvInputFieldState: InputFieldState,
-    val cardDetailsInPutField: CardDetailsInputFieldState,
     val isBillingCountryFieldRequired: Boolean,
     val supportedCountriesList: List<SupportedCountriesViewEntity>,
     val currentSelectedCountry: SupportedCountriesViewEntity,
@@ -27,10 +26,4 @@ data class InputFieldState(
     val value: String,
     @StringRes val errorMessages: Int? = null,
     val isError: Boolean = false
-)
-
-data class CardDetailsInputFieldState(
-    val cardNumberValue: String,
-    val cvvValue: String,
-    val expireDateValueValue: String,
 )

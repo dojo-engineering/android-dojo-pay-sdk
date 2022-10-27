@@ -6,6 +6,28 @@ class CardCheckoutScreenValidator {
     fun isEmailValid(emailValue: String) =
         Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()
 
+    fun isEmailFieldValidWithInputFieldVisibility(
+        emailValue: String,
+        isInputFieldVisible: Boolean
+    ): Boolean {
+        return if (isInputFieldVisible) {
+            isEmailValid(emailValue)
+        } else {
+            true
+        }
+    }
+
+    fun isPostalCodeFieldWithInputFieldVisibility(
+        postalCodeValue: String,
+        isInputFieldVisible: Boolean
+    ): Boolean {
+        return if (isInputFieldVisible) {
+            postalCodeValue.isNotBlank()
+        } else {
+            true
+        }
+    }
+
     fun isCardNumberValid(cardNumberValue: String): Boolean {
         var sum = 0
         var alternate = false

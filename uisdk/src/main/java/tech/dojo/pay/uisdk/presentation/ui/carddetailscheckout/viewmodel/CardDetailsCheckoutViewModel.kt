@@ -19,7 +19,6 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import java.util.Currency
@@ -56,11 +55,6 @@ internal class CardDetailsCheckoutViewModel(
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
             isLoading = false,
             isEnabled = false
         )
@@ -77,12 +71,12 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_card_holder
                 ),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = false
             )
         } else {
             currentState.copy(
                 cardHolderInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(cardHolderValue = newValue)
             )
         }
 
@@ -102,7 +96,7 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 postalCodeField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(postalCodeValue = newValue)
             )
         }
         pushStateToUi(currentState)
@@ -121,7 +115,7 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 cardNumberInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(cardNumberValue = newValue)
             )
         }
         pushStateToUi(currentState)
@@ -130,7 +124,7 @@ internal class CardDetailsCheckoutViewModel(
     fun validateCardNumber(cardNumberValue: String, focused: Boolean) {
         if (!focused &&
             cardNumberValue.isNotBlank() &&
-            !cardCheckoutScreenValidator.isEmailValid(cardNumberValue)
+            !cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue)
         ) {
             currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
@@ -158,9 +152,10 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 cvvInputFieldState = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(cvvValue = newValue)
             )
         }
+
         pushStateToUi(currentState)
     }
 
@@ -194,7 +189,7 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 cardExpireDateInputField = InputFieldState(newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(cardExpireDate = newValue)
             )
         }
         pushStateToUi(currentState)
@@ -230,7 +225,7 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 emailInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled()
+                isEnabled = isPayButtonEnabled(emailValue = newValue)
             )
         }
         pushStateToUi(currentState)
@@ -264,12 +259,26 @@ internal class CardDetailsCheckoutViewModel(
         pushStateToUi(currentState)
     }
 
-    private fun isPayButtonEnabled() = currentState.cardHolderInputField.value.isNotBlank() &&
-            cardCheckoutScreenValidator.isCardNumberValid(currentState.cardNumberInputField.value) &&
-            cardCheckoutScreenValidator.isCvvValid(currentState.cvvInputFieldState.value) &&
-            cardCheckoutScreenValidator.isCardExpireDateValid(currentState.cardExpireDateInputField.value) &&
-            cardCheckoutScreenValidator.isEmailValid(currentState.emailInputField.value) &&
-            currentState.postalCodeField.value.isNotBlank()
+    private fun isPayButtonEnabled(
+        cardHolderValue: String = currentState.cardHolderInputField.value,
+        cardNumberValue: String = currentState.cardNumberInputField.value,
+        cvvValue: String = currentState.cvvInputFieldState.value,
+        cardExpireDate: String = currentState.cardExpireDateInputField.value,
+        emailValue: String = currentState.emailInputField.value,
+        postalCodeValue: String = currentState.postalCodeField.value
+    ) =
+        cardHolderValue.isNotBlank() &&
+                cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) &&
+                cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
+                cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
+                cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
+                    emailValue,
+                    currentState.isEmailInputFieldRequired
+                ) &&
+                cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
+                    postalCodeValue,
+                    currentState.isPostalCodeFieldRequired
+                )
 
 
     private suspend fun observePaymentIntent() {
@@ -334,24 +343,24 @@ internal class CardDetailsCheckoutViewModel(
                 postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null
             ),
             cardDetails = DojoCardDetails(
-                cardNumber = currentState.cardDetailsInPutField.cardNumberValue,
+                cardNumber = currentState.cardNumberInputField.value,
                 cardName = currentState.cardHolderInputField.value,
-                expiryMonth = getExpiryMonth(currentState.cardDetailsInPutField.expireDateValueValue),
-                expiryYear = getExpiryYear(currentState.cardDetailsInPutField.expireDateValueValue),
-                cv2 = currentState.cardDetailsInPutField.cvvValue
+                expiryMonth = getExpiryMonth(currentState.cardExpireDateInputField.value),
+                expiryYear = getExpiryYear(currentState.cardExpireDateInputField.value),
+                cv2 = currentState.cvvInputFieldState.value
             )
         )
 
     private fun getExpiryMonth(expireDateValueValue: String) =
         if (expireDateValueValue.isNotBlank()) {
-            currentState.cardDetailsInPutField.expireDateValueValue.substring(0, 2)
+            currentState.cardExpireDateInputField.value.substring(0, 2)
         } else {
             ""
         }
 
     private fun getExpiryYear(expireDateValueValue: String) =
         if (expireDateValueValue.isNotBlank() && expireDateValueValue.length > 2) {
-            currentState.cardDetailsInPutField.expireDateValueValue.substring(2, 4)
+            currentState.cardExpireDateInputField.value.substring(2, 4)
         } else {
             ""
         }
