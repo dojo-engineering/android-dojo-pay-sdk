@@ -96,16 +96,6 @@ class CardDetailsCheckoutViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedIcons = listOf(1, 2, 3)
         whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
@@ -234,16 +224,6 @@ class CardDetailsCheckoutViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -317,16 +297,6 @@ class CardDetailsCheckoutViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -402,7 +372,6 @@ class CardDetailsCheckoutViewModelTest {
         whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
             any()
         )).thenReturn(true)
@@ -481,16 +450,6 @@ class CardDetailsCheckoutViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -565,16 +524,6 @@ class CardDetailsCheckoutViewModelTest {
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
             countryCode = "EG",
@@ -644,7 +593,7 @@ class CardDetailsCheckoutViewModelTest {
 
     @Test
     fun `pay button should be disabled  if  any of cardCheckoutScreenValidator methods return false `() = runTest {
-// arrange
+        // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -652,12 +601,6 @@ class CardDetailsCheckoutViewModelTest {
         whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(false)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(false)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(false)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
             countryCode = "EG",
@@ -701,7 +644,10 @@ class CardDetailsCheckoutViewModelTest {
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator
         )
-        viewModel.onEmailValueChanged("new")
+        viewModel.validateCvv("new",false)
+        viewModel.validateCardNumber("new",false)
+        viewModel.validateEmailValue("new",false)
+        viewModel.validateExpireDate("new",false)
         // assert
         Assert.assertEquals(false, viewModel.state.value?.isEnabled)
     }
