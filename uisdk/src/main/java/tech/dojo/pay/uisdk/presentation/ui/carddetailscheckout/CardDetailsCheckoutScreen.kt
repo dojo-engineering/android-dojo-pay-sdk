@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,15 +20,11 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -43,8 +37,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AmountWithPaymentMethodsHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
@@ -70,9 +62,6 @@ internal fun CardDetailsCheckoutScreen(
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     val keyboardController = LocalSoftwareKeyboardController.current
-    val coroutineScope = rememberCoroutineScope()
-    val focusManager = LocalFocusManager.current
-    val bringIntoViewRequester = BringIntoViewRequester()
     val scrollState = rememberScrollState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -93,7 +82,7 @@ internal fun CardDetailsCheckoutScreen(
                 ) {
                     AmountWithPaymentMethodsHeader(state)
                     EmailField(state, keyboardController, viewModel)
-                    BillingCountryField(state, keyboardController, viewModel)
+                    BillingCountryField(state, viewModel)
                     PostalCodeField(state, keyboardController, viewModel)
                     CardHolderNameField(keyboardController, state, viewModel)
                     CardNumberField(keyboardController, state, viewModel)
@@ -109,10 +98,8 @@ internal fun CardDetailsCheckoutScreen(
                         Divider(modifier = Modifier.width(32.dp))
                         Box(modifier = Modifier.weight(1f)) {
                             CvvField(
-                                coroutineScope,
-                                bringIntoViewRequester,
+                                keyboardController,
                                 state,
-                                focusManager,
                                 viewModel
                             )
                         }
@@ -124,7 +111,7 @@ internal fun CardDetailsCheckoutScreen(
                         .align(Alignment.BottomCenter)
                         .background(Color.White)
                 ) {
-                    PayButton(bringIntoViewRequester, scrollState, state, viewModel)
+                    PayButton(scrollState, state, viewModel)
                     ScreenFooter()
                 }
             }
@@ -140,16 +127,13 @@ private fun ScreenFooter() {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PayButton(
-    bringIntoViewRequester: BringIntoViewRequester,
     scrollState: ScrollState,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel
 ) {
     SingleButtonView(
-        modifier = Modifier.bringIntoViewRequester(bringIntoViewRequester),
         scrollState = scrollState,
         text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
         isLoading = state.isLoading,
@@ -161,24 +145,15 @@ private fun PayButton(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CvvField(
-    coroutineScope: CoroutineScope,
-    bringIntoViewRequester: BringIntoViewRequester,
+    keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
-    focusManager: FocusManager,
     viewModel: CardDetailsCheckoutViewModel
 ) {
     CvvInputField(
         modifier = Modifier
-            .onFocusEvent {
-                if (it.hasFocus) {
-                    coroutineScope.launch {
-                        bringIntoViewRequester.bringIntoView()
-                    }
-                }
-            }
             .onFocusChanged {
                 viewModel.validateCvv(
                     state.cvvInputFieldState.value,
@@ -202,7 +177,7 @@ private fun CvvField(
         assistiveText = state.cvvInputFieldState.errorMessages?.let {
             AnnotatedString(stringResource(id = it))
         },
-        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCvvValueChanged(it) }
     )
@@ -375,7 +350,6 @@ private fun EmailField(
 @Composable
 private fun BillingCountryField(
     state: CardDetailsCheckoutState,
-    keyboardController: SoftwareKeyboardController?,
     viewModel: CardDetailsCheckoutViewModel
 ) {
     if (state.isBillingCountryFieldRequired) {
