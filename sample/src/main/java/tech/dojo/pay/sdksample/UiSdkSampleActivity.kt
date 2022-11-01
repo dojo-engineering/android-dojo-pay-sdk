@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdksample.customer.CustomerGenerator
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
@@ -25,6 +26,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding = ActivityUiSdkSampleBinding.inflate(layoutInflater)
         setContentView(uiSdkSampleBinding.root)
         setTokenListener()
+        setCustomerCreationListener()
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = null
             dojoPayUI.startPaymentFlow(
@@ -75,7 +77,23 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(PaymentIDGenerator.generatePaymentId().id)
+                    displayToken(PaymentIDGenerator.generatePaymentId(uiSdkSampleBinding.userId.text.toString()).id)
+                } catch (e: Throwable) {
+                    showTokenError(e)
+                } finally {
+                    hideLoading()
+                }
+            }
+        }
+    }
+
+    private fun setCustomerCreationListener(){
+        uiSdkSampleBinding.btnGenerateCustomerID.setOnClickListener {
+            uiSdkSampleBinding.userId.setText("")
+            lifecycleScope.launch {
+                showLoading()
+                try {
+                    displayCustomerID(CustomerGenerator.generateCustomerId().id)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
@@ -88,6 +106,10 @@ class UiSdkSampleActivity : AppCompatActivity() {
     private fun displayToken(token: String) {
         uiSdkSampleBinding.token.setText(token)
         uiSdkSampleBinding.token.visibility = View.VISIBLE
+    }
+
+    private fun displayCustomerID(id:String){
+        uiSdkSampleBinding.userId.setText(id)
     }
 
     private fun onSandboxChecked(isChecked: Boolean) {

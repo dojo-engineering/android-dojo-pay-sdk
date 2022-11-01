@@ -5,6 +5,7 @@ data class PaymentIdBody(
     val reference: String,
     val description: String,
     val config: Config? = null,
+    val customer: Customer? = null,
     val itemLines: List<ItemLines>
 )
 
@@ -15,7 +16,7 @@ data class Amount(
 
 data class PaymentIdResponse(
     val id: String,
-    val clientSessionSecret:String
+    val clientSessionSecret: String
 )
 
 data class ItemLines(
@@ -24,10 +25,12 @@ data class ItemLines(
     val caption: String = "",
     val amountTotal: Amount
 )
+
 data class Config(
     val customerEmail: CustomerEmail,
     val billingAddress: BillingAddress
 )
+
 data class CustomerEmail(
     val collectionRequired: Boolean
 )
@@ -35,3 +38,5 @@ data class CustomerEmail(
 data class BillingAddress(
     val collectionRequired: Boolean
 )
+
+data class Customer(val id: String)
