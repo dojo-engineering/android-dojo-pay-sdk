@@ -28,8 +28,8 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsInputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -49,6 +49,7 @@ class CardDetailsCheckoutViewModelTest {
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper = mock()
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
+    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator= mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -57,7 +58,6 @@ class CardDetailsCheckoutViewModelTest {
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-
         val expected = CardDetailsCheckoutState(
             totalAmount = "",
             amountCurrency = "",
@@ -70,11 +70,9 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = false,
             postalCodeField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
         )
@@ -86,7 +84,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -126,16 +125,13 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = false,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
-
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -145,7 +141,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -198,11 +195,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -217,7 +212,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -270,16 +266,13 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = true,
             isEnabled = false
-
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -289,7 +282,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         viewModel.onPayWithCardClicked()
         // assert
@@ -345,16 +339,13 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
-
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -364,7 +355,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         viewModel.onPayWithCardClicked()
         paymentStateFakeFlow.tryEmit(false)
@@ -377,6 +369,15 @@ class CardDetailsCheckoutViewModelTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
+            any()
+        )).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
+            any()
+        )).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -419,16 +420,13 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = "new"),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
-
+            isEnabled = true
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -438,7 +436,8 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
 
         viewModel.onCardHolderValueChanged("new")
@@ -493,16 +492,13 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "new",
-                cvvValue = "new",
-                expireDateValueValue = "new",
-            ),
+            cardNumberInputField= InputFieldState(value = "new"),
+            cardExpireDateInputField= InputFieldState(value = "new"),
+            cvvInputFieldState= InputFieldState(value = "new"),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
-
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -512,11 +508,12 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         viewModel.onCardNumberValueChanged("new")
         viewModel.onCvvValueChanged("new")
-        viewModel.onExpireDareValueChanged("new")
+        viewModel.onExpireDateValueChanged("new")
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
     }
@@ -569,11 +566,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = "new"),
             isEmailInputFieldRequired = true,
-            cardDetailsInPutField = CardDetailsInputFieldState(
-                cardNumberValue = "",
-                cvvValue = "",
-                expireDateValueValue = "",
-            ),
+            cardNumberInputField= InputFieldState(value = ""),
+            cardExpireDateInputField= InputFieldState(value = ""),
+            cvvInputFieldState= InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -588,10 +583,72 @@ class CardDetailsCheckoutViewModelTest {
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         )
         viewModel.onEmailValueChanged("new")
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
+    }
+
+    @Test
+    fun `pay button should be disabled  if  any of cardCheckoutScreenValidator methods return false `() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+        whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isEmailValid(any())).thenReturn(false)
+        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
+            countryName = "EGP",
+            countryCode = "EG",
+            isPostalCodeEnabled = true,
+        )
+        val supportedIcons = listOf(1, 2, 3)
+        whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity(
+                        10L,
+                        "100",
+                        "GBP"
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                    collectionBillingAddressRequired = true,
+                    collectionEmailRequired = true,
+                )
+            )
+        )
+        paymentStateFakeFlow.tryEmit(true)
+        whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
+            listOf(
+                SupportedCountriesDomainEntity("", "", false)
+            )
+        )
+        whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
+
+        whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)
+        // act
+        val viewModel = CardDetailsCheckoutViewModel(
+            observePaymentIntent,
+            dojoCardPaymentHandler,
+            observePaymentStatus,
+            updatePaymentStateUseCase,
+            getSupportedCountriesUseCase,
+            supportedCountriesViewEntityMapper,
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
+        )
+        viewModel.validateCvv("new",false)
+        viewModel.validateCardNumber("new",false)
+        viewModel.validateEmailValue("new",false)
+        viewModel.validateExpireDate("new",false)
+        // assert
+        Assert.assertEquals(false, viewModel.state.value?.isEnabled)
     }
 }

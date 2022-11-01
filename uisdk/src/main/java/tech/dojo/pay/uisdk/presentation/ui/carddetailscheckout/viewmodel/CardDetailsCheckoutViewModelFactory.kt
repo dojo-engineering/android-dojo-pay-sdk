@@ -10,6 +10,7 @@ import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 
 class CardDetailsCheckoutViewModelFactory(
     private val dojoCardPaymentHandler: DojoCardPaymentHandler
@@ -28,6 +29,8 @@ class CardDetailsCheckoutViewModelFactory(
             SupportedCountriesViewEntityMapper()
         val allowedPaymentMethodsViewEntityMapper =
             AllowedPaymentMethodsViewEntityMapper()
+        val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
+
 
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
@@ -36,7 +39,8 @@ class CardDetailsCheckoutViewModelFactory(
             updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator
         ) as T
     }
 }
