@@ -1,6 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,25 +20,30 @@ fun CheckBoxItem(
     onCheckedChange: (Boolean) -> (Unit),
 ) {
     val checkedState = remember { mutableStateOf(true) }
+    Box(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(30.dp),
+            verticalAlignment = Alignment.CenterVertically
 
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Checkbox(
-            checked = checkedState.value,
-            onCheckedChange ={
-                checkedState.value = it
-                onCheckedChange(it)
-            }
-        )
-        DojoSpacer(width = 8.dp)
-        Text(
-            text = itemText,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-            style = DojoTheme.typography.subtitle1,
-        )
+        ) {
+            Checkbox(
+                modifier = Modifier.absoluteOffset((-12).dp, 0.dp),
+                checked = checkedState.value,
+                onCheckedChange = {
+                    checkedState.value = it
+                    onCheckedChange(it)
+                }
+            )
+            Text(
+                modifier = Modifier.absoluteOffset((-12).dp, 0.dp),
+                text = itemText,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = DojoTheme.typography.subtitle1,
+            )
+        }
     }
 }
 
