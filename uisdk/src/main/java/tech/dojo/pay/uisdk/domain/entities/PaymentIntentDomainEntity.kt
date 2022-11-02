@@ -11,6 +11,7 @@ data class PaymentIntentDomainEntity(
     val supportedCardsSchemes: List<CardsSchemes>,
     val supportedWalletSchemes: List<WalletSchemes> = emptyList(),
     val itemLines: List<ItemLinesDomainEntity>? = null,
+    val customerId: String? = null,
     val collectionEmailRequired: Boolean = false,
     val collectionBillingAddressRequired: Boolean = false
 )
