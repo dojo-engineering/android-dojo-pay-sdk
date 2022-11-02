@@ -38,6 +38,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AmountWithPaymentMethodsHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
@@ -46,7 +47,6 @@ import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
-import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -104,6 +104,7 @@ internal fun CardDetailsCheckoutScreen(
                             )
                         }
                     }
+                    saveCardCheckBox(state, viewModel)
                 }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(0.dp),
@@ -117,6 +118,20 @@ internal fun CardDetailsCheckoutScreen(
             }
         }
     )
+}
+
+@Composable
+private fun saveCardCheckBox(
+    state: CardDetailsCheckoutState,
+    viewModel: CardDetailsCheckoutViewModel
+) {
+    if (state.saveCardCheckBox.isVisible) {
+        CheckBoxItem(
+            itemText = stringResource(id = state.saveCardCheckBox.messageText),
+            onCheckedChange = {
+                viewModel.onSaveCardChecked(it)
+            })
+    }
 }
 
 @Composable
