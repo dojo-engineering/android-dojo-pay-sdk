@@ -4,7 +4,7 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import java.util.Locale
 
-class CardPaymentRequestMapper {
+internal class CardPaymentRequestMapper {
     fun mapToPaymentDetails(payload: DojoCardPaymentPayLoad): PaymentDetails {
         return when (payload) {
             is DojoCardPaymentPayLoad.FullCardPaymentPayload -> payload.toPaymentDetails()
@@ -19,6 +19,7 @@ class CardPaymentRequestMapper {
             cardNumber = cardDetails.cardNumber,
             expiryDate = formatExpiryDate(cardDetails.expiryMonth, cardDetails.expiryYear),
             userEmailAddress = userEmailAddress,
+            savePaymentMethod=savePaymentMethod,
             userPhoneNumber = userPhoneNumber,
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,
