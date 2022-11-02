@@ -57,7 +57,7 @@ internal class CardDetailsCheckoutViewModel(
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
-                isVisible = true,
+                isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
