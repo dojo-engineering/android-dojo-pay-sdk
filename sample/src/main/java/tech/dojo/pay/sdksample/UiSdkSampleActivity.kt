@@ -135,6 +135,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             message = "${result.name} (${result.code})"
         )
         displayToken("")
+        displayCustomerID("")
     }
 
     private fun showDialog(title: String, message: String) {

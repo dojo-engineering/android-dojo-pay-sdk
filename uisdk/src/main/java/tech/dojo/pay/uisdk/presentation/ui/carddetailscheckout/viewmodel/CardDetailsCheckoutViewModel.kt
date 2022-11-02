@@ -19,6 +19,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import java.util.Currency
@@ -55,6 +56,11 @@ internal class CardDetailsCheckoutViewModel(
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = true,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             isLoading = false,
             isEnabled = false
         )
@@ -291,6 +297,11 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                saveCardCheckBox = CheckBoxItem(
+                    isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(),
+                    isChecked = false,
+                    messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                ),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes
                 ),
@@ -324,6 +335,11 @@ internal class CardDetailsCheckoutViewModel(
         }
     }
 
+    fun onSaveCardChecked(isChecked: Boolean) {
+        val newCheckBoxItem = currentState.saveCardCheckBox.copy(isChecked = isChecked)
+        currentState = currentState.copy(saveCardCheckBox = newCheckBoxItem)
+    }
+
     fun onPayWithCardClicked() {
         viewModelScope.launch { observePaymentIntent() }
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
@@ -342,6 +358,7 @@ internal class CardDetailsCheckoutViewModel(
                 countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
                 postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null
             ),
+            savePaymentMethod= currentState.saveCardCheckBox.isChecked,
             cardDetails = DojoCardDetails(
                 cardNumber = currentState.cardNumberInputField.value,
                 cardName = currentState.cardHolderInputField.value,
