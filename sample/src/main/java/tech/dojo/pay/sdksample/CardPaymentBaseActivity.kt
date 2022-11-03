@@ -18,7 +18,6 @@ import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
-import tech.dojo.pay.sdksample.token.TokenGenerator
 
 abstract class CardPaymentBaseActivity : AppCompatActivity() {
 

@@ -18,6 +18,7 @@ internal data class CardDetailsCheckoutState(
     val currentSelectedCountry: SupportedCountriesViewEntity,
     val isPostalCodeFieldRequired: Boolean,
     val postalCodeField: InputFieldState,
+    val saveCardCheckBox: CheckBoxItem,
     val isLoading: Boolean,
     val isEnabled: Boolean
 )
@@ -26,4 +27,10 @@ data class InputFieldState(
     val value: String,
     @StringRes val errorMessages: Int? = null,
     val isError: Boolean = false
+)
+
+data class CheckBoxItem(
+    @StringRes val messageText: Int,
+    val isChecked: Boolean,
+    val isVisible: Boolean
 )

@@ -15,6 +15,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
@@ -28,6 +29,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
@@ -49,7 +51,7 @@ class CardDetailsCheckoutViewModelTest {
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper = mock()
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
-    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator= mock()
+    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -70,9 +72,14 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = false,
             postalCodeField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
         )
@@ -125,10 +132,15 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = false,
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
@@ -195,10 +207,15 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
@@ -266,9 +283,14 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = true,
@@ -339,9 +361,14 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -372,12 +399,18 @@ class CardDetailsCheckoutViewModelTest {
         whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
+        whenever(
+            cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
+                any(),
+                any()
+            )
+        ).thenReturn(true)
+        whenever(
+            cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
+                any(),
+                any()
+            )
+        ).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -420,9 +453,14 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = "new"),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -492,9 +530,14 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = "new"),
-            cardExpireDateInputField= InputFieldState(value = "new"),
-            cvvInputFieldState= InputFieldState(value = "new"),
+            cardNumberInputField = InputFieldState(value = "new"),
+            cardExpireDateInputField = InputFieldState(value = "new"),
+            cvvInputFieldState = InputFieldState(value = "new"),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -566,9 +609,14 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = "new"),
             isEmailInputFieldRequired = true,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            saveCardCheckBox = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+            ),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -644,10 +692,10 @@ class CardDetailsCheckoutViewModelTest {
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator
         )
-        viewModel.validateCvv("new",false)
-        viewModel.validateCardNumber("new",false)
-        viewModel.validateEmailValue("new",false)
-        viewModel.validateExpireDate("new",false)
+        viewModel.validateCvv("new", false)
+        viewModel.validateCardNumber("new", false)
+        viewModel.validateEmailValue("new", false)
+        viewModel.validateExpireDate("new", false)
         // assert
         Assert.assertEquals(false, viewModel.state.value?.isEnabled)
     }

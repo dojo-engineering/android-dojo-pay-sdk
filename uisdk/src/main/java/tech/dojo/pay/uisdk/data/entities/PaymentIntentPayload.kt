@@ -14,6 +14,7 @@ data class PaymentIntentPayload(
     val amount: Amount? = null,
     val tipsAmount: Amount? = null,
     val requestedAmount: Amount? = null,
+    val customer: Customer? = null,
     val totalAmount: Amount? = null,
     val refundedAmount: Long? = null,
     val createdAt: String? = null,
@@ -65,6 +66,6 @@ data class SupportedPaymentMethods(
     val wallets: List<WalletSchemes>? = null
 )
 
-data class Metadata(
-    val locationID: String
-)
+data class Metadata(val locationID: String)
+
+data class Customer(val id: String)

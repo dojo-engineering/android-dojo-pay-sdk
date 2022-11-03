@@ -31,7 +31,6 @@ class CardDetailsCheckoutViewModelFactory(
             AllowedPaymentMethodsViewEntityMapper()
         val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
 
-
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
             dojoCardPaymentHandler,

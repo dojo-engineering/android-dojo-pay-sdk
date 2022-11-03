@@ -12,6 +12,7 @@ class PaymentIntentDomainEntityMapper {
         checkInvalidParameters(raw)
         return PaymentIntentDomainEntity(
             id = requireNotNull(raw.id),
+            customerId = raw.customer?.id,
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
                 valueLong = requireNotNull(raw.amount?.value),

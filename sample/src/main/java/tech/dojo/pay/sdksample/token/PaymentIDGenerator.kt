@@ -12,41 +12,45 @@ object PaymentIDGenerator {
             .create(PaymentIntentApi::class.java)
     }
 
-    suspend fun generatePaymentId(): PaymentIdResponse = paymentIntentApi.getToken(
-        PaymentIdBody(
-            amount = Amount(
-                value = 10L,
-                currencyCode = "GBP"
-            ),
-            config = Config(
-                customerEmail = CustomerEmail(true),
-                billingAddress = BillingAddress(true)
-            ),
-            itemLines = listOf(
-                ItemLines(
-                    amountTotal = Amount(
-                        10L,
-                        currencyCode = "GBP"
-                    ),
-                    caption = "Pixel 5"
+    suspend fun generatePaymentId(customerId: String = ""): PaymentIdResponse =
+        paymentIntentApi.getToken(
+            PaymentIdBody(
+                amount = Amount(
+                    value = 10L,
+                    currencyCode = "GBP"
                 ),
-                ItemLines(
-                    amountTotal = Amount(
-                        10L,
-                        currencyCode = "GBP"
-                    ),
-                    caption = "Pixel 6"
+                customer = Customer(
+                    id = customerId
                 ),
-                ItemLines(
-                    amountTotal = Amount(
-                        10L,
-                        currencyCode = "GBP"
-                    ),
-                    caption = "Pixel 6 pro"
+                config = Config(
+                    customerEmail = CustomerEmail(true),
+                    billingAddress = BillingAddress(true)
                 ),
-            ),
-            reference = "Order 234",
-            description = "Demo payment intent"
+                itemLines = listOf(
+                    ItemLines(
+                        amountTotal = Amount(
+                            10L,
+                            currencyCode = "GBP"
+                        ),
+                        caption = "Pixel 5"
+                    ),
+                    ItemLines(
+                        amountTotal = Amount(
+                            10L,
+                            currencyCode = "GBP"
+                        ),
+                        caption = "Pixel 6"
+                    ),
+                    ItemLines(
+                        amountTotal = Amount(
+                            10L,
+                            currencyCode = "GBP"
+                        ),
+                        caption = "Pixel 6 pro"
+                    ),
+                ),
+                reference = "Order 234",
+                description = "Demo payment intent"
+            )
         )
-    )
 }
