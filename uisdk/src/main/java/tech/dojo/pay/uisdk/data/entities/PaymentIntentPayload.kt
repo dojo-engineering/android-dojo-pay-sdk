@@ -3,7 +3,7 @@ package tech.dojo.pay.uisdk.data.entities
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
 
-data class PaymentIntentPayload(
+internal data class PaymentIntentPayload(
     val id: String? = null,
     val captureMode: String? = null,
     val transactionSource: String? = null,
@@ -27,24 +27,24 @@ data class PaymentIntentPayload(
     val metadata: Metadata? = null
 )
 
-data class ItemLines(
+internal data class ItemLines(
     val caption: String,
     val amountTotal: Amount
 )
 
-data class Amount(
+internal data class Amount(
     val value: Long,
     val currencyCode: String
 )
 
-data class Config(
+internal data class Config(
     val tradingName: String,
     val branding: Branding,
     val customerEmail: CustomerEmail,
     val billingAddress: BillingAddress
 )
 
-data class CustomerEmail(
+internal data class CustomerEmail(
     val collectionRequired: Boolean
 )
 
@@ -52,16 +52,16 @@ data class BillingAddress(
     val collectionRequired: Boolean
 )
 
-data class Branding(
+internal data class Branding(
     val logoURL: String,
     val faviconURL: String
 )
 
-data class MerchantConfig(
+internal data class MerchantConfig(
     val supportedPaymentMethods: SupportedPaymentMethods? = null
 )
 
-data class SupportedPaymentMethods(
+internal data class SupportedPaymentMethods(
     val cardSchemes: List<CardsSchemes>? = null,
     val wallets: List<WalletSchemes>? = null
 )

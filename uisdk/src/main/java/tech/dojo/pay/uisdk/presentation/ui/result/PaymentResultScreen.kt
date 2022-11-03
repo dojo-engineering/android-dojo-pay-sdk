@@ -41,7 +41,7 @@ import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewMod
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ShowResultSheetScreen(
+internal fun ShowResultSheetScreen(
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel

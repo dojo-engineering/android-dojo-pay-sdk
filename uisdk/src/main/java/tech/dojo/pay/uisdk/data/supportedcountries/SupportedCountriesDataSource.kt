@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.data
+package tech.dojo.pay.uisdk.data.supportedcountries
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import tech.dojo.pay.uisdk.data.entities.SupportedCountryRaw

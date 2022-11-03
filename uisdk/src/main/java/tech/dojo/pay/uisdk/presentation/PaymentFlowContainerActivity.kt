@@ -131,7 +131,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
-    fun PaymentFlowNavHost(
+  internal fun PaymentFlowNavHost(
         navController: NavHostController,
         viewModel: PaymentFlowViewModel
     ) {

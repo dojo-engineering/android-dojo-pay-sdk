@@ -11,7 +11,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 
-class PaymentFlowViewModel(
+internal class PaymentFlowViewModel(
     paymentId: String,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent,

@@ -1,8 +1,8 @@
 package tech.dojo.pay.uisdk.domain
 
-import tech.dojo.pay.uisdk.data.PaymentIntentRepository
+import tech.dojo.pay.uisdk.data.paymentintent.PaymentIntentRepository
 
-class ObservePaymentIntent(
+internal class ObservePaymentIntent(
     private val repo: PaymentIntentRepository
 ) {
     fun observePaymentIntent() = repo.observePaymentIntent()

@@ -20,7 +20,7 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCa
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 import java.util.Currency
 
-class PaymentMethodCheckoutViewModel(
+internal class PaymentMethodCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,

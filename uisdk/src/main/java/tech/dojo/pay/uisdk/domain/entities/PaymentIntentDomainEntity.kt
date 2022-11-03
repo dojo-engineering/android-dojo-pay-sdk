@@ -4,7 +4,7 @@ import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.uisdk.data.entities.Amount
 
-data class PaymentIntentDomainEntity(
+internal data class PaymentIntentDomainEntity(
     val id: String,
     val paymentToken: String,
     val amount: AmountDomainEntity,
@@ -22,7 +22,7 @@ data class AmountDomainEntity(
     val currencyCode: String
 )
 
-data class ItemLinesDomainEntity(
+internal data class ItemLinesDomainEntity(
     val caption: String,
     val amount: Amount
 )

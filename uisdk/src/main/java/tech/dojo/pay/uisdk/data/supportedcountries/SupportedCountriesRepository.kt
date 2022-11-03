@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.data
+package tech.dojo.pay.uisdk.data.supportedcountries
 
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.domain.mapper.SupportedCountriesDomainMapper

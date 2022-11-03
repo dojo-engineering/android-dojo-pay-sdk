@@ -1,8 +1,8 @@
 package tech.dojo.pay.uisdk.domain
 
-import tech.dojo.pay.uisdk.data.PaymentIntentRepository
+import tech.dojo.pay.uisdk.data.paymentintent.PaymentIntentRepository
 
-class FetchPaymentIntentUseCase(
+internal class FetchPaymentIntentUseCase(
     private val repo: PaymentIntentRepository
 ) {
     fun fetchPaymentIntent(paymentId: String) {

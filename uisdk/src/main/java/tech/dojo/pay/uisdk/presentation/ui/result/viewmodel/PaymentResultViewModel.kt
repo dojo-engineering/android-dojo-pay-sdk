@@ -13,7 +13,7 @@ import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import java.util.Currency
 
-class PaymentResultViewModel(
+internal class PaymentResultViewModel(
     private val result: DojoPaymentResult,
     private val observePaymentIntent: ObservePaymentIntent,
     private val refreshPaymentIntent: RefreshPaymentIntentUseCase

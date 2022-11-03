@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.data
+package tech.dojo.pay.uisdk.data.paymentintent
 
 import tech.dojo.pay.sdk.DojoSdk
 
