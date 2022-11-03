@@ -19,7 +19,7 @@ internal class CardPaymentRequestMapper {
             cardNumber = cardDetails.cardNumber,
             expiryDate = formatExpiryDate(cardDetails.expiryMonth, cardDetails.expiryYear),
             userEmailAddress = userEmailAddress,
-            savePaymentMethod=savePaymentMethod,
+            savePaymentMethod = savePaymentMethod,
             userPhoneNumber = userPhoneNumber,
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,

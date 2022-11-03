@@ -142,7 +142,6 @@ internal class CardDetailsCheckoutViewModel(
             )
         }
         pushStateToUi(currentState)
-
     }
 
     fun onCvvValueChanged(newValue: String) {
@@ -274,18 +273,17 @@ internal class CardDetailsCheckoutViewModel(
         postalCodeValue: String = currentState.postalCodeField.value
     ) =
         cardHolderValue.isNotBlank() &&
-                cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) &&
-                cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
-                cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
-                cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
-                    emailValue,
-                    currentState.isEmailInputFieldRequired
-                ) &&
-                cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
-                    postalCodeValue,
-                    currentState.isPostalCodeFieldRequired
-                )
-
+            cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) &&
+            cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
+            cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
+            cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
+                emailValue,
+                currentState.isEmailInputFieldRequired
+            ) &&
+            cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
+                postalCodeValue,
+                currentState.isPostalCodeFieldRequired
+            )
 
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
@@ -358,7 +356,7 @@ internal class CardDetailsCheckoutViewModel(
                 countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
                 postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null
             ),
-            savePaymentMethod= currentState.saveCardCheckBox.isChecked,
+            savePaymentMethod = currentState.saveCardCheckBox.isChecked,
             cardDetails = DojoCardDetails(
                 cardNumber = currentState.cardNumberInputField.value,
                 cardName = currentState.cardHolderInputField.value,

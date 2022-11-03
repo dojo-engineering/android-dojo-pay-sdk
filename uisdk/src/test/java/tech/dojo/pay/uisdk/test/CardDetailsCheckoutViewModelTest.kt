@@ -51,7 +51,7 @@ class CardDetailsCheckoutViewModelTest {
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper = mock()
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
-    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator= mock()
+    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -77,9 +77,9 @@ class CardDetailsCheckoutViewModelTest {
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isLoading = false,
             isEnabled = false
         )
@@ -132,9 +132,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = false,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
@@ -207,9 +207,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
@@ -283,9 +283,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
@@ -361,9 +361,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
@@ -399,12 +399,18 @@ class CardDetailsCheckoutViewModelTest {
         whenever(cardCheckoutScreenValidator.isCardNumberValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCvvValid(any())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(any())).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
-        whenever(cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(any(),
-            any()
-        )).thenReturn(true)
+        whenever(
+            cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
+                any(),
+                any()
+            )
+        ).thenReturn(true)
+        whenever(
+            cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
+                any(),
+                any()
+            )
+        ).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -447,9 +453,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = "new"),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
@@ -524,9 +530,9 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            cardNumberInputField= InputFieldState(value = "new"),
-            cardExpireDateInputField= InputFieldState(value = "new"),
-            cvvInputFieldState= InputFieldState(value = "new"),
+            cardNumberInputField = InputFieldState(value = "new"),
+            cardExpireDateInputField = InputFieldState(value = "new"),
+            cvvInputFieldState = InputFieldState(value = "new"),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
@@ -608,9 +614,9 @@ class CardDetailsCheckoutViewModelTest {
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
-            cardNumberInputField= InputFieldState(value = ""),
-            cardExpireDateInputField= InputFieldState(value = ""),
-            cvvInputFieldState= InputFieldState(value = ""),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
@@ -686,10 +692,10 @@ class CardDetailsCheckoutViewModelTest {
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator
         )
-        viewModel.validateCvv("new",false)
-        viewModel.validateCardNumber("new",false)
-        viewModel.validateEmailValue("new",false)
-        viewModel.validateExpireDate("new",false)
+        viewModel.validateCvv("new", false)
+        viewModel.validateCardNumber("new", false)
+        viewModel.validateEmailValue("new", false)
+        viewModel.validateExpireDate("new", false)
         // assert
         Assert.assertEquals(false, viewModel.state.value?.isEnabled)
     }

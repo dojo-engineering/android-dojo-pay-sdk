@@ -6,6 +6,6 @@ data class CustomerResponse(
     val emailAddress: String
 )
 data class CustomerRequest(
-    val name:String,
-    val emailAddress:String
+    val name: String,
+    val emailAddress: String
 )

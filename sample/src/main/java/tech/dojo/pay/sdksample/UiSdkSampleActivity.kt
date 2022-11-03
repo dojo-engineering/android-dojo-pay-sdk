@@ -87,7 +87,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCustomerCreationListener(){
+    private fun setCustomerCreationListener() {
         uiSdkSampleBinding.btnGenerateCustomerID.setOnClickListener {
             uiSdkSampleBinding.userId.setText("")
             lifecycleScope.launch {
@@ -108,7 +108,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.token.visibility = View.VISIBLE
     }
 
-    private fun displayCustomerID(id:String){
+    private fun displayCustomerID(id: String) {
         uiSdkSampleBinding.userId.setText(id)
     }
 

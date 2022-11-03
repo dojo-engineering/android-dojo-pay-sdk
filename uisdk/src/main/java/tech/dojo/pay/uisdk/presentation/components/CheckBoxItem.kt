@@ -43,7 +43,7 @@ fun CheckBoxItem(
                     .size(25.dp)
                     .border(
                         width = 1.dp,
-                        color = if(checkedState.value) DojoTheme.colors.primary else Color.Black,
+                        color = if (checkedState.value) DojoTheme.colors.primary else Color.Black,
                         shape = DojoTheme.shapes.small
                     )
                     .background(Color.White)
@@ -53,8 +53,9 @@ fun CheckBoxItem(
                     },
                 contentAlignment = Alignment.Center
             ) {
-                if(checkedState.value)
+                if (checkedState.value) {
                     Icon(Icons.Default.Check, contentDescription = "", tint = DojoTheme.colors.primary)
+                }
             }
             DojoSpacer(16.dp)
 

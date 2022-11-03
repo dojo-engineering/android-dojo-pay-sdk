@@ -56,5 +56,4 @@ class CardCheckoutScreenValidator {
     }
 
     fun isCvvValid(cvvValue: String): Boolean = cvvValue.length > 2
-
 }

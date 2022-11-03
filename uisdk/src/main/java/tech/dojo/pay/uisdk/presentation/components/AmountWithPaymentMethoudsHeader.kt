@@ -73,7 +73,7 @@ internal fun AmountWithPaymentMethodsHeader(
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
                 )
             }
-            SupportedPaymentMethods(Modifier.padding(start = 32.dp,end= 32.dp, top=16.dp), allowedPaymentMethodsIcons)
+            SupportedPaymentMethods(Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp), allowedPaymentMethodsIcons)
         }
     }
 }
