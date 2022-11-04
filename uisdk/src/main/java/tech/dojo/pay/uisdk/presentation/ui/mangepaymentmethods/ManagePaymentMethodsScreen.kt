@@ -49,7 +49,7 @@ fun ManagePaymentMethods(
                     top.linkTo(parent.top, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                selected = true,
+                isSelected = true,
                 onClick = { }
             )
 
