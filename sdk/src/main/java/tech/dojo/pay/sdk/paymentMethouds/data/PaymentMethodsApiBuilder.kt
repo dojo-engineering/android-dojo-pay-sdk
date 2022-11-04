@@ -18,7 +18,7 @@ internal class PaymentMethodsApiBuilder {
             .client(createHttpClient())
             .build()
 
-    private fun getBaseUrl() = "https://pay.dojo.tech/api/"
+    private fun getBaseUrl() = "https://api.dojo.tech/"
 
     private fun createHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
