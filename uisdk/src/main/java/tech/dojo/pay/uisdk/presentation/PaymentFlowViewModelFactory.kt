@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.data.PaymentStateRepository
+import tech.dojo.pay.uisdk.data.WalletStateRepository
 import tech.dojo.pay.uisdk.data.paymentintent.PaymentIntentRepository
 import tech.dojo.pay.uisdk.data.paymentmethods.PaymentMethodsRepository
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
@@ -43,5 +44,6 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val paymentIntentRepository by lazy { PaymentIntentRepository() }
         val paymentStatusRepository by lazy { PaymentStateRepository() }
         val paymentMethodsRepository by lazy { PaymentMethodsRepository() }
+        val walletStateRepository by lazy { WalletStateRepository() }
     }
 }

@@ -22,6 +22,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
@@ -39,7 +40,7 @@ class PaymentMethodCheckoutViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val gpayPaymentHandler: DojoGPayHandler = mock()
-
+    private val updateWalletState: UpdateWalletState= mock()
     @Test
     fun `test initial state`() = runTest {
         // arrange
@@ -58,6 +59,7 @@ class PaymentMethodCheckoutViewModelTest {
         )
         // act
         val actual = PaymentMethodCheckoutViewModel(
+            updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
             null,
@@ -108,6 +110,7 @@ class PaymentMethodCheckoutViewModelTest {
         )
 
         val actual = PaymentMethodCheckoutViewModel(
+            updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
             DojoGPayConfig(
@@ -157,6 +160,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
 
         val viewModel = PaymentMethodCheckoutViewModel(
+            updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
             null,
@@ -207,6 +211,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
 
         val viewModel = PaymentMethodCheckoutViewModel(
+            updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
             DojoGPayConfig(
@@ -239,11 +244,13 @@ class PaymentMethodCheckoutViewModelTest {
                             "100",
                             "GBP"
                         ),
-                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                        supportedWalletSchemes = listOf(WalletSchemes.GOOGLE_PAY)
                     )
                 )
             )
             val viewModel = PaymentMethodCheckoutViewModel(
+                updateWalletState,
                 observePaymentIntent,
                 gpayPaymentHandler,
                 DojoGPayConfig(
@@ -299,6 +306,7 @@ class PaymentMethodCheckoutViewModelTest {
                 )
             )
             val viewModel = PaymentMethodCheckoutViewModel(
+                updateWalletState,
                 observePaymentIntent,
                 gpayPaymentHandler,
                 DojoGPayConfig(
@@ -349,11 +357,13 @@ class PaymentMethodCheckoutViewModelTest {
                             "100",
                             "GBP"
                         ),
-                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                        supportedWalletSchemes = listOf(WalletSchemes.GOOGLE_PAY)
                     )
                 )
             )
             val viewModel = PaymentMethodCheckoutViewModel(
+                updateWalletState,
                 observePaymentIntent,
                 gpayPaymentHandler,
                 DojoGPayConfig(
@@ -409,6 +419,7 @@ class PaymentMethodCheckoutViewModelTest {
                 )
             )
             val viewModel = PaymentMethodCheckoutViewModel(
+                updateWalletState,
                 observePaymentIntent,
                 gpayPaymentHandler,
                 DojoGPayConfig(
@@ -470,6 +481,7 @@ class PaymentMethodCheckoutViewModelTest {
         )
 
         val viewModel = PaymentMethodCheckoutViewModel(
+            updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
             DojoGPayConfig(

@@ -14,6 +14,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
@@ -21,6 +22,7 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMe
 import java.util.Currency
 
 internal class PaymentMethodCheckoutViewModel(
+    private val updateWalletState: UpdateWalletState,
     private val observePaymentIntent: ObservePaymentIntent,
     private val gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
@@ -66,7 +68,9 @@ internal class PaymentMethodCheckoutViewModel(
                 it?.let {
                     if (it is PaymentIntentResult.Success) {
                         paymentIntent = it.result
-                        if (currentState.isLoading) { applyInitialFlowRules(it, gPayConfig) }
+                        if (currentState.isLoading) {
+                            applyInitialFlowRules(it, gPayConfig)
+                        }
                     }
                 }
             }
@@ -93,15 +97,20 @@ internal class PaymentMethodCheckoutViewModel(
         isGooglePayEnabled: Boolean
     ) {
         paymentIntent = paymentIntentResult.result
+        updateWalletState.updateWalletState(
+            isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
+                WalletSchemes.GOOGLE_PAY
+            )
+        )
         currentState = PaymentMethodCheckoutState(
             gPayConfig = gPayConfig,
-            isGooglePayVisible = isGooglePayEnabled && gPayConfig != null,
+            isGooglePayVisible = isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY),
             isBottomSheetVisible = true,
             isLoading = false,
             isGpayItemVisible = isMangePaymentEnabled && isGooglePayEnabled && gPayConfig != null,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
-                paymentIntent.amount.valueString,
+                    paymentIntent.amount.valueString,
 
             payWithCarButtonState = getPayWithCarButtonState(isGooglePayEnabled)
         )
@@ -113,7 +122,7 @@ internal class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                    it.amount.value.centsToString()
+                        it.amount.value.centsToString()
             )
         }
     }
