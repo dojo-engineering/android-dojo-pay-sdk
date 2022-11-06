@@ -29,7 +29,7 @@ internal fun CardItemWithRadioButton(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        DojoSpacer(width = 16.dp)
+        DojoSpacer(width = 8.dp)
         Icon(
             painter = painterResource(id = cardItem.icon),
             contentDescription = "",
@@ -40,7 +40,7 @@ internal fun CardItemWithRadioButton(
                 .heightIn(15.dp)
         )
 
-        DojoSpacer(width = 32.dp)
+        DojoSpacer(width = 16.dp)
         Column(
             modifier = Modifier
                 .wrapContentHeight()

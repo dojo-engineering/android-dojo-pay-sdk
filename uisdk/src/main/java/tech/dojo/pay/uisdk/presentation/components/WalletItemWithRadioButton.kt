@@ -38,7 +38,7 @@ internal fun WalletItemWithRadioButton(
                 .padding(top = 2.dp)
         )
 
-        DojoSpacer(width = 32.dp)
+        DojoSpacer(width = 16.dp)
         Text(
             modifier = Modifier.weight(1f),
             text = stringResource(id = R.string.dojo_ui_sdk_google_pay_string),
@@ -48,7 +48,7 @@ internal fun WalletItemWithRadioButton(
         )
 
         RadioButton(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 8.dp),
             selected = isSelected,
             onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
             colors = RadioButtonDefaults.colors(

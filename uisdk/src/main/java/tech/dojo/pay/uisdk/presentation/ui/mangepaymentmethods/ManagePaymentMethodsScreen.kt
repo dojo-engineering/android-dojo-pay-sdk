@@ -3,24 +3,28 @@ package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.ViewModel
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
-import tech.dojo.pay.uisdk.presentation.components.WalletItemWithRadioButton
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
 
 @Composable
-fun ManagePaymentMethods(
+internal fun ManagePaymentMethods(
+    viewModel: MangePaymentViewModel,
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
     onNewCardButtonClicked: () -> Unit
@@ -29,6 +33,8 @@ fun ManagePaymentMethods(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
+        val state = viewModel.state.observeAsState().value  ?: return@Surface
+
         DojoAppBar(
             title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
             titleGravity = TitleGravity.LEFT,
@@ -42,15 +48,15 @@ fun ManagePaymentMethods(
                 .fillMaxSize()
         ) {
             val (walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
-            WalletItemWithRadioButton(
+            PaymentMethodsList(
                 modifier = Modifier.constrainAs(walletItem) {
                     start.linkTo(parent.start, 0.dp)
                     end.linkTo(parent.end, 0.dp)
-                    top.linkTo(parent.top, 46.dp)
+                    top.linkTo(parent.top, 60.dp)
                     width = Dimension.fillToConstraints
                 },
-                isSelected = true,
-                onClick = { }
+                paymentMethodItems = state.paymentMethodItems.items,
+                onItemClicked = { }
             )
 
             DojoOutlinedButton(

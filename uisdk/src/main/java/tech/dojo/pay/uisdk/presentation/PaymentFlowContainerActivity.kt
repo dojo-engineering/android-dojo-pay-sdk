@@ -42,6 +42,8 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsChecko
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.ManagePaymentMethods
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.PaymentMethodsCheckOutScreen
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
@@ -193,7 +195,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
+                    val mangePaymentViewModel : MangePaymentViewModel by viewModels{ MangePaymentViewModelFactory() }
                     ManagePaymentMethods(
+                        mangePaymentViewModel,
                         {
                             returnResult(DojoPaymentResult.DECLINED)
                             viewModel.onCloseFlowClicked()

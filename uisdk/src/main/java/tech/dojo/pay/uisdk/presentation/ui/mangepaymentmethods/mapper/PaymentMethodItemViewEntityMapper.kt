@@ -2,7 +2,7 @@ package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper
 
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
@@ -11,14 +11,16 @@ import java.util.Locale
 internal class PaymentMethodItemViewEntityMapper {
 
     fun apply(
-        domainEntity: PaymentMethodsDomainEntity,
+        FetchPaymentMethodsResult: FetchPaymentMethodsResult?,
         isWalletNEnabled: Boolean
     ): PaymentMethodItemViewEntity {
         val items = mutableListOf<PaymentMethodItemViewEntityItem>()
         if (isWalletNEnabled) {
             items.add(PaymentMethodItemViewEntityItem.WalletItemItem)
         }
-        domainEntity.items.forEach { items.add(mapToCardItem(it)) }
+        if (FetchPaymentMethodsResult is FetchPaymentMethodsResult.Success) {
+            FetchPaymentMethodsResult.result.items.forEach { items.add(mapToCardItem(it)) }
+        }
         return PaymentMethodItemViewEntity(items)
     }
 
