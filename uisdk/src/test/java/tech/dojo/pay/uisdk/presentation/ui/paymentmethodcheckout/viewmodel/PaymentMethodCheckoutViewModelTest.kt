@@ -40,7 +40,8 @@ class PaymentMethodCheckoutViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val gpayPaymentHandler: DojoGPayHandler = mock()
-    private val updateWalletState: UpdateWalletState= mock()
+    private val updateWalletState: UpdateWalletState = mock()
+
     @Test
     fun `test initial state`() = runTest {
         // arrange

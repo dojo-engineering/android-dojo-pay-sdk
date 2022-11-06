@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.domain
 
 import tech.dojo.pay.uisdk.data.paymentmethods.PaymentMethodsRepository
 
-
 internal class FetchPaymentMethodsUseCase(
     private val repo: PaymentMethodsRepository
 ) {

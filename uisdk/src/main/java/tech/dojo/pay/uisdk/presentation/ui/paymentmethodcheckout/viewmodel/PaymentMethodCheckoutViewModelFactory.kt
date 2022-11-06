@@ -19,9 +19,9 @@ class PaymentMethodCheckoutViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val observePaymentIntent = ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-        val updateWalletState= UpdateWalletState(walletStateRepository)
+        val updateWalletState = UpdateWalletState(walletStateRepository)
         val gPayConfig =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
-        return PaymentMethodCheckoutViewModel(updateWalletState,observePaymentIntent, gpayPaymentHandler, gPayConfig, isMangePaymentEnabled) as T
+        return PaymentMethodCheckoutViewModel(updateWalletState, observePaymentIntent, gpayPaymentHandler, gPayConfig, isMangePaymentEnabled) as T
     }
 }

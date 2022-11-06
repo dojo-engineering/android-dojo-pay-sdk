@@ -3,7 +3,6 @@ package tech.dojo.pay.uisdk.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.DojoFetchPaymentMethodsResult
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
