@@ -56,7 +56,7 @@ internal fun ManagePaymentMethods(
                     width = Dimension.fillToConstraints
                 },
                 paymentMethodItems = state.paymentMethodItems.items,
-                onItemClicked = { }
+                onItemClicked = { viewModel.onPaymentMethodChanged(it) }
             )
 
             DojoOutlinedButton(

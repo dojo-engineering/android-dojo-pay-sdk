@@ -3,8 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state
 import androidx.annotation.DrawableRes
 
 internal data class MangePaymentMethodsState(
-    @DrawableRes
-    val appBarIcon: Int,
+    val appBarIconType: AppBarIconType,
     val paymentMethodItems: PaymentMethodItemViewEntity,
     val isUsePaymentMethodButtonEnabled: Boolean
 )
@@ -24,4 +23,8 @@ internal sealed class PaymentMethodItemViewEntityItem {
         val scheme: String,
         val pan: String
     ) : PaymentMethodItemViewEntityItem()
+}
+
+internal enum class AppBarIconType{
+    CLOSE,DELETE
 }

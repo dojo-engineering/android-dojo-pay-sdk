@@ -9,8 +9,10 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.MangePaymentMethodsState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 internal class MangePaymentViewModel(
     private val observeWalletState: ObserveWalletState,
@@ -23,11 +25,11 @@ internal class MangePaymentViewModel(
         get() = mutableState
     private var currentState: MangePaymentMethodsState
     private var isWalletEnabled: Boolean = false
-    private var currentSelectedMethod: PaymentMethodItemViewEntity? = null
+    private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
 
     init {
         currentState = MangePaymentMethodsState(
-            appBarIcon = R.drawable.ic_close_green_24px,
+            appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
             isUsePaymentMethodButtonEnabled = true
         )
@@ -42,6 +44,12 @@ internal class MangePaymentViewModel(
                 }
             }
         }
+        postStateToUI()
+    }
+
+    fun onPaymentMethodChanged(currentSelectedMethod: PaymentMethodItemViewEntityItem?){
+        this.currentSelectedMethod= currentSelectedMethod
+        currentState= currentState.copy(isUsePaymentMethodButtonEnabled= true)
         postStateToUI()
     }
 
