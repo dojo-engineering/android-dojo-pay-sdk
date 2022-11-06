@@ -3,19 +3,25 @@ package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state
 import androidx.annotation.DrawableRes
 
 internal data class MangePaymentMethodsState(
-    val tolBarIcon: Int,
-    val paymentMethodItems: List<PaymentMethodItemViewEntity>,
+    @DrawableRes
+    val toolBarIcon: Int,
+    val paymentMethodItems: PaymentMethodItemViewEntity,
     val isUsePaymentMethodButtonEnabled: Boolean
 )
 
-internal sealed class PaymentMethodItemViewEntity {
+internal data class PaymentMethodItemViewEntity(
+    val items: List<PaymentMethodItemViewEntityItem>
+)
 
-    object WalletItem : PaymentMethodItemViewEntity()
+internal sealed class PaymentMethodItemViewEntityItem {
 
-    data class CardItem(
+    object WalletItemItem : PaymentMethodItemViewEntityItem()
+
+    data class CardItemItem(
         @DrawableRes
         val icon: Int,
+        val id: String,
         val scheme: String,
         val pan: String
-    ) : PaymentMethodItemViewEntity()
+    ) : PaymentMethodItemViewEntityItem()
 }

@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -15,17 +14,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
-import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
 import tech.dojo.pay.uisdk.R
-
+import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 @Composable
 internal fun CardItemWithRadioButton(
     modifier: Modifier = Modifier,
-    cardItem: PaymentMethodItemViewEntity.CardItem,
+    cardItem: PaymentMethodItemViewEntityItem.CardItemItem,
     isSelected: Boolean,
-    onClick: ((PaymentMethodItemViewEntity.CardItem) -> Unit),
+    onClick: ((PaymentMethodItemViewEntityItem.CardItemItem) -> Unit),
 ) {
     Row(
         modifier = modifier,
@@ -63,7 +61,6 @@ internal fun CardItemWithRadioButton(
             )
         }
 
-
         RadioButton(
             modifier = Modifier.padding(horizontal = 16.dp),
             selected = isSelected,
@@ -83,12 +80,13 @@ internal fun CardItemWithRadioButton(
 fun PreviewCardItemWithRadioButton() {
     DojoPreview {
         CardItemWithRadioButton(
-            cardItem = PaymentMethodItemViewEntity.CardItem(
+            cardItem = PaymentMethodItemViewEntityItem.CardItemItem(
+                id = "",
                 icon = R.drawable.ic_visa,
                 scheme = "Visa",
                 pan = "****9560"
-            ), onClick = {
-
+            ),
+            onClick = {
             },
             isSelected = true
         )

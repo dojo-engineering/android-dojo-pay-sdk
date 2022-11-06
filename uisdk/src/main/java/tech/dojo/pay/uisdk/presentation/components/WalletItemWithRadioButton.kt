@@ -17,13 +17,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
-import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 @Composable
 internal fun WalletItemWithRadioButton(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
-    onClick: ((PaymentMethodItemViewEntity.WalletItem) -> Unit),
+    onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
 ) {
     Row(
         modifier = modifier.wrapContentHeight(),
@@ -50,7 +50,7 @@ internal fun WalletItemWithRadioButton(
         RadioButton(
             modifier = Modifier.padding(horizontal = 16.dp),
             selected = isSelected,
-            onClick = { onClick.invoke(PaymentMethodItemViewEntity.WalletItem) } ,
+            onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
             colors = RadioButtonDefaults.colors(
                 selectedColor = Color(0xFF00857D),
                 unselectedColor = Color(0xFF262626),
