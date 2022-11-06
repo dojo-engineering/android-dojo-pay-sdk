@@ -29,7 +29,7 @@ internal fun CardItemWithRadioButton(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        DojoSpacer(width = 8.dp)
+        DojoSpacer(width = 16.dp)
         Icon(
             painter = painterResource(id = cardItem.icon),
             contentDescription = "",
@@ -62,7 +62,7 @@ internal fun CardItemWithRadioButton(
         }
 
         RadioButton(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 8.dp),
             selected = isSelected,
             onClick = { onClick.invoke(cardItem) },
             colors = RadioButtonDefaults.colors(
