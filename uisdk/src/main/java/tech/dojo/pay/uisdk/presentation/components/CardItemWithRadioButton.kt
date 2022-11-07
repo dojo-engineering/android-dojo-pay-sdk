@@ -37,7 +37,7 @@ internal fun CardItemWithRadioButton(
     Row(
         modifier = modifier.combinedClickable(
             onClick = {
-                if (inEditeMode) onLongClick.invoke(cardItem)
+                if (inEditeMode) onLongClick.invoke(cardItem) else onClick.invoke(cardItem)
             },
             onLongClick = {
                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
