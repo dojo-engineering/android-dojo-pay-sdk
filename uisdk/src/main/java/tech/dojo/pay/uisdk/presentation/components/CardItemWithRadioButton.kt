@@ -1,15 +1,20 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,15 +23,28 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun CardItemWithRadioButton(
     modifier: Modifier = Modifier,
     cardItem: PaymentMethodItemViewEntityItem.CardItemItem,
     isSelected: Boolean,
+    inEditeMode: Boolean,
     onClick: ((PaymentMethodItemViewEntityItem.CardItemItem) -> Unit),
+    onLongClick: ((PaymentMethodItemViewEntityItem.CardItemItem) -> Unit)
 ) {
+    val haptic = LocalHapticFeedback.current
+
     Row(
-        modifier = modifier,
+        modifier = modifier.combinedClickable(
+            onClick = {
+                if (inEditeMode) onLongClick.invoke(cardItem)
+            },
+            onLongClick = {
+                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                onLongClick.invoke(cardItem)
+            }
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -61,16 +79,35 @@ internal fun CardItemWithRadioButton(
             )
         }
 
-        RadioButton(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            selected = isSelected,
-            onClick = { onClick.invoke(cardItem) },
-            colors = RadioButtonDefaults.colors(
-                selectedColor = Color(0xFF00857D),
-                unselectedColor = Color(0xFF262626),
-                disabledColor = Color.LightGray
+        if (inEditeMode) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 18.dp)
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ) {
+                if (isSelected) {
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = "",
+                        tint = DojoTheme.colors.primary
+                    )
+                }
+            }
+        } else {
+            RadioButton(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                selected = isSelected,
+                onClick = { onClick.invoke(cardItem) },
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = Color(0xFF00857D),
+                    unselectedColor = Color(0xFF262626),
+                    disabledColor = Color.LightGray
+                )
             )
-        )
+        }
+
+
     }
 }
 
@@ -86,9 +123,10 @@ fun PreviewCardItemWithRadioButton() {
                 scheme = "Visa",
                 pan = "****9560"
             ),
-            onClick = {
-            },
-            isSelected = true
+            onClick = {},
+            onLongClick = {},
+            isSelected = true,
+            inEditeMode = false,
         )
     }
 }

@@ -23,8 +23,9 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal fun WalletItemWithRadioButton(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
+    showRadioButton: Boolean= true,
     onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
-) {
+    ) {
     Row(
         modifier = modifier.wrapContentHeight(),
         verticalAlignment = Alignment.CenterVertically,
@@ -46,17 +47,18 @@ internal fun WalletItemWithRadioButton(
             maxLines = 1,
             style = DojoTheme.typography.body1,
         )
-
-        RadioButton(
-            modifier = Modifier.padding(horizontal = 8.dp),
-            selected = isSelected,
-            onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
-            colors = RadioButtonDefaults.colors(
-                selectedColor = Color(0xFF00857D),
-                unselectedColor = Color(0xFF262626),
-                disabledColor = Color.LightGray
+        if(showRadioButton){
+            RadioButton(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                selected = isSelected,
+                onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = Color(0xFF00857D),
+                    unselectedColor = Color(0xFF262626),
+                    disabledColor = Color.LightGray
+                )
             )
-        )
+        }
     }
 }
 

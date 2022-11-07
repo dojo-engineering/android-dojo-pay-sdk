@@ -15,7 +15,8 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal fun PaymentMethodsList(
     modifier: Modifier = Modifier,
     paymentMethodItems: List<PaymentMethodItemViewEntityItem>,
-    onItemClicked: ((PaymentMethodItemViewEntityItem) -> Unit)
+    onItemChecked: ((PaymentMethodItemViewEntityItem) -> Unit),
+    onItemLongClicked: ((PaymentMethodItemViewEntityItem) -> Unit)
 ) {
     var selectedOption: PaymentMethodItemViewEntityItem by remember {
         mutableStateOf(
@@ -24,8 +25,11 @@ internal fun PaymentMethodsList(
     }
     val onSelectionChange =
         { paymentMethodItem: PaymentMethodItemViewEntityItem -> selectedOption = paymentMethodItem }
+
+    var isInEditMode: Boolean by remember {mutableStateOf( false) }
+
     LaunchedEffect(Unit) {
-        if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) onItemClicked(
+        if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) onItemChecked(
             selectedOption
         )
     }
@@ -40,19 +44,26 @@ internal fun PaymentMethodsList(
                 when (item) {
                     is PaymentMethodItemViewEntityItem.WalletItemItem -> WalletItemWithRadioButton(
                         isSelected = selectedOption == item,
+                        showRadioButton = !isInEditMode,
                         onClick = {
                             onSelectionChange(it)
-                            onItemClicked(it)
+                            onItemChecked(it)
                         }
                     )
 
                     is PaymentMethodItemViewEntityItem.CardItemItem -> CardItemWithRadioButton(
                         isSelected = selectedOption == item,
+                        inEditeMode = isInEditMode,
                         onClick = {
                             onSelectionChange(it)
-                            onItemClicked(it)
+                            onItemChecked(it)
                         },
-                        cardItem = item
+                        cardItem = item,
+                        onLongClick = {
+                            isInEditMode= true
+                            onSelectionChange(it)
+                            onItemLongClicked(it)
+                        }
                     )
                 }
             }
@@ -87,9 +98,10 @@ fun PreviewPaymentMethodsList() {
         )
         PaymentMethodsList(
             paymentMethodItems = itemList,
-            onItemClicked = {
+            onItemChecked = {
                 println("============================= $it")
-            }
+            },
+            onItemLongClicked = {}
         )
     }
 }

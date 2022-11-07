@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.lifecycle.ViewModel
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
@@ -20,6 +19,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
 
 @Composable
@@ -39,9 +39,13 @@ internal fun ManagePaymentMethods(
             title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
             titleGravity = TitleGravity.LEFT,
             navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
-            actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) {
-                onCloseClicked()
+            actionIcon = if(state.appBarIconType== AppBarIconType.CLOSE){
+                AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
+            }else{
+                AppBarIcon.delete (DojoTheme.colors.headerButtonTintColor) { viewModel.onDeleteClicked() }
+
             }
+
         )
         ConstraintLayout(
             modifier = Modifier
@@ -56,7 +60,8 @@ internal fun ManagePaymentMethods(
                     width = Dimension.fillToConstraints
                 },
                 paymentMethodItems = state.paymentMethodItems.items,
-                onItemClicked = { viewModel.onPaymentMethodChanged(it) }
+                onItemChecked = { viewModel.onPaymentMethodChanged(it) },
+                onItemLongClicked = {viewModel.onPaymentMethodLongCLick(it)}
             )
 
             DojoOutlinedButton(

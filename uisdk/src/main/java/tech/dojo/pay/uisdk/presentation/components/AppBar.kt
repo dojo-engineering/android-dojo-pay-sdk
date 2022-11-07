@@ -139,6 +139,15 @@ internal data class AppBarIcon(
             tintColor,
             onClick
         )
+
+        fun delete(
+            tintColor: Color? = null,
+            onClick: () -> Unit
+        ) = AppBarIcon(
+            R.drawable.delete_24px,
+            tintColor,
+            onClick
+        )
     }
 }
 

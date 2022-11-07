@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
@@ -26,6 +25,7 @@ internal class MangePaymentViewModel(
     private var currentState: MangePaymentMethodsState
     private var isWalletEnabled: Boolean = false
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
+    private var currentDeletedMethod: PaymentMethodItemViewEntityItem.CardItemItem? = null
 
     init {
         currentState = MangePaymentMethodsState(
@@ -47,11 +47,19 @@ internal class MangePaymentViewModel(
         postStateToUI()
     }
 
-    fun onPaymentMethodChanged(currentSelectedMethod: PaymentMethodItemViewEntityItem?){
-        this.currentSelectedMethod= currentSelectedMethod
-        currentState= currentState.copy(isUsePaymentMethodButtonEnabled= true)
+    fun onPaymentMethodChanged(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
+        this.currentSelectedMethod = currentSelectedMethod
+        currentState = currentState.copy(isUsePaymentMethodButtonEnabled = true)
         postStateToUI()
     }
+
+    fun onPaymentMethodLongCLick(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
+        this.currentDeletedMethod = currentSelectedMethod as PaymentMethodItemViewEntityItem.CardItemItem
+        currentState = currentState.copy(appBarIconType = AppBarIconType.DELETE)
+        postStateToUI()
+    }
+
+    fun onDeleteClicked(){}
 
     private fun postStateToUI() {
         mutableState.postValue(currentState)
