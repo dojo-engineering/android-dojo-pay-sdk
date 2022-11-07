@@ -21,6 +21,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
         showResult(result)
     }
 
+    var secret=""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         uiSdkSampleBinding = ActivityUiSdkSampleBinding.inflate(layoutInflater)
@@ -32,7 +34,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
-                    uiSdkSampleBinding.userId.text.toString(),
+                    secret,
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -53,7 +55,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
-                    uiSdkSampleBinding.userId.text.toString(),
+                    secret,
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -95,7 +97,9 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayCustomerSecrete(CustomerGenerator.getCustomerSecrete(CustomerGenerator.generateCustomerId().id).secret)
+                    val id = CustomerGenerator.generateCustomerId().id
+                    secret= CustomerGenerator.getCustomerSecrete(id).secret
+                    displayCustomerSecrete(id)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
@@ -138,6 +142,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         )
         displayToken("")
         displayCustomerSecrete("")
+        secret=""
     }
 
     private fun showDialog(title: String, message: String) {
