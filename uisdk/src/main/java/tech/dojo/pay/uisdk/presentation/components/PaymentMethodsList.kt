@@ -15,6 +15,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal fun PaymentMethodsList(
     modifier: Modifier = Modifier,
     paymentMethodItems: List<PaymentMethodItemViewEntityItem>,
+    isInEditMode:Boolean,
     onItemChecked: ((PaymentMethodItemViewEntityItem) -> Unit),
     onItemLongClicked: ((PaymentMethodItemViewEntityItem) -> Unit)
 ) {
@@ -25,8 +26,6 @@ internal fun PaymentMethodsList(
     }
     val onSelectionChange =
         { paymentMethodItem: PaymentMethodItemViewEntityItem -> selectedOption = paymentMethodItem }
-
-    var isInEditMode: Boolean by remember {mutableStateOf( false) }
 
     LaunchedEffect(Unit) {
         if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) onItemChecked(
@@ -60,7 +59,6 @@ internal fun PaymentMethodsList(
                         },
                         cardItem = item,
                         onLongClick = {
-                            isInEditMode= true
                             onSelectionChange(it)
                             onItemLongClicked(it)
                         }
@@ -101,7 +99,8 @@ fun PreviewPaymentMethodsList() {
             onItemChecked = {
                 println("============================= $it")
             },
-            onItemLongClicked = {}
+            onItemLongClicked = {},
+            isInEditMode = false
         )
     }
 }

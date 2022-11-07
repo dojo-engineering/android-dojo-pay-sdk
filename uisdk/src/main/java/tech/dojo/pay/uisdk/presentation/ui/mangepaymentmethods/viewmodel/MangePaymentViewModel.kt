@@ -32,7 +32,8 @@ internal class MangePaymentViewModel(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
             isUsePaymentMethodButtonEnabled = true,
-            showDialog = false
+            showDialog = false,
+            isInEditMode = false
         )
         viewModelScope.launch {
             observeWalletState.observe().collect {
@@ -58,7 +59,10 @@ internal class MangePaymentViewModel(
     fun onPaymentMethodLongCLick(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
         this.currentDeletedMethod =
             currentSelectedMethod as PaymentMethodItemViewEntityItem.CardItemItem
-        currentState = currentState.copy(appBarIconType = AppBarIconType.DELETE)
+        currentState = currentState.copy(
+            appBarIconType = AppBarIconType.DELETE,
+            isInEditMode = true
+        )
         postStateToUI()
     }
 
@@ -68,7 +72,12 @@ internal class MangePaymentViewModel(
     }
 
     fun onCancelDialogClicked(){
-
+        currentState = currentState.copy(
+            showDialog= false,
+            appBarIconType = AppBarIconType.CLOSE,
+            isInEditMode = false
+        )
+        postStateToUI()
     }
 
     fun onDeletePaymentMethodClicked(){

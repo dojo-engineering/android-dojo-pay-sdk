@@ -6,7 +6,8 @@ internal data class MangePaymentMethodsState(
     val appBarIconType: AppBarIconType,
     val paymentMethodItems: PaymentMethodItemViewEntity,
     val isUsePaymentMethodButtonEnabled: Boolean,
-    val showDialog:Boolean
+    val showDialog:Boolean,
+    val isInEditMode:Boolean
 )
 
 internal data class PaymentMethodItemViewEntity(

@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.RadioButton
@@ -23,11 +24,17 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal fun WalletItemWithRadioButton(
     modifier: Modifier = Modifier,
     isSelected: Boolean,
-    showRadioButton: Boolean= true,
+    showRadioButton: Boolean = true,
     onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
-    ) {
+) {
     Row(
-        modifier = modifier.wrapContentHeight().padding(vertical = if(showRadioButton) 0.dp else 12.dp),
+        modifier = modifier
+            .wrapContentHeight()
+            .padding(vertical = if (showRadioButton) 0.dp else 12.dp)
+            .clickable(
+                enabled = showRadioButton,
+                onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) }
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -47,7 +54,7 @@ internal fun WalletItemWithRadioButton(
             maxLines = 1,
             style = DojoTheme.typography.body1,
         )
-        if(showRadioButton){
+        if (showRadioButton) {
             RadioButton(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 selected = isSelected,
