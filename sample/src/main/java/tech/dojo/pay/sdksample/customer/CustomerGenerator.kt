@@ -18,4 +18,6 @@ object CustomerGenerator {
             emailAddress = "samy@dojo.com"
         )
     )
+
+    suspend fun getCustomerSecrete(customerId:String): CustomerSecreteResponse = CustomerCreationApi.getCustomerSecrete(customerId)
 }

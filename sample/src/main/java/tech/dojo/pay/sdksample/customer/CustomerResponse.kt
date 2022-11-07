@@ -5,7 +5,12 @@ data class CustomerResponse(
     val name: String,
     val emailAddress: String
 )
+
 data class CustomerRequest(
     val name: String,
     val emailAddress: String
+)
+
+data class CustomerSecreteResponse(
+    val secret: String
 )

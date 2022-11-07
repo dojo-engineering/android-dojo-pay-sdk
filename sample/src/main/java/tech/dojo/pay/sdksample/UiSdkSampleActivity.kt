@@ -32,6 +32,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
+                    uiSdkSampleBinding.userId.text.toString(),
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -39,7 +40,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
                     )
                 ),
 
-            )
+                )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
@@ -52,6 +53,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
+                    uiSdkSampleBinding.userId.text.toString(),
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -93,7 +95,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayCustomerID(CustomerGenerator.generateCustomerId().id)
+                    displayCustomerSecrete(CustomerGenerator.getCustomerSecrete(CustomerGenerator.generateCustomerId().id).secret)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
@@ -108,7 +110,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.token.visibility = View.VISIBLE
     }
 
-    private fun displayCustomerID(id: String) {
+    private fun displayCustomerSecrete(id: String) {
         uiSdkSampleBinding.userId.setText(id)
     }
 
@@ -135,7 +137,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             message = "${result.name} (${result.code})"
         )
         displayToken("")
-        displayCustomerID("")
+        displayCustomerSecrete("")
     }
 
     private fun showDialog(title: String, message: String) {

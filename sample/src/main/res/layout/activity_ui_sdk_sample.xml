@@ -96,7 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_margin="16dp"
-        android:hint="user id"
+        android:hint="user secrete"
         app:layout_constraintBottom_toTopOf="@+id/startPaymentFlow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
