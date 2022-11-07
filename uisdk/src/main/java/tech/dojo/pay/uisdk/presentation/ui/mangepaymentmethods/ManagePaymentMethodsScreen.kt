@@ -33,20 +33,22 @@ internal fun ManagePaymentMethods(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        val state = viewModel.state.observeAsState().value  ?: return@Surface
-        if (state.showDialog){SimpleAlertDialog(
-            title = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_title),
-            text = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_message),
-            confirmButtonText = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_confirm_text),
-            dismissButton= stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_cancel_text),
-            onConfirmButtonClicked = {viewModel.onDeletePaymentMethodClicked()},
-            onDismissButtonClicked = {viewModel.onCancelDialogClicked()}
-        )}
+        val state = viewModel.state.observeAsState().value ?: return@Surface
+        if (state.showDialog) {
+            SimpleAlertDialog(
+                title = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_title),
+                text = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_message),
+                confirmButtonText = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_confirm_text),
+                dismissButton = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_cancel_text),
+                onConfirmButtonClicked = { viewModel.onDeletePaymentMethodClicked() },
+                onDismissButtonClicked = { viewModel.onCancelDialogClicked() }
+            )
+        }
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val (appBar,walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
+            val (appBar, walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
 
             DojoAppBar(
                 modifier = Modifier.constrainAs(appBar) {
@@ -58,14 +60,12 @@ internal fun ManagePaymentMethods(
                 title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
                 titleGravity = TitleGravity.LEFT,
                 navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
-                actionIcon = if(state.appBarIconType== AppBarIconType.CLOSE){
+                actionIcon = if (state.appBarIconType == AppBarIconType.CLOSE) {
                     AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
-                }else{
-                    AppBarIcon.delete (DojoTheme.colors.headerButtonTintColor) { viewModel.onDeleteClicked() }
-
+                } else {
+                    AppBarIcon.delete(DojoTheme.colors.headerButtonTintColor) { viewModel.onDeleteClicked() }
                 }
             )
-
 
             PaymentMethodsList(
                 modifier = Modifier.constrainAs(walletItem) {
@@ -77,7 +77,7 @@ internal fun ManagePaymentMethods(
                 paymentMethodItems = state.paymentMethodItems.items,
                 isInEditMode = state.isInEditMode,
                 onItemChecked = { viewModel.onPaymentMethodChanged(it) },
-                onItemLongClicked = {viewModel.onPaymentMethodLongCLick(it)}
+                onItemLongClicked = { viewModel.onPaymentMethodLongCLick(it) }
             )
 
             DojoOutlinedButton(

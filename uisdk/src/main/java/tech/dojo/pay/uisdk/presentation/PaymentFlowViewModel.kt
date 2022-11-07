@@ -22,6 +22,7 @@ internal class PaymentFlowViewModel(
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
+    var currentCustomerId: String? = null
 
     init {
         viewModelScope.launch {
@@ -31,6 +32,7 @@ internal class PaymentFlowViewModel(
                     it?.let { it ->
                         if (it is PaymentIntentResult.Success) {
                             it.result.customerId?.let { customerId ->
+                                currentCustomerId = customerId
                                 fetchPaymentMethodsUseCase.fetchPaymentMethods(
                                     customerId,
                                     customerSecret
@@ -74,7 +76,7 @@ internal class PaymentFlowViewModel(
     }
 
     fun navigateToManagePaymentMethods() {
-        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods
+        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods(currentCustomerId)
     }
 
     fun navigateToCardDetailsCheckoutScreen() {

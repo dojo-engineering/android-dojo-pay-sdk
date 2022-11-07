@@ -15,7 +15,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal fun PaymentMethodsList(
     modifier: Modifier = Modifier,
     paymentMethodItems: List<PaymentMethodItemViewEntityItem>,
-    isInEditMode:Boolean,
+    isInEditMode: Boolean,
     onItemChecked: ((PaymentMethodItemViewEntityItem) -> Unit),
     onItemLongClicked: ((PaymentMethodItemViewEntityItem) -> Unit)
 ) {

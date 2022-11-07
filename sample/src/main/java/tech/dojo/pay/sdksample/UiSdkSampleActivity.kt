@@ -21,7 +21,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         showResult(result)
     }
 
-    var secret=""
+    var secret = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +42,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
                     )
                 ),
 
-                )
+            )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
@@ -98,7 +98,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
                 showLoading()
                 try {
                     val id = CustomerGenerator.generateCustomerId().id
-                    secret= CustomerGenerator.getCustomerSecrete(id).secret
+                    secret = CustomerGenerator.getCustomerSecrete(id).secret
                     displayCustomerSecrete(id)
                 } catch (e: Throwable) {
                     showTokenError(e)
@@ -135,14 +135,14 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.token.setText(e.message)
     }
 
-    fun showResult(result: DojoPaymentResult) {
+    private fun showResult(result: DojoPaymentResult) {
         showDialog(
             title = "Payment result",
             message = "${result.name} (${result.code})"
         )
         displayToken("")
         displayCustomerSecrete("")
-        secret=""
+        secret = ""
     }
 
     private fun showDialog(title: String, message: String) {

@@ -43,8 +43,8 @@ internal fun CardItemWithRadioButton(
                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 onLongClick.invoke(cardItem)
             }
-        ).padding(vertical = if(inEditeMode) 2.dp else 0.dp)
-            .background(color = if(inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background),
+        ).padding(vertical = if (inEditeMode) 2.dp else 0.dp)
+            .background(color = if (inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -107,8 +107,6 @@ internal fun CardItemWithRadioButton(
                 )
             )
         }
-
-
     }
 }
 

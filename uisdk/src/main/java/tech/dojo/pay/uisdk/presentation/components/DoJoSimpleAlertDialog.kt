@@ -20,8 +20,7 @@ internal fun SimpleAlertDialog(
     AlertDialog(
         onDismissRequest = { },
         confirmButton = {
-            TextButton(onClick = { onConfirmButtonClicked.invoke() })
-            {
+            TextButton(onClick = { onConfirmButtonClicked.invoke() }) {
                 Text(
                     text = confirmButtonText,
                     overflow = TextOverflow.Ellipsis,
@@ -32,8 +31,7 @@ internal fun SimpleAlertDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissButtonClicked.invoke() })
-            {
+            TextButton(onClick = { onDismissButtonClicked.invoke() }) {
                 Text(
                     text = dismissButton,
                     overflow = TextOverflow.Ellipsis,

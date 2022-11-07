@@ -40,14 +40,13 @@ internal class PaymentMethodsRepository(
 
     fun observePaymentMethods() = fetchPaymentMethodResult
 
-     fun deletePaymentMethods(
+    fun deletePaymentMethods(
         customerId: String,
         customerSecret: String,
         paymentMethodId: String,
         onDeletePaymentMethodsSuccess: (DeletePaymentMethodsResult) -> Unit,
         onDeletePaymentMethodsFailed: (DeletePaymentMethodsResult) -> Unit
     ) {
-
         dataSource
             .deletePaymentMethods(
                 customerId = customerId,
@@ -64,6 +63,5 @@ internal class PaymentMethodsRepository(
                     )
                 }
             )
-
     }
 }

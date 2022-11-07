@@ -119,7 +119,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 }
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
-                navController.navigate(PaymentFlowScreens.ManagePaymentMethods.rout)
+                navController.navigate(
+                    PaymentFlowScreens.ManagePaymentMethods.createRoute(
+                        event.customerId ?: ""
+                    )
+                )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
@@ -176,7 +180,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-                val paymentResultViewModel = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                val paymentResultViewModel =
+                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
@@ -189,13 +194,29 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     )
                 }
             }
-            composable(route = PaymentFlowScreens.ManagePaymentMethods.rout) {
+            composable(
+                route = PaymentFlowScreens.ManagePaymentMethods.rout,
+                arguments = listOf(
+                    navArgument(name = "customerId") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                        nullable = false
+                    }
+                )
+            ) {
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
-                    val mangePaymentViewModel : MangePaymentViewModel by viewModels{ MangePaymentViewModelFactory() }
+                    val customerId = it.arguments?.get("customerId") as String
+
+                    val mangePaymentViewModel: MangePaymentViewModel by viewModels {
+                        MangePaymentViewModelFactory(
+                            customerId,
+                            arguments
+                        )
+                    }
                     ManagePaymentMethods(
                         mangePaymentViewModel,
                         {

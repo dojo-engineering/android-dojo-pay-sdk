@@ -19,5 +19,5 @@ object CustomerGenerator {
         )
     )
 
-    suspend fun getCustomerSecrete(customerId:String): CustomerSecreteResponse = CustomerCreationApi.getCustomerSecrete(customerId)
+    suspend fun getCustomerSecrete(customerId: String): CustomerSecreteResponse = CustomerCreationApi.getCustomerSecrete(customerId)
 }

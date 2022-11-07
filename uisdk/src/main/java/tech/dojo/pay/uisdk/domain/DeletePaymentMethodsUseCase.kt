@@ -4,11 +4,11 @@ import tech.dojo.pay.uisdk.data.paymentmethods.PaymentMethodsRepository
 import tech.dojo.pay.uisdk.domain.entities.DeletePaymentMethodsResult
 
 internal class DeletePaymentMethodsUseCase(
+    private val customerId: String,
     private val customerSecrete: String,
     private val repo: PaymentMethodsRepository
 ) {
     fun deletePaymentMethods(
-        customerId: String,
         paymentMethodId: String,
         onDeletePaymentMethodsSuccess: (DeletePaymentMethodsResult) -> Unit,
         onDeletePaymentMethodsFailed: (DeletePaymentMethodsResult) -> Unit

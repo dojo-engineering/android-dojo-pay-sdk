@@ -6,8 +6,8 @@ internal data class MangePaymentMethodsState(
     val appBarIconType: AppBarIconType,
     val paymentMethodItems: PaymentMethodItemViewEntity,
     val isUsePaymentMethodButtonEnabled: Boolean,
-    val showDialog:Boolean,
-    val isInEditMode:Boolean
+    val showDialog: Boolean,
+    val isInEditMode: Boolean
 )
 
 internal data class PaymentMethodItemViewEntity(
@@ -27,6 +27,6 @@ internal sealed class PaymentMethodItemViewEntityItem {
     ) : PaymentMethodItemViewEntityItem()
 }
 
-internal enum class AppBarIconType{
-    CLOSE,DELETE
+internal enum class AppBarIconType {
+    CLOSE, DELETE
 }

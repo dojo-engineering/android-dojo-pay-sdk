@@ -10,5 +10,5 @@ sealed class PaymentFlowNavigationEvents {
         PaymentFlowNavigationEvents()
 
     object CardDetailsCheckout : PaymentFlowNavigationEvents()
-    object ManagePaymentMethods : PaymentFlowNavigationEvents()
+    data class ManagePaymentMethods(val customerId: String?) : PaymentFlowNavigationEvents()
 }

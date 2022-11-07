@@ -11,5 +11,7 @@ sealed class PaymentFlowScreens(val rout: String) {
 
     object CardDetailsCheckout : PaymentFlowScreens("CardDetailsCheckout")
 
-    object ManagePaymentMethods : PaymentFlowScreens("ManagePaymentMethods")
+    object ManagePaymentMethods : PaymentFlowScreens("ManagePaymentMethods/{customerId}") {
+        fun createRoute(customerId: String) = "ManagePaymentMethods/$customerId"
+    }
 }

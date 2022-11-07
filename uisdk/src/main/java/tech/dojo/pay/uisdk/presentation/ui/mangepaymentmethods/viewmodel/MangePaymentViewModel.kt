@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
@@ -14,6 +15,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 internal class MangePaymentViewModel(
+    deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
     private val observeWalletState: ObserveWalletState,
     private val observePaymentMethods: ObservePaymentMethods,
     private val mapper: PaymentMethodItemViewEntityMapper
@@ -67,21 +69,20 @@ internal class MangePaymentViewModel(
     }
 
     fun onDeleteClicked() {
-        currentState= currentState.copy(showDialog = true)
+        currentState = currentState.copy(showDialog = true)
         postStateToUI()
     }
 
-    fun onCancelDialogClicked(){
+    fun onCancelDialogClicked() {
         currentState = currentState.copy(
-            showDialog= false,
+            showDialog = false,
             appBarIconType = AppBarIconType.CLOSE,
             isInEditMode = false
         )
         postStateToUI()
     }
 
-    fun onDeletePaymentMethodClicked(){
-
+    fun onDeletePaymentMethodClicked() {
     }
     private fun postStateToUI() {
         mutableState.postValue(currentState)
