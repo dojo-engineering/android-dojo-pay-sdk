@@ -15,7 +15,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 internal class MangePaymentViewModel(
-    deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
+    private val deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
     private val observeWalletState: ObserveWalletState,
     private val observePaymentMethods: ObservePaymentMethods,
     private val mapper: PaymentMethodItemViewEntityMapper
@@ -83,7 +83,37 @@ internal class MangePaymentViewModel(
     }
 
     fun onDeletePaymentMethodClicked() {
+        val newList = currentState.paymentMethodItems.items.filter { it != currentDeletedMethod }
+//        deletePaymentMethodsUseCase.deletePaymentMethods(
+//            paymentMethodId = currentDeletedMethod?.id ?: "",
+//            onDeletePaymentMethodsSuccess = {
+//                currentState = currentState.copy(
+//                    paymentMethodItems = PaymentMethodItemViewEntity(newList),
+//                    showDialog = false,
+//                    appBarIconType = AppBarIconType.CLOSE,
+//                    isInEditMode = false
+//                )
+//            },
+//            onDeletePaymentMethodsFailed = {
+//                currentState = currentState.copy(
+//                    paymentMethodItems = PaymentMethodItemViewEntity(newList),
+//                    showDialog = false,
+//                    appBarIconType = AppBarIconType.CLOSE,
+//                    isInEditMode = false
+//                )
+//            }
+//        )
+
+        currentState = currentState.copy(
+            paymentMethodItems = PaymentMethodItemViewEntity(newList),
+            isUsePaymentMethodButtonEnabled= false,
+            showDialog = false,
+            appBarIconType = AppBarIconType.CLOSE,
+            isInEditMode = false
+        )
+        postStateToUI()
     }
+
     private fun postStateToUI() {
         mutableState.postValue(currentState)
     }

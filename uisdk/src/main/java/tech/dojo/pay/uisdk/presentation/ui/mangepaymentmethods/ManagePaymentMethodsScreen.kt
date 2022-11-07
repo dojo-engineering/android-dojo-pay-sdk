@@ -96,7 +96,8 @@ internal fun ManagePaymentMethods(
                     bottom.linkTo(footer.bottom, 46.dp)
                     width = Dimension.fillToConstraints
                 },
-                text = stringResource(id = R.string.dojo_ui_sdk_pay_with_this_method)
+                text = stringResource(id = R.string.dojo_ui_sdk_pay_with_this_method),
+                enabled = state.isUsePaymentMethodButtonEnabled
             ) { onBackClicked() }
 
             DojoBrandFooter(
