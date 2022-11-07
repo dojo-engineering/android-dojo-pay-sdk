@@ -27,7 +27,7 @@ internal fun WalletItemWithRadioButton(
     onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
     ) {
     Row(
-        modifier = modifier.wrapContentHeight(),
+        modifier = modifier.wrapContentHeight().padding(vertical = if(showRadioButton) 0.dp else 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)

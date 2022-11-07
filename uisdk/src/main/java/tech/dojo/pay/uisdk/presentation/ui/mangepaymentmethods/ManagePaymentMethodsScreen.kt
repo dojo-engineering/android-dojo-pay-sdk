@@ -34,29 +34,36 @@ internal fun ManagePaymentMethods(
         color = Color.White
     ) {
         val state = viewModel.state.observeAsState().value  ?: return@Surface
-
-        DojoAppBar(
-            title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
-            titleGravity = TitleGravity.LEFT,
-            navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
-            actionIcon = if(state.appBarIconType== AppBarIconType.CLOSE){
-                AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
-            }else{
-                AppBarIcon.delete (DojoTheme.colors.headerButtonTintColor) { viewModel.onDeleteClicked() }
-
-            }
-
-        )
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            val (walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
+            val (appBar,walletItem, selectPaymentMethod, payWithNewCard, footer) = createRefs()
+
+            DojoAppBar(
+                modifier = Modifier.constrainAs(appBar) {
+                    start.linkTo(parent.start, 0.dp)
+                    end.linkTo(parent.end, 0.dp)
+                    top.linkTo(parent.top)
+                    width = Dimension.fillToConstraints
+                },
+                title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
+                titleGravity = TitleGravity.LEFT,
+                navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
+                actionIcon = if(state.appBarIconType== AppBarIconType.CLOSE){
+                    AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
+                }else{
+                    AppBarIcon.delete (DojoTheme.colors.headerButtonTintColor) { viewModel.onDeleteClicked() }
+
+                }
+            )
+
+
             PaymentMethodsList(
                 modifier = Modifier.constrainAs(walletItem) {
                     start.linkTo(parent.start, 0.dp)
                     end.linkTo(parent.end, 0.dp)
-                    top.linkTo(parent.top, 60.dp)
+                    top.linkTo(appBar.bottom)
                     width = Dimension.fillToConstraints
                 },
                 paymentMethodItems = state.paymentMethodItems.items,

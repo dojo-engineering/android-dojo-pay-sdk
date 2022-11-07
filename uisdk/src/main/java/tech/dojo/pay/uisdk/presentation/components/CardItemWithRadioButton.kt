@@ -3,12 +3,11 @@ package tech.dojo.pay.uisdk.presentation.components
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,7 +43,8 @@ internal fun CardItemWithRadioButton(
                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 onLongClick.invoke(cardItem)
             }
-        ),
+        ).padding(vertical = if(inEditeMode) 2.dp else 0.dp)
+            .background(color = if(inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -83,14 +83,15 @@ internal fun CardItemWithRadioButton(
             Box(
                 modifier = Modifier
                     .padding(horizontal = 18.dp)
-                    .background(Color.White),
+                    .background(Color.Transparent),
                 contentAlignment = Alignment.Center
             ) {
                 if (isSelected) {
                     Icon(
-                        Icons.Default.CheckCircle,
+                        painter = painterResource(id = R.drawable.check_circle_24px),
                         contentDescription = "",
-                        tint = DojoTheme.colors.primary
+                        tint = Color.Unspecified,
+                        modifier = Modifier.background(shape = CircleShape, color = Color.Transparent)
                     )
                 }
             }

@@ -49,17 +49,19 @@ internal class MangePaymentViewModel(
 
     fun onPaymentMethodChanged(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
         this.currentSelectedMethod = currentSelectedMethod
-        currentState = currentState.copy(isUsePaymentMethodButtonEnabled = true)
+        currentState = currentState
+            .copy(isUsePaymentMethodButtonEnabled = isWalletEnabled || currentSelectedMethod is PaymentMethodItemViewEntityItem.CardItemItem)
         postStateToUI()
     }
 
     fun onPaymentMethodLongCLick(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
-        this.currentDeletedMethod = currentSelectedMethod as PaymentMethodItemViewEntityItem.CardItemItem
+        this.currentDeletedMethod =
+            currentSelectedMethod as PaymentMethodItemViewEntityItem.CardItemItem
         currentState = currentState.copy(appBarIconType = AppBarIconType.DELETE)
         postStateToUI()
     }
 
-    fun onDeleteClicked(){}
+    fun onDeleteClicked() {}
 
     private fun postStateToUI() {
         mutableState.postValue(currentState)
