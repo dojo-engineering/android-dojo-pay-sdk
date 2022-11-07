@@ -31,7 +31,8 @@ internal class MangePaymentViewModel(
         currentState = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
-            isUsePaymentMethodButtonEnabled = true
+            isUsePaymentMethodButtonEnabled = true,
+            showDialog = false
         )
         viewModelScope.launch {
             observeWalletState.observe().collect {
@@ -61,8 +62,18 @@ internal class MangePaymentViewModel(
         postStateToUI()
     }
 
-    fun onDeleteClicked() {}
+    fun onDeleteClicked() {
+        currentState= currentState.copy(showDialog = true)
+        postStateToUI()
+    }
 
+    fun onCancelDialogClicked(){
+
+    }
+
+    fun onDeletePaymentMethodClicked(){
+
+    }
     private fun postStateToUI() {
         mutableState.postValue(currentState)
     }

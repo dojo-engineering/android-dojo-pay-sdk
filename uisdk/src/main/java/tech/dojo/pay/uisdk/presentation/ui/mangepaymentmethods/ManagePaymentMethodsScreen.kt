@@ -34,6 +34,14 @@ internal fun ManagePaymentMethods(
         color = Color.White
     ) {
         val state = viewModel.state.observeAsState().value  ?: return@Surface
+        if (state.showDialog){SimpleAlertDialog(
+            title = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_title),
+            text = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_message),
+            confirmButtonText = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_confirm_text),
+            dismissButton= stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_cancel_text),
+            onConfirmButtonClicked = {viewModel.onDeletePaymentMethodClicked()},
+            onDismissButtonClicked = {viewModel.onCancelDialogClicked()}
+        )}
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()

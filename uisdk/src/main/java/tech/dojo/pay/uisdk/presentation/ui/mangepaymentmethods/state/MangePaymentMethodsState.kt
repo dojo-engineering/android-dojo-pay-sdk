@@ -5,7 +5,8 @@ import androidx.annotation.DrawableRes
 internal data class MangePaymentMethodsState(
     val appBarIconType: AppBarIconType,
     val paymentMethodItems: PaymentMethodItemViewEntity,
-    val isUsePaymentMethodButtonEnabled: Boolean
+    val isUsePaymentMethodButtonEnabled: Boolean,
+    val showDialog:Boolean
 )
 
 internal data class PaymentMethodItemViewEntity(

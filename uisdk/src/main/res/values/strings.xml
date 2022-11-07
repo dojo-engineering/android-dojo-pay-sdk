@@ -45,4 +45,8 @@
     <string name = "dojo_ui_sdk_pay_with_this_method">Use this payment method</string>
     <string name = "dojo_ui_sdk_google_pay_string">Google pay</string>
     <string name = "dojo_ui_sdk_pay_with_card_string">Pay by card</string>
+    <string name = "dojo_ui_sdk_mange_payments_dialog_title">Are you sure?</string>
+    <string name = "dojo_ui_sdk_mange_payments_dialog_message">You are about to permanently delete this payment method.</string>
+    <string name = "dojo_ui_sdk_mange_payments_dialog_confirm_text">Confirm</string>
+    <string name = "dojo_ui_sdk_mange_payments_dialog_cancel_text">Cancel</string>
 </resources>
