@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -34,8 +33,6 @@ internal fun ManagePaymentMethods(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        val scrollState = rememberScrollState()
-
         val state = viewModel.state.observeAsState().value ?: return@Surface
         if (state.showDialog) {
             SimpleAlertDialog(
@@ -71,7 +68,7 @@ internal fun ManagePaymentMethods(
                 ) {
                     Column(
                         Modifier
-                            .padding(start = 8.dp, end = 8.dp, top = 16.dp, bottom = 200.dp),
+                            .padding(start = 0.dp, end = 0.dp, top = 16.dp, bottom = 200.dp),
                         verticalArrangement = Arrangement.spacedBy(32.dp)
                     ) {
                         PaymentMethodsList(

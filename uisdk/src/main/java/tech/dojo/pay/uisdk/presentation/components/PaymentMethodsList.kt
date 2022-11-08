@@ -38,7 +38,7 @@ internal fun PaymentMethodsList(
             modifier = modifier
                 .wrapContentHeight()
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             items(paymentMethodItems) { item ->
                 when (item) {

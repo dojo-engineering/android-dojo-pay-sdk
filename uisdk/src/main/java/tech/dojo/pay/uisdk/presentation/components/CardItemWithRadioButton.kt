@@ -43,8 +43,8 @@ internal fun CardItemWithRadioButton(
                 haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 onLongClick.invoke(cardItem)
             }
-        ).padding(vertical = if (inEditeMode) 2.dp else 0.dp)
-            .background(color = if (inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background),
+        ).background(color = if (inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background)
+            .padding(start = 8.dp, end = 16.dp,top= 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -54,8 +54,8 @@ internal fun CardItemWithRadioButton(
             tint = Color.Unspecified,
             modifier = Modifier
                 .padding(top = 2.dp)
-                .width(25.dp)
-                .heightIn(15.dp)
+                .width(30.dp)
+                .heightIn(20.dp)
         )
 
         DojoSpacer(width = 16.dp)
@@ -68,21 +68,20 @@ internal fun CardItemWithRadioButton(
                 text = cardItem.scheme,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = DojoTheme.typography.caption,
+                style = DojoTheme.typography.body2,
             )
             DojoSpacer(height = 8.dp)
             Text(
                 text = cardItem.pan,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = DojoTheme.typography.body1,
+                style = DojoTheme.typography.subtitle1,
             )
         }
 
         if (inEditeMode) {
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 18.dp)
                     .background(Color.Transparent),
                 contentAlignment = Alignment.Center
             ) {
@@ -97,7 +96,9 @@ internal fun CardItemWithRadioButton(
             }
         } else {
             RadioButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier
+                    .size(20.dp)
+                    .align(Alignment.CenterVertically),
                 selected = isSelected,
                 onClick = { onClick.invoke(cardItem) },
                 colors = RadioButtonDefaults.colors(

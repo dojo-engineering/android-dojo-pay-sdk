@@ -30,11 +30,12 @@ internal fun WalletItemWithRadioButton(
     Row(
         modifier = modifier
             .wrapContentHeight()
-            .padding(vertical = if (showRadioButton) 0.dp else 12.dp)
             .clickable(
                 enabled = showRadioButton,
                 onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) }
-            ),
+            )
+            .padding(start = 8.dp, end = 16.dp,top= 16.dp, bottom = 18.dp)
+        ,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -42,8 +43,7 @@ internal fun WalletItemWithRadioButton(
             painter = painterResource(id = R.drawable.ic_google_pay_card),
             contentDescription = "",
             tint = Color.Unspecified,
-            modifier = Modifier
-                .padding(top = 2.dp)
+            modifier = Modifier.padding(top = 2.dp)
         )
 
         DojoSpacer(width = 16.dp)
@@ -56,7 +56,9 @@ internal fun WalletItemWithRadioButton(
         )
         if (showRadioButton) {
             RadioButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier
+                    .size(20.dp)
+                    .align(Alignment.CenterVertically),
                 selected = isSelected,
                 onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
                 colors = RadioButtonDefaults.colors(
