@@ -76,7 +76,12 @@ internal class PaymentFlowViewModel(
     }
 
     fun navigateToManagePaymentMethods() {
-        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods(currentCustomerId)
+        val customerId = if (currentCustomerId?.isEmpty() != false || currentCustomerId?.isBlank() != false) {
+            null
+        } else {
+            currentCustomerId
+        }
+        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods(customerId)
     }
 
     fun navigateToCardDetailsCheckoutScreen() {

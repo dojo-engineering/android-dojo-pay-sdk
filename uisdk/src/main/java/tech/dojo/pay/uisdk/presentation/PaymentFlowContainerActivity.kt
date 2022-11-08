@@ -120,9 +120,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
                 navController.navigate(
-                    PaymentFlowScreens.ManagePaymentMethods.createRoute(
-                        event.customerId ?: ""
-                    )
+                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId)
                 )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
@@ -200,7 +198,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     navArgument(name = "customerId") {
                         type = NavType.StringType
                         defaultValue = ""
-                        nullable = false
+                        nullable = true
                     }
                 )
             ) {
