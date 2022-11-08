@@ -75,6 +75,7 @@ internal fun ManagePaymentMethods(
                     width = Dimension.fillToConstraints
                 },
                 paymentMethodItems = state.paymentMethodItems.items,
+                currentSelectedMethod= state.currentSelectedMethod,
                 isInEditMode = state.isInEditMode,
                 onItemChecked = { viewModel.onPaymentMethodChanged(it) },
                 onItemLongClicked = { viewModel.onPaymentMethodLongCLick(it) }

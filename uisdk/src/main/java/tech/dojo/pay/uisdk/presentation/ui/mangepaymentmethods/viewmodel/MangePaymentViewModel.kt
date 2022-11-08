@@ -34,6 +34,7 @@ internal class MangePaymentViewModel(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
             isUsePaymentMethodButtonEnabled = true,
+            currentSelectedMethod= currentSelectedMethod,
             showDialog = false,
             isInEditMode = false
         )
@@ -54,7 +55,10 @@ internal class MangePaymentViewModel(
     fun onPaymentMethodChanged(currentSelectedMethod: PaymentMethodItemViewEntityItem?) {
         this.currentSelectedMethod = currentSelectedMethod
         currentState = currentState
-            .copy(isUsePaymentMethodButtonEnabled = isWalletEnabled || currentSelectedMethod is PaymentMethodItemViewEntityItem.CardItemItem)
+            .copy(
+                isUsePaymentMethodButtonEnabled = isWalletEnabled || currentSelectedMethod is PaymentMethodItemViewEntityItem.CardItemItem,
+                currentSelectedMethod= currentSelectedMethod
+                )
         postStateToUI()
     }
 
@@ -63,8 +67,9 @@ internal class MangePaymentViewModel(
             currentSelectedMethod as PaymentMethodItemViewEntityItem.CardItemItem
         currentState = currentState.copy(
             appBarIconType = AppBarIconType.DELETE,
-            isInEditMode = true
-        )
+            isInEditMode = true,
+            currentSelectedMethod= currentSelectedMethod
+            )
         postStateToUI()
     }
 

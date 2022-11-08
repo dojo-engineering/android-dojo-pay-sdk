@@ -14,6 +14,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 @Composable
 internal fun PaymentMethodsList(
     modifier: Modifier = Modifier,
+    currentSelectedMethod: PaymentMethodItemViewEntityItem?= null,
     paymentMethodItems: List<PaymentMethodItemViewEntityItem>,
     isInEditMode: Boolean,
     onItemChecked: ((PaymentMethodItemViewEntityItem) -> Unit),
@@ -21,7 +22,7 @@ internal fun PaymentMethodsList(
 ) {
     var selectedOption: PaymentMethodItemViewEntityItem by remember {
         mutableStateOf(
-            PaymentMethodItemViewEntityItem.WalletItemItem
+            currentSelectedMethod ?: PaymentMethodItemViewEntityItem.WalletItemItem
         )
     }
     val onSelectionChange =
@@ -100,6 +101,7 @@ fun PreviewPaymentMethodsList() {
                 println("============================= $it")
             },
             onItemLongClicked = {},
+            currentSelectedMethod = null,
             isInEditMode = false
         )
     }
