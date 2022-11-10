@@ -2,19 +2,22 @@ package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state
 
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
-data class PaymentMethodCheckoutState(
+internal data class PaymentMethodCheckoutState(
     val gPayConfig: DojoGPayConfig?,
-    val isGooglePayVisible: Boolean,
-    val isBottomSheetVisible: Boolean,
-    val isLoading: Boolean,
-    val isGpayItemVisible: Boolean,
+    val paymentMethodItem: PaymentMethodItemViewEntityItem?,
     val amountBreakDownList: List<AmountBreakDownItem>,
+    val payWithCarButtonState: PayWithCarButtonState,
     val totalAmount: String,
-    val payWithCarButtonState: PayWithCarButtonState
+    val cvvFieldState: InputFieldState,
+    val isGooglePayButtonVisible: Boolean,
+    val isBottomSheetVisible: Boolean,
+    val isBottomSheetLoading: Boolean,
+    val payAmountButtonState:PayAmountButtonVState?
 )
-data class PayWithCarButtonState(
-    val isVisibleL: Boolean,
-    val isPrimary: Boolean,
 
-)
+internal data class PayWithCarButtonState(val isVisibleL: Boolean, val navigateToCardCheckout: Boolean)
+
+internal data class PayAmountButtonVState(val isEnabled:Boolean)
