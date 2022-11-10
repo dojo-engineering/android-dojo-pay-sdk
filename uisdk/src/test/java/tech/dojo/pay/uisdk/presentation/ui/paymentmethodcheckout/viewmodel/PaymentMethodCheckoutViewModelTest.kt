@@ -63,9 +63,7 @@ class PaymentMethodCheckoutViewModelTest {
             updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
-            null,
-            false
-        ).state.value
+            null).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -118,8 +116,7 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            ),
-            true
+            )
         ).state.value
         // assert
         Assert.assertEquals(expected, actual)
@@ -164,8 +161,7 @@ class PaymentMethodCheckoutViewModelTest {
             updateWalletState,
             observePaymentIntent,
             gpayPaymentHandler,
-            null,
-            true
+            null
         )
         val actual = viewModel.state.value
 
@@ -219,8 +215,7 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            ),
-            true
+            )
         )
         val actual = viewModel.state.value
 
@@ -258,8 +253,7 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                ),
-                true
+                )
             )
             val expected = PaymentMethodCheckoutState(
                 DojoGPayConfig(
@@ -314,8 +308,7 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                ),
-                true
+                )
             )
             val expected = PaymentMethodCheckoutState(
                 DojoGPayConfig(
@@ -371,8 +364,7 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                ),
-                false
+                )
             )
             val expected = PaymentMethodCheckoutState(
                 DojoGPayConfig(
@@ -427,8 +419,7 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                ),
-                false
+                )
             )
             val expected = PaymentMethodCheckoutState(
                 DojoGPayConfig(
@@ -489,8 +480,7 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            ),
-            false
+            )
         )
 
         // act
