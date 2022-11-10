@@ -26,7 +26,6 @@ internal class PaymentMethodCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
-    private val isMangePaymentEnabled: Boolean
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
     val state: LiveData<PaymentMethodCheckoutState>
@@ -104,13 +103,15 @@ internal class PaymentMethodCheckoutViewModel(
         )
         currentState = PaymentMethodCheckoutState(
             gPayConfig = gPayConfig,
-            isGooglePayVisible = isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY),
+            isGooglePayVisible = isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
+                WalletSchemes.GOOGLE_PAY
+            ),
             isBottomSheetVisible = true,
             isLoading = false,
-            isGpayItemVisible = isMangePaymentEnabled && isGooglePayEnabled && gPayConfig != null,
+            isGpayItemVisible = isGooglePayEnabled && gPayConfig != null,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
-                paymentIntent.amount.valueString,
+                    paymentIntent.amount.valueString,
 
             payWithCarButtonState = getPayWithCarButtonState(isGooglePayEnabled)
         )
@@ -122,7 +123,7 @@ internal class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                    it.amount.value.centsToString()
+                        it.amount.value.centsToString()
             )
         }
     }
@@ -136,17 +137,7 @@ internal class PaymentMethodCheckoutViewModel(
                 isPrimary = true
             )
         } else {
-            if (isMangePaymentEnabled) {
-                PayWithCarButtonState(
-                    isVisibleL = false,
-                    isPrimary = true
-                )
-            } else {
-                PayWithCarButtonState(
-                    isVisibleL = true,
-                    isPrimary = false
-                )
-            }
+            PayWithCarButtonState(isVisibleL = true, isPrimary = false)
         }
     }
 

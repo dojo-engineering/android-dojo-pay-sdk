@@ -13,15 +13,14 @@ import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultCon
 
 class PaymentMethodCheckoutViewModelFactory(
     private val gpayPaymentHandler: DojoGPayHandler,
-    private val arguments: Bundle?,
-    private val isMangePaymentEnabled: Boolean
-) : ViewModelProvider.Factory {
+    private val arguments: Bundle?
+    ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val observePaymentIntent = ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
         val updateWalletState = UpdateWalletState(walletStateRepository)
         val gPayConfig =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
-        return PaymentMethodCheckoutViewModel(updateWalletState, observePaymentIntent, gpayPaymentHandler, gPayConfig, isMangePaymentEnabled) as T
+        return PaymentMethodCheckoutViewModel(updateWalletState, observePaymentIntent, gpayPaymentHandler, gPayConfig) as T
     }
 }
