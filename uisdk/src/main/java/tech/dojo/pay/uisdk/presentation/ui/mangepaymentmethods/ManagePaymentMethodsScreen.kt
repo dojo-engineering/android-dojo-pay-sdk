@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -20,20 +21,25 @@ import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
 
 @Composable
 internal fun ManagePaymentMethods(
     viewModel: MangePaymentViewModel,
     onCloseClicked: () -> Unit,
-    onBackClicked: () -> Unit,
+    onBackClicked: ( currentSelectedMethod: PaymentMethodItemViewEntityItem?) -> Unit,
     onNewCardButtonClicked: () -> Unit
 ) {
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
         val state = viewModel.state.observeAsState().value ?: return@Surface
+        BackHandler{
+            onBackClicked(state.currentSelectedMethod)
+        }
         if (state.showDialog) {
             SimpleAlertDialog(
                 title = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_title),
@@ -52,7 +58,7 @@ internal fun ManagePaymentMethods(
                 DojoAppBar(
                     title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
                     titleGravity = TitleGravity.LEFT,
-                    navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
+                    navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked(state.currentSelectedMethod) },
                     actionIcon = if (state.appBarIconType == AppBarIconType.CLOSE) {
                         AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
                     } else {
@@ -88,7 +94,7 @@ internal fun ManagePaymentMethods(
                         SingleButtonView(
                             text = stringResource(id = R.string.dojo_ui_sdk_pay_with_this_method),
                             enabled = state.isUsePaymentMethodButtonEnabled
-                        ) { onBackClicked() }
+                        ) { onBackClicked(state.currentSelectedMethod) }
                         DojoOutlinedButton(
                             modifier = Modifier
                                 .fillMaxWidth()

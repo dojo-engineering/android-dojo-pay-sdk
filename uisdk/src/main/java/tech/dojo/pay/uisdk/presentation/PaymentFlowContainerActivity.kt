@@ -42,6 +42,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsChecko
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.ManagePaymentMethods
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.PaymentMethodsCheckOutScreen
@@ -54,6 +55,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
+    private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val viewModel: PaymentFlowViewModel by viewModels {
         PaymentFlowViewModelFactory(
             arguments
@@ -126,6 +128,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
             }
+            is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod ->{
+                this.currentSelectedMethod= event.currentSelectedMethod
+                navController.popBackStack()
+
+            }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
                 this.finish()
@@ -154,6 +161,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler, arguments, true)
                 }
                 PaymentMethodsCheckOutScreen(
+                    currentSelectedMethod,
                     paymentMethodCheckoutViewModel,
                     {
                         returnResult(DojoPaymentResult.DECLINED)
@@ -171,7 +179,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         defaultValue = DojoPaymentResult.DECLINED
                         nullable = false
                     }
-                ),
+                )
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
                 val refreshPaymentIntent =
@@ -221,7 +229,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             returnResult(DojoPaymentResult.DECLINED)
                             viewModel.onCloseFlowClicked()
                         },
-                        viewModel::onBackClicked,
+                        viewModel::onBackClickedWithSavedPaymentMethod,
                         viewModel::navigateToCardDetailsCheckoutScreen
                     )
                 }

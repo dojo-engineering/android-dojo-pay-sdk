@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 internal class PaymentFlowViewModel(
     paymentId: String,
@@ -62,6 +63,13 @@ internal class PaymentFlowViewModel(
         navigationEvent.value = PaymentFlowNavigationEvents.OnBack
     }
 
+    fun onBackClickedWithSavedPaymentMethod(currentSelectedMethod: PaymentMethodItemViewEntityItem? = null) {
+        navigationEvent.value =
+            PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod(
+                currentSelectedMethod
+            )
+    }
+
     fun onCloseFlowClicked() {
         navigationEvent.value = PaymentFlowNavigationEvents.OnCloseFlow
     }
@@ -76,11 +84,12 @@ internal class PaymentFlowViewModel(
     }
 
     fun navigateToManagePaymentMethods() {
-        val customerId = if (currentCustomerId?.isEmpty() != false || currentCustomerId?.isBlank() != false) {
-            null
-        } else {
-            currentCustomerId
-        }
+        val customerId =
+            if (currentCustomerId?.isEmpty() != false || currentCustomerId?.isBlank() != false) {
+                null
+            } else {
+                currentCustomerId
+            }
         navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods(customerId)
     }
 
