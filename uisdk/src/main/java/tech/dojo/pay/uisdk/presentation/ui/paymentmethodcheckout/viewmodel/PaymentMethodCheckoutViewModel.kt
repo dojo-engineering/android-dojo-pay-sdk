@@ -60,16 +60,6 @@ internal class PaymentMethodCheckoutViewModel(
 
     }
 
-    private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
-        observePaymentIntent.observePaymentIntent().collect {
-            it?.let {
-                if (it is PaymentIntentResult.Success) {
-                    handleSuccessPaymentIntent(it, isGooglePayEnabled)
-                }
-            }
-        }
-    }
-
     fun observePaymentIntent() {
         viewModelScope.launch {
             observePaymentIntent.observePaymentIntent().collect {
@@ -107,7 +97,17 @@ internal class PaymentMethodCheckoutViewModel(
                 isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) {
                     it.result.items.isEmpty()
                 } else {
-                    true
+                    false
+                }
+            }
+        }
+    }
+
+    private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
+        observePaymentIntent.observePaymentIntent().collect {
+            it?.let {
+                if (it is PaymentIntentResult.Success) {
+                    handleSuccessPaymentIntent(it, isGooglePayEnabled)
                 }
             }
         }
@@ -213,6 +213,7 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     fun onSavedPaymentMethodChanged(newValue: PaymentMethodItemViewEntityItem?) {
+        currentState = currentState.copy(cvvFieldState = InputFieldState(value = ""))
         if (newValue != currentState.paymentMethodItem) {
             currentState = currentState.copy(
                 paymentMethodItem = newValue,
@@ -222,11 +223,9 @@ internal class PaymentMethodCheckoutViewModel(
                     isPrimary = false,
                     navigateToCardCheckout = false
                 ),
-                cvvFieldState = InputFieldState(""),
                 isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
             )
         }
-
         postStateToUI()
     }
 

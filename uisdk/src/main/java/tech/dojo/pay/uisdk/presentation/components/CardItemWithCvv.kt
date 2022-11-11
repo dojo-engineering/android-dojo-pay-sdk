@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -26,6 +27,7 @@ internal fun CardItemWithCvv(
     modifier: Modifier = Modifier,
     cardItem: PaymentMethodItemViewEntityItem.CardItemItem,
     onClick: (() -> Unit)? = null,
+    keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     Row(
         modifier = modifier
@@ -70,7 +72,8 @@ internal fun CardItemWithCvv(
             CvvInputField(
                 cvvValue = cvvValue,
                 cvvPlaceholder = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_cvv),
-                onCvvValueChanged = onCvvValueChanged
+                onCvvValueChanged = onCvvValueChanged,
+                keyboardActions= keyboardActions
             )
         }
 
