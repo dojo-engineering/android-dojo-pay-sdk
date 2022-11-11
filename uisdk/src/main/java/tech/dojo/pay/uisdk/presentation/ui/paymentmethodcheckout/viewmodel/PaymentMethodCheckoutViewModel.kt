@@ -50,6 +50,7 @@ internal class PaymentMethodCheckoutViewModel(
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
                 isVisibleL = false,
+                isPrimary = false,
                 navigateToCardCheckout = false
             ),
             payAmountButtonState = null
@@ -103,8 +104,10 @@ internal class PaymentMethodCheckoutViewModel(
     private fun observePaymentMethods() {
         viewModelScope.launch {
             observePaymentMethods.observe().collect {
-                if (it is FetchPaymentMethodsResult.Success) {
-                    isSavedCardsEmpty = it.result.items.isEmpty()
+                isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) {
+                    it.result.items.isEmpty()
+                } else {
+                    true
                 }
             }
         }
@@ -128,7 +131,7 @@ internal class PaymentMethodCheckoutViewModel(
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
                     paymentIntent.amount.valueString,
 
-            payWithCarButtonState = getPayWithCarButtonState(isGooglePayEnabled),
+            payWithCarButtonState = getPayWithCarButtonStateWithGooglePayState(isGooglePayEnabled),
             payAmountButtonState = null,
             cvvFieldState = InputFieldState(value = ""),
         )
@@ -153,16 +156,30 @@ internal class PaymentMethodCheckoutViewModel(
         }
     }
 
-    private fun getPayWithCarButtonState(
+    private fun getPayWithCarButtonStateWithGooglePayState(
         isGooglePayEnabled: Boolean
     ): PayWithCarButtonState {
         return if (!isGooglePayEnabled || gPayConfig == null) {
             PayWithCarButtonState(
                 isVisibleL = true,
+                isPrimary = true,
                 navigateToCardCheckout = isSavedCardsEmpty
             )
         } else {
-            PayWithCarButtonState(isVisibleL = false, navigateToCardCheckout = false)
+            if (isSavedCardsEmpty) {
+                PayWithCarButtonState(
+                    isVisibleL = true,
+                    isPrimary = false,
+                    navigateToCardCheckout = true
+                )
+
+            } else {
+                PayWithCarButtonState(
+                    isVisibleL = false,
+                    isPrimary = false,
+                    navigateToCardCheckout = false
+                )
+            }
         }
     }
 
@@ -200,6 +217,11 @@ internal class PaymentMethodCheckoutViewModel(
             currentState = currentState.copy(
                 paymentMethodItem = newValue,
                 payAmountButtonState = getPayAmountButtonState(newValue),
+                payWithCarButtonState = PayWithCarButtonState(
+                    isVisibleL = false,
+                    isPrimary = false,
+                    navigateToCardCheckout = false
+                ),
                 cvvFieldState = InputFieldState(""),
                 isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
             )

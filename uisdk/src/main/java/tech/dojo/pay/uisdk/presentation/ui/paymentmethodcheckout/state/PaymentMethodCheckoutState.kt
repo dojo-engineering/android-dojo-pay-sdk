@@ -20,6 +20,7 @@ internal data class PaymentMethodCheckoutState(
 
 internal data class PayWithCarButtonState(
     val isVisibleL: Boolean,
+    val isPrimary:Boolean,
     val navigateToCardCheckout: Boolean
 )
 

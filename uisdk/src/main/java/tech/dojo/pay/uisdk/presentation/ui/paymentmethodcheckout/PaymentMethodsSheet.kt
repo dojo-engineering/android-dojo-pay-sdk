@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
@@ -143,7 +142,7 @@ private fun BottomSheetItems(
             onGpayClicked,
             observePaymentIntent
         )
-        PaymentMethodsButton(contentState, onPayByCard)
+        PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
         PayAmountButton(contentState, onPayAmount)
         FooterItem()
     }
@@ -256,23 +255,37 @@ private fun GooglePayButton(
 @Composable
 private fun PaymentMethodsButton(
     contentState: PaymentMethodCheckoutState,
-    onPayByCard: () -> Unit
+    onPayByCard: () -> Unit,
+    onManagePaymentClicked: () -> Unit
 ) {
     if (contentState.payWithCarButtonState.isVisibleL) {
-        if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+        if (contentState.payWithCarButtonState.isPrimary) {
             DojoFullGroundButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
-            ) { onPayByCard() }
+            ) {
+                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                    onPayByCard()
+                } else {
+                    onManagePaymentClicked()
+                }
+
+            }
         } else {
             DojoOutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
-            ) { onPayByCard() }
+            ) {
+                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                    onPayByCard()
+                } else {
+                    onManagePaymentClicked()
+                }
+            }
         }
     }
 }
