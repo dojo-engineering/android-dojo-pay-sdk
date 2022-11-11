@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
@@ -78,6 +79,7 @@ internal fun PaymentMethodsCheckOutScreen(
                 viewModel::onGpayCLicked,
                 onManagePaymentClicked,
                 onPayByCard,
+                viewModel::onPayAmountClicked,
                 viewModel::observePaymentIntent,
                 viewModel::onCvvValueChanged
             )
@@ -124,6 +126,7 @@ private fun BottomSheetItems(
     onGpayClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit,
+    onPayAmount: () -> Unit,
     observePaymentIntent: () -> Unit,
     onCvvChanged: (String) -> Unit
 ) {
@@ -141,7 +144,7 @@ private fun BottomSheetItems(
             observePaymentIntent
         )
         PaymentMethodsButton(contentState, onPayByCard)
-        PayAmountButton(contentState, onGpayClicked)
+        PayAmountButton(contentState, onPayAmount)
         FooterItem()
     }
 }
@@ -179,7 +182,7 @@ private fun PaymentMethodItem(
             CardItemWithCvv(
                 modifier = Modifier.padding(top = 8.dp),
                 cvvValue = contentState.cvvFieldState.value,
-                onCvvValueChanged = { onCvvChanged(it) },
+                onCvvValueChanged = { newValue -> onCvvChanged(newValue) },
                 cardItem = it as PaymentMethodItemViewEntityItem.CardItemItem,
                 onClick = {
                     onManagePaymentClicked()
@@ -277,7 +280,7 @@ private fun PaymentMethodsButton(
 @Composable
 private fun PayAmountButton(
     contentState: PaymentMethodCheckoutState,
-    onPayByCard: () -> Unit
+    onPayAmount: () -> Unit
 ) {
     contentState.payAmountButtonState?.let {
         DojoFullGroundButton(
@@ -285,7 +288,12 @@ private fun PayAmountButton(
                 .fillMaxWidth()
                 .padding(16.dp, 8.dp, 16.dp, 8.dp),
             enabled = contentState.payAmountButtonState.isEnabled,
+            isLoading = contentState.payAmountButtonState.isLoading,
             text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + contentState.totalAmount
-        ) { }
+        ) {
+            if (!contentState.payAmountButtonState.isLoading) {
+                onPayAmount()
+            }
+        }
     }
 }

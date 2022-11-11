@@ -28,6 +28,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
@@ -55,6 +56,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
+    private lateinit var savedCardPaymentHandler: DojoSavedCardPaymentHandler
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val viewModel: PaymentFlowViewModel by viewModels {
         PaymentFlowViewModelFactory(
@@ -99,6 +101,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
+        savedCardPaymentHandler = DojoSdk.createSavedCardPaymentHandler(this) {
+            viewModel.updatePaymentState(false)
+            viewModel.navigateToPaymentResult(it)
+        }
     }
 
     private fun onNavigationEvent(
@@ -128,8 +134,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
             }
-            is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod ->{
-                this.currentSelectedMethod= event.currentSelectedMethod
+            is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod -> {
+                this.currentSelectedMethod = event.currentSelectedMethod
                 navController.popBackStack()
 
             }
@@ -158,7 +164,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler, arguments)
+                    PaymentMethodCheckoutViewModelFactory(
+                        savedCardPaymentHandler,
+                        gpayPaymentHandler,
+                        arguments
+                    )
                 }
                 PaymentMethodsCheckOutScreen(
                     currentSelectedMethod,

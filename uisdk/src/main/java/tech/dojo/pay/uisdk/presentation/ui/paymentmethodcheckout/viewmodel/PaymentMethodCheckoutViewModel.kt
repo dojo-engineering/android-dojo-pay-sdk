@@ -5,14 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
-import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
-import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
-import tech.dojo.pay.sdk.card.entities.WalletSchemes
+import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
-import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
@@ -28,6 +24,7 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMe
 import java.util.Currency
 
 internal class PaymentMethodCheckoutViewModel(
+    private val savedCardPaymentHandler: DojoSavedCardPaymentHandler,
     private val updateWalletState: UpdateWalletState,
     private val observePaymentIntent: ObservePaymentIntent,
     private val observePaymentMethods: ObservePaymentMethods,
@@ -199,40 +196,49 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     fun onSavedPaymentMethodChanged(newValue: PaymentMethodItemViewEntityItem?) {
-        currentState = currentState.copy(
-            paymentMethodItem = newValue,
-            payAmountButtonState = getPayAmountButtonState(newValue),
-            isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
-        )
+        if (newValue != currentState.paymentMethodItem) {
+            currentState = currentState.copy(
+                paymentMethodItem = newValue,
+                payAmountButtonState = getPayAmountButtonState(newValue),
+                cvvFieldState = InputFieldState(""),
+                isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
+            )
+        }
 
         postStateToUI()
     }
 
     private fun getPayAmountButtonState(newValue: PaymentMethodItemViewEntityItem?): PayAmountButtonVState? {
         return if (newValue is PaymentMethodItemViewEntityItem.CardItemItem) {
-            PayAmountButtonVState(isEnabled = currentState.cvvFieldState.value.length>2)
+            PayAmountButtonVState(isEnabled = currentState.cvvFieldState.value.length > 2)
         } else {
             null
         }
     }
 
-     fun onCvvValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
-                cvvFieldState = InputFieldState(
-                    value = "",
-                    isError = true,
-                    errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_cvv
-                ),
-                payAmountButtonState = PayAmountButtonVState(false)
-            )
-        } else {
-            currentState.copy(
-                cvvFieldState = InputFieldState(value = newValue),
-                payAmountButtonState = PayAmountButtonVState(newValue.length>2)
-            )
-        }
+    fun onCvvValueChanged(newValue: String) {
+        currentState = currentState.copy(
+            cvvFieldState = InputFieldState(value = newValue),
+            payAmountButtonState = PayAmountButtonVState(newValue.length > 2)
+        )
         postStateToUI()
+    }
+
+    fun onPayAmountClicked() {
+        currentState = currentState.copy(
+            payAmountButtonState = PayAmountButtonVState(
+                currentState.cvvFieldState.value.length > 2,
+                true
+            )
+        )
+        savedCardPaymentHandler.executeSavedCardPayment(
+            paymentIntent.paymentToken,
+            DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
+                cv2 = currentState.cvvFieldState.value,
+                paymentMethodId = (currentState.paymentMethodItem as? PaymentMethodItemViewEntityItem.CardItemItem)?.id
+                    ?: ""
+            )
+        )
     }
 
     private fun postStateToUI() {

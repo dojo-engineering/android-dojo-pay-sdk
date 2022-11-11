@@ -15,9 +15,12 @@ internal data class PaymentMethodCheckoutState(
     val isGooglePayButtonVisible: Boolean,
     val isBottomSheetVisible: Boolean,
     val isBottomSheetLoading: Boolean,
-    val payAmountButtonState:PayAmountButtonVState?
+    val payAmountButtonState: PayAmountButtonVState?
 )
 
-internal data class PayWithCarButtonState(val isVisibleL: Boolean, val navigateToCardCheckout: Boolean)
+internal data class PayWithCarButtonState(
+    val isVisibleL: Boolean,
+    val navigateToCardCheckout: Boolean
+)
 
-internal data class PayAmountButtonVState(val isEnabled:Boolean)
+internal data class PayAmountButtonVState(val isEnabled: Boolean, val isLoading: Boolean = false)
