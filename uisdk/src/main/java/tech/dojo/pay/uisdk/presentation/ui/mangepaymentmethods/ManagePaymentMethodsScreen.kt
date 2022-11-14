@@ -28,7 +28,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePa
 internal fun ManagePaymentMethods(
     viewModel: MangePaymentViewModel,
     onCloseClicked: () -> Unit,
-    onBackClicked: ( currentSelectedMethod: PaymentMethodItemViewEntityItem?) -> Unit,
+    onBackClicked: (currentSelectedMethod: PaymentMethodItemViewEntityItem?) -> Unit,
     onNewCardButtonClicked: () -> Unit
 ) {
 
@@ -37,10 +37,10 @@ internal fun ManagePaymentMethods(
         color = Color.White
     ) {
         val state = viewModel.state.observeAsState().value ?: return@Surface
-        BackHandler{
-            if(state.isInEditMode){
+        BackHandler {
+            if (state.isInEditMode) {
                 viewModel.closeEditMode()
-            }else{
+            } else {
                 onBackClicked(state.currentSelectedMethod)
             }
         }
@@ -62,7 +62,13 @@ internal fun ManagePaymentMethods(
                 DojoAppBar(
                     title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
                     titleGravity = TitleGravity.LEFT,
-                    navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked(state.currentSelectedMethod) },
+                    navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) {
+                        if (state.isInEditMode) {
+                            viewModel.closeEditMode()
+                        } else {
+                            onBackClicked(state.currentSelectedMethod)
+                        }
+                    },
                     actionIcon = if (state.appBarIconType == AppBarIconType.CLOSE) {
                         AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
                     } else {
