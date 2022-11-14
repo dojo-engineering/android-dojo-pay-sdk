@@ -78,7 +78,7 @@ internal class MangePaymentViewModel(
         postStateToUI()
     }
 
-    fun onCancelDialogClicked() {
+    fun closeEditMode() {
         currentState = currentState.copy(
             showDialog = false,
             appBarIconType = AppBarIconType.CLOSE,
