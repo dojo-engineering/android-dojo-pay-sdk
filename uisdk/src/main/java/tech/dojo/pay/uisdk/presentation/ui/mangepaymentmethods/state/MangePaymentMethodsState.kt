@@ -8,7 +8,8 @@ internal data class MangePaymentMethodsState(
     var currentSelectedMethod: PaymentMethodItemViewEntityItem?,
     val isUsePaymentMethodButtonEnabled: Boolean,
     val showDialog: Boolean,
-    val isInEditMode: Boolean
+    val isInEditMode: Boolean,
+    val isDeleteItemInProgress: Boolean
 )
 
 internal data class PaymentMethodItemViewEntity(

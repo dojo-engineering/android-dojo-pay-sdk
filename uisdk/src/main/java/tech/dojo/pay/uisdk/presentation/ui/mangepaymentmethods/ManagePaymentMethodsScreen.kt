@@ -51,7 +51,8 @@ internal fun ManagePaymentMethods(
                 confirmButtonText = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_confirm_text),
                 dismissButton = stringResource(id = R.string.dojo_ui_sdk_mange_payments_dialog_cancel_text),
                 onConfirmButtonClicked = { viewModel.onDeletePaymentMethodClicked() },
-                onDismissButtonClicked = { viewModel.closeEditMode() }
+                onDismissButtonClicked = { viewModel.closeEditMode() },
+                isLoading = state.isDeleteItemInProgress
             )
         }
 
