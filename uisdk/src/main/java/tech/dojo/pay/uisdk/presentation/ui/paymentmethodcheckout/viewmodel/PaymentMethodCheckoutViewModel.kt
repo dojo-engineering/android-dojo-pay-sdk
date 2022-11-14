@@ -5,7 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
@@ -91,23 +96,36 @@ internal class PaymentMethodCheckoutViewModel(
         }
     }
 
+    fun handleGooglePayAvailable() {
+        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk = true) }
+    }
+
+    fun handleGooglePayUnAvailable() {
+        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk = false) }
+    }
+
     private fun observePaymentMethods() {
         viewModelScope.launch {
             observePaymentMethods.observe().collect {
                 isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) {
                     it.result.items.isEmpty()
                 } else {
-                    false
+                    true
                 }
             }
         }
     }
 
-    private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabled: Boolean) {
+    private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk: Boolean) {
         observePaymentIntent.observePaymentIntent().collect {
             it?.let {
                 if (it is PaymentIntentResult.Success) {
-                    handleSuccessPaymentIntent(it, isGooglePayEnabled)
+                    handleSuccessPaymentIntent(
+                        it,
+                        isGooglePayEnabledFromSdk && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
+                            WalletSchemes.GOOGLE_PAY
+                        )
+                    )
                 }
             }
         }
@@ -117,33 +135,70 @@ internal class PaymentMethodCheckoutViewModel(
         paymentIntentResult: PaymentIntentResult.Success,
         isGooglePayEnabled: Boolean
     ) {
-        paymentIntent = paymentIntentResult.result
         updateWalletState(isGooglePayEnabled)
-        currentState = PaymentMethodCheckoutState(
+        paymentIntent = paymentIntentResult.result
+        currentState = currentState.copy(
             gPayConfig = gPayConfig,
-            isGooglePayButtonVisible = isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
-                WalletSchemes.GOOGLE_PAY
-            ),
             isBottomSheetVisible = true,
             isBottomSheetLoading = false,
-            paymentMethodItem = if (isGooglePayEnabled && gPayConfig != null) PaymentMethodItemViewEntityItem.WalletItemItem else null,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
-            totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol +
-                    paymentIntent.amount.valueString,
-
-            payWithCarButtonState = getPayWithCarButtonStateWithGooglePayState(isGooglePayEnabled),
-            payAmountButtonState = null,
-            cvvFieldState = InputFieldState(value = ""),
+            totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol + paymentIntent.amount.valueString
         )
+        if (paymentIntent.customerId.isNullOrBlank() || isSavedCardsEmpty) {
+            buildStateForUnavailableSavedCard(isGooglePayEnabled)
+        } else {
+            buildStateForAvailableSavedCard(isGooglePayEnabled)
+        }
         postStateToUI()
     }
 
-    private fun updateWalletState(isGooglePayEnabled: Boolean) {
-        updateWalletState.updateWalletState(
-            isGooglePayEnabled && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
-                WalletSchemes.GOOGLE_PAY
+    private fun buildStateForUnavailableSavedCard(isGooglePayEnabled: Boolean) {
+        if (isGooglePayEnabled) {
+            currentState = currentState.copy(
+                isGooglePayButtonVisible = true,
+                payWithCarButtonState = PayWithCarButtonState(
+                    isVisibleL = true,
+                    isPrimary = false,
+                    navigateToCardCheckout = true
+                )
             )
-        )
+        } else {
+            currentState = currentState.copy(
+                isGooglePayButtonVisible = false,
+                payWithCarButtonState = PayWithCarButtonState(
+                    isVisibleL = true,
+                    isPrimary = true,
+                    navigateToCardCheckout = true
+                )
+            )
+        }
+    }
+
+    private fun buildStateForAvailableSavedCard(isGooglePayEnabled: Boolean) {
+        if (isGooglePayEnabled) {
+            currentState = currentState.copy(
+                isGooglePayButtonVisible = true,
+                paymentMethodItem = PaymentMethodItemViewEntityItem.WalletItemItem,
+                payWithCarButtonState = PayWithCarButtonState(
+                    isVisibleL = false,
+                    isPrimary = false,
+                    navigateToCardCheckout = true
+                )
+            )
+        } else {
+            currentState = currentState.copy(
+                isGooglePayButtonVisible = false,
+                payWithCarButtonState = PayWithCarButtonState(
+                    isVisibleL = true,
+                    isPrimary = true,
+                    navigateToCardCheckout = false
+                )
+            )
+        }
+    }
+
+    private fun updateWalletState(isGooglePayEnabled: Boolean) {
+        updateWalletState.updateWalletState(isGooglePayEnabled)
     }
 
     private fun getAmountBreakDownList(): List<AmountBreakDownItem>? {
@@ -154,41 +209,6 @@ internal class PaymentMethodCheckoutViewModel(
                         it.amount.value.centsToString()
             )
         }
-    }
-
-    private fun getPayWithCarButtonStateWithGooglePayState(
-        isGooglePayEnabled: Boolean
-    ): PayWithCarButtonState {
-        return if (!isGooglePayEnabled || gPayConfig == null) {
-            PayWithCarButtonState(
-                isVisibleL = true,
-                isPrimary = true,
-                navigateToCardCheckout = isSavedCardsEmpty
-            )
-        } else {
-            if (isSavedCardsEmpty) {
-                PayWithCarButtonState(
-                    isVisibleL = true,
-                    isPrimary = false,
-                    navigateToCardCheckout = true
-                )
-
-            } else {
-                PayWithCarButtonState(
-                    isVisibleL = false,
-                    isPrimary = false,
-                    navigateToCardCheckout = false
-                )
-            }
-        }
-    }
-
-    fun handleGooglePayAvailable() {
-        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabled = true) }
-    }
-
-    fun handleGooglePayUnAvailable() {
-        viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabled = false) }
     }
 
     fun onGpayCLicked() {
