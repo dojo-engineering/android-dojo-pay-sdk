@@ -25,7 +25,7 @@ internal fun SimpleAlertDialog(
                     text = confirmButtonText,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = DojoTheme.typography.caption,
+                    style = DojoTheme.typography.subtitle2,
                     color = DojoTheme.colors.primary
                 )
             }
@@ -36,7 +36,7 @@ internal fun SimpleAlertDialog(
                     text = dismissButton,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = DojoTheme.typography.caption,
+                    style = DojoTheme.typography.subtitle2,
                     color = DojoTheme.colors.primary
                 )
             }
@@ -53,7 +53,7 @@ internal fun SimpleAlertDialog(
             Text(
                 text = text,
                 overflow = TextOverflow.Ellipsis,
-                style = DojoTheme.typography.caption,
+                style = DojoTheme.typography.subtitle1,
             )
         }
     )
