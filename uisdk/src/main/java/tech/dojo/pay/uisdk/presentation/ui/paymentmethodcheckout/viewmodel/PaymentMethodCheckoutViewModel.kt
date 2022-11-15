@@ -132,8 +132,15 @@ internal class PaymentMethodCheckoutViewModel(
         )
         viewModelScope.launch {
             observePaymentMethods.observe().collect {
-                val isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) { it.result.items.isEmpty() } else { true }
-                postStateToUiWIthPaymentMethods(isGooglePayEnabled, isSavedCardsEmpty)
+                it?.let {
+                    val isSavedCardsEmpty =
+                        if (it is FetchPaymentMethodsResult.Success) {
+                            it.result.items.isEmpty()
+                        } else {
+                            true
+                        }
+                    postStateToUiWIthPaymentMethods(isGooglePayEnabled, isSavedCardsEmpty)
+                }
             }
         }
     }
