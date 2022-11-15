@@ -23,24 +23,22 @@ internal class PaymentFlowViewModel(
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
-    var currentCustomerId: String? = null
+    private var currentCustomerId: String? = null
 
     init {
         viewModelScope.launch {
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
-                    it?.let { it ->
-                        if (it is PaymentIntentResult.Success) {
-                            it.result.customerId?.let { customerId ->
-                                currentCustomerId = customerId
-                                fetchPaymentMethodsUseCase.fetchPaymentMethods(
-                                    customerId,
-                                    customerSecret
-                                )
-                            }
+                    it?.let { paymentIntentResult ->
+                        if (paymentIntentResult is PaymentIntentResult.Success) {
+                            currentCustomerId = paymentIntentResult.result.customerId
+                            fetchPaymentMethodsUseCase.fetchPaymentMethods(
+                                paymentIntentResult.result.customerId ?: "",
+                                customerSecret
+                            )
                         }
-                        if (it is PaymentIntentResult.FetchFailure) {
+                        if (paymentIntentResult is PaymentIntentResult.FetchFailure) {
                             closeFLowWithInternalError()
                         }
                     }
