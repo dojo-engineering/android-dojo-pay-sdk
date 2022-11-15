@@ -41,7 +41,6 @@ internal class PaymentMethodCheckoutViewModel(
         get() = mutableState
     private lateinit var paymentIntent: PaymentIntentDomainEntity
     private var currentState: PaymentMethodCheckoutState
-    private var isSavedCardsEmpty: Boolean = true
 
     init {
         currentState = PaymentMethodCheckoutState(
@@ -84,7 +83,6 @@ internal class PaymentMethodCheckoutViewModel(
         paymentIntentResult: PaymentIntentResult.Success,
         gPayConfig: DojoGPayConfig?
     ) {
-        observePaymentMethods()
         if (paymentIntentResult.result.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY) && gPayConfig != null) {
             val gPayConfigWithSupportedCardsSchemes =
                 gPayConfig.copy(allowedCardNetworks = paymentIntentResult.result.supportedCardsSchemes)
@@ -102,18 +100,6 @@ internal class PaymentMethodCheckoutViewModel(
 
     fun handleGooglePayUnAvailable() {
         viewModelScope.launch { observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk = false) }
-    }
-
-    private fun observePaymentMethods() {
-        viewModelScope.launch {
-            observePaymentMethods.observe().collect {
-                isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) {
-                    it.result.items.isEmpty()
-                } else {
-                    true
-                }
-            }
-        }
     }
 
     private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk: Boolean) {
@@ -144,6 +130,18 @@ internal class PaymentMethodCheckoutViewModel(
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
             totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol + paymentIntent.amount.valueString
         )
+        viewModelScope.launch {
+            observePaymentMethods.observe().collect {
+                val isSavedCardsEmpty = if (it is FetchPaymentMethodsResult.Success) { it.result.items.isEmpty() } else { true }
+                postStateToUiWIthPaymentMethods(isGooglePayEnabled, isSavedCardsEmpty)
+            }
+        }
+    }
+
+    private fun postStateToUiWIthPaymentMethods(
+        isGooglePayEnabled: Boolean,
+        isSavedCardsEmpty: Boolean
+    ) {
         if (paymentIntent.customerId.isNullOrBlank() || isSavedCardsEmpty) {
             buildStateForUnavailableSavedCard(isGooglePayEnabled)
         } else {
