@@ -2,7 +2,7 @@ package tech.dojo.pay.sdk.payemntintent.data
 
 import tech.dojo.pay.sdk.DojoPaymentIntentResult
 
-class PaymentIntentRepository(
+internal class PaymentIntentRepository(
     private val api: PaymentIntentApi
 ) {
     suspend fun getPaymentIntent(paymentId: String): DojoPaymentIntentResult {

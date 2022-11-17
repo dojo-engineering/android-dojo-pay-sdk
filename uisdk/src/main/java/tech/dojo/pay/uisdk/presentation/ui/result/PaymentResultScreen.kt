@@ -16,7 +16,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,9 +41,9 @@ import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ShowResultSheetScreen(
+internal fun ShowResultSheetScreen(
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel
@@ -53,6 +55,11 @@ fun ShowResultSheetScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit){ keyboardController?.hide()}
+
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentResultSheetState,

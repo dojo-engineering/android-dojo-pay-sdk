@@ -20,8 +20,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.payemntintent.PaymentIntentProvider
-import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentApiBuilder
-import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
+import tech.dojo.pay.sdk.paymentMethouds.PaymentMethodsProvider
 
 object DojoSdk {
     private val REQUEST_CODE_SAVED_CARD = "DOJO_PAY_SAVED_CARD".hashCode()
@@ -166,7 +165,7 @@ object DojoSdk {
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
         onPaymentIntentFailed: () -> Unit
     ) {
-        return PaymentIntentProvider(PaymentIntentRepository(PaymentIntentApiBuilder().create()))
+        PaymentIntentProvider()
             .fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
     }
 
@@ -178,7 +177,45 @@ object DojoSdk {
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
         onPaymentIntentFailed: () -> Unit
     ) {
-        return PaymentIntentProvider(PaymentIntentRepository(PaymentIntentApiBuilder().create()))
+        PaymentIntentProvider()
             .refreshPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
+    }
+
+    /**
+     * fetch saved payment methods object in format of json for specific customer
+     */
+
+    fun fetchPaymentMethods(
+        customerId: String,
+        customerSecret: String,
+        onFetchPaymentMethodsSuccess: (paymentMethodsJson: String) -> Unit,
+        onFetchPaymentMethodsFailed: () -> Unit
+    ) {
+        PaymentMethodsProvider().fetchPaymentMethods(
+            customerId,
+            customerSecret,
+            onFetchPaymentMethodsSuccess,
+            onFetchPaymentMethodsFailed
+        )
+    }
+
+    /**
+     * delete saved payment method for specific customer
+     */
+
+    fun deletePaymentMethods(
+        customerId: String,
+        customerSecret: String,
+        paymentMethodId: String,
+        onDeletePaymentMethodsSuccess: () -> Unit,
+        onDeletePaymentMethodsFailed: () -> Unit
+    ) {
+        PaymentMethodsProvider().deletePaymentMethod(
+            customerId,
+            customerSecret,
+            paymentMethodId,
+            onDeletePaymentMethodsSuccess,
+            onDeletePaymentMethodsFailed
+        )
     }
 }

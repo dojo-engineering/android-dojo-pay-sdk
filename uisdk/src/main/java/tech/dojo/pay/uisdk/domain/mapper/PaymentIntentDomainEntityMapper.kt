@@ -7,7 +7,7 @@ import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 
-class PaymentIntentDomainEntityMapper {
+internal class PaymentIntentDomainEntityMapper {
     fun apply(raw: PaymentIntentPayload): PaymentIntentDomainEntity {
         checkInvalidParameters(raw)
         return PaymentIntentDomainEntity(

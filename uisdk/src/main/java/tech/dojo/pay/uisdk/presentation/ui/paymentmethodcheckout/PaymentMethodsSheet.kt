@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
@@ -18,8 +19,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -29,23 +32,24 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.getActivity
 import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
-import tech.dojo.pay.uisdk.presentation.components.AmountBreakDown
+import tech.dojo.pay.uisdk.presentation.components.*
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
-import tech.dojo.pay.uisdk.presentation.components.GooglePayButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WalletItem
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PaymentMethodsCheckOutScreen(
+    currentSelectedMethod: PaymentMethodItemViewEntityItem?,
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit,
@@ -62,6 +66,9 @@ internal fun PaymentMethodsCheckOutScreen(
     if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true) {
         CheckGPayAvailability(state.gPayConfig, activity, viewModel)
     }
+    if (currentSelectedMethod != null) {
+        viewModel.onSavedPaymentMethodChanged(currentSelectedMethod)
+    }
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
@@ -74,7 +81,9 @@ internal fun PaymentMethodsCheckOutScreen(
                 viewModel::onGpayCLicked,
                 onManagePaymentClicked,
                 onPayByCard,
-                viewModel::observePaymentIntent
+                viewModel::onPayAmountClicked,
+                viewModel::observePaymentIntent,
+                viewModel::onCvvValueChanged
             )
         }
     ) {
@@ -119,13 +128,15 @@ private fun BottomSheetItems(
     onGpayClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit,
-    observePaymentIntent: () -> Unit
+    onPayAmount: () -> Unit,
+    observePaymentIntent: () -> Unit,
+    onCvvChanged: (String) -> Unit
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
-    if (contentState.isLoading) {
+    if (contentState.isBottomSheetLoading) {
         Loading()
     } else {
-        GPayItem(contentState, onManagePaymentClicked)
+        PaymentMethodItem(contentState, onManagePaymentClicked, onCvvChanged)
         AmountBreakDownItem(contentState)
         GooglePayButton(
             contentState,
@@ -134,7 +145,8 @@ private fun BottomSheetItems(
             onGpayClicked,
             observePaymentIntent
         )
-        PaymentMethodsButton(contentState, onPayByCard)
+        PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
+        PayAmountButton(contentState, onPayAmount)
         FooterItem()
     }
 }
@@ -155,13 +167,34 @@ private fun AmountBreakDownItem(contentState: PaymentMethodCheckoutState) {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun GPayItem(contentState: PaymentMethodCheckoutState, onManagePaymentClicked: () -> Unit) {
-    if (contentState.isGpayItemVisible) {
-        WalletItem(
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            onManagePaymentClicked()
+private fun PaymentMethodItem(
+    contentState: PaymentMethodCheckoutState,
+    onManagePaymentClicked: () -> Unit,
+    onCvvChanged: (String) -> Unit
+) {
+    contentState.paymentMethodItem?.let {
+        if (it is PaymentMethodItemViewEntityItem.WalletItemItem) {
+            WalletItem(
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                onManagePaymentClicked()
+            }
+        } else {
+            val keyboardController = LocalSoftwareKeyboardController.current
+            CardItemWithCvv(
+                modifier = Modifier.padding(top = 8.dp),
+                cvvValue = contentState.cvvFieldState.value,
+                onCvvValueChanged = { newValue -> onCvvChanged(newValue) },
+                cardItem = it as PaymentMethodItemViewEntityItem.CardItemItem,
+                onClick = {
+                    onManagePaymentClicked()
+                },
+                keyboardActions = KeyboardActions(onDone = {
+                    keyboardController?.hide()
+                })
+            )
         }
     }
 }
@@ -212,7 +245,7 @@ private fun GooglePayButton(
     onGpayClicked: () -> Unit,
     observePaymentIntent: () -> Unit
 ) {
-    if (googlePayVisibility.isGooglePayVisible) {
+    if (googlePayVisibility.isGooglePayButtonVisible) {
         GooglePayButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -230,7 +263,8 @@ private fun GooglePayButton(
 @Composable
 private fun PaymentMethodsButton(
     contentState: PaymentMethodCheckoutState,
-    onPayByCard: () -> Unit
+    onPayByCard: () -> Unit,
+    onManagePaymentClicked: () -> Unit
 ) {
     if (contentState.payWithCarButtonState.isVisibleL) {
         if (contentState.payWithCarButtonState.isPrimary) {
@@ -239,14 +273,48 @@ private fun PaymentMethodsButton(
                     .fillMaxWidth()
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
-            ) { onPayByCard() }
+            ) {
+                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                    onPayByCard()
+                } else {
+                    onManagePaymentClicked()
+                }
+
+            }
         } else {
             DojoOutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string)
-            ) { onPayByCard() }
+            ) {
+                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                    onPayByCard()
+                } else {
+                    onManagePaymentClicked()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PayAmountButton(
+    contentState: PaymentMethodCheckoutState,
+    onPayAmount: () -> Unit
+) {
+    contentState.payAmountButtonState?.let {
+        DojoFullGroundButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 8.dp, 16.dp, 8.dp),
+            enabled = contentState.payAmountButtonState.isEnabled,
+            isLoading = contentState.payAmountButtonState.isLoading,
+            text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + contentState.totalAmount
+        ) {
+            if (!contentState.payAmountButtonState.isLoading) {
+                onPayAmount()
+            }
         }
     }
 }

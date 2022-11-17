@@ -8,8 +8,8 @@ enum class CardsSchemes(val cardsSchemes: String) {
     NOT_SUPPORTED("");
 
     companion object {
-        fun fromCountryCode(countryCode: String): CardsSchemes =
+        fun fromCardsSchemes(cardsSchemes: String): CardsSchemes =
             values()
-                .find { it.cardsSchemes == countryCode } ?: NOT_SUPPORTED
+                .find { it.cardsSchemes == cardsSchemes } ?: NOT_SUPPORTED
     }
 }

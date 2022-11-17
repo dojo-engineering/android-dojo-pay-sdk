@@ -5,12 +5,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -28,6 +24,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
@@ -42,6 +39,9 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsChecko
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.ManagePaymentMethods
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.PaymentMethodsCheckOutScreen
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
@@ -52,6 +52,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
+    private lateinit var savedCardPaymentHandler: DojoSavedCardPaymentHandler
+    private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val viewModel: PaymentFlowViewModel by viewModels {
         PaymentFlowViewModelFactory(
             arguments
@@ -95,6 +97,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
+        savedCardPaymentHandler = DojoSdk.createSavedCardPaymentHandler(this) {
+            viewModel.updatePaymentState(false)
+            viewModel.navigateToPaymentResult(it)
+        }
     }
 
     private fun onNavigationEvent(
@@ -117,10 +123,17 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 }
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
-                navController.navigate(PaymentFlowScreens.ManagePaymentMethods.rout)
+                navController.navigate(
+                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId)
+                )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
+            }
+            is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod -> {
+                this.currentSelectedMethod = event.currentSelectedMethod
+                navController.popBackStack()
+
             }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -131,25 +144,52 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
-    fun PaymentFlowNavHost(
+    internal fun PaymentFlowNavHost(
         navController: NavHostController,
         viewModel: PaymentFlowViewModel
     ) {
         AnimatedNavHost(
             navController = navController,
             startDestination = PaymentFlowScreens.PaymentMethodCheckout.rout,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None }
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Left,
+                    animationSpec = tween(300)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentScope.SlideDirection.Right,
+                    animationSpec = tween(300)
+                )
+
+            }
         ) {
             composable(
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
-                    PaymentMethodCheckoutViewModelFactory(gpayPaymentHandler, arguments, true)
+                    PaymentMethodCheckoutViewModelFactory(
+                        savedCardPaymentHandler,
+                        gpayPaymentHandler,
+                        arguments
+                    )
                 }
                 PaymentMethodsCheckOutScreen(
+                    currentSelectedMethod,
                     paymentMethodCheckoutViewModel,
                     {
                         returnResult(DojoPaymentResult.DECLINED)
@@ -167,14 +207,15 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         defaultValue = DojoPaymentResult.DECLINED
                         nullable = false
                     }
-                ),
+                )
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
                 val refreshPaymentIntent =
                     RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-                val paymentResultViewModel = PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                val paymentResultViewModel =
+                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
@@ -187,18 +228,36 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     )
                 }
             }
-            composable(route = PaymentFlowScreens.ManagePaymentMethods.rout) {
+            composable(
+                route = PaymentFlowScreens.ManagePaymentMethods.rout,
+                arguments = listOf(
+                    navArgument(name = "customerId") {
+                        type = NavType.StringType
+                        defaultValue = ""
+                        nullable = true
+                    }
+                )
+            ) {
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
+                    val customerId = it.arguments?.get("customerId") as String
+
+                    val mangePaymentViewModel: MangePaymentViewModel by viewModels {
+                        MangePaymentViewModelFactory(
+                            customerId,
+                            arguments
+                        )
+                    }
                     ManagePaymentMethods(
+                        mangePaymentViewModel,
                         {
                             returnResult(DojoPaymentResult.DECLINED)
                             viewModel.onCloseFlowClicked()
                         },
-                        viewModel::onBackClicked,
+                        viewModel::onBackClickedWithSavedPaymentMethod,
                         viewModel::navigateToCardDetailsCheckoutScreen
                     )
                 }

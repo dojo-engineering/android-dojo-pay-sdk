@@ -23,13 +23,13 @@ internal data class CardDetailsCheckoutState(
     val isEnabled: Boolean
 )
 
-data class InputFieldState(
+internal data class InputFieldState(
     val value: String,
     @StringRes val errorMessages: Int? = null,
     val isError: Boolean = false
 )
 
-data class CheckBoxItem(
+internal data class CheckBoxItem(
     @StringRes val messageText: Int,
     val isChecked: Boolean,
     val isVisible: Boolean

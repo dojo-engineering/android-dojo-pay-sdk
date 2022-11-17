@@ -7,26 +7,40 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
+import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
+import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
-class PaymentFlowViewModel(
+internal class PaymentFlowViewModel(
     paymentId: String,
+    customerSecret: String,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent,
+    private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
+    private var currentCustomerId: String? = null
 
     init {
         viewModelScope.launch {
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
-                    it?.let {
-                        if (it is PaymentIntentResult.FetchFailure) { closeFLowWithInternalError() }
+                    it?.let { paymentIntentResult ->
+                        if (paymentIntentResult is PaymentIntentResult.Success) {
+                            currentCustomerId = paymentIntentResult.result.customerId
+                            fetchPaymentMethodsUseCase.fetchPaymentMethods(
+                                paymentIntentResult.result.customerId ?: "",
+                                customerSecret
+                            )
+                        }
+                        if (paymentIntentResult is PaymentIntentResult.FetchFailure) {
+                            closeFLowWithInternalError()
+                        }
                     }
                 }
             } catch (error: Throwable) {
@@ -47,6 +61,13 @@ class PaymentFlowViewModel(
         navigationEvent.value = PaymentFlowNavigationEvents.OnBack
     }
 
+    fun onBackClickedWithSavedPaymentMethod(currentSelectedMethod: PaymentMethodItemViewEntityItem? = null) {
+        navigationEvent.value =
+            PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod(
+                currentSelectedMethod
+            )
+    }
+
     fun onCloseFlowClicked() {
         navigationEvent.value = PaymentFlowNavigationEvents.OnCloseFlow
     }
@@ -61,7 +82,13 @@ class PaymentFlowViewModel(
     }
 
     fun navigateToManagePaymentMethods() {
-        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods
+        val customerId =
+            if (currentCustomerId?.isEmpty() != false || currentCustomerId?.isBlank() != false) {
+                null
+            } else {
+                currentCustomerId
+            }
+        navigationEvent.value = PaymentFlowNavigationEvents.ManagePaymentMethods(customerId)
     }
 
     fun navigateToCardDetailsCheckoutScreen() {

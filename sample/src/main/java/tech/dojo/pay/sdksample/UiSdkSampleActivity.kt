@@ -21,6 +21,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
         showResult(result)
     }
 
+    var secret = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         uiSdkSampleBinding = ActivityUiSdkSampleBinding.inflate(layoutInflater)
@@ -32,6 +34,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
+                    secret,
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -52,6 +55,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
+                    secret,
                     GPayConfig = DojoGPayConfig(
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
@@ -93,7 +97,9 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayCustomerID(CustomerGenerator.generateCustomerId().id)
+                    val id = CustomerGenerator.generateCustomerId().id
+                    secret = CustomerGenerator.getCustomerSecrete(id).secret
+                    displayCustomerSecrete(id)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
@@ -108,7 +114,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.token.visibility = View.VISIBLE
     }
 
-    private fun displayCustomerID(id: String) {
+    private fun displayCustomerSecrete(id: String) {
         uiSdkSampleBinding.userId.setText(id)
     }
 
@@ -129,13 +135,14 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.token.setText(e.message)
     }
 
-    fun showResult(result: DojoPaymentResult) {
+    private fun showResult(result: DojoPaymentResult) {
         showDialog(
             title = "Payment result",
             message = "${result.name} (${result.code})"
         )
         displayToken("")
-        displayCustomerID("")
+        displayCustomerSecrete("")
+        secret = ""
     }
 
     private fun showDialog(title: String, message: String) {
