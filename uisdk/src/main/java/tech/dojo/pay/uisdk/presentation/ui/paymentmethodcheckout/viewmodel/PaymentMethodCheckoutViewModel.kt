@@ -41,6 +41,7 @@ internal class PaymentMethodCheckoutViewModel(
         get() = mutableState
     private lateinit var paymentIntent: PaymentIntentDomainEntity
     private var currentState: PaymentMethodCheckoutState
+    private var currentCvvValue: String = ""
 
     init {
         currentState = PaymentMethodCheckoutState(
@@ -267,20 +268,22 @@ internal class PaymentMethodCheckoutViewModel(
             cvvFieldState = InputFieldState(value = newValue),
             payAmountButtonState = PayAmountButtonVState(newValue.length > 2)
         )
+        currentCvvValue = newValue
         postStateToUI()
     }
 
     fun onPayAmountClicked() {
         currentState = currentState.copy(
             payAmountButtonState = PayAmountButtonVState(
-                currentState.cvvFieldState.value.length > 2,
-                true
+                isEnabled = true,
+                isLoading = true
             )
         )
+        postStateToUI()
         savedCardPaymentHandler.executeSavedCardPayment(
             paymentIntent.paymentToken,
             DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
-                cv2 = currentState.cvvFieldState.value,
+                cv2 = currentCvvValue,
                 paymentMethodId = (currentState.paymentMethodItem as? PaymentMethodItemViewEntityItem.CardItemItem)?.id
                     ?: ""
             )

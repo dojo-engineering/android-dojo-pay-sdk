@@ -295,11 +295,7 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                saveCardCheckBox = CheckBoxItem(
-                    isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(),
-                    isChecked = false,
-                    messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
-                ),
+                saveCardCheckBox = currentState.saveCardCheckBox.copy(isVisible = !paymentIntentResult.result.customerId.isNullOrBlank()),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes
                 ),
