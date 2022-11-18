@@ -34,7 +34,7 @@ internal class MangePaymentViewModel(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
             isUsePaymentMethodButtonEnabled = true,
-            currentSelectedMethod= currentSelectedMethod,
+            currentSelectedMethod = currentSelectedMethod,
             showDialog = false,
             isInEditMode = false,
             isDeleteItemInProgress = false
@@ -58,8 +58,8 @@ internal class MangePaymentViewModel(
         currentState = currentState
             .copy(
                 isUsePaymentMethodButtonEnabled = isWalletEnabled || currentSelectedMethod is PaymentMethodItemViewEntityItem.CardItemItem,
-                currentSelectedMethod= currentSelectedMethod
-                )
+                currentSelectedMethod = currentSelectedMethod
+            )
         postStateToUI()
     }
 
@@ -69,8 +69,8 @@ internal class MangePaymentViewModel(
         currentState = currentState.copy(
             appBarIconType = AppBarIconType.DELETE,
             isInEditMode = true,
-            currentSelectedMethod= currentSelectedMethod
-            )
+            currentSelectedMethod = currentSelectedMethod
+        )
         postStateToUI()
     }
 
@@ -89,31 +89,25 @@ internal class MangePaymentViewModel(
     }
 
     fun onDeletePaymentMethodClicked() {
-        currentState= currentState.copy(isDeleteItemInProgress = true)
+        currentState = currentState.copy(isDeleteItemInProgress = true)
         postStateToUI()
         deletePaymentMethodsUseCase.deletePaymentMethods(
             paymentMethodId = currentDeletedMethod?.id ?: "",
-            onDeletePaymentMethodsSuccess = {
-                val newList = currentState.paymentMethodItems.items.filter { it != currentDeletedMethod }
-                currentState = currentState.copy(
-                    paymentMethodItems = PaymentMethodItemViewEntity(newList),
-                    showDialog = false,
-                    appBarIconType = AppBarIconType.CLOSE,
-                    isInEditMode = false,
-                    isDeleteItemInProgress = false
-                )
-                postStateToUI()
-            },
-            onDeletePaymentMethodsFailed = {
-                currentState = currentState.copy(
-                    showDialog = false,
-                    appBarIconType = AppBarIconType.CLOSE,
-                    isInEditMode = false,
-                    isDeleteItemInProgress = false
-                )
-                postStateToUI()
-            }
+            onDeletePaymentMethodsSuccess = { deleteItemFromUi() },
+            onDeletePaymentMethodsFailed = { deleteItemFromUi() }
         )
+    }
+
+    private fun deleteItemFromUi() {
+        val newList = currentState.paymentMethodItems.items.filter { it != currentDeletedMethod }
+        currentState = currentState.copy(
+            paymentMethodItems = PaymentMethodItemViewEntity(newList),
+            showDialog = false,
+            appBarIconType = AppBarIconType.CLOSE,
+            isInEditMode = false,
+            isDeleteItemInProgress = false
+        )
+        postStateToUI()
     }
 
     private fun postStateToUI() {
