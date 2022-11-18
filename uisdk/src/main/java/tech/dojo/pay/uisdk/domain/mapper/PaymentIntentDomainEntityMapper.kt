@@ -19,7 +19,7 @@ internal class PaymentIntentDomainEntityMapper {
                 valueString = requireNotNull(raw.amount?.value?.centsToString()),
                 currencyCode = requireNotNull(raw.amount?.currencyCode)
             ),
-            supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes),
+            supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }),
             supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets
                 ?: emptyList(),
             itemLines = raw.itemLines?.map {
