@@ -273,10 +273,11 @@ internal class PaymentMethodCheckoutViewModel(
     fun onPayAmountClicked() {
         currentState = currentState.copy(
             payAmountButtonState = PayAmountButtonVState(
-                currentState.cvvFieldState.value.length > 2,
-                true
+                isEnabled = true,
+                isLoading = true
             )
         )
+        postStateToUI()
         savedCardPaymentHandler.executeSavedCardPayment(
             paymentIntent.paymentToken,
             DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
