@@ -238,8 +238,8 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     fun onSavedPaymentMethodChanged(newValue: PaymentMethodItemViewEntityItem?) {
-        currentState = currentState.copy(cvvFieldState = InputFieldState(value = ""))
         if (newValue != currentState.paymentMethodItem) {
+            currentState = currentState.copy(cvvFieldState = InputFieldState(value = ""))
             currentState = currentState.copy(
                 paymentMethodItem = newValue,
                 payAmountButtonState = getPayAmountButtonState(newValue),
