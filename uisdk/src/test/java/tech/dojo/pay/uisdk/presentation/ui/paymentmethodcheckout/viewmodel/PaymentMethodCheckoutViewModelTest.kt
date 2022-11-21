@@ -19,9 +19,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
-import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
-import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
+import tech.dojo.pay.uisdk.domain.*
 import tech.dojo.pay.uisdk.domain.entities.*
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
@@ -44,6 +42,9 @@ class PaymentMethodCheckoutViewModelTest {
     private val updateWalletState: UpdateWalletState = mock()
     private val observePaymentMethods: ObservePaymentMethods = mock()
     private val savedCardPaymentHandler: DojoSavedCardPaymentHandler = mock()
+    private val observePaymentStatus: ObservePaymentStatus= mock()
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase= mock()
+
 
     @Test
     fun `test initial state`() = runTest {
@@ -71,7 +72,9 @@ class PaymentMethodCheckoutViewModelTest {
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
-            null
+            null,
+            observePaymentStatus,
+            updatePaymentStateUseCase
         )
         val actual = viewModel.state.value
         // assert
@@ -131,7 +134,9 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            )
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
         ).state.value
         // assert
         Assert.assertEquals(expected, actual)
@@ -196,7 +201,9 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            )
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
         )
         val actual = viewModel.state.value
         // assert
@@ -264,7 +271,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -333,7 +342,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -402,7 +413,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -476,7 +489,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -550,7 +565,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -630,7 +647,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -710,7 +729,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -794,7 +815,9 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            )
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
         )
         val newValue: PaymentMethodItemViewEntityItem =
             PaymentMethodItemViewEntityItem.CardItemItem(
@@ -884,7 +907,9 @@ class PaymentMethodCheckoutViewModelTest {
                 merchantName = "",
                 merchantId = "",
                 gatewayMerchantId = ""
-            )
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
         )
         val newValue: PaymentMethodItemViewEntityItem =
             PaymentMethodItemViewEntityItem.CardItemItem(
@@ -951,7 +976,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             val newValue: PaymentMethodItemViewEntityItem =
                 PaymentMethodItemViewEntityItem.CardItemItem(
@@ -1022,7 +1049,9 @@ class PaymentMethodCheckoutViewModelTest {
                     merchantName = "",
                     merchantId = "",
                     gatewayMerchantId = ""
-                )
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
             )
             viewModel.handleGooglePayAvailable()
             // act
