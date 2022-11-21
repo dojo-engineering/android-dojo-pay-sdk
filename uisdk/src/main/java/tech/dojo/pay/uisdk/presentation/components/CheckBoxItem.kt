@@ -29,7 +29,7 @@ fun CheckBoxItem(
     itemText: String,
     onCheckedChange: (Boolean) -> (Unit),
 ) {
-    val checkedState = remember { mutableStateOf(false) }
+    val checkedState = remember { mutableStateOf(true) }
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
