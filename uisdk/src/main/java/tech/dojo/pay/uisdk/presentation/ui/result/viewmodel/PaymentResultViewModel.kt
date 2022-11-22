@@ -67,7 +67,7 @@ internal class PaymentResultViewModel(
             PaymentResultState.FailedResult(
                 appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
                 imageId = R.drawable.ic_error_circle,
-                showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+                showTryAgain =true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
                 orderInfo = paymentIntentResult.result.id,
                 isTryAgainLoading = false,
@@ -87,7 +87,7 @@ internal class PaymentResultViewModel(
         val state = PaymentResultState.FailedResult(
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
             imageId = R.drawable.ic_error_circle,
-            showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+            showTryAgain =true,
             isTryAgainLoading = false,
             shouldNavigateToPreviousScreen = false,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
