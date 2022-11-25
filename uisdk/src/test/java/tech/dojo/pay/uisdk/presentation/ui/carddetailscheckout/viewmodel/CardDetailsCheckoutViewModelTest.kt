@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.test
+package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
