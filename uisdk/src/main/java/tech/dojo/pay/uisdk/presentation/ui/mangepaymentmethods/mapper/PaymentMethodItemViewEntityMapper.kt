@@ -32,7 +32,11 @@ internal class PaymentMethodItemViewEntityMapper {
                     Locale.getDefault()
                 ) else firstChar.toString()
             },
-            pan = it.pan.substring(it.pan.length - 8, it.pan.length),
+            pan = if (it.pan.length >8) {
+                it.pan.substring(it.pan.length - 8, it.pan.length)
+            } else {
+                it.pan
+            },
             icon = requireNotNull(getIcon(it)),
         )
 
