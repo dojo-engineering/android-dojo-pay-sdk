@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InputFieldWithErrorMessage(
+internal fun InputFieldWithErrorMessage(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,

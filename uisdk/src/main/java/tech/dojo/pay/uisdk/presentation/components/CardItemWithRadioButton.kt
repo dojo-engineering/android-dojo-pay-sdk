@@ -114,7 +114,7 @@ internal fun CardItemWithRadioButton(
 @SuppressLint("CardItemWithRadioButton")
 @Preview("CardItemWithRadioButton", group = "CardItemWithRadioButton")
 @Composable
-fun PreviewCardItemWithRadioButton() {
+internal fun PreviewCardItemWithRadioButton() {
     DojoPreview {
         CardItemWithRadioButton(
             cardItem = PaymentMethodItemViewEntityItem.CardItemItem(

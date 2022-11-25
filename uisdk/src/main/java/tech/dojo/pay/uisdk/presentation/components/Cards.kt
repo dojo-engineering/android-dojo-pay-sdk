@@ -33,7 +33,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-fun DojoExpandableCard(
+internal fun DojoExpandableCard(
     header: String,
     isExpanded: Boolean = true,
     content: @Composable AnimatedVisibilityScope.() -> Unit

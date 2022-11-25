@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-fun CheckBoxItem(
+internal fun CheckBoxItem(
     modifier: Modifier = Modifier,
     itemText: String,
     onCheckedChange: (Boolean) -> (Unit),

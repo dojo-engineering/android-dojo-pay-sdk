@@ -14,7 +14,7 @@ private val maestroCardRegex = Regex("^(5[06789]|6)[0-9]{0,}\$")
 /**
  * This will match if the card number is Amex card or not
  */
-fun isAmexCardScheme(cardNumber: String): Boolean {
+internal fun isAmexCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(ameRegex)
 }
@@ -22,7 +22,7 @@ fun isAmexCardScheme(cardNumber: String): Boolean {
 /**
  * This will match if the card number is Visa card or not
  */
-fun isVisaCardScheme(cardNumber: String): Boolean {
+internal fun isVisaCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(visaRegex)
 }
@@ -30,7 +30,7 @@ fun isVisaCardScheme(cardNumber: String): Boolean {
 /**
  * This will match if the card number is MasterCard card or not
  */
-fun isMasterCardScheme(cardNumber: String): Boolean {
+internal fun isMasterCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(masterCardRegex)
 }
@@ -38,7 +38,7 @@ fun isMasterCardScheme(cardNumber: String): Boolean {
 /**
  * This will match if the card number is MaestroCard card or not
  */
-fun isMaestroCardScheme(cardNumber: String): Boolean {
+internal fun isMaestroCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(maestroCardRegex)
 }
@@ -46,7 +46,7 @@ fun isMaestroCardScheme(cardNumber: String): Boolean {
 /**
  * This will format the card number to follow amex format
  */
-fun formatAmex(text: AnnotatedString): TransformedText {
+internal fun formatAmex(text: AnnotatedString): TransformedText {
     //    original - 345678901234564
     //    transformed 3456 7890123 4564
     //    xxxx xxxxxx xxxxx
@@ -85,7 +85,7 @@ fun formatAmex(text: AnnotatedString): TransformedText {
     return TransformedText(AnnotatedString(out), creditCardOffsetTranslator)
 }
 
-fun formatNormalCard(text: AnnotatedString): TransformedText {
+internal fun formatNormalCard(text: AnnotatedString): TransformedText {
     val trimmed = if (text.text.length >= 16) text.text.substring(0..15) else text.text
 
     val annotatedString = AnnotatedString.Builder().run {
@@ -120,7 +120,7 @@ fun formatNormalCard(text: AnnotatedString): TransformedText {
     return TransformedText(annotatedString, creditCardOffsetTranslator)
 }
 
-fun dateFilter(text: AnnotatedString): TransformedText {
+internal fun dateFilter(text: AnnotatedString): TransformedText {
     val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
     var out = ""
     for (i in trimmed.indices) {
