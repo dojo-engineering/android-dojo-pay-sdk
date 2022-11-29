@@ -37,8 +37,9 @@ internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = D
     onError = Color.White,
     honey = Color(0xFFFF8D02)
 )
-private val DarkColorPalette = DojoColors(
-    primary = Color(0xFF262626),
+
+internal fun darkColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
+    primary = Color(0xFF00857D),
     onPrimary = Color.White,
     background = Color(0xFF121212),
     onBackground = Color.White,
@@ -63,7 +64,7 @@ fun DojoTheme(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColorPalette else lightColorPalette()
+    val colors = if (darkTheme) darkColorPalette() else lightColorPalette()
 
     CompositionLocalProvider(LocalDojoColors provides colors) {
         MaterialTheme(

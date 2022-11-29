@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -31,6 +32,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
+import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
@@ -65,8 +67,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         configureDojoPayCore()
         setContent {
-            DojoTheme {
-                val customColorPalette = lightColorPalette(DojoSDKDropInUI.dojoThemeSettings)
+            DojoTheme() {
+                val customColorPalette =
+                    if (isSystemInDarkTheme()) darkColorPalette(DojoSDKDropInUI.dojoThemeSettings) else lightColorPalette(
+                        DojoSDKDropInUI.dojoThemeSettings
+                    )
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
