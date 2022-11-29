@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-fun BasicInputField(
+internal fun BasicInputField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,

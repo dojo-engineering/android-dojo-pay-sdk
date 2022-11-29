@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AmountBreakDown(
+internal fun AmountBreakDown(
     modifier: Modifier = Modifier,
     items: List<AmountBreakDownItem>,
     totalAmount: String

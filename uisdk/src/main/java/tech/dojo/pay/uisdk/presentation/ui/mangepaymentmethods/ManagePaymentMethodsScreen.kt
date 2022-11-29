@@ -63,10 +63,12 @@ internal fun ManagePaymentMethods(
                 DojoAppBar(
                     title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
                     titleGravity = TitleGravity.LEFT,
-                    navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) {
-                        if (state.isInEditMode) {
+                    navigationIcon = if (state.isInEditMode) {
+                        AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) {
                             viewModel.closeEditMode()
-                        } else {
+                        }
+                    } else {
+                        AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) {
                             onBackClicked(state.currentSelectedMethod)
                         }
                     },

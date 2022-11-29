@@ -15,6 +15,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHand
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.domain.*
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.UpdateWalletState
@@ -35,6 +36,8 @@ internal class PaymentMethodCheckoutViewModel(
     private val observePaymentMethods: ObservePaymentMethods,
     private val gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
+    private val observePaymentStatus: ObservePaymentStatus,
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
     val state: LiveData<PaymentMethodCheckoutState>
@@ -239,7 +242,10 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     fun onSavedPaymentMethodChanged(newValue: PaymentMethodItemViewEntityItem?) {
-        currentState = currentState.copy(cvvFieldState = InputFieldState(value = ""))
+        observePaymentStatus()
+        currentState = currentState.copy(
+            cvvFieldState = InputFieldState(value = "")
+        )
         if (newValue != currentState.paymentMethodItem) {
             currentState = currentState.copy(
                 paymentMethodItem = newValue,
@@ -253,6 +259,17 @@ internal class PaymentMethodCheckoutViewModel(
             )
         }
         postStateToUI()
+    }
+
+    private fun observePaymentStatus() {
+        viewModelScope.launch {
+            observePaymentStatus.observePaymentStates().collect {
+                currentState = currentState.copy(
+                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it)
+                )
+                postStateToUI()
+            }
+        }
     }
 
     private fun getPayAmountButtonState(newValue: PaymentMethodItemViewEntityItem?): PayAmountButtonVState? {
@@ -273,6 +290,7 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     fun onPayAmountClicked() {
+        updatePaymentStateUseCase.updatePaymentSate(true)
         currentState = currentState.copy(
             payAmountButtonState = PayAmountButtonVState(
                 isEnabled = true,

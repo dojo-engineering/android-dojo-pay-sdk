@@ -19,7 +19,7 @@ internal class PaymentResultViewModel(
     private val refreshPaymentIntent: RefreshPaymentIntentUseCase
 ) : ViewModel() {
     private var currentState: PaymentResultState
-    lateinit var currentPaymentId: String
+    private var currentPaymentId: String = ""
     private val mutableState = MutableLiveData<PaymentResultState>()
     val state: LiveData<PaymentResultState>
         get() = mutableState
@@ -45,7 +45,11 @@ internal class PaymentResultViewModel(
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
-        if (paymentIntentResult is PaymentIntentResult.Success) { handlePaymentIntentSuccess(paymentIntentResult) } else if (paymentIntentResult is PaymentIntentResult.RefreshFailure) { handlePaymentIntentRefreshFailure() }
+        if (paymentIntentResult is PaymentIntentResult.Success) {
+            handlePaymentIntentSuccess(paymentIntentResult)
+        } else if (paymentIntentResult is PaymentIntentResult.RefreshFailure) {
+            handlePaymentIntentRefreshFailure()
+        }
     }
 
     private fun handlePaymentIntentSuccess(paymentIntentResult: PaymentIntentResult.Success) {
@@ -57,13 +61,13 @@ internal class PaymentResultViewModel(
                 status = R.string.dojo_ui_sdk_payment_result_title_success,
                 orderInfo = paymentIntentResult.result.id,
                 description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
-                    paymentIntentResult.result.amount.valueString
+                        paymentIntentResult.result.amount.valueString
             )
         } else {
             PaymentResultState.FailedResult(
                 appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
                 imageId = R.drawable.ic_error_circle,
-                showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+                showTryAgain =true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
                 orderInfo = paymentIntentResult.result.id,
                 isTryAgainLoading = false,
@@ -78,11 +82,12 @@ internal class PaymentResultViewModel(
         currentState = state
         postStateToUi(currentState)
     }
+
     private fun handlePaymentIntentRefreshFailure() {
         val state = PaymentResultState.FailedResult(
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
             imageId = R.drawable.ic_error_circle,
-            showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
+            showTryAgain =true,
             isTryAgainLoading = false,
             shouldNavigateToPreviousScreen = false,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,

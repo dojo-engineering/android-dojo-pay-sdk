@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
-fun ScrollHintLayout(
+internal fun ScrollHintLayout(
     modifier: Modifier,
     scrollState: ScrollState,
     content: @Composable () -> Unit

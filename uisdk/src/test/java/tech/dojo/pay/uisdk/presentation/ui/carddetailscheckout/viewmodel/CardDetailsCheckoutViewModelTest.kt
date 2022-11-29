@@ -1,4 +1,4 @@
-package tech.dojo.pay.uisdk.test
+package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -74,7 +74,7 @@ class CardDetailsCheckoutViewModelTest {
             isEmailInputFieldRequired = false,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             cardNumberInputField = InputFieldState(value = ""),
@@ -138,7 +138,7 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = false,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             postalCodeField = InputFieldState(value = ""),
@@ -213,7 +213,7 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = true,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             postalCodeField = InputFieldState(value = ""),
@@ -288,7 +288,7 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             isPostalCodeFieldRequired = true,
@@ -366,7 +366,7 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             isPostalCodeFieldRequired = true,
@@ -458,7 +458,7 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             isPostalCodeFieldRequired = true,
@@ -535,7 +535,7 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = "new"),
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             isPostalCodeFieldRequired = true,
@@ -611,7 +611,7 @@ class CardDetailsCheckoutViewModelTest {
             isEmailInputFieldRequired = true,
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
             ),
             cardNumberInputField = InputFieldState(value = ""),
