@@ -81,7 +81,7 @@ internal fun CardDetailsCheckoutScreen(
     var scrollToPosition by remember { mutableStateOf(0F) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        backgroundColor = Color.White,
+        backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         topBar = { AppBarItem(onBackClicked, onCloseClicked) },
         content = {
             Box(

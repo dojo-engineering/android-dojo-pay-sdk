@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -102,7 +103,12 @@ internal fun GooglePayButton(
         enabled = enabled
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_google_pay),
+            painter = painterResource(id = if(isSystemInDarkTheme()){
+                R.drawable.ic_google_pay_darck
+            }else{
+                R.drawable.ic_google_pay
+            }
+           ),
             contentDescription = "",
             tint = Color.Unspecified,
             modifier = Modifier
@@ -150,7 +156,7 @@ internal fun DojoOutlinedButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.background,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.primarySurfaceBackgroundColor,
         contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,

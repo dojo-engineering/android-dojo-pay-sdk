@@ -34,7 +34,7 @@ internal fun ManagePaymentMethods(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color.White
+        color = DojoTheme.colors.primarySurfaceBackgroundColor
     ) {
         val state = viewModel.state.observeAsState().value ?: return@Surface
         BackHandler {
