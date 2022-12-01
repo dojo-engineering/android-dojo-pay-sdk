@@ -246,7 +246,7 @@ private fun SingleButton(
             contentColor = contentColor ?: DojoTheme.colors.onPrimary,
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
-            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+            loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
         )
     }
 }

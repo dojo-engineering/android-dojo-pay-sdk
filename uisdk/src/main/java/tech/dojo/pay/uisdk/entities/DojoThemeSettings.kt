@@ -80,7 +80,7 @@ data class DarkColorPalette(
     @ColorRes
     val errorTextColor: String = "#FFCF6679",
     @ColorRes
-    val loadingIndicatorColor: String = "#FFFFFFFF",
+    val loadingIndicatorColor: String = "#FF000000",
     @ColorRes
     val inputFieldPlaceholderColor: String = "#FFFFFFFF",
     @ColorRes
