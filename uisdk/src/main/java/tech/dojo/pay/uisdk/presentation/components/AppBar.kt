@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -89,7 +90,7 @@ private fun BoxScope.Title(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = DojoTheme.typography.h5.medium,
-            color = titleColor ?: LocalContentColor.current.copy(alpha = ContentAlpha.high)
+            color = titleColor ?: DojoTheme.colors.headerTintColor.copy(alpha = ContentAlpha.high)
         )
     }
 }
@@ -103,7 +104,7 @@ private fun AppBarIconButton(
             Icon(
                 painter = painterResource(id = icon.resId),
                 contentDescription = null,
-                tint = icon.tintColor ?: DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                tint = icon.tintColor ?: DojoTheme.colors.headerButtonTintColor.copy(alpha = ContentAlpha.medium)
             )
         }
     }

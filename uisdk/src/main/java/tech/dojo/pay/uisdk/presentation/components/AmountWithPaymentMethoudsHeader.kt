@@ -41,7 +41,7 @@ internal fun AmountWithPaymentMethodsHeader(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.h6.medium,
-                color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
 
             Row(
@@ -63,14 +63,14 @@ internal fun AmountWithPaymentMethodsHeader(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.h3.medium,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
                 )
                 Text(
                     text = amount,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.h1.medium,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
                 )
             }
             SupportedPaymentMethods(Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp), allowedPaymentMethodsIcons)
