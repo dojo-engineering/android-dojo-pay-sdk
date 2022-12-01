@@ -175,7 +175,7 @@ internal fun CardDetailsCheckoutScreen(
                     verticalArrangement = Arrangement.spacedBy(0.dp),
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .background(Color.White)
+                        .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                 ) {
                     PayButton(scrollState, state, viewModel)
                     ScreenFooter()

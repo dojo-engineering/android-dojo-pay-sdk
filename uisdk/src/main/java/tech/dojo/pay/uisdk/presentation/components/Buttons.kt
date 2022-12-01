@@ -47,7 +47,7 @@ private fun DojoButton(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
-            disabledBackgroundColor = DojoTheme.colors.onBackground.copy(alpha = 0.1f)
+            disabledBackgroundColor = DojoTheme.colors.primaryCTAButtonDisabledBackgroundColor
         ),
         elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp),
         shape = RoundedCornerShape(50),
@@ -103,12 +103,13 @@ internal fun GooglePayButton(
         enabled = enabled
     ) {
         Icon(
-            painter = painterResource(id = if(isSystemInDarkTheme()){
-                R.drawable.ic_google_pay_darck
-            }else{
-                R.drawable.ic_google_pay
-            }
-           ),
+            painter = painterResource(
+                id = if (isSystemInDarkTheme()) {
+                    R.drawable.ic_google_pay_darck
+                } else {
+                    R.drawable.ic_google_pay
+                }
+            ),
             contentDescription = "",
             tint = Color.Unspecified,
             modifier = Modifier
@@ -131,13 +132,21 @@ internal fun DojoFullGroundButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-        contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+        backgroundColor = if (enabled) {
+            backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
+        } else {
+            backgroundColor ?: DojoTheme.colors.primaryCTAButtonDisabledBackgroundColor
+        },
+        contentColor = if (enabled) {
+            contentColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor
+        } else {
+            contentColor ?: DojoTheme.colors.primaryCTAButtonDisableTextColor
+        },
         borderStroke = null,
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+        loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
         onClick = onClick
     )
 }
@@ -157,12 +166,12 @@ internal fun DojoOutlinedButton(
     DojoButton(
         text = text,
         backgroundColor = backgroundColor ?: DojoTheme.colors.primarySurfaceBackgroundColor,
-        contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
+        contentColor = contentColor ?: DojoTheme.colors.secondaryCTAButtonActiveTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
+        loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
         onClick = onClick
     )
 }
@@ -224,7 +233,7 @@ private fun SingleButton(
     loadingColor: Color? = null,
     onClick: () -> Unit
 ) {
-    Box(modifier = modifier.background(DojoTheme.colors.background)) {
+    Box(modifier = modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)) {
         DojoButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -232,7 +241,8 @@ private fun SingleButton(
             text = text,
             enabled = enabled,
             onClick = onClick,
-            backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            backgroundColor = backgroundColor
+                ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             contentColor = contentColor ?: DojoTheme.colors.onPrimary,
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
@@ -248,7 +258,7 @@ private fun getBorderStroke(
 ) =
     if (enabled) BorderStroke(
         1.dp,
-        borderStrokeColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
+        borderStrokeColor ?: DojoTheme.colors.secondaryCTAButtonActiveBorderColor
     ) else null
 
 @Preview("Button", group = "Buttons")
