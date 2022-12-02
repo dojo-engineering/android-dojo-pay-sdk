@@ -2,7 +2,9 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
@@ -33,13 +35,16 @@ internal fun DojoBrandFooter(
     withTermsAndPrivacy: Boolean = false
 ) {
     val context = LocalContext.current
+    val currentThemColo =
+        if (isSystemInDarkTheme()) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
 
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(36.dp)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .background(DojoTheme.colors.primarySurfaceBackgroundColor),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
 
@@ -49,16 +54,17 @@ internal fun DojoBrandFooter(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body1,
-                color = LocalContentColor.current.copy(alpha = ContentAlpha.high)
+                color = currentThemColo.copy(alpha = ContentAlpha.high)
             )
             Icon(
                 modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 2.dp, end = 12.dp),
                 painter = painterResource(id = R.drawable.ic_dojo),
+                tint =  currentThemColo.copy(alpha = ContentAlpha.high),
                 contentDescription = null,
             )
             if (withTermsAndPrivacy) {
                 Divider(
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.high),
+                    color = currentThemColo.copy(alpha = ContentAlpha.high),
                     modifier = Modifier
                         .height(20.dp)
                         .width(1.dp)
@@ -83,7 +89,7 @@ internal fun DojoBrandFooter(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                    color = currentThemColo.copy(alpha = ContentAlpha.medium)
                 )
                 Text(
                     text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_privacy),
@@ -100,7 +106,7 @@ internal fun DojoBrandFooter(
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.subtitle1,
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                    color = currentThemColo.copy(alpha = ContentAlpha.medium)
                 )
             }
         }
@@ -121,3 +127,6 @@ internal fun PreviewDojoBrandFooterWithTermsAndPrivacy() = DojoPreview {
 
 private const val TERMS_URL = "https://pay.dojo.tech/terms"
 private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"
+private const val Light_COLOR_HEXA= "#FF000000"
+private const val DARK_COLOR_HEXA= "#FFFFFFFF"
+

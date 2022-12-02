@@ -72,6 +72,7 @@ internal fun PaymentMethodsCheckOutScreen(
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
+        sheetBackgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         sheetContent = {
             BottomSheetItems(
                 coroutineScope,
