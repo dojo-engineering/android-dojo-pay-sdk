@@ -43,7 +43,13 @@ internal fun DojoExpandableCard(
         targetValue = if (expanded) 180F else 0F
     )
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor= DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor
+    )
     Column(
         modifier = Modifier
             .border(
@@ -63,11 +69,12 @@ internal fun DojoExpandableCard(
             Text(
                 text = header,
                 style = DojoTheme.typography.body2.medium,
-                color = DojoTheme.colors.onSurface.copy(alpha = ContentAlpha.high)
+                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
             Icon(
                 painter = painterResource(R.drawable.ic_expand_more_24px),
                 contentDescription = null,
+                tint= DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
                 modifier = Modifier
                     .rotate(rotateState.value)
             )

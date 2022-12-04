@@ -88,7 +88,13 @@ internal fun BasicCvvInputField(
     keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor = DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor
+    )
     val maxCvvChar = 4
     Column(
         modifier = modifier

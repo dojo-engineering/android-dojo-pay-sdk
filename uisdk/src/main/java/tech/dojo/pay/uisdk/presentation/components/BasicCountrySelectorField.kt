@@ -25,7 +25,14 @@ internal fun BasicCountrySelectorField(
     onCountrySelected: (SupportedCountriesViewEntity) -> Unit,
     enabled: Boolean = true,
 ) {
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor= DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor
+    )
+
     var selectedCountry: SupportedCountriesViewEntity by remember {
         mutableStateOf(
             supportedCountriesViewEntity[0]
