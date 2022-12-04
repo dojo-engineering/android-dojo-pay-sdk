@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -43,8 +42,7 @@ internal fun DojoBrandFooter(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(36.dp)
-                .padding(horizontal = 16.dp)
-                .background(DojoTheme.colors.primarySurfaceBackgroundColor),
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
 

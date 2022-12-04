@@ -227,7 +227,7 @@ private fun Loading() {
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(DojoTheme.colors.background.copy(alpha = 0.8f))
+            .background(DojoTheme.colors.primarySurfaceBackgroundColor.copy(alpha = 0.8f))
             .clickable(false) {},
         contentAlignment = Alignment.Center
     ) {
