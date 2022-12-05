@@ -74,12 +74,12 @@ internal fun DojoExpandableCard(
             Text(
                 text = header,
                 style = DojoTheme.typography.body2.medium,
-                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
+                color = DojoTheme.colors.secondaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
             Icon(
                 painter = painterResource(R.drawable.ic_expand_more_24px),
                 contentDescription = null,
-                tint= DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
+                tint= colors.indicatorColor(true, false, interactionSource).value,
                 modifier = Modifier
                     .rotate(rotateState.value)
             )

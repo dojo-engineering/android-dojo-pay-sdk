@@ -456,7 +456,6 @@ private fun EmailField(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun BillingCountryField(
     state: CardDetailsCheckoutState,
