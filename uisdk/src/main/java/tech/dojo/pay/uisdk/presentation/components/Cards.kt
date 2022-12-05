@@ -48,7 +48,12 @@ internal fun DojoExpandableCard(
         unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
-        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
     )
     Column(
         modifier = Modifier
