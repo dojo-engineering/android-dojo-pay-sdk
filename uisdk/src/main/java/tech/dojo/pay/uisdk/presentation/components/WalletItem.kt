@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
@@ -24,6 +26,8 @@ internal fun WalletItem(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
+    val currentThemColor =
+        if (isSystemInDarkTheme()) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
     Row(
         modifier = modifier
             .clickable(onClick = onClick ?: {})
@@ -48,10 +52,12 @@ internal fun WalletItem(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = DojoTheme.typography.body1,
+            color = currentThemColor
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right),
             modifier = Modifier.padding(8.dp),
+            tint = currentThemColor,
             contentDescription = null
         )
     }
