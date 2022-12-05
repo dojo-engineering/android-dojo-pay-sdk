@@ -25,7 +25,7 @@ data class LightColorPalette(
     @ColorRes
     val primaryCTAButtonActiveTextColor: String = "#FFFFFFFF",
     @ColorRes
-    val primaryCTAButtonDisabledBackgroundColor: String = "#FFE5E5E5",
+    val primaryCTAButtonDisabledBackgroundColor: String = "#94E5E5E5",
     @ColorRes
     val primaryCTAButtonDisableTextColor: String = "#61000000",
     @ColorRes
@@ -68,7 +68,7 @@ data class DarkColorPalette(
     @ColorRes
     val primaryCTAButtonActiveTextColor: String = "#FF000000",
     @ColorRes
-    val primaryCTAButtonDisabledBackgroundColor: String = "#FFE5E5E5",
+    val primaryCTAButtonDisabledBackgroundColor: String = "#94E5E5E5",
     @ColorRes
     val primaryCTAButtonDisableTextColor: String = "#FFE5E5E5",
     @ColorRes

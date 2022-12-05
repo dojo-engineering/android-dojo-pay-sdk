@@ -243,7 +243,11 @@ private fun SingleButton(
             onClick = onClick,
             backgroundColor = backgroundColor
                 ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-            contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+            contentColor = if (enabled) {
+                contentColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor
+            } else {
+                contentColor ?: DojoTheme.colors.primaryCTAButtonDisableTextColor
+            },
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
             loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
