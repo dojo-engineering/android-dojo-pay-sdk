@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
@@ -38,14 +37,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -226,7 +221,7 @@ private fun PayButton(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CvvField(
     scrollState: ScrollState,
@@ -258,18 +253,7 @@ private fun CvvField(
                     it.isFocused
                 )
             },
-        label = buildAnnotatedString {
-            withStyle(
-                SpanStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.15.sp
-                ),
-            ) {
-                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv))
-            }
-        },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
         cvvValue = state.cvvInputFieldState.value,
         isError = state.cvvInputFieldState.isError,
         assistiveText = state.cvvInputFieldState.errorMessages?.let {
@@ -283,7 +267,7 @@ private fun CvvField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardExpireDateField(
     scrollState: ScrollState,
@@ -316,18 +300,7 @@ private fun CardExpireDateField(
                     it.isFocused
                 )
             },
-        label = buildAnnotatedString {
-            withStyle(
-                SpanStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.15.sp
-                ),
-            ) {
-                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date))
-            }
-        },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
@@ -377,18 +350,7 @@ private fun CardNumberField(
                 it.isFocused
             )
         },
-        label = buildAnnotatedString {
-            withStyle(
-                SpanStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.15.sp
-                ),
-            ) {
-                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan))
-            }
-        },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
@@ -444,18 +406,7 @@ private fun CardHolderNameField(
             )
         },
         onValueChange = { viewModel.onCardHolderValueChanged(it) },
-        label = buildAnnotatedString {
-            withStyle(
-                SpanStyle(
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.15.sp
-                ),
-            ) {
-                append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name))
-            }
-        }
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) }
     )
 }
 
@@ -500,18 +451,7 @@ private fun EmailField(
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = state.emailInputField.value,
             onValueChange = { viewModel.onEmailValueChanged(it) },
-            label = buildAnnotatedString {
-                withStyle(
-                    SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.15.sp
-                    ),
-                ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email))
-                }
-            }
+            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
         )
     }
 }
@@ -524,18 +464,7 @@ private fun BillingCountryField(
 ) {
     if (state.isBillingCountryFieldRequired) {
         CountrySelectorField(
-            label = buildAnnotatedString {
-                withStyle(
-                    SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.15.sp
-                    ),
-                ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country))
-                }
-            },
+            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
             supportedCountriesViewEntity = state.supportedCountriesList,
             onCountrySelected = { viewModel.onCountrySelected(it) }
         )
@@ -575,18 +504,7 @@ private fun PostalCodeField(
             assistiveText =
             state.postalCodeField.errorMessages?.let { AnnotatedString(stringResource(id = it)) },
             onValueChange = { viewModel.onPostalCodeValueChanged(it) },
-            label = buildAnnotatedString {
-                withStyle(
-                    SpanStyle(
-                        color = Color.Black,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 16.sp,
-                        letterSpacing = 0.15.sp
-                    ),
-                ) {
-                    append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode))
-                }
-            }
+            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode)) }
         )
     }
 }

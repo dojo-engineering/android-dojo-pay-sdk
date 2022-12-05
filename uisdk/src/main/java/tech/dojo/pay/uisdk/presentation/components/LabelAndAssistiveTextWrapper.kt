@@ -54,7 +54,7 @@ internal fun Label(
     Text(
         text = text,
         style = DojoTheme.typography.subtitle1,
-        color = LocalContentColor.current.copy(
+        color = DojoTheme.colors.primaryLabelTextColor.copy(
             alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
         )
     )
@@ -71,7 +71,7 @@ internal fun AssistiveText(
             Icon(
                 modifier = Modifier.padding(end = 8.dp),
                 painter = painterResource(id = R.drawable.ic_error_18),
-                tint = DojoTheme.colors.error,
+                tint = DojoTheme.colors.errorTextColor,
                 contentDescription = null
             )
         }
@@ -79,7 +79,7 @@ internal fun AssistiveText(
             text = text,
             style = DojoTheme.typography.subtitle2,
             color = when {
-                isError -> DojoTheme.colors.error
+                isError -> DojoTheme.colors.errorTextColor
                 else -> LocalContentColor.current.copy(
                     alpha = if (enabled) ContentAlpha.medium else ContentAlpha.disabled
                 )
