@@ -17,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,10 +42,10 @@ internal fun CheckBoxItem(
                     .size(25.dp)
                     .border(
                         width = 1.dp,
-                        color = if (checkedState.value) DojoTheme.colors.primary else Color.Black,
+                        color = if (checkedState.value) DojoTheme.colors.inputElementActiveTintColor else DojoTheme.colors.inputElementDefaultTintColor,
                         shape = DojoTheme.shapes.small
                     )
-                    .background(Color.White)
+                    .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                     .clickable {
                         checkedState.value = !checkedState.value
                         onCheckedChange(checkedState.value)
@@ -54,7 +53,11 @@ internal fun CheckBoxItem(
                 contentAlignment = Alignment.Center
             ) {
                 if (checkedState.value) {
-                    Icon(Icons.Default.Check, contentDescription = "", tint = DojoTheme.colors.primary)
+                    Icon(
+                        Icons.Default.Check,
+                        contentDescription = "",
+                        tint = DojoTheme.colors.inputElementActiveTintColor
+                    )
                 }
             }
             DojoSpacer(16.dp)
@@ -63,7 +66,8 @@ internal fun CheckBoxItem(
                 text = itemText,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = DojoTheme.typography.subtitle1,
+                color = DojoTheme.colors.secondaryLabelTextColor,
+                style = DojoTheme.typography.subtitle1
             )
         }
     }
