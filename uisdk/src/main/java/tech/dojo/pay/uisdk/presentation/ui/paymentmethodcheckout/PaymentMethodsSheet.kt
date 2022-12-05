@@ -232,7 +232,7 @@ private fun Loading() {
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = DojoTheme.colors.primaryLabelTextColor
+            color = DojoTheme.colors.loadingIndicatorColor
         )
     }
 }

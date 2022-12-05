@@ -24,11 +24,12 @@ internal fun SimpleAlertDialog(
 ) {
     AlertDialog(
         onDismissRequest = { },
+        backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         confirmButton = {
             if (isLoading) {
                 CircularProgressIndicator(
-                    color = DojoTheme.colors.primary,
-                    modifier = Modifier.padding(8.dp)
+                    color = DojoTheme.colors.loadingIndicatorColor,
+                    modifier = Modifier.padding(16.dp)
                 )
             } else {
                 TextButton(onClick = { onConfirmButtonClicked.invoke() }) {
@@ -37,7 +38,7 @@ internal fun SimpleAlertDialog(
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                         style = DojoTheme.typography.subtitle2,
-                        color = DojoTheme.colors.primary
+                        color = DojoTheme.colors.errorTextColor
                     )
                 }
             }
@@ -51,7 +52,7 @@ internal fun SimpleAlertDialog(
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
                         style = DojoTheme.typography.subtitle2,
-                        color = DojoTheme.colors.primary
+                        color = DojoTheme.colors.inputElementActiveTintColor
                     )
                 }
             }
@@ -62,6 +63,7 @@ internal fun SimpleAlertDialog(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body1.bold,
+                color = DojoTheme.colors.primaryLabelTextColor
             )
         },
         text = {
@@ -69,6 +71,7 @@ internal fun SimpleAlertDialog(
                 text = text,
                 overflow = TextOverflow.Ellipsis,
                 style = DojoTheme.typography.subtitle1,
+                color = DojoTheme.colors.secondaryLabelTextColor
             )
         }
     )
