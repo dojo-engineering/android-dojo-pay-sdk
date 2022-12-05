@@ -74,7 +74,7 @@ internal class PaymentFlowViewModel(
 
     fun navigateToPaymentResult(dojoPaymentResult: DojoPaymentResult) {
         var popBackStack = false
-        if (dojoPaymentResult == DojoPaymentResult.SUCCESSFUL || dojoPaymentResult == DojoPaymentResult.SDK_INTERNAL_ERROR) {
+        if (dojoPaymentResult == DojoPaymentResult.SUCCESSFUL) {
             popBackStack = true
         }
         navigationEvent.value =
