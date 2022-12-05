@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,16 +32,18 @@ internal fun CardItemWithRadioButton(
     val haptic = LocalHapticFeedback.current
 
     Row(
-        modifier = modifier.combinedClickable(
-            onClick = {
-                if (inEditeMode) onLongClick.invoke(cardItem) else onClick.invoke(cardItem)
-            },
-            onLongClick = {
-                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                onLongClick.invoke(cardItem)
-            }
-        ).background(color = if (inEditeMode && isSelected) DojoTheme.colors.surface else DojoTheme.colors.background)
-            .padding(start = 8.dp, end = 16.dp,top= 16.dp, bottom = 16.dp),
+        modifier = modifier
+            .combinedClickable(
+                onClick = {
+                    if (inEditeMode) onLongClick.invoke(cardItem) else onClick.invoke(cardItem)
+                },
+                onLongClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    onLongClick.invoke(cardItem)
+                }
+            )
+            .background(color = if (inEditeMode && isSelected) DojoTheme.colors.primaryLabelTextColor.copy(alpha = .3f) else DojoTheme.colors.primarySurfaceBackgroundColor)
+            .padding(start = 8.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -69,6 +68,7 @@ internal fun CardItemWithRadioButton(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.body2,
+                color = DojoTheme.colors.secondaryLabelTextColor
             )
             DojoSpacer(height = 8.dp)
             Text(
@@ -76,6 +76,7 @@ internal fun CardItemWithRadioButton(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.subtitle1,
+                color = DojoTheme.colors.primaryLabelTextColor
             )
         }
 
@@ -89,8 +90,11 @@ internal fun CardItemWithRadioButton(
                     Icon(
                         painter = painterResource(id = R.drawable.check_circle_24px),
                         contentDescription = "",
-                        tint = Color.Unspecified,
-                        modifier = Modifier.background(shape = CircleShape, color = Color.Transparent)
+                        tint = DojoTheme.colors.inputElementActiveTintColor,
+                        modifier = Modifier.background(
+                            shape = CircleShape,
+                            color = Color.Transparent
+                        )
                     )
                 }
             }
@@ -102,8 +106,8 @@ internal fun CardItemWithRadioButton(
                 selected = isSelected,
                 onClick = { onClick.invoke(cardItem) },
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = Color(0xFF00857D),
-                    unselectedColor = Color(0xFF262626),
+                    selectedColor = DojoTheme.colors.inputElementActiveTintColor,
+                    unselectedColor = DojoTheme.colors.inputElementDefaultTintColor,
                     disabledColor = Color.LightGray
                 )
             )
