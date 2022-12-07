@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -73,7 +72,7 @@ internal fun AmountWithPaymentMethodsHeader(
                     color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
                 )
             }
-            SupportedPaymentMethods(Modifier.padding(start = 32.dp, end = 32.dp, top = 16.dp), allowedPaymentMethodsIcons)
+            SupportedPaymentMethods(Modifier.padding(top = 16.dp), allowedPaymentMethodsIcons)
         }
     }
 }

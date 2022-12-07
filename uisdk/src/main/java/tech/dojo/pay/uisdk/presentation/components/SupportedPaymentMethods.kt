@@ -1,7 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -19,20 +19,25 @@ internal fun SupportedPaymentMethods(
     modifier: Modifier = Modifier,
     allowedPaymentMethodsIcons: List<Int>
 ) {
-    LazyRow(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
     ) {
-        items(allowedPaymentMethodsIcons) { iconId ->
-            Icon(
-                painter = painterResource(id = iconId),
-                contentDescription = "",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .width(40.dp)
-                    .height(40.dp)
-            )
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(allowedPaymentMethodsIcons) { iconId ->
+                Icon(
+                    painter = painterResource(id = iconId),
+                    contentDescription = "",
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .width(40.dp)
+                        .height(40.dp)
+                )
+            }
         }
     }
+
 }
