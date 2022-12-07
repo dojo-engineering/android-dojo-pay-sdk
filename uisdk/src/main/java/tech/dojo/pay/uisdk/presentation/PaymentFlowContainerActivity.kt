@@ -70,8 +70,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         configureDojoPayCore()
         setContent {
             DojoTheme() {
+                val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
                 val customColorPalette =
-                    if (isSystemInDarkTheme()) darkColorPalette(DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette?: DarkColorPalette()) else lightColorPalette(
+                    if (isSystemInDarkTheme()&& !forceLightMode) darkColorPalette(DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette?: DarkColorPalette()) else lightColorPalette(
                         DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette?: LightColorPalette()
                     )
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {

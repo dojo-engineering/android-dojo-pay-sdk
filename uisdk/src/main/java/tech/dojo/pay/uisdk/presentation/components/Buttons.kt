@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
@@ -87,6 +88,8 @@ internal fun GooglePayButton(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
+    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+
     Button(
         modifier = modifier
             .height(DojoButtonHeight)
@@ -104,7 +107,7 @@ internal fun GooglePayButton(
     ) {
         Icon(
             painter = painterResource(
-                id = if (isSystemInDarkTheme()) {
+                id = if (isSystemInDarkTheme() && !forceLightMode) {
                     R.drawable.ic_google_pay_darck
                 } else {
                     R.drawable.ic_google_pay
@@ -146,7 +149,7 @@ internal fun DojoFullGroundButton(
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         onClick = onClick
     )
 }
@@ -171,7 +174,7 @@ internal fun DojoOutlinedButton(
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         onClick = onClick
     )
 }
@@ -250,7 +253,7 @@ private fun SingleButton(
             },
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
-            loadingColor = loadingColor ?: DojoTheme.colors.loadingIndicatorColor,
+            loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         )
     }
 }

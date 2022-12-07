@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -34,8 +35,10 @@ internal fun DojoBrandFooter(
     withTermsAndPrivacy: Boolean = false
 ) {
     val context = LocalContext.current
+    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+
     val currentThemColor =
-        if (isSystemInDarkTheme()) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
+        if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
 
     Column(modifier = modifier) {
         Row(
