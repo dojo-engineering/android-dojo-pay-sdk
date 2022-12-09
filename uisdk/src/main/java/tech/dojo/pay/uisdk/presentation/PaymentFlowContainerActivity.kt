@@ -70,10 +70,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         configureDojoPayCore()
         setContent {
             DojoTheme() {
-                val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+                val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
+                val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
                 val customColorPalette =
-                    if (isSystemInDarkTheme()&& !forceLightMode) darkColorPalette(DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette?: DarkColorPalette()) else lightColorPalette(
-                        DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette?: LightColorPalette()
+                    if (isDarkModeEnabled) darkColorPalette(
+                        DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette ?: DarkColorPalette()
+                    ) else lightColorPalette(
+                        DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette ?: LightColorPalette()
                     )
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
@@ -88,7 +91,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                                 onNavigationEvent(it, navController)
                             }
                         }
-                        PaymentFlowNavHost(navController, viewModel)
+                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled)
                     }
                 }
             }
@@ -154,7 +157,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     @Composable
     internal fun PaymentFlowNavHost(
         navController: NavHostController,
-        viewModel: PaymentFlowViewModel
+        viewModel: PaymentFlowViewModel,
+        isDarkModeEnabled: Boolean
     ) {
         AnimatedNavHost(
             navController = navController,
@@ -256,7 +260,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     val mangePaymentViewModel: MangePaymentViewModel by viewModels {
                         MangePaymentViewModelFactory(
                             customerId,
-                            arguments
+                            arguments,
+                            isDarkModeEnabled
                         )
                     }
                     ManagePaymentMethods(
