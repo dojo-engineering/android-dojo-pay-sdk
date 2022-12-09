@@ -278,7 +278,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled)
                 }
                 AnimatedVisibility(
                     visible = true,

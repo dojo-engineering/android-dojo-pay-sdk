@@ -13,7 +13,8 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 
 class CardDetailsCheckoutViewModelFactory(
-    private val dojoCardPaymentHandler: DojoCardPaymentHandler
+    private val dojoCardPaymentHandler: DojoCardPaymentHandler,
+    private val isDarkModeEnabled: Boolean
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -28,7 +29,7 @@ class CardDetailsCheckoutViewModelFactory(
         val supportedCountriesViewEntityMapper =
             SupportedCountriesViewEntityMapper()
         val allowedPaymentMethodsViewEntityMapper =
-            AllowedPaymentMethodsViewEntityMapper()
+            AllowedPaymentMethodsViewEntityMapper(isDarkModeEnabled)
         val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
 
         return CardDetailsCheckoutViewModel(
