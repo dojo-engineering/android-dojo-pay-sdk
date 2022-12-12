@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -45,6 +46,7 @@ internal fun DojoExpandableCard(
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
         textColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
         unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
@@ -61,7 +63,7 @@ internal fun DojoExpandableCard(
                 width = 1.dp,
                 color = colors.indicatorColor(true, false, interactionSource).value,
                 shape = DojoTheme.shapes.small
-            )
+            ).background(DojoTheme.colors.inputFieldBackgroundColor)
     ) {
         Row(
             modifier = Modifier
@@ -79,7 +81,7 @@ internal fun DojoExpandableCard(
             Icon(
                 painter = painterResource(R.drawable.ic_expand_more_24px),
                 contentDescription = null,
-                tint= colors.indicatorColor(true, false, interactionSource).value,
+                tint= DojoTheme.colors.primaryLabelTextColor,
                 modifier = Modifier
                     .rotate(rotateState.value)
             )

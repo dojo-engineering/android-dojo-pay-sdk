@@ -12,13 +12,13 @@ data class DojoThemeSettings(
 
 data class LightColorPalette(
     @ColorRes
-    val primaryLabelTextColor: String = "#FF000000",
+    val primaryLabelTextColor: String = "#DD000000",
     @ColorRes
     val secondaryLabelTextColor: String = "#99000000",
     @ColorRes
-    val headerTintColor: String = "#FF000000",
+    val headerTintColor: String = "#DD000000",
     @ColorRes
-    val headerButtonTintColor: String = "#FF000000",
+    val headerButtonTintColor: String = "#99000000",
     @ColorRes
     val primarySurfaceBackgroundColor: String = "#FFFFFFFF",
     @ColorRes
@@ -26,31 +26,31 @@ data class LightColorPalette(
     @ColorRes
     val primaryCTAButtonActiveTextColor: String = "#FFFFFFFF",
     @ColorRes
-    val primaryCTAButtonDisabledBackgroundColor: String = "#94E5E5E5",
+    val primaryCTAButtonDisabledBackgroundColor: String = "#FFE5E5E5",
     @ColorRes
-    val primaryCTAButtonDisableTextColor: String = "#61000000",
+    val primaryCTAButtonDisableTextColor: String = "#60000000",
     @ColorRes
-    val secondaryCTAButtonActiveBorderColor: String = "#FF000000",
+    val secondaryCTAButtonActiveBorderColor: String = "#FF262626",
     @ColorRes
-    val secondaryCTAButtonActiveTextColor: String = "#FF000000",
+    val secondaryCTAButtonActiveTextColor: String = "#FF262626",
     @ColorRes
     val separatorColor: String = "#33000000",
     @ColorRes
     val errorTextColor: String = "#FFB00020",
     @ColorRes
-    val loadingIndicatorColor: String = "#FF000000",
+    val loadingIndicatorColor: String = "#FF262626",
     @ColorRes
     val inputFieldPlaceholderColor: String = "#FF000000",
     @ColorRes
-    val inputFieldBackgroundColor: String = "#FFF5F5F5",
+    val inputFieldBackgroundColor: String = "#FFFFFFFF",
     @ColorRes
-    val inputFieldDefaultBorderColor: String = "#FF000000",
+    val inputFieldDefaultBorderColor: String = "#26000000",
     @ColorRes
     val inputFieldSelectedBorderColor: String = "#FF00857D",
     @ColorRes
     val inputElementActiveTintColor: String = "#FF00857D",
     @ColorRes
-    val inputElementDefaultTintColor: String = "#FF262626"
+    val inputElementDefaultTintColor: String = "#26000000"
 ) : Serializable
 
 data class DarkColorPalette(
@@ -63,15 +63,15 @@ data class DarkColorPalette(
     @ColorRes
     val headerButtonTintColor: String = "#FFFFFFFF",
     @ColorRes
-    val primarySurfaceBackgroundColor: String = "#FF1e1e1e",
+    val primarySurfaceBackgroundColor: String = "#FF1B1B1B",
     @ColorRes
     val primaryCTAButtonActiveBackgroundColor: String = "#FFFFFFFF",
     @ColorRes
-    val primaryCTAButtonActiveTextColor: String = "#FF000000",
+    val primaryCTAButtonActiveTextColor: String = "#DD000000",
     @ColorRes
-    val primaryCTAButtonDisabledBackgroundColor: String = "#94E5E5E5",
+    val primaryCTAButtonDisabledBackgroundColor: String = "#FFC3C3C3",
     @ColorRes
-    val primaryCTAButtonDisableTextColor: String = "#FFE5E5E5",
+    val primaryCTAButtonDisableTextColor: String = "#60000000",
     @ColorRes
     val secondaryCTAButtonActiveBorderColor: String = "#FFFFFFFF",
     @ColorRes
@@ -79,19 +79,19 @@ data class DarkColorPalette(
     @ColorRes
     val separatorColor: String = "#33000000",
     @ColorRes
-    val errorTextColor: String = "#FFCF6679",
+    val errorTextColor: String = "#FFED5645",
     @ColorRes
     val loadingIndicatorColor: String = "#FFFFFFFF",
     @ColorRes
     val inputFieldPlaceholderColor: String = "#FFFFFFFF",
     @ColorRes
-    val inputFieldBackgroundColor: String = "#FFF5F5F5",
+    val inputFieldBackgroundColor: String = "#FF313131",
     @ColorRes
-    val inputFieldDefaultBorderColor: String = "#FFFFFFFF",
+    val inputFieldDefaultBorderColor: String = "#26FFFFFF",
     @ColorRes
-    val inputFieldSelectedBorderColor: String = "#FF00857D",
+    val inputFieldSelectedBorderColor: String = "#FFFFFFFF",
     @ColorRes
-    val inputElementActiveTintColor: String = "#FF00857D",
+    val inputElementActiveTintColor: String = "#FFFFFFFF",
     @ColorRes
     val inputElementDefaultTintColor: String = "#FFFFFFFF"
 ) : Serializable

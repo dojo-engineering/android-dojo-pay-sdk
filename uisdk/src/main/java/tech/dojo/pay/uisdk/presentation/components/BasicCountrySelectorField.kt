@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,7 @@ internal fun BasicCountrySelectorField(
 ) {
     val colors = TextFieldDefaults.outlinedTextFieldColors(
         textColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
         unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
@@ -53,6 +55,8 @@ internal fun BasicCountrySelectorField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
+                .background(DojoTheme.colors.inputFieldBackgroundColor)
+
         ) {
             items(supportedCountriesViewEntity) { countryItem ->
                 Text(

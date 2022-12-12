@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -90,6 +91,7 @@ internal fun BasicCvvInputField(
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
         textColor = DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
         unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
@@ -110,6 +112,7 @@ internal fun BasicCvvInputField(
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
     ) {
         Box(
             modifier = Modifier

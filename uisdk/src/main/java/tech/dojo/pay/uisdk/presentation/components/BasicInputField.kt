@@ -97,6 +97,7 @@ fun BasicInputField(
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
         textColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
         unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
@@ -118,6 +119,8 @@ fun BasicInputField(
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
+
     ) {
         if (leading != null) leading()
 
