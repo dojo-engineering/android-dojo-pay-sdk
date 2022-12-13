@@ -16,7 +16,8 @@ import java.util.Currency
 internal class PaymentResultViewModel(
     private val result: DojoPaymentResult,
     private val observePaymentIntent: ObservePaymentIntent,
-    private val refreshPaymentIntent: RefreshPaymentIntentUseCase
+    private val refreshPaymentIntent: RefreshPaymentIntentUseCase,
+    private val isDarkModeEnabled: Boolean
 ) : ViewModel() {
     private var currentState: PaymentResultState
     private var currentPaymentId: String = ""
@@ -66,8 +67,8 @@ internal class PaymentResultViewModel(
         } else {
             PaymentResultState.FailedResult(
                 appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
-                imageId = R.drawable.ic_error_circle,
-                showTryAgain =true,
+                imageId = getErrorImage(),
+                showTryAgain = true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
                 orderInfo = paymentIntentResult.result.id,
                 isTryAgainLoading = false,
@@ -86,8 +87,8 @@ internal class PaymentResultViewModel(
     private fun handlePaymentIntentRefreshFailure() {
         val state = PaymentResultState.FailedResult(
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
-            imageId = R.drawable.ic_error_circle,
-            showTryAgain =true,
+            imageId = getErrorImage(),
+            showTryAgain = true,
             isTryAgainLoading = false,
             shouldNavigateToPreviousScreen = false,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
@@ -110,7 +111,7 @@ internal class PaymentResultViewModel(
         } else {
             PaymentResultState.FailedResult(
                 appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
-                imageId = R.drawable.ic_error_circle,
+                imageId = getErrorImage(),
                 showTryAgain = result != DojoPaymentResult.SDK_INTERNAL_ERROR,
                 isTryAgainLoading = false,
                 shouldNavigateToPreviousScreen = false,
@@ -119,6 +120,12 @@ internal class PaymentResultViewModel(
                 details = R.string.dojo_ui_sdk_payment_result_failed_description
             )
         }
+
+    private fun getErrorImage() = if (isDarkModeEnabled) {
+        R.drawable.ic_error_dark
+    } else {
+        R.drawable.ic_error_circle
+    }
 
     private fun postStateToUi(currentState: PaymentResultState) =
         mutableState.postValue(currentState)

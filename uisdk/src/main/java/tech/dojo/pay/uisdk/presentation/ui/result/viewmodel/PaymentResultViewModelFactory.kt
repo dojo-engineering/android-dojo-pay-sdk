@@ -16,6 +16,11 @@ class PaymentResultViewModelFactory(private val result: DojoPaymentResult) :
             ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
         val refreshPaymentIntent =
             RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
-        return PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent) as T
+        return PaymentResultViewModel(
+            result,
+            observePaymentIntent,
+            refreshPaymentIntent,
+            false
+        ) as T
     }
 }

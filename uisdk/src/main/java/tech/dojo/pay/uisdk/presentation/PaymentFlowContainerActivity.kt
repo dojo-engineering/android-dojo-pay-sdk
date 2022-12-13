@@ -227,7 +227,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val paymentResultViewModel =
-                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent, isDarkModeEnabled)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
