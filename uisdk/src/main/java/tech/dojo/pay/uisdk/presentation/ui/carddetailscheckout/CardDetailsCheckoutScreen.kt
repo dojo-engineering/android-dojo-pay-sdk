@@ -68,6 +68,7 @@ internal fun CardDetailsCheckoutScreen(
     viewModel: CardDetailsCheckoutViewModel,
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
+    isDarkModeEnabled: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -131,7 +132,8 @@ internal fun CardDetailsCheckoutScreen(
                         scrollToPosition,
                         keyboardController,
                         state,
-                        viewModel
+                        viewModel,
+                        isDarkModeEnabled
                     )
                     Row(
                         modifier = Modifier
@@ -327,7 +329,8 @@ private fun CardNumberField(
     scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
+    isDarkModeEnabled: Boolean
 ) {
     val scrollOffset = with(LocalDensity.current) {
         if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) FORTH_FIELD_OFF_SET_DP.dp.toPx()
@@ -365,7 +368,8 @@ private fun CardNumberField(
         },
         cardNumberValue = state.cardNumberInputField.value,
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
-        onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) }
+        onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
+        isDarkModeEnabled= isDarkModeEnabled
     )
 }
 

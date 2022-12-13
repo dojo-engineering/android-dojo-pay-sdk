@@ -291,7 +291,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             returnResult(DojoPaymentResult.DECLINED)
                             viewModel.onCloseFlowClicked()
                         },
-                        viewModel::onBackClicked
+                        viewModel::onBackClicked,
+                        isDarkModeEnabled
                     )
                 }
             }
