@@ -95,7 +95,7 @@ internal fun BasicCardExpireDateField(
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
         textColor = DojoTheme.colors.primaryLabelTextColor,
-        cursorColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor = DojoTheme.colors.primaryLabelTextColor,
         unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,

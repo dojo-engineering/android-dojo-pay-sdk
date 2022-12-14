@@ -88,7 +88,7 @@ internal fun GooglePayButton(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+    val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
     Button(
         modifier = modifier

@@ -13,14 +13,25 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
-import tech.dojo.pay.uisdk.domain.*
-import tech.dojo.pay.uisdk.domain.entities.*
+import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
+import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.UpdateWalletState
+import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayAmountButtonVState
@@ -42,9 +53,8 @@ class PaymentMethodCheckoutViewModelTest {
     private val updateWalletState: UpdateWalletState = mock()
     private val observePaymentMethods: ObservePaymentMethods = mock()
     private val savedCardPaymentHandler: DojoSavedCardPaymentHandler = mock()
-    private val observePaymentStatus: ObservePaymentStatus= mock()
-    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase= mock()
-
+    private val observePaymentStatus: ObservePaymentStatus = mock()
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -189,7 +199,6 @@ class PaymentMethodCheckoutViewModelTest {
             payAmountButtonState = null
         )
 
-
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
@@ -258,7 +267,6 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 payAmountButtonState = null
             )
-
 
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
@@ -330,7 +338,6 @@ class PaymentMethodCheckoutViewModelTest {
                 payAmountButtonState = null
             )
 
-
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
@@ -400,7 +407,6 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 payAmountButtonState = null
             )
-
 
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
@@ -477,7 +483,6 @@ class PaymentMethodCheckoutViewModelTest {
                 payAmountButtonState = null
             )
 
-
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
@@ -553,7 +558,6 @@ class PaymentMethodCheckoutViewModelTest {
                 payAmountButtonState = null
             )
 
-
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
@@ -606,7 +610,10 @@ class PaymentMethodCheckoutViewModelTest {
                     PaymentMethodsDomainEntity(
                         listOf(
                             PaymentMethodsDomainEntityItem(
-                                "", "", "", CardsSchemes.VISA
+                                "",
+                                "",
+                                "",
+                                CardsSchemes.VISA
                             )
                         )
                     )
@@ -634,7 +641,6 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 payAmountButtonState = null
             )
-
 
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
@@ -688,7 +694,10 @@ class PaymentMethodCheckoutViewModelTest {
                     PaymentMethodsDomainEntity(
                         listOf(
                             PaymentMethodsDomainEntityItem(
-                                "", "", "", CardsSchemes.VISA
+                                "",
+                                "",
+                                "",
+                                CardsSchemes.VISA
                             )
                         )
                     )
@@ -716,7 +725,6 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 payAmountButtonState = null
             )
-
 
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
@@ -769,7 +777,10 @@ class PaymentMethodCheckoutViewModelTest {
                 PaymentMethodsDomainEntity(
                     listOf(
                         PaymentMethodsDomainEntityItem(
-                            "", "", "", CardsSchemes.VISA
+                            "",
+                            "",
+                            "",
+                            CardsSchemes.VISA
                         )
                     )
                 )
@@ -802,7 +813,6 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             payAmountButtonState = PayAmountButtonVState(false, isLoading = false)
         )
-
 
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
@@ -863,7 +873,10 @@ class PaymentMethodCheckoutViewModelTest {
                 PaymentMethodsDomainEntity(
                     listOf(
                         PaymentMethodsDomainEntityItem(
-                            "", "", "", CardsSchemes.VISA
+                            "",
+                            "",
+                            "",
+                            CardsSchemes.VISA
                         )
                     )
                 )
@@ -959,7 +972,10 @@ class PaymentMethodCheckoutViewModelTest {
                     PaymentMethodsDomainEntity(
                         listOf(
                             PaymentMethodsDomainEntityItem(
-                                "", "", "", CardsSchemes.VISA
+                                "",
+                                "",
+                                "",
+                                CardsSchemes.VISA
                             )
                         )
                     )
@@ -995,9 +1011,10 @@ class PaymentMethodCheckoutViewModelTest {
             viewModel.onPayAmountClicked()
             // assert
             verify(savedCardPaymentHandler).executeSavedCardPayment(
-                "token", DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
+                "token",
+                DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
                     cv2 = "123",
-                    paymentMethodId =""
+                    paymentMethodId = ""
                 )
             )
         }
@@ -1033,7 +1050,10 @@ class PaymentMethodCheckoutViewModelTest {
                     PaymentMethodsDomainEntity(
                         listOf(
                             PaymentMethodsDomainEntityItem(
-                                "", "", "", CardsSchemes.VISA
+                                "",
+                                "",
+                                "",
+                                CardsSchemes.VISA
                             )
                         )
                     )
@@ -1059,5 +1079,4 @@ class PaymentMethodCheckoutViewModelTest {
             // assert
             verify(gpayPaymentHandler).executeGPay(any(), any())
         }
-
 }

@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator
 
 import androidx.core.util.PatternsCompat
 
-
 internal class CardCheckoutScreenValidator {
     fun isEmailValid(emailValue: String) =
         PatternsCompat.EMAIL_ADDRESS.matcher(emailValue).matches()

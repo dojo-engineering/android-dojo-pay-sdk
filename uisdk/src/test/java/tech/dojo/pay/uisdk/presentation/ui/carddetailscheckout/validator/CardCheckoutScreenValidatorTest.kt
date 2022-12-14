@@ -3,7 +3,6 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator
 import org.junit.Assert
 import org.junit.Test
 
-
 internal class CardCheckoutScreenValidatorTest {
 
     @Test
@@ -38,7 +37,6 @@ internal class CardCheckoutScreenValidatorTest {
         // assert
         Assert.assertEquals(expected, actual)
     }
-
 
     @Test
     fun `calling isEmailFieldValidWithInputFieldVisibility with true  for isInputFieldVisible  and valid email should return true`() {
@@ -96,7 +94,6 @@ internal class CardCheckoutScreenValidatorTest {
         val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
         // assert
         Assert.assertEquals(expected, actual)
-
     }
 
     @Test
@@ -108,7 +105,6 @@ internal class CardCheckoutScreenValidatorTest {
         val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
         // assert
         Assert.assertEquals(expected, actual)
-
     }
 
     @Test
@@ -120,7 +116,6 @@ internal class CardCheckoutScreenValidatorTest {
         val actual = CardCheckoutScreenValidator().isCardExpireDateValid(expireDate)
         // assert
         Assert.assertEquals(expected, actual)
-
     }
 
     @Test
@@ -154,7 +149,6 @@ internal class CardCheckoutScreenValidatorTest {
         val actual = CardCheckoutScreenValidator().isCvvValid(cvv)
         // assert
         Assert.assertEquals(expected, actual)
-
     }
 
     @Test
@@ -166,7 +160,5 @@ internal class CardCheckoutScreenValidatorTest {
         val actual = CardCheckoutScreenValidator().isCvvValid(cvv)
         // assert
         Assert.assertEquals(expected, actual)
-
     }
-
 }

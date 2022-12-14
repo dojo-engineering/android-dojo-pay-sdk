@@ -96,6 +96,5 @@ data class DarkColorPalette(
     val inputElementDefaultTintColor: String = "#FFFFFFFF"
 ) : Serializable
 
-
 internal val String.color
     get() = Color(android.graphics.Color.parseColor(this))

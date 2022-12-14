@@ -62,7 +62,7 @@ internal class PaymentResultViewModel(
                 status = R.string.dojo_ui_sdk_payment_result_title_success,
                 orderInfo = paymentIntentResult.result.id,
                 description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
-                        paymentIntentResult.result.amount.valueString
+                    paymentIntentResult.result.amount.valueString
             )
         } else {
             PaymentResultState.FailedResult(

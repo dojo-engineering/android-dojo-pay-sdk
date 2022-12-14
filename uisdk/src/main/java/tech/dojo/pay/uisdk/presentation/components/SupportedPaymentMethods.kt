@@ -39,5 +39,4 @@ internal fun SupportedPaymentMethods(
             }
         }
     }
-
 }

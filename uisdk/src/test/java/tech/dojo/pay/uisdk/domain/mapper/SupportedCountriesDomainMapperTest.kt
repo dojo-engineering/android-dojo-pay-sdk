@@ -5,7 +5,6 @@ import org.junit.Test
 import tech.dojo.pay.uisdk.data.entities.SupportedCountryRaw
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 
-
 internal class SupportedCountriesDomainMapperTest {
     @Test
     fun `should mao to the correct model`() {
@@ -27,8 +26,7 @@ internal class SupportedCountriesDomainMapperTest {
     }
 
     @Test
-    fun`should map to SupportedCountriesDomainEntity with  isPostalCodeEnabled if country is supported`(){
-
+    fun`should map to SupportedCountriesDomainEntity with  isPostalCodeEnabled if country is supported`() {
         // arrange
         val raw = SupportedCountryRaw(
             countryCode = "GB",
@@ -45,5 +43,4 @@ internal class SupportedCountriesDomainMapperTest {
         // assert
         Assert.assertEquals(expected, actual)
     }
-
 }

@@ -280,7 +280,6 @@ private fun PaymentMethodsButton(
                 } else {
                     onManagePaymentClicked()
                 }
-
             }
         } else {
             DojoOutlinedButton(

@@ -5,8 +5,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
@@ -144,7 +148,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod -> {
                 this.currentSelectedMethod = event.currentSelectedMethod
                 navController.popBackStack()
-
             }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -180,14 +183,12 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
-
             },
             popExitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
-
             }
         ) {
             composable(
@@ -227,7 +228,12 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val paymentResultViewModel =
-                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent, isDarkModeEnabled)
+                    PaymentResultViewModel(
+                        result,
+                        observePaymentIntent,
+                        refreshPaymentIntent,
+                        isDarkModeEnabled
+                    )
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),

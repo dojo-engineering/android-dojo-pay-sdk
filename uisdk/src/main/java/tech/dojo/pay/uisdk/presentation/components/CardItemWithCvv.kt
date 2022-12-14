@@ -49,7 +49,8 @@ internal fun CardItemWithCvv(
         DojoSpacer(width = 16.dp)
         Column(
             modifier = Modifier
-                .wrapContentHeight()) {
+                .wrapContentHeight()
+        ) {
             Text(
                 text = cardItem.scheme,
                 overflow = TextOverflow.Ellipsis,
@@ -66,14 +67,16 @@ internal fun CardItemWithCvv(
         }
         DojoSpacer(width = 16.dp)
 
-        Box(modifier = Modifier
-            .padding(16.dp)
-            .width(85.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .width(85.dp)
+        ) {
             CvvInputField(
                 cvvValue = cvvValue,
                 cvvPlaceholder = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_cvv),
                 onCvvValueChanged = onCvvValueChanged,
-                keyboardActions= keyboardActions
+                keyboardActions = keyboardActions
             )
         }
 
@@ -96,12 +99,12 @@ internal fun PreviewCardItemWithCvv() = DojoPreview {
     CardItemWithCvv(
         cvvValue = cvvValueState.text,
         onCvvValueChanged = { value = it },
-        cardItem= PaymentMethodItemViewEntityItem.CardItemItem(
+        cardItem = PaymentMethodItemViewEntityItem.CardItemItem(
             id = "",
             icon = R.drawable.ic_visa,
             scheme = "Visa",
             pan = "****9560"
         ),
-        onClick={}
+        onClick = {}
     )
 }

@@ -26,7 +26,6 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.MangePaymen
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
-
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 internal class MangePaymentViewModelTest {

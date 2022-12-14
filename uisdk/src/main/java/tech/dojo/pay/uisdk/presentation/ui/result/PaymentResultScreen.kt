@@ -58,7 +58,7 @@ internal fun ShowResultSheetScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(Unit){ keyboardController?.hide()}
+    LaunchedEffect(Unit) { keyboardController?.hide() }
 
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
@@ -194,7 +194,7 @@ private fun SuccessfulResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) +": "+ state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             color = DojoTheme.colors.primaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -205,7 +205,7 @@ private fun SuccessfulResult(
             }
         )
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_successful_description) + ": "+state.description,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_successful_description) + ": " + state.description,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -285,7 +285,7 @@ private fun FailedResult(
             }
         )
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": "+state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
