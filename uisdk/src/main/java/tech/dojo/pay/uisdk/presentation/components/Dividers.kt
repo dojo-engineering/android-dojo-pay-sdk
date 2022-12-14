@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +17,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 @Composable
 internal fun HorizontalDivider(
     modifier: Modifier = Modifier,
-    color: Color = LocalContentColor.current.copy(alpha = DividerAlpha),
+    color: Color = DojoTheme.colors.separatorColor,
     thickness: Dp = 1.dp,
     paddingStart: Dp = 0.dp,
     paddingEnd: Dp = 0.dp
@@ -35,7 +34,7 @@ internal fun HorizontalDivider(
 @Composable
 internal fun VerticalDivider(
     modifier: Modifier = Modifier,
-    color: Color = DojoTheme.colors.onBackground.copy(alpha = DividerAlpha),
+    color: Color =  DojoTheme.colors.separatorColor,
     thickness: Dp = 1.dp,
     paddingTop: Dp = 0.dp,
     paddingBottom: Dp = 0.dp
