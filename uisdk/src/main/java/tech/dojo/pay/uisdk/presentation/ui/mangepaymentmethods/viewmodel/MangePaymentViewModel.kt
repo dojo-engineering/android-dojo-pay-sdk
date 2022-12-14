@@ -105,6 +105,7 @@ internal class MangePaymentViewModel(
             showDialog = false,
             appBarIconType = AppBarIconType.CLOSE,
             isInEditMode = false,
+            isUsePaymentMethodButtonEnabled= false,
             isDeleteItemInProgress = false
         )
         postStateToUI()

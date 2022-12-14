@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -48,7 +49,8 @@ internal fun BasicCardNumberInPutField(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Done
     ),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    isDarkModeEnabled: Boolean
 ) {
     var cardNumberValueState by remember {
         mutableStateOf(
@@ -75,7 +77,8 @@ internal fun BasicCardNumberInPutField(
         textHorizontalPadding = textHorizontalPadding,
         textVerticalPadding = textVerticalPadding,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        isDarkModeEnabled = isDarkModeEnabled
     )
 }
 
@@ -96,10 +99,23 @@ internal fun BasicCardNumberInputField(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Done
     ),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    isDarkModeEnabled: Boolean = false
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor = DojoTheme.colors.primaryLabelTextColor,
+        cursorColor = DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
+    )
     val maxCardNumberChar = when (isAmexCardScheme(cardNumberValue.text)) {
         true -> 15
         else -> 16
@@ -114,6 +130,8 @@ internal fun BasicCardNumberInputField(
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
+
     ) {
         Box(
             modifier = Modifier
@@ -154,7 +172,7 @@ internal fun BasicCardNumberInputField(
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
             if (cardNumberValue.text.isNotBlank()) {
-                getCardTypeIcon(cardNumberValue.text)?.let {
+                getCardTypeIcon(cardNumberValue.text, isDarkModeEnabled)?.let {
                     Icon(
                         painter = painterResource(id = it),
                         contentDescription = "",
@@ -171,12 +189,24 @@ internal fun BasicCardNumberInputField(
     }
 }
 
-private fun getCardTypeIcon(cardNumberValue: String): Int? {
+private fun getCardTypeIcon(cardNumberValue: String, isDarkModeEnabled: Boolean): Int? {
     return when {
-        isAmexCardScheme(cardNumberValue) -> R.drawable.ic_amex
+        isAmexCardScheme(cardNumberValue) -> {
+            if (isDarkModeEnabled) {
+                R.drawable.ic_amex_dark
+            } else {
+                R.drawable.ic_amex
+            }
+        }
         isMaestroCardScheme(cardNumberValue) -> R.drawable.ic_maestro
         isMasterCardScheme(cardNumberValue) -> R.drawable.ic_mastercard
-        isVisaCardScheme(cardNumberValue) -> R.drawable.ic_visa
+        isVisaCardScheme(cardNumberValue) -> {
+            if (isDarkModeEnabled) {
+                R.drawable.ic_visa_dark
+            } else {
+                R.drawable.ic_visa
+            }
+        }
         else -> null
     }
 }

@@ -34,6 +34,7 @@ internal class PaymentResultViewModelTest {
 
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val refreshPaymentIntent: RefreshPaymentIntentUseCase = mock()
+    private val isDarkModeEnabled: Boolean = false
 
     @Test
     fun `test initial state in case of success result`() = runTest {
@@ -50,7 +51,12 @@ internal class PaymentResultViewModelTest {
         )
         // act
         val actual =
-            PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                isDarkModeEnabled
+            ).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -73,7 +79,40 @@ internal class PaymentResultViewModelTest {
         )
         // act
         val actual =
-            PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                isDarkModeEnabled
+            ).state.value
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `test initial state in case of failure result and darck mode enabled `() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        val result: DojoPaymentResult = DojoPaymentResult.DECLINED
+        val expected = PaymentResultState.FailedResult(
+            appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
+            imageId =  R.drawable.ic_error_dark,
+            showTryAgain = true,
+            status = R.string.dojo_ui_sdk_payment_result_title_fail,
+            orderInfo = "",
+            details = R.string.dojo_ui_sdk_payment_result_failed_description,
+            isTryAgainLoading = false,
+            shouldNavigateToPreviousScreen = false
+        )
+        // act
+        val actual =
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                true
+            ).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -97,7 +136,12 @@ internal class PaymentResultViewModelTest {
         )
         // act
         val actual =
-            PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                isDarkModeEnabled
+            ).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -131,7 +175,12 @@ internal class PaymentResultViewModelTest {
         )
         // act
         val actual =
-            PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                isDarkModeEnabled
+            ).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
@@ -168,13 +217,18 @@ internal class PaymentResultViewModelTest {
         )
         // act
         val actual =
-            PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent).state.value
+            PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                refreshPaymentIntent,
+                isDarkModeEnabled
+            ).state.value
         // assert
         Assert.assertEquals(expected, actual)
     }
 
     @Test
-    fun `test state when press on try again button  and refresh the payment intent Success`() =
+    fun `test state when press on try again button and refresh the payment intent Success`() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
@@ -207,7 +261,12 @@ internal class PaymentResultViewModelTest {
             )
             // act
             val viewModel =
-                PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                PaymentResultViewModel(
+                    result,
+                    observePaymentIntent,
+                    refreshPaymentIntent,
+                    isDarkModeEnabled
+                )
             viewModel.onTryAgainClicked()
             val actual = viewModel.state.value
             // assert
@@ -248,7 +307,12 @@ internal class PaymentResultViewModelTest {
             )
             // act
             val viewModel =
-                PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                PaymentResultViewModel(
+                    result,
+                    observePaymentIntent,
+                    refreshPaymentIntent,
+                    isDarkModeEnabled
+                )
             viewModel.onTryAgainClicked()
             paymentIntentFakeFlow.tryEmit(PaymentIntentResult.RefreshFailure)
             val actual = viewModel.state.value

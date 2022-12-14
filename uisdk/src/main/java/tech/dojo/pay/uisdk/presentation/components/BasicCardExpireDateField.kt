@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -92,16 +93,31 @@ internal fun BasicCardExpireDateField(
     keyboardActions: KeyboardActions = KeyboardActions()
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor = DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
+    )
     val expireDataCharLength = 4
     Column(
         modifier = modifier
             .height(IntrinsicSize.Min)
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
             .border(
                 width = 1.dp,
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
+
     ) {
         Box(
             modifier = Modifier

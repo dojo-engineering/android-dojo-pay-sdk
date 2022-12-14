@@ -14,7 +14,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 @Composable
 internal fun PaymentMethodsList(
     modifier: Modifier = Modifier,
-    currentSelectedMethod: PaymentMethodItemViewEntityItem?= null,
+    currentSelectedMethod: PaymentMethodItemViewEntityItem? = null,
     paymentMethodItems: List<PaymentMethodItemViewEntityItem>,
     isInEditMode: Boolean,
     onItemChecked: ((PaymentMethodItemViewEntityItem) -> Unit),
@@ -32,6 +32,11 @@ internal fun PaymentMethodsList(
         if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) onItemChecked(
             selectedOption
         )
+    }
+
+    if (paymentMethodItems.size > 1 && !paymentMethodItems.contains(selectedOption)) {
+        onSelectionChange(paymentMethodItems[0])
+        onItemChecked(paymentMethodItems[0])
     }
     Box(modifier = modifier) {
         LazyColumn(

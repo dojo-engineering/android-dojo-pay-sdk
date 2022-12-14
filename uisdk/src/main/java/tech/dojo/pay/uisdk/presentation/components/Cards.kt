@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -43,14 +44,26 @@ internal fun DojoExpandableCard(
         targetValue = if (expanded) 180F else 0F
     )
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
+    )
     Column(
         modifier = Modifier
             .border(
                 width = 1.dp,
                 color = colors.indicatorColor(true, false, interactionSource).value,
                 shape = DojoTheme.shapes.small
-            )
+            ).background(DojoTheme.colors.inputFieldBackgroundColor)
     ) {
         Row(
             modifier = Modifier
@@ -63,11 +76,12 @@ internal fun DojoExpandableCard(
             Text(
                 text = header,
                 style = DojoTheme.typography.body2.medium,
-                color = DojoTheme.colors.onSurface.copy(alpha = ContentAlpha.high)
+                color = DojoTheme.colors.secondaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
             Icon(
                 painter = painterResource(R.drawable.ic_expand_more_24px),
                 contentDescription = null,
+                tint= DojoTheme.colors.primaryLabelTextColor,
                 modifier = Modifier
                     .rotate(rotateState.value)
             )

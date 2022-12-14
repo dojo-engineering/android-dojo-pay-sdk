@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
@@ -34,7 +33,7 @@ internal fun ManagePaymentMethods(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color.White
+        color = DojoTheme.colors.primarySurfaceBackgroundColor
     ) {
         val state = viewModel.state.observeAsState().value ?: return@Surface
         BackHandler {
@@ -58,7 +57,7 @@ internal fun ManagePaymentMethods(
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            backgroundColor = Color.White,
+            backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
             topBar = {
                 DojoAppBar(
                     title = stringResource(id = R.string.dojo_ui_sdk_manage_payment_methods_title),
@@ -102,7 +101,7 @@ internal fun ManagePaymentMethods(
                         verticalArrangement = Arrangement.spacedBy(0.dp),
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .background(Color.White),
+                            .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                     ) {
                         SingleButtonView(
                             text = stringResource(id = R.string.dojo_ui_sdk_pay_with_this_method),

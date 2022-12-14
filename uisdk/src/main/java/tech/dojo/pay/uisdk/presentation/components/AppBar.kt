@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -89,7 +88,7 @@ private fun BoxScope.Title(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = DojoTheme.typography.h5.medium,
-            color = titleColor ?: LocalContentColor.current.copy(alpha = ContentAlpha.high)
+            color = titleColor ?: DojoTheme.colors.headerTintColor.copy(alpha = ContentAlpha.high)
         )
     }
 }
@@ -103,7 +102,7 @@ private fun AppBarIconButton(
             Icon(
                 painter = painterResource(id = icon.resId),
                 contentDescription = null,
-                tint = icon.tintColor ?: DojoTheme.colors.onBackground.copy(alpha = ContentAlpha.medium)
+                tint = icon.tintColor ?: DojoTheme.colors.headerButtonTintColor.copy(alpha = ContentAlpha.medium)
             )
         }
     }

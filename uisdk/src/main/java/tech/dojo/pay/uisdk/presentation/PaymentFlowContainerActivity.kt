@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -29,8 +30,11 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
+import tech.dojo.pay.uisdk.entities.DarkColorPalette
+import tech.dojo.pay.uisdk.entities.LightColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
+import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
@@ -65,8 +69,15 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         configureDojoPayCore()
         setContent {
-            DojoTheme {
-                val customColorPalette = lightColorPalette(DojoSDKDropInUI.dojoThemeSettings)
+            DojoTheme() {
+                val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
+                val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
+                val customColorPalette =
+                    if (isDarkModeEnabled) darkColorPalette(
+                        DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette ?: DarkColorPalette()
+                    ) else lightColorPalette(
+                        DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette ?: LightColorPalette()
+                    )
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
@@ -80,7 +91,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                                 onNavigationEvent(it, navController)
                             }
                         }
-                        PaymentFlowNavHost(navController, viewModel)
+                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled)
                     }
                 }
             }
@@ -146,7 +157,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     @Composable
     internal fun PaymentFlowNavHost(
         navController: NavHostController,
-        viewModel: PaymentFlowViewModel
+        viewModel: PaymentFlowViewModel,
+        isDarkModeEnabled: Boolean
     ) {
         AnimatedNavHost(
             navController = navController,
@@ -215,7 +227,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val observePaymentIntent =
                     ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
                 val paymentResultViewModel =
-                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent)
+                    PaymentResultViewModel(result, observePaymentIntent, refreshPaymentIntent, isDarkModeEnabled)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
@@ -248,7 +260,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     val mangePaymentViewModel: MangePaymentViewModel by viewModels {
                         MangePaymentViewModelFactory(
                             customerId,
-                            arguments
+                            arguments,
+                            isDarkModeEnabled
                         )
                     }
                     ManagePaymentMethods(
@@ -265,7 +278,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled)
                 }
                 AnimatedVisibility(
                     visible = true,
@@ -278,7 +291,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             returnResult(DojoPaymentResult.DECLINED)
                             viewModel.onCloseFlowClicked()
                         },
-                        viewModel::onBackClicked
+                        viewModel::onBackClicked,
+                        isDarkModeEnabled
                     )
                 }
             }

@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -94,7 +95,19 @@ fun BasicInputField(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val colors = TextFieldDefaults.outlinedTextFieldColors()
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor= DojoTheme.colors.primaryLabelTextColor,
+        cursorColor= DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
+    )
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -106,6 +119,8 @@ fun BasicInputField(
                 color = colors.indicatorColor(enabled, isError, interactionSource).value,
                 shape = DojoTheme.shapes.small
             )
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
+
     ) {
         if (leading != null) leading()
 

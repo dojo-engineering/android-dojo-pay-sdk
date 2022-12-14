@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.RadioButton
@@ -16,7 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
@@ -27,6 +30,10 @@ internal fun WalletItemWithRadioButton(
     showRadioButton: Boolean = true,
     onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
 ) {
+    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+
+    val currentThemColor =
+        if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
     Row(
         modifier = modifier
             .wrapContentHeight()
@@ -53,6 +60,7 @@ internal fun WalletItemWithRadioButton(
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             style = DojoTheme.typography.body1,
+            color = currentThemColor
         )
         if (showRadioButton) {
             RadioButton(
@@ -62,8 +70,8 @@ internal fun WalletItemWithRadioButton(
                 selected = isSelected,
                 onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = Color(0xFF00857D),
-                    unselectedColor = Color(0xFF262626),
+                    selectedColor = DojoTheme.colors.inputElementActiveTintColor,
+                    unselectedColor =  DojoTheme.colors.inputElementDefaultTintColor,
                     disabledColor = Color.LightGray
                 )
             )

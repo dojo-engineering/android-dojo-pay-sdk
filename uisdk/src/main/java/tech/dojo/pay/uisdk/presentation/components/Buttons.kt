@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
@@ -46,7 +48,7 @@ private fun DojoButton(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
-            disabledBackgroundColor = DojoTheme.colors.onBackground.copy(alpha = 0.1f)
+            disabledBackgroundColor = DojoTheme.colors.primaryCTAButtonDisabledBackgroundColor
         ),
         elevation = ButtonDefaults.elevation(0.dp, 0.dp, 0.dp),
         shape = RoundedCornerShape(50),
@@ -86,6 +88,8 @@ internal fun GooglePayButton(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
+    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+
     Button(
         modifier = modifier
             .height(DojoButtonHeight)
@@ -102,7 +106,13 @@ internal fun GooglePayButton(
         enabled = enabled
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_google_pay),
+            painter = painterResource(
+                id = if (isSystemInDarkTheme() && !forceLightMode) {
+                    R.drawable.ic_google_pay_darck
+                } else {
+                    R.drawable.ic_google_pay
+                }
+            ),
             contentDescription = "",
             tint = Color.Unspecified,
             modifier = Modifier
@@ -125,13 +135,21 @@ internal fun DojoFullGroundButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-        contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+        backgroundColor = if (enabled) {
+            backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
+        } else {
+            backgroundColor ?: DojoTheme.colors.primaryCTAButtonDisabledBackgroundColor
+        },
+        contentColor = if (enabled) {
+            contentColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor
+        } else {
+            contentColor ?: DojoTheme.colors.primaryCTAButtonDisableTextColor
+        },
         borderStroke = null,
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         onClick = onClick
     )
 }
@@ -150,13 +168,13 @@ internal fun DojoOutlinedButton(
 ) {
     DojoButton(
         text = text,
-        backgroundColor = backgroundColor ?: DojoTheme.colors.background,
-        contentColor = contentColor ?: DojoTheme.colors.primaryLabelTextColor,
+        backgroundColor = backgroundColor ?: DojoTheme.colors.primarySurfaceBackgroundColor,
+        contentColor = contentColor ?: DojoTheme.colors.secondaryCTAButtonActiveTextColor,
         borderStroke = getBorderStroke(enabled, borderStrokeColor),
         modifier = modifier,
         enabled = enabled,
         isLoading = isLoading,
-        loadingColor = loadingColor ?: DojoTheme.colors.primaryLabelTextColor,
+        loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         onClick = onClick
     )
 }
@@ -218,7 +236,7 @@ private fun SingleButton(
     loadingColor: Color? = null,
     onClick: () -> Unit
 ) {
-    Box(modifier = modifier.background(DojoTheme.colors.background)) {
+    Box(modifier = modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)) {
         DojoButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -226,11 +244,16 @@ private fun SingleButton(
             text = text,
             enabled = enabled,
             onClick = onClick,
-            backgroundColor = backgroundColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-            contentColor = contentColor ?: DojoTheme.colors.onPrimary,
+            backgroundColor = backgroundColor
+                ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            contentColor = if (enabled) {
+                contentColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor
+            } else {
+                contentColor ?: DojoTheme.colors.primaryCTAButtonDisableTextColor
+            },
             borderStroke = borderStrokeColor,
             isLoading = isLoading,
-            loadingColor = loadingColor ?: DojoTheme.colors.onPrimary,
+            loadingColor = loadingColor ?: DojoTheme.colors.primaryCTAButtonActiveTextColor,
         )
     }
 }
@@ -242,7 +265,7 @@ private fun getBorderStroke(
 ) =
     if (enabled) BorderStroke(
         1.dp,
-        borderStrokeColor ?: DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
+        borderStrokeColor ?: DojoTheme.colors.secondaryCTAButtonActiveBorderColor
     ) else null
 
 @Preview("Button", group = "Buttons")

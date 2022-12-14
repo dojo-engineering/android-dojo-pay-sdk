@@ -15,6 +15,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMet
 class MangePaymentViewModelFactory(
     private val customerId: String,
     private val arguments: Bundle?,
+    private val isDarkModeEnabled: Boolean,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val customerSecret =
@@ -23,7 +24,7 @@ class MangePaymentViewModelFactory(
         val observeWalletState = ObserveWalletState(walletStateRepository)
         val observePaymentMethods =
             ObservePaymentMethods(paymentMethodsRepository)
-        val mapper = PaymentMethodItemViewEntityMapper()
+        val mapper = PaymentMethodItemViewEntityMapper(isDarkModeEnabled)
 
         val deletePaymentMethodsUseCase = DeletePaymentMethodsUseCase(
             customerId,

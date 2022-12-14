@@ -72,6 +72,7 @@ internal fun PaymentMethodsCheckOutScreen(
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
         sheetState = paymentMethodsSheetState,
+        sheetBackgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         sheetContent = {
             BottomSheetItems(
                 coroutineScope,
@@ -226,12 +227,12 @@ private fun Loading() {
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .background(DojoTheme.colors.background.copy(alpha = 0.8f))
+            .background(DojoTheme.colors.primarySurfaceBackgroundColor.copy(alpha = 0.8f))
             .clickable(false) {},
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
-            color = DojoTheme.colors.primaryLabelTextColor
+            color = DojoTheme.colors.loadingIndicatorColor
         )
     }
 }

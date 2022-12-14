@@ -12,50 +12,78 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoThemeSettings
+import tech.dojo.pay.uisdk.entities.LightColorPalette
 import tech.dojo.pay.uisdk.entities.color
 
-internal fun lightColorPalette(dojoThemeSettings: DojoThemeSettings? = null) = DojoColors(
-    primary = Color(0xFF00857D),
-    onPrimary = Color.White,
-    background = Color.White,
-    onBackground = Color.Black,
-    surface = Color(0xFFF5F5F5),
-    onSurface = Color.Black,
-    secondarySurface = Color(0xFF262626),
-    primaryLabelTextColor = dojoThemeSettings?.primaryLabelTextColor?.color ?: Color(0xFF262626),
-    headerButtonTintColor = dojoThemeSettings?.headerButtonTintColor?.color ?: Color(0xDE000000),
-    headerTintColor = dojoThemeSettings?.headerTintColor?.color ?: Color(0xFF262626),
-    secondaryLabelTextColor = dojoThemeSettings?.secondaryLabelTextColor?.color
-        ?: Color(0xDE000000),
-    primaryCTAButtonActiveBackgroundColor = dojoThemeSettings?.primaryCTAButtonActiveBackgroundColor?.color
-        ?: Color.Black,
-    onSecondarySurface = Color.White,
-    success = Color(0xFF2C7B32),
-    onSuccess = Color.White,
-    error = Color(0xFFB00020),
-    onError = Color.White,
-    honey = Color(0xFFFF8D02)
-)
-private val DarkColorPalette = DojoColors(
-    primary = Color(0xFF262626),
+internal fun lightColorPalette(lightColorPalette: LightColorPalette = LightColorPalette()) =
+    DojoColors(
+        primary = lightColorPalette.inputElementActiveTintColor.color,
+        onPrimary = Color.White,
+        background = Color.White,
+        onBackground = Color.Black,
+        surface = lightColorPalette.primarySurfaceBackgroundColor.color,
+        onSurface = Color.Black,
+        secondarySurface = Color(0xFF262626),
+        onSecondarySurface = Color.White,
+        success = Color(0xFF2C7B32),
+        error = lightColorPalette.errorTextColor.color,
+        onError = Color.White,
+        primaryLabelTextColor = lightColorPalette.primaryLabelTextColor.color,
+        secondaryLabelTextColor = lightColorPalette.secondaryLabelTextColor.color,
+        headerTintColor = lightColorPalette.headerTintColor.color,
+        headerButtonTintColor = lightColorPalette.headerButtonTintColor.color,
+        primarySurfaceBackgroundColor = lightColorPalette.primarySurfaceBackgroundColor.color,
+        primaryCTAButtonActiveBackgroundColor = lightColorPalette.primaryCTAButtonActiveBackgroundColor.color,
+        primaryCTAButtonActiveTextColor = lightColorPalette.primaryCTAButtonActiveTextColor.color,
+        primaryCTAButtonDisabledBackgroundColor = lightColorPalette.primaryCTAButtonDisabledBackgroundColor.color,
+        primaryCTAButtonDisableTextColor = lightColorPalette.primaryCTAButtonDisableTextColor.color,
+        secondaryCTAButtonActiveBorderColor = lightColorPalette.secondaryCTAButtonActiveBorderColor.color,
+        secondaryCTAButtonActiveTextColor = lightColorPalette.secondaryCTAButtonActiveTextColor.color,
+        separatorColor = lightColorPalette.separatorColor.color,
+        errorTextColor = lightColorPalette.errorTextColor.color,
+        loadingIndicatorColor = lightColorPalette.loadingIndicatorColor.color,
+        inputFieldPlaceholderColor = lightColorPalette.inputFieldPlaceholderColor.color,
+        inputFieldBackgroundColor = lightColorPalette.inputFieldBackgroundColor.color,
+        inputFieldDefaultBorderColor = lightColorPalette.inputFieldDefaultBorderColor.color,
+        inputFieldSelectedBorderColor = lightColorPalette.inputFieldSelectedBorderColor.color,
+        inputElementActiveTintColor = lightColorPalette.inputElementActiveTintColor.color,
+        inputElementDefaultTintColor = lightColorPalette.inputElementDefaultTintColor.color
+    )
+
+internal fun darkColorPalette(darkColorPalette: DarkColorPalette = DarkColorPalette()) = DojoColors(
+    primary = darkColorPalette.inputElementActiveTintColor.color,
     onPrimary = Color.White,
     background = Color(0xFF121212),
     onBackground = Color.White,
-    surface = Color(0xFF1e1e1e),
+    surface = darkColorPalette.primarySurfaceBackgroundColor.color,
     onSurface = Color.White,
-    headerButtonTintColor = Color.White,
-    headerTintColor = Color.White,
-    secondaryLabelTextColor = Color.White,
-    primaryLabelTextColor = Color.White,
-    primaryCTAButtonActiveBackgroundColor = Color.Black,
     secondarySurface = Color.White,
     onSecondarySurface = Color.Black,
     success = Color(0xFF88B484),
-    onSuccess = Color.White,
-    error = Color(0xFFCF6679),
+    error = darkColorPalette.errorTextColor.color,
     onError = Color.White,
-    honey = Color(0xFFFF8D02)
+    primaryLabelTextColor = darkColorPalette.primaryLabelTextColor.color,
+    secondaryLabelTextColor = darkColorPalette.secondaryLabelTextColor.color,
+    headerTintColor = darkColorPalette.headerTintColor.color,
+    headerButtonTintColor = darkColorPalette.headerButtonTintColor.color,
+    primarySurfaceBackgroundColor = darkColorPalette.primarySurfaceBackgroundColor.color,
+    primaryCTAButtonActiveBackgroundColor = darkColorPalette.primaryCTAButtonActiveBackgroundColor.color,
+    primaryCTAButtonActiveTextColor = darkColorPalette.primaryCTAButtonActiveTextColor.color,
+    primaryCTAButtonDisabledBackgroundColor = darkColorPalette.primaryCTAButtonDisabledBackgroundColor.color,
+    primaryCTAButtonDisableTextColor = darkColorPalette.primaryCTAButtonDisableTextColor.color,
+    secondaryCTAButtonActiveBorderColor = darkColorPalette.secondaryCTAButtonActiveBorderColor.color,
+    secondaryCTAButtonActiveTextColor = darkColorPalette.secondaryCTAButtonActiveTextColor.color,
+    separatorColor = darkColorPalette.separatorColor.color,
+    errorTextColor = darkColorPalette.errorTextColor.color,
+    loadingIndicatorColor = darkColorPalette.loadingIndicatorColor.color,
+    inputFieldPlaceholderColor = darkColorPalette.inputFieldPlaceholderColor.color,
+    inputFieldBackgroundColor = darkColorPalette.inputFieldBackgroundColor.color,
+    inputFieldDefaultBorderColor = darkColorPalette.inputFieldDefaultBorderColor.color,
+    inputFieldSelectedBorderColor = darkColorPalette.inputFieldSelectedBorderColor.color,
+    inputElementActiveTintColor = darkColorPalette.inputElementActiveTintColor.color,
+    inputElementDefaultTintColor = darkColorPalette.inputElementDefaultTintColor.color
 )
 
 @Composable
@@ -63,7 +91,7 @@ fun DojoTheme(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colors = if (darkTheme) DarkColorPalette else lightColorPalette()
+    val colors = if (darkTheme) darkColorPalette() else lightColorPalette()
 
     CompositionLocalProvider(LocalDojoColors provides colors) {
         MaterialTheme(
@@ -99,15 +127,28 @@ class DojoColors(
     secondarySurface: Color,
     onSecondarySurface: Color,
     success: Color,
-    onSuccess: Color,
     error: Color,
     onError: Color,
-    headerButtonTintColor: Color,
-    headerTintColor: Color,
-    secondaryLabelTextColor: Color,
     primaryLabelTextColor: Color,
+    secondaryLabelTextColor: Color,
+    headerTintColor: Color,
+    headerButtonTintColor: Color,
+    primarySurfaceBackgroundColor: Color,
     primaryCTAButtonActiveBackgroundColor: Color,
-    honey: Color
+    primaryCTAButtonActiveTextColor: Color,
+    primaryCTAButtonDisabledBackgroundColor: Color,
+    primaryCTAButtonDisableTextColor: Color,
+    secondaryCTAButtonActiveBorderColor: Color,
+    secondaryCTAButtonActiveTextColor: Color,
+    separatorColor: Color,
+    errorTextColor: Color,
+    loadingIndicatorColor: Color,
+    inputFieldPlaceholderColor: Color,
+    inputFieldBackgroundColor: Color,
+    inputFieldDefaultBorderColor: Color,
+    inputFieldSelectedBorderColor: Color,
+    inputElementActiveTintColor: Color,
+    inputElementDefaultTintColor: Color
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -127,25 +168,57 @@ class DojoColors(
         private set
     var success by mutableStateOf(success)
         private set
-    var onSuccess by mutableStateOf(onSuccess)
-        private set
     var error by mutableStateOf(error)
         private set
     var onError by mutableStateOf(onError)
         private set
-    var honey by mutableStateOf(honey)
-        private set
-    var headerButtonTintColor by mutableStateOf(headerButtonTintColor)
-        private set
-    var headerTintColor by mutableStateOf(headerTintColor)
+    var primaryLabelTextColor by mutableStateOf(primaryLabelTextColor)
         private set
     var secondaryLabelTextColor by mutableStateOf(secondaryLabelTextColor)
         private set
-    var primaryLabelTextColor by mutableStateOf(primaryLabelTextColor)
+    var headerTintColor by mutableStateOf(headerTintColor)
+        private set
+    var headerButtonTintColor by mutableStateOf(headerButtonTintColor)
+        private set
+    var primarySurfaceBackgroundColor by mutableStateOf(primarySurfaceBackgroundColor)
         private set
     var primaryCTAButtonActiveBackgroundColor by mutableStateOf(
         primaryCTAButtonActiveBackgroundColor
     )
+        private set
+    var primaryCTAButtonActiveTextColor by mutableStateOf(primaryCTAButtonActiveTextColor)
+        private set
+    var primaryCTAButtonDisabledBackgroundColor by mutableStateOf(
+        primaryCTAButtonDisabledBackgroundColor
+    )
+        private set
+
+    var primaryCTAButtonDisableTextColor by mutableStateOf(primaryCTAButtonDisableTextColor)
+        private set
+
+    var secondaryCTAButtonActiveBorderColor by mutableStateOf(secondaryCTAButtonActiveBorderColor)
+        private set
+    var secondaryCTAButtonActiveTextColor by mutableStateOf(secondaryCTAButtonActiveTextColor)
+        private set
+
+    var separatorColor by mutableStateOf(separatorColor)
+        private set
+    var errorTextColor by mutableStateOf(errorTextColor)
+        private set
+    var loadingIndicatorColor by mutableStateOf(loadingIndicatorColor)
+        private set
+    var inputFieldPlaceholderColor by mutableStateOf(inputFieldPlaceholderColor)
+        private set
+    var inputFieldBackgroundColor by mutableStateOf(inputFieldBackgroundColor)
+        private set
+
+    var inputFieldDefaultBorderColor by mutableStateOf(inputFieldDefaultBorderColor)
+        private set
+    var inputFieldSelectedBorderColor by mutableStateOf(inputFieldSelectedBorderColor)
+        private set
+    var inputElementActiveTintColor by mutableStateOf(inputElementActiveTintColor)
+        private set
+    var inputElementDefaultTintColor by mutableStateOf(inputElementDefaultTintColor)
         private set
 }
 

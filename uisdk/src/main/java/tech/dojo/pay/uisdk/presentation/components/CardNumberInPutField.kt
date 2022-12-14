@@ -30,7 +30,8 @@ internal fun CardNumberInPutField(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Done
     ),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    isDarkModeEnabled: Boolean
 ) {
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
@@ -52,7 +53,8 @@ internal fun CardNumberInPutField(
             textHorizontalPadding,
             textVerticalPadding,
             keyboardOptions,
-            keyboardActions
+            keyboardActions,
+            isDarkModeEnabled
         )
     }
 }

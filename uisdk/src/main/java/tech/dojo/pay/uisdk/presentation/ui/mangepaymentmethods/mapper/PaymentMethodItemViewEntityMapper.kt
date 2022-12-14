@@ -8,8 +8,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import java.util.Locale
 
-internal class PaymentMethodItemViewEntityMapper {
-
+internal class PaymentMethodItemViewEntityMapper(private val isDarkModeEnabled: Boolean) {
     fun apply(
         FetchPaymentMethodsResult: FetchPaymentMethodsResult?,
         isWalletNEnabled: Boolean
@@ -19,12 +18,19 @@ internal class PaymentMethodItemViewEntityMapper {
             items.add(PaymentMethodItemViewEntityItem.WalletItemItem)
         }
         if (FetchPaymentMethodsResult is FetchPaymentMethodsResult.Success) {
-            FetchPaymentMethodsResult.result.items.forEach { items.add(mapToCardItem(it)) }
+            FetchPaymentMethodsResult.result.items.forEach {
+                items.add(
+                    mapToCardItem(
+                        it,
+                        isDarkModeEnabled
+                    )
+                )
+            }
         }
         return PaymentMethodItemViewEntity(items)
     }
 
-    private fun mapToCardItem(it: PaymentMethodsDomainEntityItem) =
+    private fun mapToCardItem(it: PaymentMethodsDomainEntityItem, isDarkModeEnabled: Boolean) =
         PaymentMethodItemViewEntityItem.CardItemItem(
             id = it.id,
             scheme = it.scheme.cardsSchemes.replaceFirstChar { firstChar ->
@@ -32,20 +38,24 @@ internal class PaymentMethodItemViewEntityMapper {
                     Locale.getDefault()
                 ) else firstChar.toString()
             },
-            pan = if (it.pan.length >8) {
+            pan = if (it.pan.length > 8) {
                 it.pan.substring(it.pan.length - 8, it.pan.length)
             } else {
                 it.pan
             },
-            icon = requireNotNull(getIcon(it)),
+            icon = requireNotNull(getIcon(it, isDarkModeEnabled)),
         )
 
-    private fun getIcon(it: PaymentMethodsDomainEntityItem) =
+    private fun getIcon(it: PaymentMethodsDomainEntityItem, isDarkModeEnabled: Boolean) =
         when (it.scheme) {
-            CardsSchemes.VISA -> R.drawable.ic_visa
+            CardsSchemes.VISA -> {
+                if (isDarkModeEnabled) R.drawable.ic_visa_dark else R.drawable.ic_visa
+            }
             CardsSchemes.MASTERCARD -> R.drawable.ic_mastercard
             CardsSchemes.MAESTRO -> R.drawable.ic_maestro
-            CardsSchemes.AMEX -> R.drawable.ic_amex
+            CardsSchemes.AMEX -> {
+                if (isDarkModeEnabled) R.drawable.ic_amex_dark else R.drawable.ic_amex
+            }
             else -> null
         }
 }
