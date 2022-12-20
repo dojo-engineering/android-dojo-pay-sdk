@@ -10,7 +10,6 @@ import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntityItem
 
-
 internal class SupportedPaymentMethodsDomainMapperTest {
 
     @Test

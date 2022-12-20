@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
-import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.entities.LightColorPalette
 import tech.dojo.pay.uisdk.entities.color
 

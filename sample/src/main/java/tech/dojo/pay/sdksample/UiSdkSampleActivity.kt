@@ -42,7 +42,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
                     )
                 ),
 
-                )
+            )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)

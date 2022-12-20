@@ -176,7 +176,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling onBackClickedWithSavedPaymentMethod should emits PaymentMethodsCheckOutWithSelectedPaymentMethod`()= runTest {
+    fun `calling onBackClickedWithSavedPaymentMethod should emits PaymentMethodsCheckOutWithSelectedPaymentMethod`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -214,7 +214,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling onCloseFlowClicked should emits OnCloseFlow`()= runTest {
+    fun `calling onCloseFlowClicked should emits OnCloseFlow`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -252,7 +252,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToPaymentResult with SUCCESSFUL should emits PaymentResult with popBackStack as true `()= runTest {
+    fun `calling navigateToPaymentResult with SUCCESSFUL should emits PaymentResult with popBackStack as true `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -290,7 +290,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as true `()= runTest {
+    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as true `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -328,7 +328,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToPaymentResult with FAILED should emits PaymentResult with popBackStack as false `()= runTest {
+    fun `calling navigateToPaymentResult with FAILED should emits PaymentResult with popBackStack as false `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -366,7 +366,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToCardDetailsCheckoutScreen should emits CardDetailsCheckout`()= runTest {
+    fun `calling navigateToCardDetailsCheckoutScreen should emits CardDetailsCheckout`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -404,7 +404,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToManagePaymentMethods should emits ManagePaymentMethods with customer id `()= runTest {
+    fun `calling navigateToManagePaymentMethods should emits ManagePaymentMethods with customer id `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)

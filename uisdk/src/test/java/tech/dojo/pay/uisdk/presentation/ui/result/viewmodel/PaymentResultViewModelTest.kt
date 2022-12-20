@@ -97,7 +97,7 @@ internal class PaymentResultViewModelTest {
         val result: DojoPaymentResult = DojoPaymentResult.DECLINED
         val expected = PaymentResultState.FailedResult(
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_fail,
-            imageId =  R.drawable.ic_error_dark,
+            imageId = R.drawable.ic_error_dark,
             showTryAgain = true,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
             orderInfo = "",

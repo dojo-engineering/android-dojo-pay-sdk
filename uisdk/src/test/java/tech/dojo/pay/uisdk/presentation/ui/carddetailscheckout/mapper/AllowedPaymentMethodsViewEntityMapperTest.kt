@@ -30,7 +30,6 @@ internal class AllowedPaymentMethodsViewEntityMapperTest {
         Assert.assertEquals(expected, actual)
     }
 
-
     @Test
     fun `calling apply with dark mode enabled  should map to correct icons`() {
         val isDarkModeEnabled = true

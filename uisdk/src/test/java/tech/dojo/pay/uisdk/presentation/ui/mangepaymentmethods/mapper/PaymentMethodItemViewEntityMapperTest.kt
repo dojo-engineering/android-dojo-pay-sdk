@@ -10,7 +10,6 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
-
 internal class PaymentMethodItemViewEntityMapperTest {
 
     @Test

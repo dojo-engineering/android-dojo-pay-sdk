@@ -30,7 +30,6 @@ internal fun ManagePaymentMethods(
     onBackClicked: (currentSelectedMethod: PaymentMethodItemViewEntityItem?) -> Unit,
     onNewCardButtonClicked: () -> Unit
 ) {
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = DojoTheme.colors.primarySurfaceBackgroundColor

@@ -35,7 +35,7 @@ internal fun DojoBrandFooter(
     withTermsAndPrivacy: Boolean = false
 ) {
     val context = LocalContext.current
-    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+    val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
     val currentThemColor =
         if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
@@ -60,7 +60,7 @@ internal fun DojoBrandFooter(
             Icon(
                 modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 2.dp, end = 12.dp),
                 painter = painterResource(id = R.drawable.ic_dojo),
-                tint =  currentThemColor.copy(alpha = ContentAlpha.high),
+                tint = currentThemColor.copy(alpha = ContentAlpha.high),
                 contentDescription = null,
             )
             if (withTermsAndPrivacy) {
@@ -128,6 +128,5 @@ internal fun PreviewDojoBrandFooterWithTermsAndPrivacy() = DojoPreview {
 
 private const val TERMS_URL = "https://pay.dojo.tech/terms"
 private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"
-internal const val Light_COLOR_HEXA= "#FF000000"
-internal const val DARK_COLOR_HEXA= "#FFFFFFFF"
-
+internal const val Light_COLOR_HEXA = "#FF000000"
+internal const val DARK_COLOR_HEXA = "#FFFFFFFF"

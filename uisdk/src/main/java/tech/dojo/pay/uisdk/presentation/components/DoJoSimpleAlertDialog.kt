@@ -42,7 +42,6 @@ internal fun SimpleAlertDialog(
                     )
                 }
             }
-
         },
         dismissButton = {
             if (!isLoading) {

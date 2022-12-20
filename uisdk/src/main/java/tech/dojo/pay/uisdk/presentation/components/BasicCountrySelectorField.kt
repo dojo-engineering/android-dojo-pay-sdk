@@ -27,11 +27,11 @@ internal fun BasicCountrySelectorField(
     enabled: Boolean = true,
 ) {
     val colors = TextFieldDefaults.outlinedTextFieldColors(
-        textColor= DojoTheme.colors.primaryLabelTextColor,
-        cursorColor= DojoTheme.colors.primaryLabelTextColor,
-        unfocusedBorderColor= DojoTheme.colors.inputFieldDefaultBorderColor,
-        backgroundColor= DojoTheme.colors.inputFieldBackgroundColor,
-        focusedBorderColor= DojoTheme.colors.inputFieldSelectedBorderColor,
+        textColor = DojoTheme.colors.primaryLabelTextColor,
+        cursorColor = DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
         placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
         errorBorderColor = DojoTheme.colors.errorTextColor,
         errorCursorColor = DojoTheme.colors.errorTextColor,

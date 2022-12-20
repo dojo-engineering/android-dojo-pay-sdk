@@ -30,7 +30,7 @@ internal fun WalletItemWithRadioButton(
     showRadioButton: Boolean = true,
     onClick: ((PaymentMethodItemViewEntityItem.WalletItemItem) -> Unit),
 ) {
-    val forceLightMode=  DojoSDKDropInUI.dojoThemeSettings?.forceLightMode?:  false
+    val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
     val currentThemColor =
         if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
@@ -41,8 +41,7 @@ internal fun WalletItemWithRadioButton(
                 enabled = showRadioButton,
                 onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) }
             )
-            .padding(start = 8.dp, end = 16.dp,top= 16.dp, bottom = 18.dp)
-        ,
+            .padding(start = 8.dp, end = 16.dp, top = 16.dp, bottom = 18.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DojoSpacer(width = 16.dp)
@@ -71,7 +70,7 @@ internal fun WalletItemWithRadioButton(
                 onClick = { onClick.invoke(PaymentMethodItemViewEntityItem.WalletItemItem) },
                 colors = RadioButtonDefaults.colors(
                     selectedColor = DojoTheme.colors.inputElementActiveTintColor,
-                    unselectedColor =  DojoTheme.colors.inputElementDefaultTintColor,
+                    unselectedColor = DojoTheme.colors.inputElementDefaultTintColor,
                     disabledColor = Color.LightGray
                 )
             )
