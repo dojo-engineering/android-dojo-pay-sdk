@@ -277,6 +277,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         )
                     }
                     ManagePaymentMethods(
+                        windowSize,
                         mangePaymentViewModel,
                         {
                             returnResult(DojoPaymentResult.DECLINED)
