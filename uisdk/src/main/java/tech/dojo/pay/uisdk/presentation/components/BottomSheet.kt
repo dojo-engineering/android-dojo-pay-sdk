@@ -32,9 +32,7 @@ internal fun DojoBottomSheet(
         sheetBackgroundColor = sheetBackgroundColor ?: DojoTheme.colors.background,
         sheetContentColor = sheetContentColor ?: DojoTheme.colors.onBackground,
         scrimColor = scrimColor ?: DojoTheme.colors.onBackground.copy(alpha = 0.35f),
-        sheetContent = {
-            sheetContent()
-        },
+        sheetContent = { sheetContent() },
         content = content
     )
 }

@@ -37,6 +37,7 @@ object Versions {
     const val TIMBER = "5.0.1"
     const val GSON = "2.8.7"
     const val csvReader= "1.6.0"
+    const val ANDROIDX_WINDOW= "1.0.0"
 }
 
 object BuildPluginsVersion {
@@ -101,6 +102,8 @@ object AndroidX {
     const val CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
     const val VIEWBINDING = "androidx.databinding:viewbinding:${Versions.VIEWBINDING}"
     const val CORE_TESTING_ARCH = "androidx.arch.core:core-testing:2.1.0"
+    const val WINDOW = "androidx.window:window:${Versions.ANDROIDX_WINDOW}"
+
 
     object Activity {
 

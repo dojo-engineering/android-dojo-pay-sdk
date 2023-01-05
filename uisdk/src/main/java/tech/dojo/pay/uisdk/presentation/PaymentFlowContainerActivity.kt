@@ -36,6 +36,8 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.LightColorPalette
+import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberWindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
 import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
@@ -82,6 +84,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     ) else lightColorPalette(
                         DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette ?: LightColorPalette()
                     )
+                val windowSize = rememberWindowSize()
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
@@ -95,7 +98,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                                 onNavigationEvent(it, navController)
                             }
                         }
-                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled)
+                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled, windowSize)
                     }
                 }
             }
@@ -161,7 +164,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     internal fun PaymentFlowNavHost(
         navController: NavHostController,
         viewModel: PaymentFlowViewModel,
-        isDarkModeEnabled: Boolean
+        isDarkModeEnabled: Boolean,
+        windowSize: WindowSize
     ) {
         AnimatedNavHost(
             navController = navController,
@@ -202,6 +206,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     )
                 }
                 PaymentMethodsCheckOutScreen(
+                    windowSize,
                     currentSelectedMethod,
                     paymentMethodCheckoutViewModel,
                     {

@@ -3,10 +3,13 @@ package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout
 import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.CircularProgressIndicator
@@ -32,15 +35,18 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.getActivity
 import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
-import tech.dojo.pay.uisdk.presentation.components.*
+import tech.dojo.pay.uisdk.presentation.components.AmountBreakDown
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
+import tech.dojo.pay.uisdk.presentation.components.CardItemWithCvv
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
+import tech.dojo.pay.uisdk.presentation.components.GooglePayButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WalletItem
+import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
@@ -49,6 +55,7 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PaymentMethodsCheckOutScreen(
+    windowSize: WindowSize,
     currentSelectedMethod: PaymentMethodItemViewEntityItem?,
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
@@ -84,7 +91,8 @@ internal fun PaymentMethodsCheckOutScreen(
                 onPayByCard,
                 viewModel::onPayAmountClicked,
                 viewModel::observePaymentIntent,
-                viewModel::onCvvValueChanged
+                viewModel::onCvvValueChanged,
+                windowSize
             )
         }
     ) {
@@ -131,24 +139,39 @@ private fun BottomSheetItems(
     onPayByCard: () -> Unit,
     onPayAmount: () -> Unit,
     observePaymentIntent: () -> Unit,
-    onCvvChanged: (String) -> Unit
+    onCvvChanged: (String) -> Unit,
+    windowSize: WindowSize
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
     if (contentState.isBottomSheetLoading) {
         Loading()
     } else {
-        PaymentMethodItem(contentState, onManagePaymentClicked, onCvvChanged)
-        AmountBreakDownItem(contentState)
-        GooglePayButton(
-            contentState,
-            coroutineScope,
-            sheetState,
-            onGpayClicked,
-            observePaymentIntent
-        )
-        PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
-        PayAmountButton(contentState, onPayAmount)
-        FooterItem()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 40.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PaymentMethodItem(contentState, onManagePaymentClicked, onCvvChanged)
+                AmountBreakDownItem(contentState)
+                GooglePayButton(
+                    contentState,
+                    coroutineScope,
+                    sheetState,
+                    onGpayClicked,
+                    observePaymentIntent
+                )
+                PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
+                PayAmountButton(contentState, onPayAmount)
+                FooterItem()
+            }
+        }
     }
 }
 
