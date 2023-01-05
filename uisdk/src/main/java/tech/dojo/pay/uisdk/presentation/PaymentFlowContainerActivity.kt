@@ -245,6 +245,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     exit = shrinkVertically()
                 ) {
                     ShowResultSheetScreen(
+                        windowSize,
                         viewModel::onCloseFlowClicked,
                         viewModel::onBackClicked,
                         paymentResultViewModel
