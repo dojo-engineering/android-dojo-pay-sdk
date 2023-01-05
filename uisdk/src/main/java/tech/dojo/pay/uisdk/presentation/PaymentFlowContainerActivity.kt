@@ -298,6 +298,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     exit = shrinkVertically()
                 ) {
                     CardDetailsCheckoutScreen(
+                        windowSize,
                         cardDetailsCheckoutViewModel,
                         {
                             returnResult(DojoPaymentResult.DECLINED)

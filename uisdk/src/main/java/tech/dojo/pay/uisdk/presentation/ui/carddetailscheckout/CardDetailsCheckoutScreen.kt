@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -57,6 +59,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
@@ -65,6 +68,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CardDetailsCheckoutScreen(
+    windowSize: WindowSize,
     viewModel: CardDetailsCheckoutViewModel,
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
@@ -80,102 +84,111 @@ internal fun CardDetailsCheckoutScreen(
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         topBar = { AppBarItem(onBackClicked, onCloseClicked) },
         content = {
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
+                    .fillMaxWidth()
+                    .heightIn(min = 40.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
-                    Modifier
-                        .verticalScroll(scrollState)
-                        .wrapContentHeight()
-                        .onGloballyPositioned { layoutCoordinates ->
-                            scrollToPosition =
-                                scrollState.value + layoutCoordinates.positionInRoot().y
-                        }
-                        .imePadding()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    AmountWithPaymentMethodsHeader(state)
-                    EmailField(
-                        scrollState,
-                        coroutineScope,
-                        scrollToPosition,
-                        state,
-                        keyboardController,
-                        viewModel
-                    )
-                    BillingCountryField(
-                        state,
-                        viewModel
-                    )
-                    PostalCodeField(
-                        scrollState,
-                        coroutineScope,
-                        scrollToPosition,
-                        state,
-                        keyboardController,
-                        viewModel
-                    )
-                    CardHolderNameField(
-                        scrollState,
-                        coroutineScope,
-                        scrollToPosition,
-                        keyboardController,
-                        state,
-                        viewModel
-                    )
-                    CardNumberField(
-                        scrollState,
-                        coroutineScope,
-                        scrollToPosition,
-                        keyboardController,
-                        state,
-                        viewModel,
-                        isDarkModeEnabled
-                    )
-                    Row(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .heightIn(48.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            CardExpireDateField(
-                                scrollState,
-                                coroutineScope,
-                                scrollToPosition,
-                                keyboardController,
-                                state,
-                                viewModel
-                            )
-                        }
-
-                        Divider(modifier = Modifier.width(32.dp))
-                        Box(modifier = Modifier.weight(1f)) {
-                            CvvField(
-                                scrollState,
-                                coroutineScope,
-                                scrollToPosition,
-                                state,
-                                keyboardController,
-                                viewModel
-                            )
-                        }
-                    }
-
-                    saveCardCheckBox(state, viewModel)
-                }
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(0.dp),
+                Box(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                        .fillMaxHeight()
+                        .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f)
+                        .padding(it)
                 ) {
-                    PayButton(scrollState, state, viewModel)
-                    ScreenFooter()
+                    Column(
+                        Modifier
+                            .verticalScroll(scrollState)
+                            .wrapContentHeight()
+                            .onGloballyPositioned { layoutCoordinates ->
+                                scrollToPosition =
+                                    scrollState.value + layoutCoordinates.positionInRoot().y
+                            }
+                            .imePadding()
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
+                        verticalArrangement = Arrangement.spacedBy(32.dp)
+                    ) {
+                        AmountWithPaymentMethodsHeader(state)
+                        EmailField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            state,
+                            keyboardController,
+                            viewModel
+                        )
+                        BillingCountryField(
+                            state,
+                            viewModel
+                        )
+                        PostalCodeField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            state,
+                            keyboardController,
+                            viewModel
+                        )
+                        CardHolderNameField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            keyboardController,
+                            state,
+                            viewModel
+                        )
+                        CardNumberField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            keyboardController,
+                            state,
+                            viewModel,
+                            isDarkModeEnabled
+                        )
+                        Row(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .heightIn(48.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                CardExpireDateField(
+                                    scrollState,
+                                    coroutineScope,
+                                    scrollToPosition,
+                                    keyboardController,
+                                    state,
+                                    viewModel
+                                )
+                            }
+
+                            Divider(modifier = Modifier.width(32.dp))
+                            Box(modifier = Modifier.weight(1f)) {
+                                CvvField(
+                                    scrollState,
+                                    coroutineScope,
+                                    scrollToPosition,
+                                    state,
+                                    keyboardController,
+                                    viewModel
+                                )
+                            }
+                        }
+
+                        saveCardCheckBox(state, viewModel)
+                    }
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                    ) {
+                        PayButton(scrollState, state, viewModel)
+                        ScreenFooter()
+                    }
                 }
             }
         }
