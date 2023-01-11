@@ -75,7 +75,7 @@ internal fun DojoExpandableCard(
         ) {
             Text(
                 text = header,
-                style = DojoTheme.typography.body2.medium,
+                style = DojoTheme.typography.body2,
                 color = DojoTheme.colors.secondaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
             Icon(

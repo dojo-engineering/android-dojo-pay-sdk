@@ -178,7 +178,7 @@ private fun BottomSheetItems(
 @Composable
 private fun FooterItem() {
     DojoBrandFooter(
-        modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 24.dp),
+        modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 24.dp),
     )
 }
 
