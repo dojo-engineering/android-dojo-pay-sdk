@@ -1,9 +1,12 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
@@ -35,6 +38,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
+import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
@@ -44,6 +48,7 @@ import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewMod
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun ShowResultSheetScreen(
+    windowSize: WindowSize,
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel
@@ -70,7 +75,8 @@ internal fun ShowResultSheetScreen(
                 state,
                 onCloseFlowClicked,
                 onTryAgainClicked,
-                viewModel
+                viewModel,
+                windowSize
             )
         }
     ) {
@@ -90,7 +96,8 @@ private fun BottomSheetItems(
     state: PaymentResultState,
     onCloseFlowClicker: () -> Unit,
     onTryAgainClicked: () -> Unit,
-    viewModel: PaymentResultViewModel
+    viewModel: PaymentResultViewModel,
+    windowSize: WindowSize
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -104,21 +111,36 @@ private fun BottomSheetItems(
             onCloseFlowClicker()
         }
     )
-    when (state) {
-        is PaymentResultState.SuccessfulResult -> SuccessfulResult(
-            state,
-            coroutineScope,
-            sheetState,
-            onCloseFlowClicker
-        )
-        is PaymentResultState.FailedResult -> HandleFailedResult(
-            state,
-            coroutineScope,
-            sheetState,
-            onCloseFlowClicker,
-            onTryAgainClicked,
-            viewModel
-        )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 40.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (state) {
+                is PaymentResultState.SuccessfulResult -> SuccessfulResult(
+                    state,
+                    coroutineScope,
+                    sheetState,
+                    onCloseFlowClicker
+                )
+                is PaymentResultState.FailedResult -> HandleFailedResult(
+                    state,
+                    coroutineScope,
+                    sheetState,
+                    onCloseFlowClicker,
+                    onTryAgainClicked,
+                    viewModel
+                )
+            }
+        }
     }
 }
 

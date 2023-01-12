@@ -34,7 +34,7 @@ internal fun HorizontalDivider(
 @Composable
 internal fun VerticalDivider(
     modifier: Modifier = Modifier,
-    color: Color =  DojoTheme.colors.separatorColor,
+    color: Color = DojoTheme.colors.separatorColor,
     thickness: Dp = 1.dp,
     paddingTop: Dp = 0.dp,
     paddingBottom: Dp = 0.dp

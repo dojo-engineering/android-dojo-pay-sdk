@@ -99,6 +99,7 @@ dependencies {
     implementation(AndroidX.Logging.TIMBER)
     implementation(AndroidX.Network.GSON)
     implementation(project(":sdk"))
+    implementation(AndroidX.WINDOW)
     testImplementation(TestingLib.JUNIT)
     implementation(CsvReader.csvReader)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
