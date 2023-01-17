@@ -149,7 +149,10 @@ internal fun BasicCardNumberInputField(
             BasicTextField(
                 value = cardNumberValue,
                 onValueChange = {
-                    if (it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) onCardNumberValueChanged(
+                    if ((it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) && isDigit(
+                            it
+                        )
+                    ) onCardNumberValueChanged(
                         it
                     )
                 },
