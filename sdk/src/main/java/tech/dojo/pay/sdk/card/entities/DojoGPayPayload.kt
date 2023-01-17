@@ -16,5 +16,6 @@ data class DojoGPayConfig(
     val collectPhoneNumber: Boolean = false,
     val merchantName: String,
     val merchantId: String,
-    val gatewayMerchantId: String
+    val gatewayMerchantId: String,
+    val allowedCardNetworks: List<CardsSchemes> = emptyList()
 ) : Serializable

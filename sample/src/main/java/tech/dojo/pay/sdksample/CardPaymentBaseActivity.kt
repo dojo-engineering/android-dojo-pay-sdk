@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
@@ -16,7 +17,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdksample.databinding.ActivityCardPaymentBinding
-import tech.dojo.pay.sdksample.token.TokenGenerator
+import tech.dojo.pay.sdksample.token.PaymentIDGenerator
 
 abstract class CardPaymentBaseActivity : AppCompatActivity() {
 
@@ -90,7 +91,13 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                 collectEmailAddress = binding.checkboxEmail.isChecked,
                 merchantName = "Dojo Cafe (Paymentsense)",
                 merchantId = "BCR2DN6T57R5ZI34",
-                gatewayMerchantId = "119784244252745"
+                gatewayMerchantId = "119784244252745",
+                allowedCardNetworks = listOf(
+                    CardsSchemes.AMEX,
+                    CardsSchemes.VISA,
+                    CardsSchemes.MAESTRO,
+                    CardsSchemes.MASTERCARD
+                )
             ),
             { binding.btnGPay.googlePayButton.visibility = View.VISIBLE },
             { binding.btnGPay.googlePayButton.visibility = View.GONE }
@@ -108,7 +115,13 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         collectEmailAddress = binding.checkboxEmail.isChecked,
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
-                        gatewayMerchantId = "119784244252745"
+                        gatewayMerchantId = "119784244252745",
+                        allowedCardNetworks = listOf(
+                            CardsSchemes.AMEX,
+                            CardsSchemes.VISA,
+                            CardsSchemes.MAESTRO,
+                            CardsSchemes.MASTERCARD
+                        )
                     )
                 ),
                 dojoPaymentIntent = DojoPaymentIntent(
@@ -134,7 +147,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
     }
 
     private fun setTokenListener() {
-        DojoSdk.sandbox = binding.checkboxSandbox.isChecked
+        DojoSdk.walletSandBox = binding.checkboxSandbox.isChecked
 
         binding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             binding.btnGenerateToken.visibility = if (isChecked) View.VISIBLE else View.GONE
@@ -146,7 +159,7 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(TokenGenerator.generateToken())
+                    displayToken(PaymentIDGenerator.generatePaymentId().clientSessionSecret)
                 } catch (e: Throwable) {
                     showTokenError(e)
                 } finally {
