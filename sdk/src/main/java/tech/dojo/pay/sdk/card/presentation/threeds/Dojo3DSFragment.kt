@@ -47,9 +47,9 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
                     super.onPageFinished(view, url)
                     webView.loadUrl(
                         "javascript:(function() {" +
-                                "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
-                                " androidListener.receiveMessage(response);" +
-                                "})()"
+                            "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
+                            " androidListener.receiveMessage(response);" +
+                            "})()"
                     )
                 }
             }
