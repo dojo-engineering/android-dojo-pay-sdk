@@ -26,6 +26,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".UiSdkSampleActivity"/>
+
         <activity android:name=".CardPaymentActivity"/>
 
         <activity android:name=".CardPaymentOldSchoolActivity"/>

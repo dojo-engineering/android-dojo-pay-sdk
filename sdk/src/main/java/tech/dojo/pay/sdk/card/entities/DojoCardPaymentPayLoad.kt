@@ -5,6 +5,7 @@ import java.io.Serializable
 sealed class DojoCardPaymentPayLoad : Serializable {
     data class FullCardPaymentPayload(
         val cardDetails: DojoCardDetails,
+        val savePaymentMethod: Boolean? = null,
         val userEmailAddress: String? = null,
         val userPhoneNumber: String? = null,
         val billingAddress: DojoAddressDetails? = null,

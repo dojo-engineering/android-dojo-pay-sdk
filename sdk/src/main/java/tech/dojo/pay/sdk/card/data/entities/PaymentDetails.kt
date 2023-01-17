@@ -3,8 +3,9 @@ package tech.dojo.pay.sdk.card.data.entities
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
-data class PaymentDetails(
+internal data class PaymentDetails(
     val cV2: String?,
+    val savePaymentMethod: Boolean? = null,
     val cardName: String? = null,
     val cardNumber: String? = null,
     val expiryDate: String? = null,

@@ -4,8 +4,9 @@
 
     <application>
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:name=".presentation.PaymentFlowContainerActivity"
+            android:windowSoftInputMode="adjustResize"
+        android:theme="@style/Theme.Transparent" />
     </application>
 
 </manifest>
