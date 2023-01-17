@@ -130,7 +130,7 @@ internal fun BasicCvvInputField(
             BasicTextField(
                 value = cvvValue,
                 onValueChange = {
-                    if (it.text.length < maxCvvChar || it.text.length == maxCvvChar) onCvvValueChanged(
+                    if ((it.text.length < maxCvvChar || it.text.length == maxCvvChar) && isDigit(it)) onCvvValueChanged(
                         it
                     )
                 },

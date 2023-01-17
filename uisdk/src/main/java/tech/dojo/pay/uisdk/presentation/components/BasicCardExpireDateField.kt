@@ -135,7 +135,10 @@ internal fun BasicCardExpireDateField(
             BasicTextField(
                 value = expireDateValue,
                 onValueChange = {
-                    if (it.text.length < expireDataCharLength || it.text.length == expireDataCharLength) onExpireDateValueChanged(
+                    if ((it.text.length < expireDataCharLength || it.text.length == expireDataCharLength) && isDigit(
+                            it
+                        )
+                    ) onExpireDateValueChanged(
                         it
                     )
                 },

@@ -4,12 +4,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.TransformedText
 
 private val ameRegex = Regex("^3[47][0-9]{0,}\$")
 private val visaRegex = Regex("^4[0-9]{0,}\$")
 private val masterCardRegex = Regex("^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[01]|2720)[0-9]{0,}\$")
 private val maestroCardRegex = Regex("^(5[06789]|6)[0-9]{0,}\$")
+private val digitsPattern = Regex("^\\d+\$")
 
 /**
  * This will match if the card number is Amex card or not
@@ -41,6 +43,13 @@ internal fun isMasterCardScheme(cardNumber: String): Boolean {
 internal fun isMaestroCardScheme(cardNumber: String): Boolean {
     val trimmedCardNumber = cardNumber.replace(" ", "")
     return trimmedCardNumber.matches(maestroCardRegex)
+}
+
+/**
+ * This will match if the input value is number of not
+ */
+internal fun isDigit(newValue: TextFieldValue): Boolean {
+    return newValue.text.isEmpty() || newValue.text.matches(digitsPattern)
 }
 
 /**
