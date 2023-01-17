@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
-import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
 internal fun DojoExpandableCard(
