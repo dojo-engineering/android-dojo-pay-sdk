@@ -4,19 +4,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
+    private val cardinalConfigurator: CardinalConfigurator
 ) : Dojo3DSBaseViewModel() {
 
     private val fingerPrintCapturedEvent = Channel<Unit>()
@@ -28,9 +29,6 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 deviceData.value = repository.collectDeviceData()
-                withTimeoutOrNull(FINGERPRINT_TIMEOUT_MILLIS) {
-                    fingerPrintCapturedEvent.receive() // Wait till event is fired
-                }
                 paymentResult.value = repository.processPayment()
                 canExit = true
             } catch (throwable: Throwable) {
