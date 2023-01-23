@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdk.card.presentation.gpay.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
@@ -47,10 +46,6 @@ internal class DojoGPayViewModel(
     }
 
     override fun onValidated(p0: ValidateResponse?, p1: String?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onValidated(p0: Context?, p1: ValidateResponse?, p2: String?) {
         TODO("Not yet implemented")
     }
 }

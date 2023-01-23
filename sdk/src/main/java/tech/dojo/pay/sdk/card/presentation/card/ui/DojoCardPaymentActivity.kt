@@ -51,12 +51,21 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
-        viewModel.configureDCardinalInstance.cca_continue(
-            params.md,
-            params.jwt,
-            this,
-            this.viewModel
-        )
+        try {
+            viewModel.configureDCardinalInstance.cca_continue(
+                params.md,
+                params.jwt,
+                this
+            ) { _, validateResponse, serverJWT ->
+                viewModel.on3dsCompleted(
+                    validateResponse,
+                    serverJWT
+                )
+            }
+        } catch (throwable: Throwable) {
+            viewModel.on3dsCompleted()
+        }
+
     }
 
     override fun onBackPressed() {

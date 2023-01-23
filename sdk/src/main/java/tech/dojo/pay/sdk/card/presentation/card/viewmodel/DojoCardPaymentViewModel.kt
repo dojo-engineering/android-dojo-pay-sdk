@@ -1,6 +1,5 @@
 package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
@@ -31,12 +30,14 @@ internal class DojoCardPaymentViewModel(
             try {
                 deviceData.value = repository.collectDeviceData()
             } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                postPaymentFieldToUI()
             }
         }
     }
 
-    fun initCardinal() { configureDCardinalInstance.init(deviceData.value?.token, this) }
+    fun initCardinal() {
+        configureDCardinalInstance.init(deviceData.value?.token, this)
+    }
 
     override fun onSetupCompleted(consumerSessionId: String?) {
         viewModelScope.launch {
@@ -44,28 +45,31 @@ internal class DojoCardPaymentViewModel(
                 paymentResult.value = repository.processPayment()
                 canExit = true
             } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                postPaymentFieldToUI()
             }
         }
     }
 
     override fun onValidated(validateResponse: ValidateResponse?, serverJwt: String?) {
-        paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+        postPaymentFieldToUI()
     }
 
-    override fun onValidated(
-        context: Context?,
-        validateResponse: ValidateResponse?,
-        serverJWT: String?
+    fun on3dsCompleted(
+        validateResponse: ValidateResponse? = null,
+        serverJWT: String? = null
     ) {
         viewModelScope.launch {
             try {
                 paymentResult.value = repository.processAuthorization(serverJWT ?: "")
                 canExit = true
             } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                postPaymentFieldToUI()
             }
         }
+    }
+
+    private fun postPaymentFieldToUI() {
+        paymentResult.value = PaymentResult.Completed(DojoPaymentResult.FAILED)
     }
 
 
