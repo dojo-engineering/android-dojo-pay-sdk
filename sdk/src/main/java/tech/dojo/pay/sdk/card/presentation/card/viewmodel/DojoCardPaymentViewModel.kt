@@ -41,13 +41,13 @@ internal class DojoCardPaymentViewModel(
     fun initCardinal() { configureDCardinalInstance.init(deviceData.value?.token, this) }
 
     override fun onSetupCompleted(consumerSessionId: String?) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 paymentResult.value = repository.processPayment()
                 canExit = true
+            } catch (throwable: Throwable) {
+                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
-        } catch (throwable: Throwable) {
-            paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 
@@ -55,18 +55,18 @@ internal class DojoCardPaymentViewModel(
         paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
     }
 
-    override fun onValidated(context: Context?, validateResponse: ValidateResponse?, serverJWT: String?) {
-        if (validateResponse?.actionCode== CardinalActionCode.SUCCESS && !serverJWT.isNullOrBlank()){
+    override fun onValidated(
+        context: Context?,
+        validateResponse: ValidateResponse?,
+        serverJWT: String?
+    ) {
+        viewModelScope.launch {
             try {
-                viewModelScope.launch {
-                    paymentResult.value = repository.processAuthorization(serverJWT)
-                    canExit = true
-                }
+                paymentResult.value = repository.processAuthorization(serverJWT ?: "")
+                canExit = true
             } catch (throwable: Throwable) {
                 paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
-        }else{
-            paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 
