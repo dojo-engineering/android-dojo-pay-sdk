@@ -12,7 +12,7 @@ import org.json.JSONArray
 class CardinalConfigurator(private val context: Context) {
 
 
-    fun configureCardinal(): Cardinal {
+    fun getConfiguredCardinalInstance(): Cardinal {
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
         cardinalConfigurationParameters.environment = CardinalEnvironment.STAGING

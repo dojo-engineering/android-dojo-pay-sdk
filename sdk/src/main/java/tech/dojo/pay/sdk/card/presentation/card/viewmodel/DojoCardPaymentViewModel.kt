@@ -1,7 +1,10 @@
 package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.cardinalcommerce.cardinalmobilesdk.models.CardinalActionCode
+import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -17,8 +20,8 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
-    private val cardinalConfigurator: CardinalConfigurator
-) : Dojo3DSBaseViewModel() {
+    cardinalConfigurator: CardinalConfigurator
+) : Dojo3DSBaseViewModel(cardinalConfigurator) {
 
     private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
@@ -29,13 +32,44 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 deviceData.value = repository.collectDeviceData()
-                paymentResult.value = repository.processPayment()
-                canExit = true
             } catch (throwable: Throwable) {
                 paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
             }
         }
     }
+
+    fun initCardinal() { configureDCardinalInstance.init(deviceData.value?.token, this) }
+
+    override fun onSetupCompleted(consumerSessionId: String?) {
+        try {
+            viewModelScope.launch {
+                paymentResult.value = repository.processPayment()
+                canExit = true
+            }
+        } catch (throwable: Throwable) {
+            paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+        }
+    }
+
+    override fun onValidated(validateResponse: ValidateResponse?, serverJwt: String?) {
+        paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+    }
+
+    override fun onValidated(context: Context?, validateResponse: ValidateResponse?, serverJWT: String?) {
+        if (validateResponse?.actionCode== CardinalActionCode.SUCCESS && !serverJWT.isNullOrBlank()){
+            try {
+                viewModelScope.launch {
+                    paymentResult.value = repository.processAuthorization(serverJWT)
+                    canExit = true
+                }
+            } catch (throwable: Throwable) {
+                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+            }
+        }else{
+            paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+        }
+    }
+
 
     fun onFingerprintCaptured() {
         fingerPrintCapturedEvent.trySend(Unit)

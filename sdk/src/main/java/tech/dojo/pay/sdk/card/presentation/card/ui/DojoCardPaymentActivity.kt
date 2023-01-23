@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.commit
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
@@ -14,7 +13,6 @@ import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModel
 import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewModelFactory
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
-import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
 internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHost {
@@ -32,11 +30,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
     }
 
     private fun observeDeviceData() {
-        viewModel.deviceData.observe(this) { deviceData ->
-            supportFragmentManager.commit {
-                add(R.id.container, DojoFingerPrintFragment.newInstance(deviceData))
-            }
-        }
+        viewModel.deviceData.observe(this) { viewModel.initCardinal() }
     }
 
     private fun observeResult() {
@@ -57,10 +51,12 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
-        supportFragmentManager.commit {
-            setCustomAnimations(R.anim.enter, 0)
-            replace(R.id.container, Dojo3DSFragment.newInstance(params))
-        }
+        viewModel.configureDCardinalInstance.cca_continue(
+            params.md,
+            params.jwt,
+            this,
+            this.viewModel
+        )
     }
 
     override fun onBackPressed() {

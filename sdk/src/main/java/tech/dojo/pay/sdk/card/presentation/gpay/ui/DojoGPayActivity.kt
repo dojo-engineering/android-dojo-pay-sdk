@@ -30,7 +30,7 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoGPayViewModel by viewModels {
-        DojoGPayViewModelFactory(intent.extras)
+        DojoGPayViewModelFactory(intent.extras,this)
     }
     override val threeDSViewModel: Dojo3DSBaseViewModel by lazy { viewModel }
 

@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card.presentation.gpay.viewmodel
 
+import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,9 +11,12 @@ import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 
 internal class DojoGPayViewModelFactory(
-    private val arguments: Bundle?
+    private val arguments: Bundle?,
+    private val context: Context
+
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -24,6 +28,8 @@ internal class DojoGPayViewModelFactory(
         val repo = GPayRepository(api, params.dojoPaymentIntent.token)
         val dojo3DSRepository = Dojo3DSRepository(api)
         val mapper = GpayPaymentRequestMapper(Gson())
-        return DojoGPayViewModel(repo, dojo3DSRepository, mapper) as T
+        val cardinalConfigurator= CardinalConfigurator(context)
+
+        return DojoGPayViewModel(repo, dojo3DSRepository, mapper,cardinalConfigurator) as T
     }
 }
