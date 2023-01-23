@@ -8,8 +8,7 @@ plugins {
     kotlin("android")
     publish
 }
-val cardinalCredentialsPropertiesFile = Properties()
-cardinalCredentialsPropertiesFile.load(FileInputStream(rootProject.file("cardinal.properties")))
+
 android {
     compileSdk = 32
 
@@ -44,18 +43,6 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
-
-    repositories {
-        maven {
-            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
-            credentials {
-                username = cardinalCredentialsPropertiesFile["jfrog.user"] as String
-                password = cardinalCredentialsPropertiesFile["jfrog.key"] as String
-            }
-        }
-        google()
-        mavenCentral()
-    }
 }
 
 dependencies {
@@ -70,7 +57,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("com.google.android.material:material:1.5.0")
     implementation("com.google.android.gms:play-services-wallet:19.1.0") // GPay
-    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.6-1") // cardinal
+    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2") // cardinal
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")

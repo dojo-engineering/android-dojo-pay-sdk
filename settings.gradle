@@ -6,7 +6,15 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven{
+            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
+            credentials {
+                username= "cybersource_paymentsense_deniss_kaibagarovs"
+                password ="Cardinal1234!"
+            }
+        }
         google()
         mavenCentral()
     }
