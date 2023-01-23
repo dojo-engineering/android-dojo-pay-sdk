@@ -28,8 +28,9 @@ internal class DojoGPayViewModelFactory(
         val repo = GPayRepository(api, params.dojoPaymentIntent.token)
         val dojo3DSRepository = Dojo3DSRepository(api)
         val mapper = GpayPaymentRequestMapper(Gson())
-        val cardinalConfigurator= CardinalConfigurator(context)
+        val cardinalConfigurator = CardinalConfigurator(context)
+        val configuredCardinalInstance = cardinalConfigurator.getConfiguredCardinalInstance()
 
-        return DojoGPayViewModel(repo, dojo3DSRepository, mapper,cardinalConfigurator) as T
+        return DojoGPayViewModel(repo, dojo3DSRepository, mapper, configuredCardinalInstance) as T
     }
 }

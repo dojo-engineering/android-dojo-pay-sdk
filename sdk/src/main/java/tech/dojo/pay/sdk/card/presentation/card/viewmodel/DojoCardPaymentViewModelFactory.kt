@@ -25,6 +25,7 @@ internal class DojoCardPaymentViewModelFactory(
         val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
         val dojo3DSRepository = Dojo3DSRepository(api)
         val cardinalConfigurator= CardinalConfigurator(context)
-        return DojoCardPaymentViewModel(repo, dojo3DSRepository, cardinalConfigurator) as T
+        val configuredCardinalInstance= cardinalConfigurator.getConfiguredCardinalInstance()
+        return DojoCardPaymentViewModel(repo, dojo3DSRepository, configuredCardinalInstance) as T
     }
 }

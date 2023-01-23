@@ -2,6 +2,7 @@ package tech.dojo.pay.sdk.card.presentation.gpay.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.cardinalcommerce.cardinalmobilesdk.Cardinal
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -10,7 +11,6 @@ import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
@@ -18,8 +18,8 @@ internal class DojoGPayViewModel(
     private val repository: GPayRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
     private val gpayPaymentRequestMapper: GpayPaymentRequestMapper,
-    cardinalConfigurator: CardinalConfigurator
-) : Dojo3DSBaseViewModel(cardinalConfigurator) {
+    configuredCardinalInstance: Cardinal
+) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
     val paymentResult = MutableLiveData<PaymentResult>()
     var canExit: Boolean = false // User should not be able to leave while request is not completed
 

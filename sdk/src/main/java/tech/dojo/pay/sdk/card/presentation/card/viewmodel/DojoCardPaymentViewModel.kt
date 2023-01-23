@@ -2,6 +2,7 @@ package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.cardinalcommerce.cardinalmobilesdk.Cardinal
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -10,15 +11,14 @@ import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
-    cardinalConfigurator: CardinalConfigurator
-) : Dojo3DSBaseViewModel(cardinalConfigurator) {
+    configuredCardinalInstance: Cardinal
+) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
 
     private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
