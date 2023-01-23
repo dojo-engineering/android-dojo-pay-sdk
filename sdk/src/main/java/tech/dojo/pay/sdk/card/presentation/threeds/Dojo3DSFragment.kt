@@ -37,30 +37,30 @@ internal class Dojo3DSFragment private constructor() : Fragment() {
         view.findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             activity?.onBackPressed()
         }
-
-        webView = view.findViewById<WebView>(R.id.webView).apply {
-            settings.javaScriptEnabled = true
-            settings.useWideViewPort = true
-            addJavascriptInterface(ThreeDsInterface(viewModel::on3DSCompleted), "androidListener")
-            webViewClient = object : WebViewClient() {
-                override fun onPageFinished(view: WebView, url: String) {
-                    super.onPageFinished(view, url)
-                    webView.loadUrl(
-                        "javascript:(function() {" +
-                            "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
-                            " androidListener.receiveMessage(response);" +
-                            "})()"
-                    )
-                }
-            }
-        }
-
-        viewModel.threeDsPage.observe(viewLifecycleOwner) {
-            val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
-            webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
-        }
-
-        viewModel.fetchThreeDsPage(params)
+//
+//        webView = view.findViewById<WebView>(R.id.webView).apply {
+//            settings.javaScriptEnabled = true
+//            settings.useWideViewPort = true
+//            addJavascriptInterface(ThreeDsInterface(viewModel::on3DSCompleted), "androidListener")
+//            webViewClient = object : WebViewClient() {
+//                override fun onPageFinished(view: WebView, url: String) {
+//                    super.onPageFinished(view, url)
+//                    webView.loadUrl(
+//                        "javascript:(function() {" +
+//                            "var response = document.getElementById('psThreeDSecureResponse').value;\n" +
+//                            " androidListener.receiveMessage(response);" +
+//                            "})()"
+//                    )
+//                }
+//            }
+//        }
+//
+//        viewModel.threeDsPage.observe(viewLifecycleOwner) {
+//            val page = it.replace("<head>", "<head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">")
+//            webView.loadDataWithBaseURL(null, page, "text/html", "utf-8", null)
+//        }
+//
+//        viewModel.fetchThreeDsPage(params)
     }
 
     companion object {

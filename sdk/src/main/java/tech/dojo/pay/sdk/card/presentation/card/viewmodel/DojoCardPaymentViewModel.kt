@@ -3,7 +3,6 @@ package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.cardinalcommerce.cardinalmobilesdk.models.CardinalActionCode
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -12,7 +11,6 @@ import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
@@ -73,20 +71,6 @@ internal class DojoCardPaymentViewModel(
 
     fun onFingerprintCaptured() {
         fingerPrintCapturedEvent.trySend(Unit)
-    }
-
-    override fun on3DSCompleted(result: DojoPaymentResult) {
-        paymentResult.postValue(PaymentResult.Completed(result))
-    }
-
-    override fun fetchThreeDsPage(params: ThreeDSParams) {
-        viewModelScope.launch {
-            try {
-                threeDsPage.value = dojo3DSRepository.fetch3dsPage(params)
-            } catch (e: Exception) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
-            }
-        }
     }
 
     companion object {

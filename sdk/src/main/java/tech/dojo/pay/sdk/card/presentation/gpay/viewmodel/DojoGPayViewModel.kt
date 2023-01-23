@@ -11,7 +11,6 @@ import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
@@ -42,19 +41,6 @@ internal class DojoGPayViewModel(
         }
     }
 
-    override fun on3DSCompleted(result: DojoPaymentResult) {
-        paymentResult.postValue(PaymentResult.Completed(result))
-    }
-
-    override fun fetchThreeDsPage(params: ThreeDSParams) {
-        viewModelScope.launch {
-            try {
-                threeDsPage.value = dojo3DSRepository.fetch3dsPage(params)
-            } catch (e: Exception) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
-            }
-        }
-    }
 
     override fun onSetupCompleted(p0: String?) {
         TODO("Not yet implemented")
