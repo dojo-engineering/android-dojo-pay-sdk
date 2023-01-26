@@ -1,12 +1,6 @@
 package tech.dojo.pay.sdk.card.data.remote.cardpayment
 
-import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Url
+import retrofit2.http.*
 import tech.dojo.pay.sdk.card.data.entities.*
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
@@ -27,6 +21,7 @@ internal interface CardPaymentApi {
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): PaymentResponse
 
+    @Headers("Content-Type: application/json")
     @POST("payments/{token}/ThreeDSecureComplete")
     suspend fun processAuthorization(
         @Path("token") token: String,
