@@ -13,14 +13,14 @@ import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 
 internal interface CardPaymentApi {
 
-    @POST("device-data/{token}")
+    @POST("api/device-data/{token}")
     suspend fun collectDeviceData(
         @Path("token") token: String,
         @Body payload: PaymentDetails,
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): DeviceData
 
-    @POST("payments/{token}")
+    @POST("api/payments/{token}")
     suspend fun processPaymentForFullCard(
         @Path("token") token: String,
         @Body payload: PaymentDetails,
@@ -33,7 +33,7 @@ internal interface CardPaymentApi {
         @Body payload: AuthorizationBody,
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): PaymentResponse
-    @POST("payments/recurring/{token}")
+    @POST("api/payments/recurring/{token}")
     suspend fun processPaymentForSaverCard(
         @Path("token") token: String,
         @Body payload: PaymentDetails
@@ -47,7 +47,7 @@ internal interface CardPaymentApi {
         @Field("MD") md: String
     ): String
 
-    @POST("payments/{token}/google-pay")
+    @POST("api/payments/{token}/google-pay")
     suspend fun processGPay(
         @Path("token") token: String,
         @Body payload: GPayDetails
