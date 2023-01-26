@@ -14,7 +14,7 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
-    configuredCardinalInstance: Cardinal
+    private val configuredCardinalInstance: Cardinal
 ) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
 
     val paymentResult = MutableLiveData<PaymentResult>()
