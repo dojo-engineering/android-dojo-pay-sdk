@@ -4,11 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cardinalcommerce.cardinalmobilesdk.Cardinal
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
-import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
@@ -16,11 +14,9 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
     private val repository: CardPaymentRepository,
-    private val dojo3DSRepository: Dojo3DSRepository,
     configuredCardinalInstance: Cardinal
 ) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
 
-    private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false // User should not be able to leave while request is not completed
@@ -70,14 +66,5 @@ internal class DojoCardPaymentViewModel(
 
     private fun postPaymentFieldToUI() {
         paymentResult.value = PaymentResult.Completed(DojoPaymentResult.FAILED)
-    }
-
-
-    fun onFingerprintCaptured() {
-        fingerPrintCapturedEvent.trySend(Unit)
-    }
-
-    companion object {
-        const val FINGERPRINT_TIMEOUT_MILLIS = 15000L
     }
 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
-import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.presentation.threeds.CardinalConfigurator
@@ -23,9 +22,8 @@ internal class DojoCardPaymentViewModelFactory(
             args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams
         val api = CardPaymentApiBuilder().create()
         val repo = CardPaymentRepository(api, params.token, params.paymentPayload)
-        val dojo3DSRepository = Dojo3DSRepository(api)
         val cardinalConfigurator= CardinalConfigurator(context)
         val configuredCardinalInstance= cardinalConfigurator.getConfiguredCardinalInstance()
-        return DojoCardPaymentViewModel(repo, dojo3DSRepository, configuredCardinalInstance) as T
+        return DojoCardPaymentViewModel(repo, configuredCardinalInstance) as T
     }
 }
