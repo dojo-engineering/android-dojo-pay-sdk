@@ -17,9 +17,8 @@ import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 
 class UiSdkSampleActivity : AppCompatActivity() {
     private lateinit var uiSdkSampleBinding: ActivityUiSdkSampleBinding
-    private val dojoPayUI = DojoSDKDropInUI.createUIPaymentHandler(this) { result ->
-        showResult(result)
-    }
+    private val dojoPayUI =
+        DojoSDKDropInUI.createUIPaymentHandler(this) { result -> showResult(result) }
 
     var secret = ""
 
@@ -29,6 +28,22 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(uiSdkSampleBinding.root)
         setTokenListener()
         setCustomerCreationListener()
+        // using onActivityResult
+//        uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
+//
+//            DojoSDKDropInUI.startUIPaymentFlowForResult(
+//                this, DojoPaymentFlowParams(
+//                    uiSdkSampleBinding.token.text.toString(),
+//                    secret,
+//                    GPayConfig = DojoGPayConfig(
+//                        merchantName = "Dojo Cafe (Paymentsense)",
+//                        merchantId = "BCR2DN6T57R5ZI34",
+//                        gatewayMerchantId = "119784244252745"
+//                    )
+//                )
+//            )
+//        }
+
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = null
             dojoPayUI.startPaymentFlow(
@@ -40,9 +55,20 @@ class UiSdkSampleActivity : AppCompatActivity() {
                         merchantId = "BCR2DN6T57R5ZI34",
                         gatewayMerchantId = "119784244252745"
                     )
-                ),
-
+                )
             )
+//
+//            DojoSDKDropInUI.startUIPaymentFlowForResult(
+//                this, DojoPaymentFlowParams(
+//                    uiSdkSampleBinding.token.text.toString(),
+//                    secret,
+//                    GPayConfig = DojoGPayConfig(
+//                        merchantName = "Dojo Cafe (Paymentsense)",
+//                        merchantId = "BCR2DN6T57R5ZI34",
+//                        gatewayMerchantId = "119784244252745"
+//                    )
+//                )
+//            )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
@@ -60,6 +86,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
     }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        val result = DojoSDKDropInUI.parseUIPaymentFlowResult(requestCode, resultCode, data)
+//        if (result!= null ) showResult(result)
+//    }
 
     private fun setTokenListener() {
         DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
