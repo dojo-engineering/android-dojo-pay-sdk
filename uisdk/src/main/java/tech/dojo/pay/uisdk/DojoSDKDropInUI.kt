@@ -26,7 +26,7 @@ object DojoSDKDropInUI {
 
 
     /**
-     * Starts UI FLOW.
+     * Starts payment  UI FLOW.
      * You should receive result via onActivityResult callback
      * if you call this directly with out using the handler.
      */
