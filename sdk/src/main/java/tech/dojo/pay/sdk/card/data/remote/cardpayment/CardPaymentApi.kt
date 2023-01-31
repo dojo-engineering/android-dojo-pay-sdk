@@ -21,7 +21,7 @@ internal interface CardPaymentApi {
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): PaymentResponse
 
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("payments/{token}/ThreeDSecureComplete")
     suspend fun processAuthorization(
         @Path("token") token: String,
