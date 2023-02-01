@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
-import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
+import tech.dojo.pay.sdk.card.data.GPayTokenDecryptionRequestMapper
 import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
@@ -25,12 +25,11 @@ internal class DojoGPayViewModelFactory(
         val params =
             args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoGPayParams
         val api = CardPaymentApiBuilder().create()
-        val repo = GPayRepository(api, params.dojoPaymentIntent.token)
-        val dojo3DSRepository = Dojo3DSRepository(api)
-        val mapper = GpayPaymentRequestMapper(Gson())
+        val gPayRepository = GPayRepository(api, params.dojoPaymentIntent.token)
+        val gpayPaymentRequestMapper = GpayPaymentRequestMapper(Gson())
+        val gPayTokenDecryptionRequestMapper= GPayTokenDecryptionRequestMapper(Gson())
         val cardinalConfigurator = CardinalConfigurator(context)
         val configuredCardinalInstance = cardinalConfigurator.getConfiguredCardinalInstance()
-
-        return DojoGPayViewModel(repo, dojo3DSRepository, mapper, configuredCardinalInstance) as T
+        return DojoGPayViewModel(gPayRepository, gPayTokenDecryptionRequestMapper, gpayPaymentRequestMapper, configuredCardinalInstance) as T
     }
 }

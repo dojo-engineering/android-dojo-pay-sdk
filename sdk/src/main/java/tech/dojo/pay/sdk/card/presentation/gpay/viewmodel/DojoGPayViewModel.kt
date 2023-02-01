@@ -6,8 +6,8 @@ import com.cardinalcommerce.cardinalmobilesdk.Cardinal
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
-import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.GPayRepository
+import tech.dojo.pay.sdk.card.data.GPayTokenDecryptionRequestMapper
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
@@ -16,7 +16,7 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoGPayViewModel(
     private val repository: GPayRepository,
-    private val dojo3DSRepository: Dojo3DSRepository,
+    private val gPayTokenDecryptionRequestMapper: GPayTokenDecryptionRequestMapper,
     private val gpayPaymentRequestMapper: GpayPaymentRequestMapper,
     configuredCardinalInstance: Cardinal
 ) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
