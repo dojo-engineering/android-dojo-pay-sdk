@@ -56,10 +56,10 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
                 params.md,
                 params.jwt,
                 this
-            ) { _, validateResponse, serverJWT ->
+            ) { _, _, serverJWT ->
                 viewModel.on3dsCompleted(
-                    validateResponse,
-                    serverJWT
+                    serverJWT,
+                    params.md
                 )
             }
         } catch (throwable: Throwable) {

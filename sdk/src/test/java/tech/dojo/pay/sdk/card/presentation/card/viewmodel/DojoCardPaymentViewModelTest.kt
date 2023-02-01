@@ -140,7 +140,7 @@ internal class DojoCardPaymentViewModelTest {
         // act
         viewModel.on3dsCompleted()
         // assert
-        verify(repository).processAuthorization(any())
+        verify(repository).processAuthorization(any(), any())
     }
 
     @Test
@@ -150,7 +150,7 @@ internal class DojoCardPaymentViewModelTest {
             val deviceData = DeviceData("action", "token")
             val result = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
             whenever(repository.collectDeviceData()).thenReturn(deviceData)
-            whenever(repository.processAuthorization(any())).thenReturn(result)
+            whenever(repository.processAuthorization(any(), any())).thenReturn(result)
             val viewModel = DojoCardPaymentViewModel(repository, configuredCardinalInstance)
             // act
             viewModel.on3dsCompleted()
@@ -166,7 +166,7 @@ internal class DojoCardPaymentViewModelTest {
             val deviceData = DeviceData("action", "token")
             val result = PaymentResult.Completed(DojoPaymentResult.FAILED)
             whenever(repository.collectDeviceData()).thenReturn(deviceData)
-            whenever(repository.processAuthorization(any())).thenThrow(IllegalArgumentException())
+            whenever(repository.processAuthorization(any(), any())).thenThrow(IllegalArgumentException())
             val viewModel = DojoCardPaymentViewModel(repository, configuredCardinalInstance)
             // act
             viewModel.on3dsCompleted()
