@@ -12,6 +12,8 @@ import tech.dojo.pay.sdk.card.data.entities.GPayDetails
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenResponse
 
 internal interface CardPaymentApi {
 
@@ -41,6 +43,12 @@ internal interface CardPaymentApi {
         @Path("token") token: String,
         @Body payload: PaymentDetails
     ): PaymentResponse
+
+    @POST("api/payments/{token}/google-pay/decrypt-token")
+    suspend fun decryptGPayToken(
+        @Path("token") token: String,
+        @Body payload: DecryptGPayTokenBody
+    ): DecryptGPayTokenResponse
 
     @POST
     @FormUrlEncoded
