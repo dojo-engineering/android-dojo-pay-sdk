@@ -29,7 +29,7 @@ internal class DojoGPayViewModelFactory(
         val api = CardPaymentApiBuilder().create()
         val gPayRepository = GPayRepository(api, params.dojoPaymentIntent.token)
         val gpayPaymentRequestMapper = GpayPaymentRequestMapper(Gson())
-        val gPayTokenDecryptionRequestMapper = GPayTokenDecryptionRequestMapper(Gson())
+        val gPayTokenDecryptionRequestMapper = GPayTokenDecryptionRequestMapper()
         val cardinalConfigurator = CardinalConfigurator(context)
         val configuredCardinalInstance = cardinalConfigurator.getConfiguredCardinalInstance()
         val dojo3DSRepository = Dojo3DSRepository(api, params.dojoPaymentIntent.token)
