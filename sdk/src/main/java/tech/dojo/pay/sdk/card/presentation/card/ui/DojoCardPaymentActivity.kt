@@ -65,7 +65,6 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
         } catch (throwable: Throwable) {
             viewModel.on3dsCompleted()
         }
-
     }
 
     override fun onBackPressed() {
