@@ -47,7 +47,8 @@ internal interface CardPaymentApi {
     @POST("api/payments/{token}/google-pay/decrypt-token")
     suspend fun decryptGPayToken(
         @Path("token") token: String,
-        @Body payload: DecryptGPayTokenBody
+        @Body payload: DecryptGPayTokenBody,
+        @Header("IS-MOBILE") isMobile: Boolean = true,
     ): DecryptGPayTokenResponse
 
     @POST
