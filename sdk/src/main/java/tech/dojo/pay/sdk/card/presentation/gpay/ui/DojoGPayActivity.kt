@@ -117,10 +117,11 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
                 params.md,
                 params.jwt,
                 this
-            ) { _, _, serverJWT ->
+            ) { _, validateResponse, serverJWT ->
                 viewModel.on3dsCompleted(
                     serverJWT,
-                    params.md
+                    params.md,
+                    validateResponse
                 )
             }
         } catch (throwable: Throwable) {

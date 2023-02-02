@@ -58,12 +58,17 @@ internal class DojoCardPaymentViewModel(
 
     fun on3dsCompleted(
         serverJWT: String? = null,
-        transactionId: String? = null
+        transactionId: String? = null,
+        validateResponse: ValidateResponse? = null
     ) {
         viewModelScope.launch {
             try {
                 paymentResult.value =
-                    dojo3DSRepository.processAuthorization(serverJWT ?: "", transactionId ?: "")
+                    dojo3DSRepository.processAuthorization(
+                        serverJWT ?: "",
+                        transactionId ?: "",
+                        validateResponse
+                    )
                 canExit = true
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()
