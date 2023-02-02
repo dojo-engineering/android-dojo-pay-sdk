@@ -1,8 +1,7 @@
 package tech.dojo.pay.sdk.card.data
 
 import tech.dojo.pay.sdk.DojoPaymentResult
-import tech.dojo.pay.sdk.card.data.entities.AuthorizationBody
-import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.data.mappers.CardPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.PaymentResult
@@ -16,9 +15,6 @@ internal class CardPaymentRepository(
 ) {
 
     private val paymentDetails = requestMapper.mapToPaymentDetails(payload)
-
-    suspend fun collectDeviceData(): DeviceData =
-        api.collectDeviceData(token, paymentDetails)
 
     suspend fun processPayment(): PaymentResult {
         val response = processCardPaymentCall()
@@ -35,12 +31,6 @@ internal class CardPaymentRepository(
         } else {
             PaymentResult.Completed(paymentResult)
         }
-    }
-
-    suspend fun processAuthorization(jwt: String, transactionId: String): PaymentResult {
-        val response = api.processAuthorization(token, AuthorizationBody(jwt, transactionId))
-        val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
-        return PaymentResult.Completed(paymentResult)
     }
 
     private suspend fun processCardPaymentCall() =

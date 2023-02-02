@@ -7,13 +7,19 @@ import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
+import tech.dojo.pay.sdk.card.data.DeviceDataRepository
+import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
-    private val repository: CardPaymentRepository,
+    private val cardPaymentRepository: CardPaymentRepository,
+    private val dojo3DSRepository: Dojo3DSRepository,
+    private val deviceDataRepository: DeviceDataRepository,
+    private val dojoCardPaymentPayLoad: DojoCardPaymentPayLoad,
     private val configuredCardinalInstance: Cardinal
 ) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
 
@@ -24,7 +30,7 @@ internal class DojoCardPaymentViewModel(
     init {
         viewModelScope.launch {
             try {
-                deviceData.value = repository.collectDeviceData()
+                deviceData.value = deviceDataRepository.collectDeviceData(dojoCardPaymentPayLoad)
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()
             }
@@ -38,7 +44,7 @@ internal class DojoCardPaymentViewModel(
     override fun onSetupCompleted(consumerSessionId: String?) {
         viewModelScope.launch {
             try {
-                paymentResult.value = repository.processPayment()
+                paymentResult.value = cardPaymentRepository.processPayment()
                 canExit = true
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()
@@ -52,11 +58,12 @@ internal class DojoCardPaymentViewModel(
 
     fun on3dsCompleted(
         serverJWT: String? = null,
-        transactionId:String?= null
+        transactionId: String? = null
     ) {
         viewModelScope.launch {
             try {
-                paymentResult.value = repository.processAuthorization(serverJWT ?: "",transactionId?: "")
+                paymentResult.value =
+                    dojo3DSRepository.processAuthorization(serverJWT ?: "", transactionId ?: "")
                 canExit = true
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()

@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad

@@ -14,6 +14,7 @@ import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.dojoGPayPayl
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.shippingAddressJson
 import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.shippingContact
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
 
 @OptIn(ExperimentalCoroutinesApi::class)

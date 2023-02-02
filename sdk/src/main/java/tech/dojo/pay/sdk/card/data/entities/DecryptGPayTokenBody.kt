@@ -1,6 +1,6 @@
 package tech.dojo.pay.sdk.card.data.entities
 
-data class DecryptGPayTokenBody(
+internal data class DecryptGPayTokenBody(
     val protocolVersion: String,
     val signature: String,
     val intermediateSigningKey: IntermediateSigningKey,
@@ -8,7 +8,7 @@ data class DecryptGPayTokenBody(
 
 )
 
-data class IntermediateSigningKey(
+internal data class IntermediateSigningKey(
     val signedKey: String,
     val signatures: List<String>
 )

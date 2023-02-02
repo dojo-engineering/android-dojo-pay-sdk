@@ -1,10 +1,10 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
 import com.google.gson.Gson
 import org.json.JSONObject
 import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
 
-class GPayTokenDecryptionRequestMapper(private val gson: Gson) {
+internal class GPayTokenDecryptionRequestMapper(private val gson: Gson) {
     fun apply(
         paymentInformationJson: String
     ): DecryptGPayTokenBody? {
