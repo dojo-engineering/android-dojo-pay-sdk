@@ -27,8 +27,8 @@ internal class DojoGPayViewModel(
     private val gpayPaymentRequestMapper: GpayPaymentRequestMapper,
     configuredCardinalInstance: Cardinal
 ) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
-    private lateinit var googlePayData: String
-    private lateinit var dojoGooglePayParams: DojoGPayParams
+    private var googlePayData: String? = null
+    private var dojoGooglePayParams: DojoGPayParams? = null
     val paymentResult = MutableLiveData<PaymentResult>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false // User should not be able to leave while request is not completed
@@ -44,8 +44,8 @@ internal class DojoGPayViewModel(
                         gPayRepository.decryptGPayToken(decryptGPayTokenBody)
                     handleDecryptedGPayTokenParams(
                         decryptedGPayTokenParams,
-                        googlePayData,
-                        dojoGooglePayParams
+                        gPayData,
+                        dojoGPayParams
                     )
                 } else {
                     postPaymentFieldToUI()
@@ -66,7 +66,6 @@ internal class DojoGPayViewModel(
             AuthMethod.CRYPTOGRAM_3DS -> handleCryptogram3ds(googlePayData, dojoGPayParams)
             AuthMethod.PAN_ONLY -> handlePanOnly(decryptedGPayTokenParams)
             else -> postPaymentFieldToUI()
-
         }
     }
 
@@ -97,7 +96,11 @@ internal class DojoGPayViewModel(
     override fun onSetupCompleted(consumerSessionId: String?) {
         viewModelScope.launch {
             try {
-                processPayment(googlePayData, dojoGooglePayParams)
+                if (googlePayData != null && dojoGooglePayParams != null) {
+                    dojoGooglePayParams?.let { processPayment(googlePayData ?: "", it) }
+                } else {
+                    postPaymentFieldToUI()
+                }
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()
             }
