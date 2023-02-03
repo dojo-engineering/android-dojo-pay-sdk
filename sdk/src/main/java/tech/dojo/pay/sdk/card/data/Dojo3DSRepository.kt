@@ -3,6 +3,7 @@ package tech.dojo.pay.sdk.card.data
 import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.entities.AuthorizationBody
+import tech.dojo.pay.sdk.card.data.entities.ValidateCardinalResponse
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 
@@ -16,7 +17,17 @@ internal class Dojo3DSRepository(
         validateResponse: ValidateResponse?
     ): PaymentResult {
         val response =
-            api.processAuthorization(token, AuthorizationBody(jwt, transactionId, validateResponse))
+            api.processAuthorization(
+                token, AuthorizationBody(
+                    jwt, transactionId,
+                    ValidateCardinalResponse(
+                        isValidated = validateResponse?.isValidated,
+                        errorNumber = validateResponse?.errorNumber,
+                        errorDescription = validateResponse?.errorDescription ?: "",
+                        actionCode = validateResponse?.actionCode?.string ?: ""
+                    )
+                )
+            )
         val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
         return PaymentResult.Completed(paymentResult)
     }
