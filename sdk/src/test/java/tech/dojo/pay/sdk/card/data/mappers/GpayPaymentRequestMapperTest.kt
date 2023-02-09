@@ -1,23 +1,20 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
 import com.google.gson.Gson
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.billingAddressJson
-import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.billingContact
-import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.dojoGPayPayload
-import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.shippingAddressJson
-import tech.dojo.pay.sdk.card.data.GpayPaymentRequestMapperTestData.shippingContact
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapperTestData.billingAddressJson
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapperTestData.billingContact
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapperTestData.dojoGPayPayload
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapperTestData.shippingAddressJson
+import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapperTestData.shippingContact
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
-import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 internal class GpayPaymentRequestMapperTest {
 

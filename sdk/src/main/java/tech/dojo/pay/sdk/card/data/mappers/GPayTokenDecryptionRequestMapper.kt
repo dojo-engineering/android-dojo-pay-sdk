@@ -11,12 +11,8 @@ internal class GPayTokenDecryptionRequestMapper {
         return try {
             if (gpayToken != null) {
                 DecryptGPayTokenBody(gpayToken)
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            null
-        }
+            } else { null }
+        } catch (e: Exception) { null }
     }
 
     private fun getGpayToken(

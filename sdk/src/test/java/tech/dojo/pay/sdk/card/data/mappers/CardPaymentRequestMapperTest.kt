@@ -1,18 +1,15 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
-import tech.dojo.pay.sdk.card.data.mappers.CardPaymentRequestMapper
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 internal class CardPaymentRequestMapperTest {
 
