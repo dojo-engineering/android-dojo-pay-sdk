@@ -15,7 +15,7 @@ class CardinalConfigurator(private val context: Context) {
     fun getConfiguredCardinalInstance(): Cardinal {
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
-        cardinalConfigurationParameters.environment = CardinalEnvironment.STAGING
+        cardinalConfigurationParameters.environment = CardinalEnvironment.PRODUCTION
 
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
