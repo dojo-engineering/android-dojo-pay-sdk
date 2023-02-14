@@ -11,9 +11,14 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenResponse
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
+import tech.dojo.pay.sdk.card.data.entities.PaymentMethodDetailsRaw
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
+import tech.dojo.pay.sdk.card.entities.AuthMethod
+import tech.dojo.pay.sdk.card.entities.DecryptGPayTokenParams
 import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
@@ -68,6 +73,28 @@ internal class GPayRepositoryTest {
         Assert.assertEquals(expected, result)
     }
 
+    @Test
+    fun `when decryptGPayToken is called decryptGPayToken from API is called and DecryptGPayTokenParams is returned`() =
+        runTest {
+            // arrange
+            whenever(api.decryptGPayToken(any(), any(), any())).thenReturn(
+                DECRYPT_GPAY_TOKEN_RESPONSE
+            )
+            val decryptGPayTokenBody = DecryptGPayTokenBody("token")
+            // act
+            val actual = repo.decryptGPayToken(decryptGPayTokenBody)
+            // assert
+            Assert.assertEquals(
+                DecryptGPayTokenParams(
+                    authMethod = AuthMethod.CRYPTOGRAM_3DS,
+                    pan = "pan",
+                    expirationMonth = "122",
+                    expirationYear = "122"
+                ),
+                actual
+            )
+        }
+
     private companion object {
         const val TOKEN = "TOKEN"
 
@@ -87,11 +114,17 @@ internal class GPayRepositoryTest {
                 countryCode = "Country"
             )
         )
-
-        val ADDRESS_DETAILS = GooglePayAddressDetails(
-            address1 = "Address",
-            postcode = "Postcode",
-            countryCode = "Country"
+        val DECRYPT_GPAY_TOKEN_RESPONSE = DecryptGPayTokenResponse(
+            paymentMethod = "paymentMethod",
+            paymentMethodDetails = PaymentMethodDetailsRaw(
+                authMethod = "CRYPTOGRAM_3DS",
+                pan = "pan",
+                expirationMonth = "122",
+                expirationYear = "122"
+            ),
+            gatewayMerchantId = "gatewayMerchantId",
+            messageId = "messageId",
+            messageExpiration = "messageExpiration"
         )
     }
 }

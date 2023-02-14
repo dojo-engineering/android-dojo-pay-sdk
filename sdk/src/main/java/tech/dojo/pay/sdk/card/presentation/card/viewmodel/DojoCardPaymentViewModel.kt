@@ -2,24 +2,27 @@ package tech.dojo.pay.sdk.card.presentation.card.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
+import com.cardinalcommerce.cardinalmobilesdk.Cardinal
+import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
+import tech.dojo.pay.sdk.card.data.DeviceDataRepository
 import tech.dojo.pay.sdk.card.data.Dojo3DSRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.PaymentResult
-import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class DojoCardPaymentViewModel(
-    private val repository: CardPaymentRepository,
+    private val cardPaymentRepository: CardPaymentRepository,
     private val dojo3DSRepository: Dojo3DSRepository,
-) : Dojo3DSBaseViewModel() {
+    private val deviceDataRepository: DeviceDataRepository,
+    private val dojoCardPaymentPayLoad: DojoCardPaymentPayLoad,
+    private val configuredCardinalInstance: Cardinal
+) : Dojo3DSBaseViewModel(configuredCardinalInstance) {
 
-    private val fingerPrintCapturedEvent = Channel<Unit>()
     val paymentResult = MutableLiveData<PaymentResult>()
     val deviceData = MutableLiveData<DeviceData>()
     var canExit: Boolean = false // User should not be able to leave while request is not completed
@@ -27,37 +30,50 @@ internal class DojoCardPaymentViewModel(
     init {
         viewModelScope.launch {
             try {
-                deviceData.value = repository.collectDeviceData()
-                withTimeoutOrNull(FINGERPRINT_TIMEOUT_MILLIS) {
-                    fingerPrintCapturedEvent.receive() // Wait till event is fired
-                }
-                paymentResult.value = repository.processPayment()
-                canExit = true
+                deviceData.value = deviceDataRepository.collectDeviceData(dojoCardPaymentPayLoad)
             } catch (throwable: Throwable) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                postPaymentFieldToUI()
             }
         }
     }
 
-    fun onFingerprintCaptured() {
-        fingerPrintCapturedEvent.trySend(Unit)
+    fun initCardinal() {
+        configureDCardinalInstance.init(deviceData.value?.token, this)
     }
 
-    override fun on3DSCompleted(result: DojoPaymentResult) {
-        paymentResult.postValue(PaymentResult.Completed(result))
-    }
-
-    override fun fetchThreeDsPage(params: ThreeDSParams) {
+    override fun onSetupCompleted(consumerSessionId: String?) {
         viewModelScope.launch {
             try {
-                threeDsPage.value = dojo3DSRepository.fetch3dsPage(params)
-            } catch (e: Exception) {
-                paymentResult.value = PaymentResult.Completed(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                paymentResult.value = cardPaymentRepository.processPayment()
+                canExit = true
+            } catch (throwable: Throwable) {
+                postPaymentFieldToUI()
             }
         }
     }
 
-    companion object {
-        const val FINGERPRINT_TIMEOUT_MILLIS = 15000L
+    override fun onValidated(validateResponse: ValidateResponse?, serverJwt: String?) {
+        postPaymentFieldToUI()
+    }
+
+    fun on3dsCompleted(
+        serverJWT: String? = null,
+        transactionId: String? = null,
+        validateResponse: ValidateResponse? = null
+    ) {
+        viewModelScope.launch {
+            try {
+                paymentResult.value = dojo3DSRepository.processAuthorization(
+                    serverJWT ?: "", transactionId ?: "", validateResponse
+                )
+                canExit = true
+            } catch (throwable: Throwable) {
+                postPaymentFieldToUI()
+            }
+        }
+    }
+
+    private fun postPaymentFieldToUI() {
+        paymentResult.postValue(PaymentResult.Completed(DojoPaymentResult.FAILED))
     }
 }

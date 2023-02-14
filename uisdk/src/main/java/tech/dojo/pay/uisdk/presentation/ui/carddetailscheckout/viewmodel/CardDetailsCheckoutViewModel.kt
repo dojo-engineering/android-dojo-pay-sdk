@@ -295,7 +295,7 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                saveCardCheckBox = currentState.saveCardCheckBox.copy(isVisible = !paymentIntentResult.result.customerId.isNullOrBlank()),
+                saveCardCheckBox = currentState.saveCardCheckBox.copy(isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(), isChecked = !paymentIntentResult.result.customerId.isNullOrBlank()),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes
                 ),

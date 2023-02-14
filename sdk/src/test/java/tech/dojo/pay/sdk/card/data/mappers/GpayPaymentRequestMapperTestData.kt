@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
 import com.google.gson.Gson
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig

@@ -1,10 +1,36 @@
 package tech.dojo.pay.sdk.card.data
 
+import com.cardinalcommerce.cardinalmobilesdk.models.ValidateResponse
+import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.data.entities.AuthorizationBody
+import tech.dojo.pay.sdk.card.data.entities.ValidateCardinalResponse
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
-import tech.dojo.pay.sdk.card.entities.ThreeDSParams
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 
-internal class Dojo3DSRepository(private val api: CardPaymentApi) {
-    suspend fun fetch3dsPage(params: ThreeDSParams): String {
-        return api.fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
+internal class Dojo3DSRepository(
+    private val api: CardPaymentApi,
+    private val token: String
+) {
+    suspend fun processAuthorization(
+        jwt: String,
+        transactionId: String,
+        validateResponse: ValidateResponse?
+    ): PaymentResult {
+        val response =
+            api.processAuthorization(
+                token,
+                AuthorizationBody(
+                    jwt,
+                    transactionId,
+                    ValidateCardinalResponse(
+                        isValidated = validateResponse?.isValidated,
+                        errorNumber = validateResponse?.errorNumber,
+                        errorDescription = validateResponse?.errorDescription ?: "",
+                        actionCode = validateResponse?.actionCode?.string ?: ""
+                    )
+                )
+            )
+        val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
+        return PaymentResult.Completed(paymentResult)
     }
 }
