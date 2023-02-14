@@ -28,21 +28,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setContentView(uiSdkSampleBinding.root)
         setTokenListener()
         setCustomerCreationListener()
-        // using onActivityResult
-//        uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
-//
-//            DojoSDKDropInUI.startUIPaymentFlowForResult(
-//                this, DojoPaymentFlowParams(
-//                    uiSdkSampleBinding.token.text.toString(),
-//                    secret,
-//                    GPayConfig = DojoGPayConfig(
-//                        merchantName = "Dojo Cafe (Paymentsense)",
-//                        merchantId = "BCR2DN6T57R5ZI34",
-//                        gatewayMerchantId = "119784244252745"
-//                    )
-//                )
-//            )
-//        }
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = null
@@ -57,18 +42,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
                     )
                 )
             )
-//
-//            DojoSDKDropInUI.startUIPaymentFlowForResult(
-//                this, DojoPaymentFlowParams(
-//                    uiSdkSampleBinding.token.text.toString(),
-//                    secret,
-//                    GPayConfig = DojoGPayConfig(
-//                        merchantName = "Dojo Cafe (Paymentsense)",
-//                        merchantId = "BCR2DN6T57R5ZI34",
-//                        gatewayMerchantId = "119784244252745"
-//                    )
-//                )
-//            )
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
