@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.card.data
+package tech.dojo.pay.sdk.card.data.mappers
 
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
@@ -43,6 +43,7 @@ internal class CardPaymentRequestMapper {
      */
     private fun formatExpiryDate(month: String?, year: String?): String? {
         if (month == null || year == null) return null
-        return String.format(Locale.getDefault(), "%s / %s", month, year)
+        val expireYear = if (year.length == 4) { year.substring(2, 4) } else year
+        return String.format(Locale.getDefault(), "%s / %s", month, expireYear)
     }
 }
