@@ -11,7 +11,6 @@ import org.json.JSONArray
 
 class CardinalConfigurator(private val context: Context) {
 
-
     fun getConfiguredCardinalInstance(): Cardinal {
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()

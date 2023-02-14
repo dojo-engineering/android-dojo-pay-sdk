@@ -12,8 +12,10 @@ import tech.dojo.pay.sdk.card.data.GPayRepository
 import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.mappers.GPayTokenDecryptionRequestMapper
 import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapper
-import tech.dojo.pay.sdk.card.entities.*
 import tech.dojo.pay.sdk.card.entities.AuthMethod
+import tech.dojo.pay.sdk.card.entities.DecryptGPayTokenParams
+import tech.dojo.pay.sdk.card.entities.DojoCardDetails
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
@@ -75,7 +77,6 @@ internal class DojoGPayViewModel(
     ) {
         processPayment(gPayData, dojoGPayParams)
     }
-
 
     private suspend fun handlePanOnly(decryptedGPayTokenParams: DecryptGPayTokenParams) {
         deviceData.value = deviceDataRepository.collectDeviceData(
@@ -145,6 +146,6 @@ internal class DojoGPayViewModel(
     }
 
     private fun postPaymentFieldToUI() {
-        paymentResult.value = PaymentResult.Completed(DojoPaymentResult.FAILED)
+        paymentResult.postValue(PaymentResult.Completed(DojoPaymentResult.FAILED))
     }
 }

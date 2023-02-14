@@ -26,7 +26,14 @@ import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.GPayDetails
 import tech.dojo.pay.sdk.card.data.mappers.GPayTokenDecryptionRequestMapper
 import tech.dojo.pay.sdk.card.data.mappers.GpayPaymentRequestMapper
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.AuthMethod
+import tech.dojo.pay.sdk.card.entities.DecryptGPayTokenParams
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoGPayParams
+import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
+import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
+import tech.dojo.pay.sdk.card.entities.PaymentResult
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -56,7 +63,6 @@ internal class DojoGPayViewModelTest {
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
     }
-
 
     @Test
     fun `calling handlePaymentSuccessFromGpay should call apply from gPayTokenDecryptionRequestMapper first`() =
@@ -301,7 +307,6 @@ internal class DojoGPayViewModelTest {
             Assert.assertTrue(viewModel.canExit)
         }
 
-
     @Test
     fun `calling handlePaymentSuccessFromGpay with success from decryptGPayToken and authMethod is Pan_Only should call collect device data `() =
         runTest {
@@ -476,7 +481,6 @@ internal class DojoGPayViewModelTest {
         viewModel.initCardinal()
         // assert
         verify(configuredCardinalInstance).init(null, viewModel)
-
     }
 
     @Test
@@ -597,7 +601,6 @@ internal class DojoGPayViewModelTest {
             // assert
             Assert.assertEquals(result, viewModel.paymentResult.value)
         }
-
 
     @Test
     fun `calling onSetupCompleted with valid data and faild from  process payment should emit failed state to ui `() =
@@ -748,7 +751,6 @@ internal class DojoGPayViewModelTest {
 
         whenever(dojo3DSRepository.processAuthorization("", "", null)).thenReturn(result)
 
-
         val viewModel = DojoGPayViewModel(
             gPayRepository,
             deviceDataRepository,
@@ -759,9 +761,8 @@ internal class DojoGPayViewModelTest {
         )
         // act
         viewModel.handlePaymentSuccessFromGpay(gPayDetails.toString(), dojoGPayParams)
-        viewModel.on3dsCompleted("","",null)
+        viewModel.on3dsCompleted("", "", null)
         // assert
         Assert.assertEquals(result, viewModel.paymentResult.value)
     }
-
 }

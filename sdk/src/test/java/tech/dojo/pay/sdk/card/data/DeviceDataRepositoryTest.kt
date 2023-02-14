@@ -20,7 +20,6 @@ import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
-
 internal class DeviceDataRepositoryTest {
 
     @Mock

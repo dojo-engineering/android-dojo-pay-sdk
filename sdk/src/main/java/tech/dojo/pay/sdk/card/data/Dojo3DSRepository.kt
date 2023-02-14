@@ -18,8 +18,10 @@ internal class Dojo3DSRepository(
     ): PaymentResult {
         val response =
             api.processAuthorization(
-                token, AuthorizationBody(
-                    jwt, transactionId,
+                token,
+                AuthorizationBody(
+                    jwt,
+                    transactionId,
                     ValidateCardinalResponse(
                         isValidated = validateResponse?.isValidated,
                         errorNumber = validateResponse?.errorNumber,

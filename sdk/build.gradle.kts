@@ -1,6 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
-
 version = "1.2.0"
 
 plugins {

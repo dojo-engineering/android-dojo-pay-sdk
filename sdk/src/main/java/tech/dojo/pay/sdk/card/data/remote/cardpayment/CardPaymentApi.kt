@@ -1,19 +1,19 @@
 package tech.dojo.pay.sdk.card.data.remote.cardpayment
 
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Header
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Url
-import retrofit2.http.Field
 import tech.dojo.pay.sdk.card.data.entities.AuthorizationBody
-import tech.dojo.pay.sdk.card.data.entities.GPayDetails
-import tech.dojo.pay.sdk.card.data.entities.DeviceData
-import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
-import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
 import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenResponse
+import tech.dojo.pay.sdk.card.data.entities.DeviceData
+import tech.dojo.pay.sdk.card.data.entities.GPayDetails
+import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
+import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 
 internal interface CardPaymentApi {
 

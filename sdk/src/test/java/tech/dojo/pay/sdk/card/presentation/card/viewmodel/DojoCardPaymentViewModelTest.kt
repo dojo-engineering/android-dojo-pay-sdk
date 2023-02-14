@@ -87,7 +87,6 @@ internal class DojoCardPaymentViewModelTest {
         assertEquals(deviceData, viewModel.deviceData.value)
     }
 
-
     @Test
     fun `when initCardinal called init from configuredCardinalInstance should be called`() =
         runTest {
@@ -142,7 +141,6 @@ internal class DojoCardPaymentViewModelTest {
         // assert
         assertEquals(result, viewModel.paymentResult.value)
     }
-
 
     @Test
     fun `WHEN payment processing completes from onSetupCompleted THEN payment result is returned AND user can exit`() =
@@ -210,7 +208,7 @@ internal class DojoCardPaymentViewModelTest {
             val deviceData = DeviceData("action", "token")
             val result = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
             whenever(deviceDataRepository.collectDeviceData(any())).thenReturn(deviceData)
-            whenever(dojo3DSRepository.processAuthorization("JWT", "id",null)).thenReturn(result)
+            whenever(dojo3DSRepository.processAuthorization("JWT", "id", null)).thenReturn(result)
             val viewModel = DojoCardPaymentViewModel(
                 cardPaymentRepository,
                 dojo3DSRepository,
@@ -219,7 +217,7 @@ internal class DojoCardPaymentViewModelTest {
                 configuredCardinalInstance
             )
             // act
-            viewModel.on3dsCompleted("JWT","id")
+            viewModel.on3dsCompleted("JWT", "id")
             // assert
             assertEquals(result, viewModel.paymentResult.value)
             assertTrue(viewModel.canExit)
@@ -232,7 +230,7 @@ internal class DojoCardPaymentViewModelTest {
             val deviceData = DeviceData("action", "token")
             val result = PaymentResult.Completed(DojoPaymentResult.FAILED)
             whenever(deviceDataRepository.collectDeviceData(any())).thenReturn(deviceData)
-            whenever(dojo3DSRepository.processAuthorization("JWT", "id",null)).thenReturn(result)
+            whenever(dojo3DSRepository.processAuthorization("JWT", "id", null)).thenReturn(result)
             val viewModel = DojoCardPaymentViewModel(
                 cardPaymentRepository,
                 dojo3DSRepository,
@@ -241,7 +239,7 @@ internal class DojoCardPaymentViewModelTest {
                 configuredCardinalInstance
             )
             // act
-            viewModel.on3dsCompleted("JWT","id")
+            viewModel.on3dsCompleted("JWT", "id")
             // assert
             assertEquals(result, viewModel.paymentResult.value)
         }

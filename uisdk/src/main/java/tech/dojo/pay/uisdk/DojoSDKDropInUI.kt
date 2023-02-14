@@ -24,7 +24,6 @@ object DojoSDKDropInUI {
         onResult: (DojoPaymentResult) -> Unit
     ): DojoPaymentFlowHandler = DojoPaymentFlowHandlerImp(activity, onResult)
 
-
     /**
      * Starts payment  UI FLOW.
      * You should receive result via onActivityResult callback

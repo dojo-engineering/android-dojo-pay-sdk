@@ -4,7 +4,6 @@ import org.junit.Assert
 import org.junit.Test
 import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
 
-
 internal class GPayTokenDecryptionRequestMapperTest {
     private val mapper = GPayTokenDecryptionRequestMapper()
 
@@ -30,5 +29,4 @@ internal class GPayTokenDecryptionRequestMapperTest {
         // assert
         Assert.assertNull(result)
     }
-
 }

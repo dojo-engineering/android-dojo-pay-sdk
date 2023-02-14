@@ -11,9 +11,17 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.DojoPaymentResult
-import tech.dojo.pay.sdk.card.data.entities.*
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
+import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenResponse
+import tech.dojo.pay.sdk.card.data.entities.GPayDetails
+import tech.dojo.pay.sdk.card.data.entities.PaymentMethodDetailsRaw
+import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
-import tech.dojo.pay.sdk.card.entities.*
+import tech.dojo.pay.sdk.card.entities.AuthMethod
+import tech.dojo.pay.sdk.card.entities.DecryptGPayTokenParams
+import tech.dojo.pay.sdk.card.entities.GooglePayAddressDetails
+import tech.dojo.pay.sdk.card.entities.PaymentResult
+import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -82,7 +90,8 @@ internal class GPayRepositoryTest {
                     pan = "pan",
                     expirationMonth = "122",
                     expirationYear = "122"
-                ), actual
+                ),
+                actual
             )
         }
 

@@ -63,12 +63,9 @@ internal class DojoCardPaymentViewModel(
     ) {
         viewModelScope.launch {
             try {
-                paymentResult.value =
-                    dojo3DSRepository.processAuthorization(
-                        serverJWT ?: "",
-                        transactionId ?: "",
-                        validateResponse
-                    )
+                paymentResult.value = dojo3DSRepository.processAuthorization(
+                    serverJWT ?: "", transactionId ?: "", validateResponse
+                )
                 canExit = true
             } catch (throwable: Throwable) {
                 postPaymentFieldToUI()
@@ -77,6 +74,6 @@ internal class DojoCardPaymentViewModel(
     }
 
     private fun postPaymentFieldToUI() {
-        paymentResult.value = PaymentResult.Completed(DojoPaymentResult.FAILED)
+        paymentResult.postValue(PaymentResult.Completed(DojoPaymentResult.FAILED))
     }
 }
