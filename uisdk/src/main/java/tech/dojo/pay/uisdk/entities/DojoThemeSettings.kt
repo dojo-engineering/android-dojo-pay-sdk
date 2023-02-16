@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.entities
 
-import androidx.annotation.ColorRes
 import androidx.compose.ui.graphics.Color
 import java.io.Serializable
 
