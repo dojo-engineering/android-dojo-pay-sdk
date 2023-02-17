@@ -1,6 +1,6 @@
 import java.io.FileInputStream
 import java.util.Properties
-version = "0.5.0"
+version = "1.0.0"
 
 plugins {
     id("com.android.library")
