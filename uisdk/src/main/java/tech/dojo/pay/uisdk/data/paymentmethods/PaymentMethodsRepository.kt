@@ -6,7 +6,7 @@ import tech.dojo.pay.uisdk.data.entities.PaymentMethodsRaw
 import tech.dojo.pay.uisdk.domain.entities.DeletePaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.mapper.SupportedPaymentMethodsDomainMapper
-
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class PaymentMethodsRepository(
     private val dataSource: PaymentMethodsDataSource = PaymentMethodsDataSource(),
     private val gson: Gson = Gson(),

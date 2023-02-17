@@ -158,7 +158,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
         }
     }
-
+    @Suppress("LongMethod")
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
     internal fun PaymentFlowNavHost(

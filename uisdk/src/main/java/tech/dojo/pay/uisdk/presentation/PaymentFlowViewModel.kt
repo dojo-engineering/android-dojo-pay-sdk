@@ -12,7 +12,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
-
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class PaymentFlowViewModel(
     paymentId: String,
     customerSecret: String,

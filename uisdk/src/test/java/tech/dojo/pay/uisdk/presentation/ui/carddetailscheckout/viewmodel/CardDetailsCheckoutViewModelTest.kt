@@ -32,7 +32,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetails
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
-
+@Suppress("LongMethod", "LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 class CardDetailsCheckoutViewModelTest {
