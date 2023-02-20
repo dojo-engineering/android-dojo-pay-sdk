@@ -20,7 +20,7 @@ internal class CardPaymentApiBuilder {
             .build()
 
     private fun getBaseUrl(): String {
-        return "https://web.e.connect.paymentsense.cloud/api/"
+        return "https://web.e.connect.paymentsense.cloud/"
     }
 
     private fun createHttpClient(): OkHttpClient =

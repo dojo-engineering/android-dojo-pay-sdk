@@ -31,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
-import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
 internal fun DojoExpandableCard(
@@ -75,7 +74,9 @@ internal fun DojoExpandableCard(
         ) {
             Text(
                 text = header,
-                style = DojoTheme.typography.body2,
+                style = DojoTheme.typography.subtitle1.copy(
+                    color = colors.textColor(true).value
+                ),
                 color = DojoTheme.colors.secondaryLabelTextColor.copy(alpha = ContentAlpha.high)
             )
             Icon(

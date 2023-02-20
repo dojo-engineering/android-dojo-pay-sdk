@@ -53,19 +53,6 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            setUrl("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
-            credentials {
-                username = credentialsPropertiesFile["gpr.user"] as String
-                password = credentialsPropertiesFile["gpr.key"] as String
-            }
-        }
-        google()
-        mavenCentral()
-    }
 }
 dependencies {
     implementation(AndroidX.CORE_KTX)
