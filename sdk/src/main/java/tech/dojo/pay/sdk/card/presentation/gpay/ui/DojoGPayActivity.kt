@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.commit
 import com.google.android.gms.wallet.AutoResolveHelper
 import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
 import com.google.android.gms.wallet.PaymentData
@@ -22,7 +21,6 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
-import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSFragment
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
 @Suppress("SwallowedException")
@@ -30,7 +28,7 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoGPayViewModel by viewModels {
-        DojoGPayViewModelFactory(intent.extras)
+        DojoGPayViewModelFactory(intent.extras, this)
     }
     override val threeDSViewModel: Dojo3DSBaseViewModel by lazy { viewModel }
 
@@ -56,6 +54,7 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
                 is PaymentResult.ThreeDSRequired -> navigate3DS(result.params)
             }
         }
+        viewModel.deviceData.observe(this) { deviceData -> viewModel.initCardinal() }
     }
 
     private fun performGPay() {
@@ -103,16 +102,30 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private fun handlePaymentSuccess(paymentData: PaymentData) {
         try {
-            viewModel.sendGPayDataToServer(gPayData = paymentData.toJson(), dojoGPayParams = params)
+            viewModel.handlePaymentSuccessFromGpay(
+                gPayData = paymentData.toJson(),
+                dojoGPayParams = params
+            )
         } catch (e: JSONException) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         }
     }
 
     private fun navigate3DS(params: ThreeDSParams) {
-        supportFragmentManager.commit {
-            setCustomAnimations(R.anim.enter, 0)
-            replace(R.id.container, Dojo3DSFragment.newInstance(params))
+        try {
+            viewModel.configureDCardinalInstance.cca_continue(
+                params.md,
+                params.jwt,
+                this
+            ) { _, validateResponse, serverJWT ->
+                viewModel.on3dsCompleted(
+                    serverJWT,
+                    params.md,
+                    validateResponse
+                )
+            }
+        } catch (throwable: Throwable) {
+            viewModel.on3dsCompleted()
         }
     }
 

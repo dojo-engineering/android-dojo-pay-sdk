@@ -8,12 +8,11 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.DojoPaymentResult
-import tech.dojo.pay.sdk.card.data.entities.DeviceData
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
+import tech.dojo.pay.sdk.card.data.mappers.CardPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
@@ -36,32 +35,6 @@ internal class CardPaymentRepositoryTest {
     private lateinit var repo: CardPaymentRepository
 
     @Test
-    fun `device data collected`() = runTest {
-        // arrange
-        val paymentDetails = PaymentDetails(
-            cardNumber = CARD_DETAILS.cardNumber,
-            cardName = CARD_DETAILS.cardName,
-            expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
-            cV2 = CARD_DETAILS.cv2,
-            userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
-            userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
-            billingAddress = ADDRESS_DETAILS,
-            shippingDetails = SHIPPING_DETAILS,
-            metaData = FULL_CARD_PAYLOAD.metaData
-        )
-        whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
-        whenever(api.collectDeviceData(any(), any())).thenReturn(DeviceData("action", "token"))
-        // act
-        repo = CardPaymentRepository(api, TOKEN, FULL_CARD_PAYLOAD, requestMapper)
-        repo.collectDeviceData()
-        // assert
-        verify(api).collectDeviceData(
-            token = TOKEN,
-            payload = paymentDetails
-        )
-    }
-
-    @Test
     fun `WHEN result code is AUTHORIZING THEN threeDs params are returned`() = runTest {
         // arrange
         val paymentDetails = PaymentDetails(
@@ -82,7 +55,7 @@ internal class CardPaymentRepositoryTest {
             md = "md"
         )
 
-        whenever(api.processPaymentForFullCard(any(), any())).thenReturn(
+        whenever(api.processPaymentForFullCard(any(), any(), any())).thenReturn(
             PaymentResponse(
                 statusCode = DojoPaymentResult.AUTHORIZING.code,
                 stepUpUrl = threeDSParams.stepUpUrl,
@@ -113,7 +86,7 @@ internal class CardPaymentRepositoryTest {
             metaData = FULL_CARD_PAYLOAD.metaData
         )
         whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
-        whenever(api.processPaymentForFullCard(any(), any())).thenReturn(
+        whenever(api.processPaymentForFullCard(any(), any(), any())).thenReturn(
             PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
         )
         // act

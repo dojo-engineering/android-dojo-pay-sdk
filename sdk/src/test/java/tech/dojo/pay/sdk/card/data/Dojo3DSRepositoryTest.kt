@@ -6,9 +6,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.data.entities.AuthorizationBody
+import tech.dojo.pay.sdk.card.data.entities.PaymentResponse
+import tech.dojo.pay.sdk.card.data.entities.ValidateCardinalResponse
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
-import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -19,13 +24,18 @@ internal class Dojo3DSRepositoryTest {
     private lateinit var repo: Dojo3DSRepository
 
     @Test
-    fun `calling fetch3dsPage should call fetchSecurePage from api`() = runTest {
+    fun `calling processAuthorization should call processAuthorization from api`() = runTest {
         // arrange
-        val params = ThreeDSParams("url", "jwt", "md")
+        whenever(api.processAuthorization(any(), any(), any())).thenReturn(
+            PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
+        )
         // act
-        repo = Dojo3DSRepository(api)
-        repo.fetch3dsPage(params)
+        repo = Dojo3DSRepository(api, "token")
+        repo.processAuthorization("jwt", "id", null)
         // Assert
-        verify(api).fetchSecurePage(params.stepUpUrl, params.jwt, params.md)
+        verify(api).processAuthorization(
+            "token",
+            AuthorizationBody("jwt", "id", ValidateCardinalResponse(null, null, "", ""))
+        )
     }
 }
