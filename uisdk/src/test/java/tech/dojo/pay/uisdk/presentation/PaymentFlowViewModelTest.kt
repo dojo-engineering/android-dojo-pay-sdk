@@ -290,7 +290,7 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as true `() = runTest {
+    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as false `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
@@ -311,7 +311,7 @@ internal class PaymentFlowViewModelTest {
                 )
             )
         )
-        val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR, true)
+        val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR, false)
         // act
         val viewModel = PaymentFlowViewModel(
             paymentId,

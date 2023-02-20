@@ -32,7 +32,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.viewmodel.MangePaymentViewModel
-
+@Suppress("LongMethod")
 @Composable
 internal fun ManagePaymentMethods(
     windowSize: WindowSize,

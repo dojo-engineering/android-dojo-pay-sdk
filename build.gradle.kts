@@ -31,6 +31,7 @@ subprojects {
         android.set(false)
         outputToConsole.set(true)
         ignoreFailures.set(false)
+        disabledRules.set(setOf("experimental:argument-list-wrapping"))
         enableExperimentalRules.set(true)
         filter {
             exclude("**/generated/**")

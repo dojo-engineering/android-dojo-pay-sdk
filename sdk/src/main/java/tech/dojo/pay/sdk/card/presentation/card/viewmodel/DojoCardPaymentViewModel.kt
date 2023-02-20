@@ -64,7 +64,9 @@ internal class DojoCardPaymentViewModel(
         viewModelScope.launch {
             try {
                 paymentResult.value = dojo3DSRepository.processAuthorization(
-                    serverJWT ?: "", transactionId ?: "", validateResponse
+                    serverJWT ?: "",
+                    transactionId ?: "",
+                    validateResponse
                 )
                 canExit = true
             } catch (throwable: Throwable) {

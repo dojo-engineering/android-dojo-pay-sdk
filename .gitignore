@@ -57,3 +57,5 @@ crashlytics-build.properties
 
 credentials.properties
 cardinal.properties
+Key
+keystore.properties
