@@ -58,11 +58,8 @@ internal fun DojoExpandableCard(
     )
     Column(
         modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = colors.indicatorColor(true, false, interactionSource).value,
-                shape = DojoTheme.shapes.small
-            ).background(DojoTheme.colors.inputFieldBackgroundColor)
+            .border(width = 1.dp, color = colors.indicatorColor(true, false, interactionSource).value, shape = DojoTheme.shapes.small)
+            .background(DojoTheme.colors.inputFieldBackgroundColor)
     ) {
         Row(
             modifier = Modifier
@@ -83,8 +80,7 @@ internal fun DojoExpandableCard(
                 painter = painterResource(R.drawable.ic_expand_more_24px),
                 contentDescription = null,
                 tint = DojoTheme.colors.primaryLabelTextColor,
-                modifier = Modifier
-                    .rotate(rotateState.value)
+                modifier = Modifier.rotate(rotateState.value)
             )
         }
         AnimatedVisibility(

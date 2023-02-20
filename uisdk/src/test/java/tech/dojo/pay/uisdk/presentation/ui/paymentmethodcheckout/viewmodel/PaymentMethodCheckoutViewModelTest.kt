@@ -37,7 +37,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayAmountButtonVState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
-
+@Suppress("LongMethod", "LargeClass")
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 class PaymentMethodCheckoutViewModelTest {
