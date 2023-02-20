@@ -115,6 +115,7 @@ object DojoTheme {
         get() = MaterialTheme.shapes
 }
 
+@Suppress("LongParameterList")
 @Stable
 class DojoColors(
     primary: Color,

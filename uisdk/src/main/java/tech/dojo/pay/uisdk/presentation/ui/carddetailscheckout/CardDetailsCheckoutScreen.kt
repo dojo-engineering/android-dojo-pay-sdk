@@ -64,7 +64,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import kotlin.math.roundToInt
-
+@Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CardDetailsCheckoutScreen(
@@ -178,7 +178,7 @@ internal fun CardDetailsCheckoutScreen(
                             }
                         }
 
-                        saveCardCheckBox(state, viewModel)
+                        SaveCardCheckBox(state, viewModel)
                     }
                     Column(
                         verticalArrangement = Arrangement.spacedBy(0.dp),
@@ -204,7 +204,7 @@ private fun ScreenFooter() {
 }
 
 @Composable
-private fun saveCardCheckBox(
+private fun SaveCardCheckBox(
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel
 ) {

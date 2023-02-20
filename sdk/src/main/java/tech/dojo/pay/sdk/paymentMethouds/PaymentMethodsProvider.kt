@@ -7,7 +7,7 @@ import tech.dojo.pay.sdk.DojoDeletePaymentMethodsResult
 import tech.dojo.pay.sdk.DojoFetchPaymentMethodsResult
 import tech.dojo.pay.sdk.paymentMethouds.data.PaymentMethodsApiBuilder
 import tech.dojo.pay.sdk.paymentMethouds.data.PaymentMethodsRepository
-
+@Suppress("SwallowedException")
 internal class PaymentMethodsProvider(
     private val paymentMethodsRepository: PaymentMethodsRepository = PaymentMethodsRepository(
         api = PaymentMethodsApiBuilder().create()

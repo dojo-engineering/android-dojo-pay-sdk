@@ -66,7 +66,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val viewModel: PaymentFlowViewModel by viewModels {
         PaymentFlowViewModelFactory(
-            arguments
+            arguments,
         )
     }
 
@@ -79,16 +79,20 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
                 val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
                 val customColorPalette =
-                    if (isDarkModeEnabled) darkColorPalette(
-                        DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette ?: DarkColorPalette()
-                    ) else lightColorPalette(
-                        DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette ?: LightColorPalette()
-                    )
+                    if (isDarkModeEnabled) {
+                        darkColorPalette(
+                            DojoSDKDropInUI.dojoThemeSettings?.DarkColorPalette ?: DarkColorPalette(),
+                        )
+                    } else {
+                        lightColorPalette(
+                            DojoSDKDropInUI.dojoThemeSettings?.lightColorPalette ?: LightColorPalette(),
+                        )
+                    }
                 val windowSize = rememberWindowSize()
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = Color.Black.copy(alpha = 0.2f)
+                        color = Color.Black.copy(alpha = 0.2f),
                     ) {
                         val navController = rememberAnimatedNavController()
                         // Listen for navigation event
@@ -123,7 +127,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     private fun onNavigationEvent(
         event: PaymentFlowNavigationEvents?,
-        navController: NavHostController
+        navController: NavHostController,
     ) {
         when (event) {
             is PaymentFlowNavigationEvents.OnBack -> navController.popBackStack()
@@ -142,7 +146,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
                 navController.navigate(
-                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId)
+                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId),
                 )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
@@ -159,13 +163,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("LongMethod")
     @OptIn(ExperimentalAnimationApi::class)
     @Composable
     internal fun PaymentFlowNavHost(
         navController: NavHostController,
         viewModel: PaymentFlowViewModel,
         isDarkModeEnabled: Boolean,
-        windowSize: WindowSize
+        windowSize: WindowSize,
     ) {
         AnimatedNavHost(
             navController = navController,
@@ -173,27 +178,27 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300)
+                    animationSpec = tween(300),
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300)
+                    animationSpec = tween(300),
                 )
             },
             popEnterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300)
+                    animationSpec = tween(300),
                 )
             },
             popExitTransition = {
                 slideOutOfContainer(
                     AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300)
+                    animationSpec = tween(300),
                 )
-            }
+            },
         ) {
             composable(
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,
@@ -202,7 +207,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     PaymentMethodCheckoutViewModelFactory(
                         savedCardPaymentHandler,
                         gpayPaymentHandler,
-                        arguments
+                        arguments,
                     )
                 }
                 PaymentMethodsCheckOutScreen(
@@ -214,7 +219,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         viewModel.onCloseFlowClicked()
                     },
                     viewModel::navigateToManagePaymentMethods,
-                    viewModel::navigateToCardDetailsCheckoutScreen
+                    viewModel::navigateToCardDetailsCheckoutScreen,
                 )
             }
             composable(
@@ -224,8 +229,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         type = NavType.EnumType(DojoPaymentResult::class.java)
                         defaultValue = DojoPaymentResult.DECLINED
                         nullable = false
-                    }
-                )
+                    },
+                ),
             ) {
                 val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
                 val refreshPaymentIntent =
@@ -237,18 +242,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         result,
                         observePaymentIntent,
                         refreshPaymentIntent,
-                        isDarkModeEnabled
+                        isDarkModeEnabled,
                     )
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
-                    exit = shrinkVertically()
+                    exit = shrinkVertically(),
                 ) {
                     ShowResultSheetScreen(
                         windowSize,
                         viewModel::onCloseFlowClicked,
                         viewModel::onBackClicked,
-                        paymentResultViewModel
+                        paymentResultViewModel,
                     )
                 }
             }
@@ -259,13 +264,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         type = NavType.StringType
                         defaultValue = ""
                         nullable = true
-                    }
-                )
+                    },
+                ),
             ) {
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
-                    exit = shrinkVertically()
+                    exit = shrinkVertically(),
                 ) {
                     val customerId = it.arguments?.get("customerId") as String
 
@@ -273,7 +278,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         MangePaymentViewModelFactory(
                             customerId,
                             arguments,
-                            isDarkModeEnabled
+                            isDarkModeEnabled,
                         )
                     }
                     ManagePaymentMethods(
@@ -284,7 +289,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             viewModel.onCloseFlowClicked()
                         },
                         viewModel::onBackClickedWithSavedPaymentMethod,
-                        viewModel::navigateToCardDetailsCheckoutScreen
+                        viewModel::navigateToCardDetailsCheckoutScreen,
                     )
                 }
             }
@@ -296,7 +301,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
-                    exit = shrinkVertically()
+                    exit = shrinkVertically(),
                 ) {
                     CardDetailsCheckoutScreen(
                         windowSize,
@@ -306,7 +311,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             viewModel.onCloseFlowClicked()
                         },
                         viewModel::onBackClicked,
-                        isDarkModeEnabled
+                        isDarkModeEnabled,
                     )
                 }
             }

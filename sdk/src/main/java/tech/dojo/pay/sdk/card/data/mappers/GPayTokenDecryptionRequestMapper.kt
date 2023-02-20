@@ -2,7 +2,7 @@ package tech.dojo.pay.sdk.card.data.mappers
 
 import org.json.JSONObject
 import tech.dojo.pay.sdk.card.data.entities.DecryptGPayTokenBody
-
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class GPayTokenDecryptionRequestMapper {
     fun apply(
         paymentInformationJson: String

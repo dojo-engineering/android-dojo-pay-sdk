@@ -29,7 +29,7 @@ class PaymentIntentRepositoryTest {
             val response: Response<JsonObject> = mock()
             whenever(response.isSuccessful).thenReturn(true)
             whenever(response.body()).thenReturn(result)
-            whenever(api.fetchPaymentIntent(any())).thenReturn(response)
+            whenever(api.fetchPaymentIntent(any(), any())).thenReturn(response)
             val expected = DojoPaymentIntentResult.Success("{\"test_key\":\"test\"}")
             // act
             val actual = PaymentIntentRepository(api).getPaymentIntent("test")
@@ -43,7 +43,7 @@ class PaymentIntentRepositoryTest {
             // arrange
             val response: Response<JsonObject> = mock()
             whenever(response.isSuccessful).thenReturn(false)
-            whenever(api.fetchPaymentIntent(any())).thenReturn(response)
+            whenever(api.fetchPaymentIntent(any(), any())).thenReturn(response)
             val expected = DojoPaymentIntentResult.Failed
             // act
             val actual = PaymentIntentRepository(api).getPaymentIntent("test")
@@ -60,7 +60,7 @@ class PaymentIntentRepositoryTest {
             val response: Response<JsonObject> = mock()
             whenever(response.isSuccessful).thenReturn(true)
             whenever(response.body()).thenReturn(result)
-            whenever(api.refreshPaymentIntent(any())).thenReturn(response)
+            whenever(api.refreshPaymentIntent(any(), any())).thenReturn(response)
             val expected = DojoPaymentIntentResult.Success("{\"test_key\":\"test\"}")
             // act
             val actual = PaymentIntentRepository(api).refreshPaymentIntent("test")
@@ -74,7 +74,7 @@ class PaymentIntentRepositoryTest {
             // arrange
             val response: Response<JsonObject> = mock()
             whenever(response.isSuccessful).thenReturn(false)
-            whenever(api.refreshPaymentIntent(any())).thenReturn(response)
+            whenever(api.refreshPaymentIntent(any(), any())).thenReturn(response)
             val expected = DojoPaymentIntentResult.Failed
             // act
             val actual = PaymentIntentRepository(api).refreshPaymentIntent("test")
