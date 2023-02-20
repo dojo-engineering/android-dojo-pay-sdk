@@ -15,6 +15,7 @@ import tech.dojo.pay.sdk.card.presentation.card.viewmodel.DojoCardPaymentViewMod
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
+@Suppress("SwallowedException")
 internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
     private val viewModel: DojoCardPaymentViewModel by viewModels {

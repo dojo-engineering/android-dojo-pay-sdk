@@ -44,7 +44,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.bold
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
-
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun ShowResultSheetScreen(
@@ -265,6 +265,7 @@ private fun SuccessfulResult(
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun FailedResult(

@@ -36,6 +36,7 @@ import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@Suppress("LargeClass")
 @RunWith(MockitoJUnitRunner::class)
 internal class DojoGPayViewModelTest {
     @get:Rule

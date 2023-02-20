@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentIntentResult
 import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentApiBuilder
 import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
-
+@Suppress("SwallowedException")
 internal class PaymentIntentProvider(
     private val paymentIntentRepository: PaymentIntentRepository = PaymentIntentRepository(
         PaymentIntentApiBuilder().create()
