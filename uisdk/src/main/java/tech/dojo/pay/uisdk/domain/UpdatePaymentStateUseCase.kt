@@ -8,4 +8,8 @@ class UpdatePaymentStateUseCase(
     fun updatePaymentSate(isActive: Boolean) {
         paymentStateRepository.updatePayment(isActive)
     }
+
+    fun updateGpayPaymentSate(isActive: Boolean) {
+        paymentStateRepository.updateGpayPayment(isActive)
+    }
 }

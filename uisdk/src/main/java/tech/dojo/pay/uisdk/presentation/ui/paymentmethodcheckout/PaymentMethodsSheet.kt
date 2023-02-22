@@ -163,7 +163,6 @@ private fun BottomSheetItems(
                 GooglePayButton(
                     contentState,
                     coroutineScope,
-                    sheetState,
                     onGpayClicked,
                     observePaymentIntent
                 )
@@ -265,7 +264,6 @@ private fun Loading() {
 private fun GooglePayButton(
     googlePayVisibility: PaymentMethodCheckoutState,
     coroutineScope: CoroutineScope,
-    sheetState: ModalBottomSheetState,
     onGpayClicked: () -> Unit,
     observePaymentIntent: () -> Unit
 ) {
@@ -277,7 +275,6 @@ private fun GooglePayButton(
         ) {
             coroutineScope.launch {
                 observePaymentIntent()
-                sheetState.hide()
                 onGpayClicked()
             }
         }

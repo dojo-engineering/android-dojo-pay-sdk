@@ -52,7 +52,9 @@ internal class PaymentFlowViewModel(
     fun updatePaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
-
+    fun updateGpayPaymentState(isActivity: Boolean) {
+        updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
+    }
     private fun closeFLowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
