@@ -112,7 +112,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private fun configureDojoPayCore() {
         DojoSdk.walletSandBox = DojoSDKDropInUI.isWalletSandBox
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
-            viewModel.updatePaymentState(false)
+            viewModel.updateGpayPaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
         cardPaymentHandler = DojoSdk.createCardPaymentHandler(this) {

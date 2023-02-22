@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
@@ -222,6 +223,7 @@ internal class PaymentMethodCheckoutViewModel(
 
     fun onGpayCLicked() {
         gPayConfig?.let {
+            updatePaymentStateUseCase.updateGpayPaymentSate(true)
             val gPayConfigWithSupportedCardsSchemes =
                 gPayConfig.copy(
                     allowedCardNetworks = paymentIntent.supportedCardsSchemes,
@@ -238,6 +240,21 @@ internal class PaymentMethodCheckoutViewModel(
                     )
                 )
             )
+            currentState = currentState.copy(isBottomSheetLoading = true)
+            viewModelScope.launch {
+                delay(500)
+                postStateToUI()
+            }
+            observeGooglePayPaymentState()
+        }
+    }
+
+    private fun observeGooglePayPaymentState() {
+        viewModelScope.launch {
+            observePaymentStatus.observeGpayPaymentStates().collect {
+                currentState = currentState.copy(isBottomSheetLoading = it)
+                postStateToUI()
+            }
         }
     }
 
