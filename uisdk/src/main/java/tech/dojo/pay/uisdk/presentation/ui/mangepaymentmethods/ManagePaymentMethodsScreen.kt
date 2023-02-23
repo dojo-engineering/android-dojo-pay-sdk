@@ -132,8 +132,7 @@ internal fun ManagePaymentMethods(
                                 text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
                             ) { onNewCardButtonClicked() }
                             DojoBrandFooter(
-                                modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 16.dp),
-                                withTermsAndPrivacy = false
+                                modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 16.dp)
                             )
                         }
                     }
