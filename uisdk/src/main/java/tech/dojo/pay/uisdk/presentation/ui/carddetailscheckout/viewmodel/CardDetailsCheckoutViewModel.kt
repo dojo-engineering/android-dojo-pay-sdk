@@ -39,8 +39,8 @@ internal class CardDetailsCheckoutViewModel(
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
-    fun updateCardPaymentHandler(newDojoCardPaymentHandler: DojoCardPaymentHandler){
-        dojoCardPaymentHandler= newDojoCardPaymentHandler
+    fun updateCardPaymentHandler(newDojoCardPaymentHandler: DojoCardPaymentHandler) {
+        dojoCardPaymentHandler = newDojoCardPaymentHandler
     }
     init {
         currentState = CardDetailsCheckoutState(
