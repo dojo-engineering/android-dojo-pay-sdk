@@ -210,6 +210,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         arguments,
                     )
                 }
+                // this is to  handle unregistered activity when screen orientation change
+                paymentMethodCheckoutViewModel.updateSavedCardPaymentHandler(savedCardPaymentHandler)
+                paymentMethodCheckoutViewModel.updateGpayHandler(gpayPaymentHandler)
                 PaymentMethodsCheckOutScreen(
                     windowSize,
                     currentSelectedMethod,
@@ -298,6 +301,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
                     CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled)
                 }
+                // this is to  handle unregistered activity when screen orientation change
+                cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),

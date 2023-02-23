@@ -32,11 +32,11 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMe
 import java.util.Currency
 
 internal class PaymentMethodCheckoutViewModel(
-    private val savedCardPaymentHandler: DojoSavedCardPaymentHandler,
+    private var savedCardPaymentHandler: DojoSavedCardPaymentHandler,
     private val updateWalletState: UpdateWalletState,
     private val observePaymentIntent: ObservePaymentIntent,
     private val observePaymentMethods: ObservePaymentMethods,
-    private val gpayPaymentHandler: DojoGPayHandler,
+    private var gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
     private val observePaymentStatus: ObservePaymentStatus,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
@@ -47,6 +47,14 @@ internal class PaymentMethodCheckoutViewModel(
     private lateinit var paymentIntent: PaymentIntentDomainEntity
     private var currentState: PaymentMethodCheckoutState
     private var currentCvvValue: String = ""
+
+    fun updateSavedCardPaymentHandler(newSavedCardPaymentHandler: DojoSavedCardPaymentHandler) {
+        savedCardPaymentHandler = newSavedCardPaymentHandler
+    }
+
+    fun updateGpayHandler(newGpayPaymentHandler: DojoGPayHandler) {
+        gpayPaymentHandler = newGpayPaymentHandler
+    }
 
     init {
         currentState = PaymentMethodCheckoutState(
@@ -216,7 +224,7 @@ internal class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                    it.amount.value.centsToString()
+                        it.amount.value.centsToString()
             )
         }
     }
