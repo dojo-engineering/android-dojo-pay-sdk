@@ -5,7 +5,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -114,9 +121,7 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EmptyFooter(modifier: Modifier = Modifier) {
-  Spacer(modifier = modifier)
-}
+private fun EmptyFooter(modifier: Modifier = Modifier) { Spacer(modifier = modifier) }
 
 @Composable
 private fun DojoBrandText(currentThemColor: Color) {
