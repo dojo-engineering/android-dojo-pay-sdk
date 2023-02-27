@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -82,7 +83,7 @@ internal fun ShowResultSheetScreen(
     ) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                paymentResultSheetState.show()
+                paymentResultSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(800))
             }
         }
     }
