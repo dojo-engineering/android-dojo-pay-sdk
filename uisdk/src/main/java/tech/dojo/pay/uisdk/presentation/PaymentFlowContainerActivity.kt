@@ -297,6 +297,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         },
                         viewModel::onBackClickedWithSavedPaymentMethod,
                         viewModel::navigateToCardDetailsCheckoutScreen,
+                        showDojoBrand
                     )
                 }
             }
