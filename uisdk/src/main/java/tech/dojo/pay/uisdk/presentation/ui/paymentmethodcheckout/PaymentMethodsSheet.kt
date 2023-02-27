@@ -180,15 +180,15 @@ private fun BottomSheetItems(
 
 @Composable
 private fun FooterItem(showDojoBrand: Boolean) {
-    if(showDojoBrand){
+    if (showDojoBrand) {
         DojoBrandFooter(
             modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 24.dp),
-            mode= DojoBrandFooterModes.DOJO_BRAND_ONLY
+            mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
         )
-    }else{
+    } else {
         DojoBrandFooter(
             modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 8.dp),
-            mode= DojoBrandFooterModes.NONE
+            mode = DojoBrandFooterModes.NONE
         )
     }
 }

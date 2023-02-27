@@ -78,7 +78,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             DojoTheme() {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
                 val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
-                val showDojoBrand= DojoSDKDropInUI.dojoThemeSettings?.showBranding?: false
+                val showDojoBrand = DojoSDKDropInUI.dojoThemeSettings?.showBranding ?: false
                 val customColorPalette =
                     if (isDarkModeEnabled) {
                         darkColorPalette(
@@ -260,6 +260,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         viewModel::onCloseFlowClicked,
                         viewModel::onBackClicked,
                         paymentResultViewModel,
+                        showDojoBrand
                     )
                 }
             }

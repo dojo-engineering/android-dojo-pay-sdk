@@ -201,7 +201,7 @@ internal fun CardDetailsCheckoutScreen(
 private fun ScreenFooter(showDojoBrand: Boolean) {
     DojoBrandFooter(
         modifier = Modifier.padding(bottom = 24.dp),
-        mode= if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
+        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
     )
 }
 
