@@ -56,6 +56,7 @@ import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
@@ -73,6 +74,7 @@ internal fun CardDetailsCheckoutScreen(
     onCloseClicked: () -> Unit,
     onBackClicked: () -> Unit,
     isDarkModeEnabled: Boolean,
+    showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -187,7 +189,7 @@ internal fun CardDetailsCheckoutScreen(
                             .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                     ) {
                         PayButton(scrollState, state, viewModel)
-                        ScreenFooter()
+                        ScreenFooter(showDojoBrand)
                     }
                 }
             }
@@ -196,8 +198,11 @@ internal fun CardDetailsCheckoutScreen(
 }
 
 @Composable
-private fun ScreenFooter() {
-    DojoBrandFooter(modifier = Modifier.padding(bottom = 24.dp))
+private fun ScreenFooter(showDojoBrand: Boolean) {
+    DojoBrandFooter(
+        modifier = Modifier.padding(bottom = 24.dp),
+        mode= if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
+    )
 }
 
 @Composable

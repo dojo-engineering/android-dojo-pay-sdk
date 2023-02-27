@@ -7,7 +7,7 @@ data class DojoThemeSettings(
     val lightColorPalette: LightColorPalette = LightColorPalette(),
     val DarkColorPalette: DarkColorPalette = DarkColorPalette(),
     val forceLightMode: Boolean = false,
-    val showBranding: Boolean = true
+    val showBranding: Boolean = false
 ) : Serializable
 
 data class LightColorPalette(

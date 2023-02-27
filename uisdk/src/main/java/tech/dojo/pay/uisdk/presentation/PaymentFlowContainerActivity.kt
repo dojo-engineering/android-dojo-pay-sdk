@@ -320,6 +320,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         },
                         viewModel::onBackClicked,
                         isDarkModeEnabled,
+                        showDojoBrand
                     )
                 }
             }
