@@ -9,7 +9,7 @@ import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 class CardPaymentOldSchoolActivity : CardPaymentBaseActivity() {
 
     override fun onSandboxChecked(isChecked: Boolean) {
-        DojoSdk.walletSandBox = isChecked
+        DojoSdk.isWalletSandBox = isChecked
     }
 
     override fun onPayClicked(token: String, payload: DojoCardPaymentPayLoad.FullCardPaymentPayload) {

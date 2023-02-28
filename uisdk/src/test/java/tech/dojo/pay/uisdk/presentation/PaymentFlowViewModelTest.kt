@@ -477,4 +477,38 @@ internal class PaymentFlowViewModelTest {
         // assert
         Assert.assertEquals(expected, actual)
     }
+
+    @Test
+    fun `call isPaymentInSandBoxEnvironment with prod paymentID should return false `() = runTest {
+        // arrange
+        val viewModel = PaymentFlowViewModel(
+            paymentId,
+            customerSecret,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase
+        )
+        // act
+        val actual = viewModel.isPaymentInSandBoxEnvironment()
+        // assert
+        Assert.assertFalse(actual)
+    }
+
+    @Test
+    fun `call isPaymentInSandBoxEnvironment with sankBox paymentID should return true `() = runTest {
+        // arrange
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase
+        )
+        // act
+        val actual = viewModel.isPaymentInSandBoxEnvironment()
+        // assert
+        Assert.assertTrue(actual)
+    }
 }

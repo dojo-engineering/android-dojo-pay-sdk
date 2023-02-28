@@ -13,7 +13,6 @@ import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerImp
 object DojoSDKDropInUI {
     private val REQUEST_CODE_DROP_IN_UI = "DOJO_PAY_UI".hashCode()
 
-    var isWalletSandBox: Boolean = false
     var dojoThemeSettings: DojoThemeSettings? = DojoThemeSettings()
 
     /**
