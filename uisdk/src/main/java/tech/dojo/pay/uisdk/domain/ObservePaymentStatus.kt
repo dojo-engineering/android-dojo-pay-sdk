@@ -8,5 +8,4 @@ class ObservePaymentStatus(
     fun observePaymentStates() = paymentStateRepository.observePaymentIntent()
 
     fun observeGpayPaymentStates() = paymentStateRepository.observeGpayPaymentIntent()
-
 }

@@ -78,6 +78,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             DojoTheme() {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
                 val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
+                val showDojoBrand = DojoSDKDropInUI.dojoThemeSettings?.showBranding ?: false
                 val customColorPalette =
                     if (isDarkModeEnabled) {
                         darkColorPalette(
@@ -102,7 +103,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                                 onNavigationEvent(it, navController)
                             }
                         }
-                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled, windowSize)
+                        PaymentFlowNavHost(navController, viewModel, isDarkModeEnabled, windowSize, showDojoBrand)
                     }
                 }
             }
@@ -171,6 +172,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         viewModel: PaymentFlowViewModel,
         isDarkModeEnabled: Boolean,
         windowSize: WindowSize,
+        showDojoBrand: Boolean
     ) {
         AnimatedNavHost(
             navController = navController,
@@ -223,6 +225,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     },
                     viewModel::navigateToManagePaymentMethods,
                     viewModel::navigateToCardDetailsCheckoutScreen,
+                    showDojoBrand
                 )
             }
             composable(
@@ -257,6 +260,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         viewModel::onCloseFlowClicked,
                         viewModel::onBackClicked,
                         paymentResultViewModel,
+                        showDojoBrand
                     )
                 }
             }
@@ -293,6 +297,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         },
                         viewModel::onBackClickedWithSavedPaymentMethod,
                         viewModel::navigateToCardDetailsCheckoutScreen,
+                        showDojoBrand
                     )
                 }
             }
@@ -317,6 +322,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         },
                         viewModel::onBackClicked,
                         isDarkModeEnabled,
+                        showDojoBrand
                     )
                 }
             }

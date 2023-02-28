@@ -224,7 +224,7 @@ internal class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                        it.amount.value.centsToString()
+                    it.amount.value.centsToString()
             )
         }
     }
