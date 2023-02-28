@@ -112,7 +112,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.userId.setText(id)
     }
 
-
     private fun showLoading() {
         uiSdkSampleBinding.viewProgress.visibility = View.VISIBLE
     }
