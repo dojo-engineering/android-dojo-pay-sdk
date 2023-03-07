@@ -26,7 +26,7 @@ import java.util.Currency
 
 internal class CardDetailsCheckoutViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
-    private val dojoCardPaymentHandler: DojoCardPaymentHandler,
+    private var dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val observePaymentStatus: ObservePaymentStatus,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
@@ -39,7 +39,9 @@ internal class CardDetailsCheckoutViewModel(
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
-
+    fun updateCardPaymentHandler(newDojoCardPaymentHandler: DojoCardPaymentHandler) {
+        dojoCardPaymentHandler = newDojoCardPaymentHandler
+    }
     init {
         currentState = CardDetailsCheckoutState(
             totalAmount = "",

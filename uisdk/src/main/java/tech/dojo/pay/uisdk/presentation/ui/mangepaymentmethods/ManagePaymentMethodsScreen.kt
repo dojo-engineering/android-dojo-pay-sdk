@@ -22,6 +22,7 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.PaymentMethodsList
 import tech.dojo.pay.uisdk.presentation.components.SimpleAlertDialog
@@ -39,7 +40,8 @@ internal fun ManagePaymentMethods(
     viewModel: MangePaymentViewModel,
     onCloseClicked: () -> Unit,
     onBackClicked: (currentSelectedMethod: PaymentMethodItemViewEntityItem?) -> Unit,
-    onNewCardButtonClicked: () -> Unit
+    onNewCardButtonClicked: () -> Unit,
+    showDojoBrand: Boolean
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -131,10 +133,17 @@ internal fun ManagePaymentMethods(
                                     .padding(start = 16.dp, top = 4.dp, end = 16.dp, bottom = 8.dp),
                                 text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title)
                             ) { onNewCardButtonClicked() }
-                            DojoBrandFooter(
-                                modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 16.dp),
-                                withTermsAndPrivacy = false
-                            )
+                            if (showDojoBrand) {
+                                DojoBrandFooter(
+                                    modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 16.dp),
+                                    mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
+                                )
+                            } else {
+                                DojoBrandFooter(
+                                    modifier = Modifier.padding(24.dp, 0.dp, 16.dp, 4.dp),
+                                    mode = DojoBrandFooterModes.NONE
+                                )
+                            }
                         }
                     }
                 }

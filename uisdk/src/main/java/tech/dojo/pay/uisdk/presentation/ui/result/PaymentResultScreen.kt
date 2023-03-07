@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
@@ -51,7 +53,8 @@ internal fun ShowResultSheetScreen(
     windowSize: WindowSize,
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
-    viewModel: PaymentResultViewModel
+    viewModel: PaymentResultViewModel,
+    showDojoBrand: Boolean
 ) {
     val paymentResultSheetState =
         rememberModalBottomSheetState(
@@ -76,13 +79,14 @@ internal fun ShowResultSheetScreen(
                 onCloseFlowClicked,
                 onTryAgainClicked,
                 viewModel,
-                windowSize
+                windowSize,
+                showDojoBrand
             )
         }
     ) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
-                paymentResultSheetState.show()
+                paymentResultSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(800))
             }
         }
     }
@@ -97,7 +101,8 @@ private fun BottomSheetItems(
     onCloseFlowClicker: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel,
-    windowSize: WindowSize
+    windowSize: WindowSize,
+    showDojoBrand: Boolean
 ) {
     DojoAppBar(
         modifier = Modifier.height(60.dp),
@@ -129,7 +134,8 @@ private fun BottomSheetItems(
                     state,
                     coroutineScope,
                     sheetState,
-                    onCloseFlowClicker
+                    onCloseFlowClicker,
+                    showDojoBrand
                 )
                 is PaymentResultState.FailedResult -> HandleFailedResult(
                     state,
@@ -137,7 +143,8 @@ private fun BottomSheetItems(
                     sheetState,
                     onCloseFlowClicker,
                     onTryAgainClicked,
-                    viewModel
+                    viewModel,
+                    showDojoBrand
                 )
             }
         }
@@ -152,7 +159,8 @@ private fun HandleFailedResult(
     sheetState: ModalBottomSheetState,
     onCloseFlowClicker: () -> Unit,
     onTryAgainClicked: () -> Unit,
-    viewModel: PaymentResultViewModel
+    viewModel: PaymentResultViewModel,
+    showDojoBrand: Boolean
 ) {
     when (state.showTryAgain) {
         true -> {
@@ -162,7 +170,9 @@ private fun HandleFailedResult(
                 sheetState,
                 onCloseFlowClicker,
                 onTryAgainClicked,
-                viewModel
+                viewModel,
+                showDojoBrand
+
             )
         }
         else -> {
@@ -170,7 +180,8 @@ private fun HandleFailedResult(
                 state,
                 coroutineScope,
                 sheetState,
-                onCloseFlowClicker
+                onCloseFlowClicker,
+                showDojoBrand
             )
         }
     }
@@ -183,6 +194,7 @@ private fun SuccessfulResult(
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
     onCloseFlowClicker: () -> Unit,
+    showDojoBrand: Boolean,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -253,15 +265,29 @@ private fun SuccessfulResult(
             onCloseFlowClicker()
         }
 
-        DojoBrandFooter(
-            modifier = Modifier.constrainAs(footer) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(doneBtn.bottom, 8.dp)
-                bottom.linkTo(parent.bottom, 32.dp)
-                width = Dimension.fillToConstraints
-            }
-        )
+        if (showDojoBrand) {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 32.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
+            )
+        } else {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.NONE
+            )
+        }
     }
 }
 
@@ -275,6 +301,7 @@ private fun FailedResult(
     onCloseFlowClicker: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel,
+    showDojoBrand: Boolean,
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -360,15 +387,29 @@ private fun FailedResult(
             onCloseFlowClicker()
         }
 
-        DojoBrandFooter(
-            modifier = Modifier.constrainAs(footer) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(doneBtn.bottom, 8.dp)
-                bottom.linkTo(parent.bottom, 32.dp)
-                width = Dimension.fillToConstraints
-            }
-        )
+        if (showDojoBrand) {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 32.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
+            )
+        } else {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.NONE
+            )
+        }
     }
     if (state.shouldNavigateToPreviousScreen) {
         LaunchedEffect(Unit) {
@@ -386,7 +427,8 @@ private fun FailedResultWithOutTryAgain(
     state: PaymentResultState.FailedResult,
     coroutineScope: CoroutineScope,
     sheetState: ModalBottomSheetState,
-    onCloseFlowClicker: () -> Unit
+    onCloseFlowClicker: () -> Unit,
+    showDojoBrand: Boolean
 ) {
     ConstraintLayout(
         modifier = Modifier
@@ -444,15 +486,28 @@ private fun FailedResultWithOutTryAgain(
             }
             onCloseFlowClicker()
         }
-
-        DojoBrandFooter(
-            modifier = Modifier.constrainAs(footer) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(doneBtn.bottom, 8.dp)
-                bottom.linkTo(parent.bottom, 32.dp)
-                width = Dimension.fillToConstraints
-            }
-        )
+        if (showDojoBrand) {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 32.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
+            )
+        } else {
+            DojoBrandFooter(
+                modifier = Modifier.constrainAs(footer) {
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end, 8.dp)
+                    top.linkTo(doneBtn.bottom, 8.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
+                    width = Dimension.fillToConstraints
+                },
+                mode = DojoBrandFooterModes.NONE
+            )
+        }
     }
 }
