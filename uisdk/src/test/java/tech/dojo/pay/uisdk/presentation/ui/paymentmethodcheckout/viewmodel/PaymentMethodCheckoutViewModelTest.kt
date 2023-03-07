@@ -1079,4 +1079,65 @@ class PaymentMethodCheckoutViewModelTest {
             // assert
             verify(gpayPaymentHandler).executeGPay(any(), any())
         }
+
+    @Test
+    fun `observeGooglePayPaymentState should be called in case if user click on pay with gpay button`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP"
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                        supportedWalletSchemes = listOf(WalletSchemes.GOOGLE_PAY),
+                        customerId = " customerId"
+                    )
+                )
+            )
+            val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
+            fetchPaymentMethodsStream.tryEmit(
+                FetchPaymentMethodsResult.Success(
+                    PaymentMethodsDomainEntity(
+                        listOf(
+                            PaymentMethodsDomainEntityItem(
+                                "",
+                                "",
+                                "",
+                                CardsSchemes.VISA
+                            )
+                        )
+                    )
+                )
+            )
+            val viewModel = PaymentMethodCheckoutViewModel(
+                savedCardPaymentHandler,
+                updateWalletState,
+                observePaymentIntent,
+                observePaymentMethods,
+                gpayPaymentHandler,
+                DojoGPayConfig(
+                    merchantName = "",
+                    merchantId = "",
+                    gatewayMerchantId = ""
+                ),
+                observePaymentStatus,
+                updatePaymentStateUseCase
+            )
+            viewModel.handleGooglePayAvailable()
+            // act
+            viewModel.onGpayCLicked()
+            // assert
+            verify(observePaymentStatus).observeGpayPaymentStates()
+        }
 }

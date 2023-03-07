@@ -30,7 +30,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setCustomerCreationListener()
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
-            DojoSDKDropInUI.dojoThemeSettings = null
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
@@ -57,7 +56,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
                 )
             )
         }
-        DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
     }
 //
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -67,13 +65,10 @@ class UiSdkSampleActivity : AppCompatActivity() {
 //    }
 
     private fun setTokenListener() {
-        DojoSDKDropInUI.isWalletSandBox = uiSdkSampleBinding.checkboxSandbox.isChecked
-
         uiSdkSampleBinding.checkboxSandbox.setOnCheckedChangeListener { _, isChecked ->
             uiSdkSampleBinding.btnGenerateToken.visibility =
                 if (isChecked) View.VISIBLE else View.GONE
             displayToken("")
-            onSandboxChecked(isChecked)
         }
 
         uiSdkSampleBinding.btnGenerateToken.setOnClickListener {
@@ -115,10 +110,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
 
     private fun displayCustomerSecrete(id: String) {
         uiSdkSampleBinding.userId.setText(id)
-    }
-
-    private fun onSandboxChecked(isChecked: Boolean) {
-        DojoSDKDropInUI.isWalletSandBox = isChecked
     }
 
     private fun showLoading() {

@@ -138,6 +138,43 @@ internal class PaymentFlowViewModelTest {
         }
 
     @Test
+    fun `calling updateGpayPaymentState should call updateGpayPaymentSate from updatePaymentStateUseCase`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP"
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId"
+                    )
+                )
+            )
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase
+            )
+            viewModel.updateGpayPaymentState(isActivity = false)
+            // assert
+            verify(updatePaymentStateUseCase).updateGpayPaymentSate(false)
+        }
+
+    @Test
     fun `calling onBackClicked should emits OnBack`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
@@ -439,5 +476,39 @@ internal class PaymentFlowViewModelTest {
         val actual = viewModel.navigationEvent.value
         // assert
         Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `call isPaymentInSandBoxEnvironment with prod paymentID should return false `() = runTest {
+        // arrange
+        val viewModel = PaymentFlowViewModel(
+            paymentId,
+            customerSecret,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase
+        )
+        // act
+        val actual = viewModel.isPaymentInSandBoxEnvironment()
+        // assert
+        Assert.assertFalse(actual)
+    }
+
+    @Test
+    fun `call isPaymentInSandBoxEnvironment with sankBox paymentID should return true `() = runTest {
+        // arrange
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase
+        )
+        // act
+        val actual = viewModel.isPaymentInSandBoxEnvironment()
+        // assert
+        Assert.assertTrue(actual)
     }
 }

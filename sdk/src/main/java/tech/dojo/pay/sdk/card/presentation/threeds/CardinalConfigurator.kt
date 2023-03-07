@@ -8,24 +8,19 @@ import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalUiType
 import com.cardinalcommerce.cardinalmobilesdk.models.CardinalConfigurationParameters
 import com.cardinalcommerce.shared.userinterfaces.UiCustomization
 import org.json.JSONArray
+import tech.dojo.pay.sdk.DojoSdk
 
 class CardinalConfigurator(private val context: Context) {
 
     fun getConfiguredCardinalInstance(): Cardinal {
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
-        cardinalConfigurationParameters.environment = CardinalEnvironment.PRODUCTION
+        cardinalConfigurationParameters.environment = getEnvironment()
 
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
 
-        val rTYPE = JSONArray()
-        rTYPE.put(CardinalRenderType.OTP)
-        rTYPE.put(CardinalRenderType.SINGLE_SELECT)
-        rTYPE.put(CardinalRenderType.MULTI_SELECT)
-        rTYPE.put(CardinalRenderType.OOB)
-        rTYPE.put(CardinalRenderType.HTML)
-        cardinalConfigurationParameters.renderType = rTYPE
+        cardinalConfigurationParameters.renderType = getRenderType()
         cardinalConfigurationParameters.uiType = CardinalUiType.BOTH
 
         val yourUICustomizationObject = UiCustomization()
@@ -33,5 +28,23 @@ class CardinalConfigurator(private val context: Context) {
 
         cardinal.configure(context, cardinalConfigurationParameters)
         return cardinal
+    }
+
+    private fun getRenderType(): JSONArray {
+        val rTYPE = JSONArray()
+        rTYPE.put(CardinalRenderType.OTP)
+        rTYPE.put(CardinalRenderType.SINGLE_SELECT)
+        rTYPE.put(CardinalRenderType.MULTI_SELECT)
+        rTYPE.put(CardinalRenderType.OOB)
+        rTYPE.put(CardinalRenderType.HTML)
+        return rTYPE
+    }
+
+    private fun getEnvironment(): CardinalEnvironment {
+        return if (DojoSdk.isCardSandBox) {
+            CardinalEnvironment.STAGING
+        } else {
+            CardinalEnvironment.PRODUCTION
+        }
     }
 }

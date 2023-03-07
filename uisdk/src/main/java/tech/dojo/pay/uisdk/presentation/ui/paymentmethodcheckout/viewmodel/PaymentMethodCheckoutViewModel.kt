@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
@@ -31,11 +32,11 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMe
 import java.util.Currency
 
 internal class PaymentMethodCheckoutViewModel(
-    private val savedCardPaymentHandler: DojoSavedCardPaymentHandler,
+    private var savedCardPaymentHandler: DojoSavedCardPaymentHandler,
     private val updateWalletState: UpdateWalletState,
     private val observePaymentIntent: ObservePaymentIntent,
     private val observePaymentMethods: ObservePaymentMethods,
-    private val gpayPaymentHandler: DojoGPayHandler,
+    private var gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
     private val observePaymentStatus: ObservePaymentStatus,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
@@ -46,6 +47,14 @@ internal class PaymentMethodCheckoutViewModel(
     private lateinit var paymentIntent: PaymentIntentDomainEntity
     private var currentState: PaymentMethodCheckoutState
     private var currentCvvValue: String = ""
+
+    fun updateSavedCardPaymentHandler(newSavedCardPaymentHandler: DojoSavedCardPaymentHandler) {
+        savedCardPaymentHandler = newSavedCardPaymentHandler
+    }
+
+    fun updateGpayHandler(newGpayPaymentHandler: DojoGPayHandler) {
+        gpayPaymentHandler = newGpayPaymentHandler
+    }
 
     init {
         currentState = PaymentMethodCheckoutState(
@@ -222,6 +231,7 @@ internal class PaymentMethodCheckoutViewModel(
 
     fun onGpayCLicked() {
         gPayConfig?.let {
+            updatePaymentStateUseCase.updateGpayPaymentSate(true)
             val gPayConfigWithSupportedCardsSchemes =
                 gPayConfig.copy(
                     allowedCardNetworks = paymentIntent.supportedCardsSchemes,
@@ -238,6 +248,21 @@ internal class PaymentMethodCheckoutViewModel(
                     )
                 )
             )
+            currentState = currentState.copy(isBottomSheetLoading = true)
+            viewModelScope.launch {
+                delay(500)
+                postStateToUI()
+            }
+            observeGooglePayPaymentState()
+        }
+    }
+
+    private fun observeGooglePayPaymentState() {
+        viewModelScope.launch {
+            observePaymentStatus.observeGpayPaymentStates().collect {
+                currentState = currentState.copy(isBottomSheetLoading = it)
+                postStateToUI()
+            }
         }
     }
 

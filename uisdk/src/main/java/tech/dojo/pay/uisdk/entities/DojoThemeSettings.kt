@@ -6,7 +6,8 @@ import java.io.Serializable
 data class DojoThemeSettings(
     val lightColorPalette: LightColorPalette = LightColorPalette(),
     val DarkColorPalette: DarkColorPalette = DarkColorPalette(),
-    val forceLightMode: Boolean = false
+    val forceLightMode: Boolean = false,
+    val showBranding: Boolean = true
 ) : Serializable
 
 data class LightColorPalette(

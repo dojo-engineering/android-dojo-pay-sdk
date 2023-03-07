@@ -12,9 +12,10 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
+
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class PaymentFlowViewModel(
-    paymentId: String,
+    private val paymentId: String,
     customerSecret: String,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent,
@@ -52,7 +53,9 @@ internal class PaymentFlowViewModel(
     fun updatePaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
-
+    fun updateGpayPaymentState(isActivity: Boolean) {
+        updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
+    }
     private fun closeFLowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
@@ -94,4 +97,6 @@ internal class PaymentFlowViewModel(
     fun navigateToCardDetailsCheckoutScreen() {
         navigationEvent.value = PaymentFlowNavigationEvents.CardDetailsCheckout
     }
+
+    fun isPaymentInSandBoxEnvironment(): Boolean = paymentId.lowercase().contains("sandbox")
 }

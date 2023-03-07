@@ -41,6 +41,7 @@ import tech.dojo.pay.uisdk.presentation.components.CardItemWithCvv
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBottomSheet
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.GooglePayButton
@@ -60,7 +61,8 @@ internal fun PaymentMethodsCheckOutScreen(
     viewModel: PaymentMethodCheckoutViewModel,
     onAppBarIconClicked: () -> Unit,
     onManagePaymentClicked: () -> Unit,
-    onPayByCard: () -> Unit
+    onPayByCard: () -> Unit,
+    showDojoBrand: Boolean
 ) {
     val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
     val paymentMethodsSheetState =
@@ -92,7 +94,8 @@ internal fun PaymentMethodsCheckOutScreen(
                 viewModel::onPayAmountClicked,
                 viewModel::observePaymentIntent,
                 viewModel::onCvvValueChanged,
-                windowSize
+                windowSize,
+                showDojoBrand
             )
         }
     ) {
@@ -140,7 +143,8 @@ private fun BottomSheetItems(
     onPayAmount: () -> Unit,
     observePaymentIntent: () -> Unit,
     onCvvChanged: (String) -> Unit,
-    windowSize: WindowSize
+    windowSize: WindowSize,
+    showDojoBrand: Boolean
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
     if (contentState.isBottomSheetLoading) {
@@ -163,23 +167,30 @@ private fun BottomSheetItems(
                 GooglePayButton(
                     contentState,
                     coroutineScope,
-                    sheetState,
                     onGpayClicked,
                     observePaymentIntent
                 )
                 PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
                 PayAmountButton(contentState, onPayAmount)
-                FooterItem()
+                FooterItem(showDojoBrand)
             }
         }
     }
 }
 
 @Composable
-private fun FooterItem() {
-    DojoBrandFooter(
-        modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 24.dp),
-    )
+private fun FooterItem(showDojoBrand: Boolean) {
+    if (showDojoBrand) {
+        DojoBrandFooter(
+            modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 24.dp),
+            mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
+        )
+    } else {
+        DojoBrandFooter(
+            modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 8.dp),
+            mode = DojoBrandFooterModes.NONE
+        )
+    }
 }
 
 @Composable
@@ -265,7 +276,6 @@ private fun Loading() {
 private fun GooglePayButton(
     googlePayVisibility: PaymentMethodCheckoutState,
     coroutineScope: CoroutineScope,
-    sheetState: ModalBottomSheetState,
     onGpayClicked: () -> Unit,
     observePaymentIntent: () -> Unit
 ) {
@@ -277,7 +287,6 @@ private fun GooglePayButton(
         ) {
             coroutineScope.launch {
                 observePaymentIntent()
-                sheetState.hide()
                 onGpayClicked()
             }
         }
