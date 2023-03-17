@@ -31,16 +31,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             dojoPayUI.startPaymentFlow(
-                DojoPaymentFlowParams(
-                    uiSdkSampleBinding.token.text.toString(),
-                    secret,
-                    GPayConfig = DojoGPayConfig(
-                        merchantName = "Dojo Cafe (Paymentsense)",
-                        merchantId = "BCR2DN6T57R5ZI34",
-                        gatewayMerchantId = "119784244252745"
-                    )
-                )
-            )
+                DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()))
         }
         uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
