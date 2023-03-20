@@ -69,7 +69,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -126,7 +126,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -192,7 +192,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = true,
+                isVisible = true,
                 isPrimary = true,
                 navigateToCardCheckout = true
             ),
@@ -261,7 +261,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -331,7 +331,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -401,7 +401,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -476,7 +476,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -551,7 +551,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -635,7 +635,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = false,
+                    isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -719,7 +719,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = false
                 ),
@@ -802,7 +802,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = true,
+                isVisible = true,
                 isPrimary = false,
                 navigateToCardCheckout = true
             ),
@@ -892,7 +892,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -988,7 +988,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = "123"),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
