@@ -18,9 +18,9 @@ internal data class PaymentMethodItemViewEntity(
 
 internal sealed class PaymentMethodItemViewEntityItem {
 
-   internal object WalletItemItem : PaymentMethodItemViewEntityItem()
+    internal object WalletItemItem : PaymentMethodItemViewEntityItem()
 
-   internal data class CardItemItem(
+    internal data class CardItemItem(
         @DrawableRes
         val icon: Int,
         val id: String,
@@ -28,7 +28,7 @@ internal sealed class PaymentMethodItemViewEntityItem {
         val pan: String
     ) : PaymentMethodItemViewEntityItem()
 
-    internal object NoItem :PaymentMethodItemViewEntityItem()
+    internal object NoItem : PaymentMethodItemViewEntityItem()
 }
 
 internal enum class AppBarIconType {

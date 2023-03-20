@@ -806,7 +806,7 @@ class PaymentMethodCheckoutViewModelTest {
                 isPrimary = false,
                 navigateToCardCheckout = true
             ),
-            payAmountButtonState =null
+            payAmountButtonState = null
         )
 
         // act
@@ -832,6 +832,7 @@ class PaymentMethodCheckoutViewModelTest {
         // assert
         Assert.assertEquals(expected, actual)
     }
+
     @Test
     fun `test state when we have a new currently selected payment method`() = runTest {
         // arrange

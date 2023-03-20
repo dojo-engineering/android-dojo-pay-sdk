@@ -271,7 +271,7 @@ internal class PaymentMethodCheckoutViewModel(
         currentState = currentState.copy(
             cvvFieldState = InputFieldState(value = "")
         )
-        if (newValue is PaymentMethodItemViewEntityItem.NoItem){
+        if (newValue is PaymentMethodItemViewEntityItem.NoItem) {
             currentState = currentState.copy(
                 paymentMethodItem = null,
                 payWithCarButtonState = PayWithCarButtonState(
@@ -281,7 +281,7 @@ internal class PaymentMethodCheckoutViewModel(
                 ),
                 payAmountButtonState = null
             )
-        }else{
+        } else {
             if (newValue != currentState.paymentMethodItem) {
                 currentState = currentState.copy(
                     paymentMethodItem = newValue,
