@@ -69,7 +69,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -126,7 +126,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -192,7 +192,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = true,
+                isVisible = true,
                 isPrimary = true,
                 navigateToCardCheckout = true
             ),
@@ -261,7 +261,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -331,7 +331,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -401,7 +401,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -476,7 +476,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -551,7 +551,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 ),
@@ -635,7 +635,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = false,
+                    isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 ),
@@ -719,7 +719,7 @@ class PaymentMethodCheckoutViewModelTest {
                 totalAmount = "£100",
                 cvvFieldState = InputFieldState(value = ""),
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = false
                 ),
@@ -746,6 +746,92 @@ class PaymentMethodCheckoutViewModelTest {
             // assert
             Assert.assertEquals(expected, actual)
         }
+
+    @Test
+    fun `test state when we have a new currently selected payment method as no Item`() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+            MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity(
+                        10L,
+                        "100",
+                        "GBP"
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                    supportedWalletSchemes = listOf(WalletSchemes.GOOGLE_PAY),
+                    customerId = " customerId"
+                )
+            )
+        )
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
+            MutableStateFlow(null)
+        whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
+        fetchPaymentMethodsStream.tryEmit(
+            FetchPaymentMethodsResult.Success(
+                PaymentMethodsDomainEntity(
+                    listOf(
+                        PaymentMethodsDomainEntityItem(
+                            "",
+                            "",
+                            "",
+                            CardsSchemes.VISA
+                        )
+                    )
+                )
+            )
+        )
+
+        val expected = PaymentMethodCheckoutState(
+            gPayConfig = DojoGPayConfig(
+                merchantName = "",
+                merchantId = "",
+                gatewayMerchantId = "",
+                allowedCardNetworks = emptyList()
+            ),
+            isGooglePayButtonVisible = true,
+            isBottomSheetVisible = true,
+            isBottomSheetLoading = false,
+            paymentMethodItem = null,
+            amountBreakDownList = listOf(),
+            totalAmount = "£100",
+            cvvFieldState = InputFieldState(value = ""),
+            payWithCarButtonState = PayWithCarButtonState(
+                isVisible = true,
+                isPrimary = false,
+                navigateToCardCheckout = true
+            ),
+            payAmountButtonState = null
+        )
+
+        // act
+        val viewModel = PaymentMethodCheckoutViewModel(
+            savedCardPaymentHandler,
+            updateWalletState,
+            observePaymentIntent,
+            observePaymentMethods,
+            gpayPaymentHandler,
+            DojoGPayConfig(
+                merchantName = "",
+                merchantId = "",
+                gatewayMerchantId = ""
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
+        )
+        val newValue: PaymentMethodItemViewEntityItem =
+            PaymentMethodItemViewEntityItem.NoItem
+        viewModel.handleGooglePayAvailable()
+        viewModel.onSavedPaymentMethodChanged(newValue)
+        val actual = viewModel.state.value
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
 
     @Test
     fun `test state when we have a new currently selected payment method`() = runTest {
@@ -807,7 +893,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -903,7 +989,7 @@ class PaymentMethodCheckoutViewModelTest {
             totalAmount = "£100",
             cvvFieldState = InputFieldState(value = "123"),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),

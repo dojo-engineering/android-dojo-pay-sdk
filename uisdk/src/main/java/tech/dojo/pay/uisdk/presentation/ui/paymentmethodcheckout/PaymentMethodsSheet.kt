@@ -299,7 +299,7 @@ private fun PaymentMethodsButton(
     onPayByCard: () -> Unit,
     onManagePaymentClicked: () -> Unit
 ) {
-    if (contentState.payWithCarButtonState.isVisibleL) {
+    if (contentState.payWithCarButtonState.isVisible) {
         if (contentState.payWithCarButtonState.isPrimary) {
             DojoFullGroundButton(
                 modifier = Modifier
