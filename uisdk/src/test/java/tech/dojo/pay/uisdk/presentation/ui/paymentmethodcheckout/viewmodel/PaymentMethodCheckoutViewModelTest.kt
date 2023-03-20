@@ -748,6 +748,91 @@ class PaymentMethodCheckoutViewModelTest {
         }
 
     @Test
+    fun `test state when we have a new currently selected payment method as no Item`() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+            MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity(
+                        10L,
+                        "100",
+                        "GBP"
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                    supportedWalletSchemes = listOf(WalletSchemes.GOOGLE_PAY),
+                    customerId = " customerId"
+                )
+            )
+        )
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
+            MutableStateFlow(null)
+        whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
+        fetchPaymentMethodsStream.tryEmit(
+            FetchPaymentMethodsResult.Success(
+                PaymentMethodsDomainEntity(
+                    listOf(
+                        PaymentMethodsDomainEntityItem(
+                            "",
+                            "",
+                            "",
+                            CardsSchemes.VISA
+                        )
+                    )
+                )
+            )
+        )
+
+        val expected = PaymentMethodCheckoutState(
+            gPayConfig = DojoGPayConfig(
+                merchantName = "",
+                merchantId = "",
+                gatewayMerchantId = "",
+                allowedCardNetworks = emptyList()
+            ),
+            isGooglePayButtonVisible = true,
+            isBottomSheetVisible = true,
+            isBottomSheetLoading = false,
+            paymentMethodItem = null,
+            amountBreakDownList = listOf(),
+            totalAmount = "£100",
+            cvvFieldState = InputFieldState(value = ""),
+            payWithCarButtonState = PayWithCarButtonState(
+                isVisibleL = true,
+                isPrimary = false,
+                navigateToCardCheckout = true
+            ),
+            payAmountButtonState =null
+        )
+
+        // act
+        val viewModel = PaymentMethodCheckoutViewModel(
+            savedCardPaymentHandler,
+            updateWalletState,
+            observePaymentIntent,
+            observePaymentMethods,
+            gpayPaymentHandler,
+            DojoGPayConfig(
+                merchantName = "",
+                merchantId = "",
+                gatewayMerchantId = ""
+            ),
+            observePaymentStatus,
+            updatePaymentStateUseCase
+        )
+        val newValue: PaymentMethodItemViewEntityItem =
+            PaymentMethodItemViewEntityItem.NoItem
+        viewModel.handleGooglePayAvailable()
+        viewModel.onSavedPaymentMethodChanged(newValue)
+        val actual = viewModel.state.value
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+    @Test
     fun `test state when we have a new currently selected payment method`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =

@@ -276,7 +276,7 @@ internal class PaymentMethodCheckoutViewModel(
                 paymentMethodItem = null,
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisibleL = true,
-                    isPrimary = false,
+                    isPrimary = !currentState.isGooglePayButtonVisible,
                     navigateToCardCheckout = true
                 ),
                 payAmountButtonState = null
