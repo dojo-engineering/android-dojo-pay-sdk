@@ -15,7 +15,7 @@ internal class PaymentMethodsRepository(
 
 ) {
 
-    private lateinit var fetchPaymentMethodResult: MutableStateFlow<FetchPaymentMethodsResult?>
+    private var fetchPaymentMethodResult: MutableStateFlow<FetchPaymentMethodsResult?> = MutableStateFlow(null)
     fun deletePaymentMethods(
         customerId: String,
         customerSecret: String,
@@ -42,7 +42,6 @@ internal class PaymentMethodsRepository(
     }
 
     fun fetchPaymentMethod(customerId: String, customerSecret: String) {
-        fetchPaymentMethodResult = MutableStateFlow(null)
         dataSource.fetchPaymentMethods(
             customerId,
             customerSecret,

@@ -77,6 +77,7 @@ internal fun PaymentMethodsList(
                             onItemLongClicked(it)
                         }
                     )
+                    is PaymentMethodItemViewEntityItem.NoItem -> {}
                 }
             }
         }

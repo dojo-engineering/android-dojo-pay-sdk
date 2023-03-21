@@ -67,7 +67,7 @@ internal class PaymentMethodCheckoutViewModel(
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
             payWithCarButtonState = PayWithCarButtonState(
-                isVisibleL = false,
+                isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false
             ),
@@ -175,7 +175,7 @@ internal class PaymentMethodCheckoutViewModel(
             currentState = currentState.copy(
                 isGooglePayButtonVisible = true,
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 )
@@ -184,7 +184,7 @@ internal class PaymentMethodCheckoutViewModel(
             currentState = currentState.copy(
                 isGooglePayButtonVisible = false,
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true
                 )
@@ -198,7 +198,7 @@ internal class PaymentMethodCheckoutViewModel(
                 isGooglePayButtonVisible = true,
                 paymentMethodItem = PaymentMethodItemViewEntityItem.WalletItemItem,
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = false,
+                    isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = true
                 )
@@ -207,7 +207,7 @@ internal class PaymentMethodCheckoutViewModel(
             currentState = currentState.copy(
                 isGooglePayButtonVisible = false,
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = true,
+                    isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = false
                 )
@@ -271,17 +271,29 @@ internal class PaymentMethodCheckoutViewModel(
         currentState = currentState.copy(
             cvvFieldState = InputFieldState(value = "")
         )
-        if (newValue != currentState.paymentMethodItem) {
+        if (newValue is PaymentMethodItemViewEntityItem.NoItem) {
             currentState = currentState.copy(
-                paymentMethodItem = newValue,
-                payAmountButtonState = getPayAmountButtonState(newValue),
+                paymentMethodItem = null,
                 payWithCarButtonState = PayWithCarButtonState(
-                    isVisibleL = false,
-                    isPrimary = false,
-                    navigateToCardCheckout = false
+                    isVisible = true,
+                    isPrimary = !currentState.isGooglePayButtonVisible,
+                    navigateToCardCheckout = true
                 ),
-                isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
+                payAmountButtonState = null
             )
+        } else {
+            if (newValue != currentState.paymentMethodItem) {
+                currentState = currentState.copy(
+                    paymentMethodItem = newValue,
+                    payAmountButtonState = getPayAmountButtonState(newValue),
+                    payWithCarButtonState = PayWithCarButtonState(
+                        isVisible = false,
+                        isPrimary = false,
+                        navigateToCardCheckout = false
+                    ),
+                    isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
+                )
+            }
         }
         postStateToUI()
     }
