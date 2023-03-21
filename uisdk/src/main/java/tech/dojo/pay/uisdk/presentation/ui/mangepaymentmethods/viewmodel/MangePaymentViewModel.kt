@@ -108,6 +108,11 @@ internal class MangePaymentViewModel(
             isUsePaymentMethodButtonEnabled = false,
             isDeleteItemInProgress = false
         )
+        if (newList.isEmpty()) {
+            currentState = currentState.copy(
+                currentSelectedMethod = PaymentMethodItemViewEntityItem.NoItem
+            )
+        }
         postStateToUI()
     }
 
