@@ -1,14 +1,13 @@
 import org.jetbrains.kotlin.com.google.gson.Gson
 
 object Sdk {
-
     const val MIN_SDK_VERSION = 21
     const val TARGET_SDK_VERSION = 31
     const val COMPILE_SDK_VERSION = 31
 }
 
 object Versions {
-    const val ACTIVITY = "1.3.1"
+    const val ACTIVITY = "1.4.0"
     const val FRAGMENT = "1.4.1"
     const val ACTIVITY_COMPOSE = "1.3.0-beta01"
     const val VIEWMODEL_COMPOSE = "1.0.0-alpha04"
@@ -38,6 +37,9 @@ object Versions {
     const val GSON = "2.8.7"
     const val csvReader= "1.6.0"
     const val ANDROIDX_WINDOW= "1.0.0"
+    const val RETROFIT= "2.9.0"
+    const val GPAY= "19.1.0"
+    const val JSON_TEST= "20180813"
 }
 
 object BuildPluginsVersion {
@@ -186,8 +188,20 @@ object AndroidX {
 
 
 }
+object Networking {
+    const val RETROFIT_CORE= "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
+    const val CONVERTER_GSON= "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT}"
+    const val CONVERTER_SCALARS="com.squareup.retrofit2:converter-scalars:${Versions.RETROFIT}"
+}
+
+object Wallet{
+    const val GPAY="com.google.android.gms:play-services-wallet:${Versions.GPAY}"
+}
 
 object TestingLib {
 
     const val JUNIT = "junit:junit:${Versions.JUNIT}"
+
+    const val JSON_TEST = "org.json:json:${Versions.JSON_TEST}"
+
 }
