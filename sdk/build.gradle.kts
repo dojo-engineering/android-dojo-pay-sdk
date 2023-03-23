@@ -53,7 +53,7 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
-    implementation(files("./src/libs/threeDS-2.2.7-2.aar"))
+    implementation(project(":threeds"))
     implementation(Coroutines.COROUTINES_CORE)
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)

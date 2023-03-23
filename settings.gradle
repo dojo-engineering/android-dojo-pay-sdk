@@ -15,5 +15,6 @@ rootProject.name = "Dojo Pay Android SDK"
 include(
         ':sample',
         ':sdk',
-        ':uisdk'
+        ':uisdk',
+        ':threeds'
 )
