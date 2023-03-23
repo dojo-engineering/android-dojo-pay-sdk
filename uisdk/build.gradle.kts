@@ -9,8 +9,7 @@ plugins {
     publish
 }
 
-val credentialsPropertiesFile = Properties()
-credentialsPropertiesFile.load(FileInputStream(rootProject.file("credentials.properties")))
+
 android {
     compileSdk = 32
 
