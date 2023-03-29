@@ -6,7 +6,16 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+    def cardinalCredentialsPropertiesFile = new Properties()
+    file("cardinal.properties").withInputStream { cardinalCredentialsPropertiesFile.load(it) }
     repositories {
+        maven{
+            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
+            credentials {
+                username = cardinalCredentialsPropertiesFile.getProperty("jfrog.user")
+                password = cardinalCredentialsPropertiesFile.getProperty("jfrog.key")
+            }
+        }
         google()
         mavenCentral()
     }

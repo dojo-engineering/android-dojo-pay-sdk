@@ -1,4 +1,4 @@
-version = "1.4.2"
+version = "1.4.3"
 
 plugins {
     id("com.android.library")
@@ -53,7 +53,8 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
-    implementation(project(":threeds"))
+    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2") // cardinal
+//    implementation(project(":threeds"))
     implementation(Coroutines.COROUTINES_CORE)
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
