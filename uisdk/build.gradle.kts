@@ -82,7 +82,7 @@ dependencies {
     implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT)
     implementation(AndroidX.Logging.TIMBER)
     implementation(AndroidX.Network.GSON)
-    api (project(":sdk"))
+    api(project(":sdk"))
     implementation(AndroidX.WINDOW)
     testImplementation(TestingLib.JUNIT)
     implementation(CsvReader.csvReader)
