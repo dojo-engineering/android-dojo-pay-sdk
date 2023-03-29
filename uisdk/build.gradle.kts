@@ -1,5 +1,3 @@
-import java.io.FileInputStream
-import java.util.Properties
 version = "1.1.1"
 
 plugins {
@@ -12,7 +10,6 @@ plugins {
 
 android {
     compileSdk = 32
-
     defaultConfig {
         minSdk = 21
         targetSdk = 32
