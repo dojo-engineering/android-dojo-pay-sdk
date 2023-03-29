@@ -9,6 +9,9 @@ dependencyResolutionManagement {
     def cardinalCredentialsPropertiesFile = new Properties()
     file("cardinal.properties").withInputStream { cardinalCredentialsPropertiesFile.load(it) }
     repositories {
+        flatDir {
+            dirs 'libs'
+        }
         maven{
             url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
             credentials {

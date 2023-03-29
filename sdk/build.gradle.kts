@@ -1,4 +1,4 @@
-version = "1.4.3"
+version = "1.4.4"
 
 plugins {
     id("com.android.library")
@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(AndroidX.CORE_KTX)
     implementation(AndroidX.Activity.ACTIVITY)
     implementation(AndroidX.Fragment.FRAGMENT)
@@ -53,9 +54,8 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
-    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2") // cardinal
-//    implementation(project(":threeds"))
     implementation(Coroutines.COROUTINES_CORE)
+    implementation( files("libs/threeDS.aar"))
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
