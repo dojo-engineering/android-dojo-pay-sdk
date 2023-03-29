@@ -53,8 +53,8 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
+    api (project(":threeds"))
     implementation(Coroutines.COROUTINES_CORE)
-    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2") // cardinal
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
