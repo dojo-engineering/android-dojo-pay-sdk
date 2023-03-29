@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
     implementation(AndroidX.CORE_KTX)
     implementation(AndroidX.Activity.ACTIVITY)
     implementation(AndroidX.Fragment.FRAGMENT)
@@ -55,7 +54,7 @@ dependencies {
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
     implementation(Coroutines.COROUTINES_CORE)
-    implementation(files("libs/threeDS.aar"))
+    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2") // cardinal
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
