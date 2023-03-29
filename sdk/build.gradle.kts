@@ -55,7 +55,7 @@ dependencies {
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
     implementation(Coroutines.COROUTINES_CORE)
-    implementation( files("libs/threeDS.aar"))
+    implementation(files("libs/threeDS.aar"))
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)
     testImplementation(MOCKITO.MOCKITO_INLINE)
