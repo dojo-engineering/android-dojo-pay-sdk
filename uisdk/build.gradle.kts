@@ -7,7 +7,6 @@ plugins {
     publish
 }
 
-
 android {
     compileSdk = 32
     defaultConfig {
