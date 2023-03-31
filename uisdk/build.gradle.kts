@@ -1,6 +1,4 @@
-import java.io.FileInputStream
-import java.util.Properties
-version = "1.1.1"
+version = "1.1.3"
 
 plugins {
     id("com.android.library")
@@ -8,7 +6,6 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     publish
 }
-
 
 android {
     compileSdk = 32

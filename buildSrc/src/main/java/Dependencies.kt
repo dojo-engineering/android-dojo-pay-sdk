@@ -40,6 +40,7 @@ object Versions {
     const val RETROFIT= "2.9.0"
     const val GPAY= "19.1.0"
     const val JSON_TEST= "20180813"
+    const val CARDINAL= "2.2.7-2"
 }
 
 object BuildPluginsVersion {
@@ -198,6 +199,9 @@ object Wallet{
     const val GPAY="com.google.android.gms:play-services-wallet:${Versions.GPAY}"
 }
 
+object Threeds{
+    const val Cardinal="org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:${Versions.CARDINAL}"
+}
 object TestingLib {
 
     const val JUNIT = "junit:junit:${Versions.JUNIT}"
