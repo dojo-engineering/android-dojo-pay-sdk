@@ -21,7 +21,6 @@ class WalletStateRepositoryTest {
         repository = WalletStateRepository()
     }
 
-
     @Test
     fun `observeWalletState emits correct values`() = runTest {
         val isActive = true
@@ -35,4 +34,3 @@ class WalletStateRepositoryTest {
         job.cancel()
     }
 }
-
