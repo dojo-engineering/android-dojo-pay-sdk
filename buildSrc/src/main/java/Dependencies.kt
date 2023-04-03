@@ -41,6 +41,7 @@ object Versions {
     const val GPAY= "19.1.0"
     const val JSON_TEST= "20180813"
     const val CARDINAL= "2.2.7-2"
+    const val MOCKK="1.13.4"
 }
 
 object BuildPluginsVersion {
@@ -207,5 +208,7 @@ object TestingLib {
     const val JUNIT = "junit:junit:${Versions.JUNIT}"
 
     const val JSON_TEST = "org.json:json:${Versions.JSON_TEST}"
+
+    const val MOCKK="io.mockk:mockk:${Versions.MOCKK}"
 
 }
