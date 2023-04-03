@@ -29,20 +29,24 @@ internal class CardCheckoutScreenValidator {
     }
 
     fun isCardNumberValid(cardNumberValue: String): Boolean {
-        var sum = 0
-        var alternate = false
-        for (i in cardNumberValue.length - 1 downTo 0) {
-            var n: Int = cardNumberValue.substring(i, i + 1).toInt()
-            if (alternate) {
-                n *= 2
-                if (n > 9) {
-                    n = n % 10 + 1
+        return if (cardNumberValue.isNotEmpty()) {
+            var sum = 0
+            var alternate = false
+            for (i in cardNumberValue.length - 1 downTo 0) {
+                var n: Int = cardNumberValue.substring(i, i + 1).toInt()
+                if (alternate) {
+                    n *= 2
+                    if (n > 9) {
+                        n = n % 10 + 1
+                    }
                 }
+                sum += n
+                alternate = !alternate
             }
-            sum += n
-            alternate = !alternate
+            sum % 10 == 0
+        } else {
+            false
         }
-        return sum % 10 == 0
     }
 
     fun isCardExpireDateValid(expireDate: String): Boolean {
