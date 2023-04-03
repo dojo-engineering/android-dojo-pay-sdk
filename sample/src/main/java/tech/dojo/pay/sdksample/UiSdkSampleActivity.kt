@@ -30,6 +30,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         setCustomerCreationListener()
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = false)
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString())
             )

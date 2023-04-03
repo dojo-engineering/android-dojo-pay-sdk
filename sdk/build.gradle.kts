@@ -1,4 +1,4 @@
-version = "1.4.0"
+version = "1.4.5"
 
 plugins {
     id("com.android.library")
@@ -53,6 +53,7 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
+//    implementation(Threeds.Cardinal)
     implementation(project(":threeds"))
     implementation(Coroutines.COROUTINES_CORE)
     testImplementation(TestingLib.JUNIT)
