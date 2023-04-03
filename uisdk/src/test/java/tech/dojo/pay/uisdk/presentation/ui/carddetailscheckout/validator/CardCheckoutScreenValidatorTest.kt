@@ -97,9 +97,20 @@ internal class CardCheckoutScreenValidatorTest {
     }
 
     @Test
-    fun `calling isCardNumberValid with inValid card number should return true`() {
+    fun `calling isCardNumberValid with inValid card number should return false`() {
         // arrange
         val cardNumber = "1234123412341234"
+        val expected = false
+        // act
+        val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `calling isCardNumberValid with empty  card number should return false`() {
+        // arrange
+        val cardNumber = ""
         val expected = false
         // act
         val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
