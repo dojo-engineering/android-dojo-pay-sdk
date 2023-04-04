@@ -17,7 +17,7 @@
             android:name=".ExampleJava"
             android:exported="false" />
         <activity
-            android:name=".ExampleKoltin"
+            android:name=".ExampleKotlin"
             android:exported="false" />
 
         <meta-data

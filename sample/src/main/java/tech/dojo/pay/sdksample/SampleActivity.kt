@@ -30,7 +30,7 @@ class SampleActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.sampleAppDemoKoltin).setOnClickListener {
             startActivity(
-                Intent(this, ExampleKoltin::class.java)
+                Intent(this, ExampleKotlin::class.java)
             )
         }
     }
