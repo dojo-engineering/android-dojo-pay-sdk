@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DojoPayAndroidSDK">
         <activity
-            android:name=".SampleUI"
+            android:name=".ExampleJava"
             android:exported="false" />
         <activity
-            android:name=".SampleUiSdk"
+            android:name=".ExampleKoltin"
             android:exported="false" />
 
         <meta-data

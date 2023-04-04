@@ -11,7 +11,7 @@ import tech.dojo.pay.uisdk.DojoSDKDropInUI;
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams;
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandler;
 
-public class SampleUI extends AppCompatActivity {
+public class ExampleJava extends AppCompatActivity {
     private final DojoPaymentFlowHandler dojoPaymentFlowHandler = DojoSDKDropInUI.INSTANCE.createUIPaymentHandler(
             this,
             ((dojoPaymentResult) -> {

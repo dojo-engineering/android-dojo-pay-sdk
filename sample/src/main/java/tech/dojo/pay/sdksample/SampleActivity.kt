@@ -24,13 +24,13 @@ class SampleActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.sampleAppDemoJava).setOnClickListener {
             startActivity(
-                Intent(this, SampleUI::class.java)
+                Intent(this, ExampleJava::class.java)
             )
         }
 
         findViewById<View>(R.id.sampleAppDemoKoltin).setOnClickListener {
             startActivity(
-                Intent(this, SampleUiSdk::class.java)
+                Intent(this, ExampleKoltin::class.java)
             )
         }
     }
