@@ -22,5 +22,16 @@ class SampleActivity : AppCompatActivity() {
                 Intent(this, UiSdkSampleActivity::class.java)
             )
         }
+        findViewById<View>(R.id.sampleAppDemoJava).setOnClickListener {
+            startActivity(
+                Intent(this, ExampleJava::class.java)
+            )
+        }
+
+        findViewById<View>(R.id.sampleAppDemoKoltin).setOnClickListener {
+            startActivity(
+                Intent(this, ExampleKotlin::class.java)
+            )
+        }
     }
 }

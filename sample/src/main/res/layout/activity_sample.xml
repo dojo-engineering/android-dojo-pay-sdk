@@ -9,11 +9,24 @@
         android:id="@+id/btnCardPayment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Card Payment"/>
+        android:text="core sdk demo"/>
 
     <Button
         android:id="@+id/btnUICardPayment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="StarUI FLow" />
+        android:text="ui sdk demo " />
+
+
+    <Button
+        android:id="@+id/sampleAppDemoKoltin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sample app for ui kotlin " />
+
+    <Button
+        android:id="@+id/sampleAppDemoJava"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sample app for ui Java  " />
 </LinearLayout>
