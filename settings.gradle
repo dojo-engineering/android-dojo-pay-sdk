@@ -12,6 +12,16 @@ dependencyResolutionManagement {
         flatDir {
             dirs 'libs'
         }
+        /**
+         * those are the maven repos that u need to add on ur app
+         */
+//        maven {
+//            url = uri("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
+//            credentials {
+//                username = ""
+//                password = ""
+//            }
+//        }
 //        maven{
 //            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
 //            credentials {
