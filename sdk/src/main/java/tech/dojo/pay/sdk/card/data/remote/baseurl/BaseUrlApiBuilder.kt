@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardApiEnvironment
 import java.util.concurrent.TimeUnit
 
 internal object BaseUrlApiBuilder {
@@ -19,10 +20,10 @@ internal object BaseUrlApiBuilder {
             .client(createHttpClient())
             .build()
 
-    private fun getApiBaseUrl() = if (DojoSdk.isCardSandBox) {
-        BASE_URL_GOOGLE_SAND_BOX
-    } else {
-        BASE_URL_GOOGLE_PROD
+    private fun getApiBaseUrl() = when (DojoSdk.cardApiConfigurations.cardApiEnvironment) {
+        CardApiEnvironment.PROD -> BASE_URL_GOOGLE_PROD_SAND_BOX
+        CardApiEnvironment.SAND_BOX -> BASE_URL_GOOGLE_PROD_SAND_BOX
+        CardApiEnvironment.STAGING -> BASE_URL_GOOGLE_SAND_BOX_STAGING
     }
 
     private fun createHttpClient(): OkHttpClient =
@@ -32,7 +33,7 @@ internal object BaseUrlApiBuilder {
             .build()
 }
 
-private const val BASE_URL_GOOGLE_SAND_BOX =
+private const val BASE_URL_GOOGLE_SAND_BOX_STAGING =
     "https://storage.googleapis.com/remote-ag-nonprod-stg-manifest/"
-private const val BASE_URL_GOOGLE_PROD =
+private const val BASE_URL_GOOGLE_PROD_SAND_BOX =
     "https://storage.googleapis.com/remote-ag-prod-manifest/"

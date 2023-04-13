@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.card.DojoCardPaymentResultContract
 import tech.dojo.pay.sdk.card.DojoGPayResultContract
+import tech.dojo.pay.sdk.card.entities.CardApiConfigurations
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.FullCardPaymentPayload
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad.SavedCardPaymentPayLoad
@@ -26,7 +27,7 @@ object DojoSdk {
     private val REQUEST_CODE_SAVED_CARD = "DOJO_PAY_SAVED_CARD".hashCode()
     private val REQUEST_CODE_CARD = "DOJO_PAY".hashCode()
     private val REQUEST_CODE_G_PAY = "DOJO_G_PAY".hashCode()
-
+    var cardApiConfigurations: CardApiConfigurations = CardApiConfigurations()
     var isWalletSandBox: Boolean = false
     var isCardSandBox: Boolean = false
 
