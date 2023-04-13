@@ -1,27 +1,28 @@
-package tech.dojo.pay.sdk.card.data.remote.cardpayment
+package tech.dojo.pay.sdk.card.data.remote.baseurl
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import tech.dojo.pay.sdk.card.data.BaseUrlRepository
+import tech.dojo.pay.sdk.DojoSdk
 import java.util.concurrent.TimeUnit
 
-internal class CardPaymentApiBuilder {
-
-    fun create(): CardPaymentApi =
-        createRetrofit().create(CardPaymentApi::class.java)
+internal object BaseUrlApiBuilder {
+    fun create(): BaseUrlApi =
+        createRetrofit().create(BaseUrlApi::class.java)
 
     private fun createRetrofit(): Retrofit =
         Retrofit.Builder()
-            .baseUrl(getBaseUrl())
+            .baseUrl(getApiBaseUrl())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(createHttpClient())
             .build()
 
-    private fun getBaseUrl(): String {
-        return BaseUrlRepository.getBaseUrl().ifEmpty { "https://web.e.connect.paymentsense.cloud/" }
+    private fun getApiBaseUrl() = if (DojoSdk.isCardSandBox) {
+        BASE_URL_GOOGLE_SAND_BOX
+    } else {
+        BASE_URL_GOOGLE_PROD
     }
 
     private fun createHttpClient(): OkHttpClient =
@@ -30,3 +31,8 @@ internal class CardPaymentApiBuilder {
             .readTimeout(15, TimeUnit.SECONDS)
             .build()
 }
+
+private const val BASE_URL_GOOGLE_SAND_BOX =
+    "https://storage.googleapis.com/remote-ag-nonprod-stg-manifest/"
+private const val BASE_URL_GOOGLE_PROD =
+    "https://storage.googleapis.com/remote-ag-prod-manifest/"
