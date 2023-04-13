@@ -29,8 +29,8 @@ internal object BaseUrlRepository {
         return try {
             baseUrlRaw.ifEmpty {
                 val response = api.getBaseUrl()
-                if (response.isSuccessful) {
-                    baseUrlRaw = response.body()?.baseUrlRaw ?: ""
+                if (response.isSuccessful && response.body() != null) {
+                    baseUrlRaw = "${response.body()?.baseUrl}/"
                     baseUrlRaw
                 } else { "" }
             }
