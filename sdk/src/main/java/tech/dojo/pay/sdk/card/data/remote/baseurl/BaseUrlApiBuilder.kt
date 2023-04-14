@@ -19,11 +19,7 @@ internal object BaseUrlApiBuilder {
             .client(createHttpClient())
             .build()
 
-    private fun getApiBaseUrl() = if (DojoSdk.isCardSandBox) {
-        BASE_URL_GOOGLE_SAND_BOX
-    } else {
-        BASE_URL_GOOGLE_PROD
-    }
+    private fun getApiBaseUrl() = BASE_URL_GOOGLE_PROD
 
     private fun createHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
@@ -32,7 +28,5 @@ internal object BaseUrlApiBuilder {
             .build()
 }
 
-private const val BASE_URL_GOOGLE_SAND_BOX =
-    "https://storage.googleapis.com/remote-ag-nonprod-stg-manifest/"
 private const val BASE_URL_GOOGLE_PROD =
     "https://storage.googleapis.com/remote-ag-prod-manifest/"

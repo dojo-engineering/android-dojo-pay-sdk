@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.data.BaseUrlRepository
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +22,12 @@ internal class CardPaymentApiBuilder {
             .build()
 
     private fun getBaseUrl(): String {
-        return BaseUrlRepository.getBaseUrl().ifEmpty { "https://web.e.connect.paymentsense.cloud/" }
+        val appCustomBaseUrl: String? = DojoSdk.DojoSDKDebugConfig.dojoSDKURLConfig?.connectE
+        return if (!appCustomBaseUrl.isNullOrBlank()) {
+            appCustomBaseUrl
+        } else {
+            BaseUrlRepository.getBaseUrl().ifEmpty { "https://web.e.connect.paymentsense.cloud/" }
+        }
     }
 
     private fun createHttpClient(): OkHttpClient =
