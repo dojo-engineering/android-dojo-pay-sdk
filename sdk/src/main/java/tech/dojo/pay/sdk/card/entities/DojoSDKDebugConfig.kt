@@ -7,6 +7,6 @@ data class DojoSDKDebugConfig(
 )
 
 data class DojoSDKURLConfig(
-    val connectE: String?= null,
-    val remote: String?= null
+    val connectE: String? = null,
+    val remote: String? = null
 )

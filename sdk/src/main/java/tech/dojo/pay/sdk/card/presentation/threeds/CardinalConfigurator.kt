@@ -41,7 +41,7 @@ class CardinalConfigurator(private val context: Context) {
     }
 
     private fun getEnvironment(): CardinalEnvironment {
-        return if (DojoSdk.isCardSandBox) {
+        return if (DojoSdk.dojoSDKDebugConfig.isSandboxIntent) {
             CardinalEnvironment.STAGING
         } else {
             CardinalEnvironment.PRODUCTION
