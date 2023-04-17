@@ -112,11 +112,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun configureDojoPayCore() {
-        val dojoSDKDebugConfig = DojoSDKDebugConfig(
-            isSandboxWallet = viewModel.isPaymentInSandBoxEnvironment(),
-            isSandboxIntent = viewModel.isPaymentInSandBoxEnvironment()
-        )
-        DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
+        configureDojoSDKDebugConfig()
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             viewModel.updateGpayPaymentState(false)
             viewModel.navigateToPaymentResult(it)
@@ -128,6 +124,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         savedCardPaymentHandler = DojoSdk.createSavedCardPaymentHandler(this) {
             viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
+        }
+    }
+
+    private fun configureDojoSDKDebugConfig() {
+        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
+            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
+        } else {
+            val dojoSDKDebugConfig = DojoSDKDebugConfig(
+                isSandboxWallet = viewModel.isPaymentInSandBoxEnvironment(),
+                isSandboxIntent = viewModel.isPaymentInSandBoxEnvironment()
+            )
+            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 
