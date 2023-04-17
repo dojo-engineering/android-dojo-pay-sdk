@@ -29,7 +29,7 @@ object DojoSdk {
     private val REQUEST_CODE_G_PAY = "DOJO_G_PAY".hashCode()
     var isWalletSandBox: Boolean = false
     var isCardSandBox: Boolean = false
-    val DojoSDKDebugConfig: DojoSDKDebugConfig= DojoSDKDebugConfig()
+    val dojoSDKDebugConfig: DojoSDKDebugConfig= DojoSDKDebugConfig()
 
     /**
      * Returns handler which starts payment process for normal card payment .

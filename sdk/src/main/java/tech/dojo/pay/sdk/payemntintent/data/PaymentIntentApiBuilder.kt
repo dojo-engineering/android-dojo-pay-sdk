@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import tech.dojo.pay.sdk.DojoSdk
 import java.util.concurrent.TimeUnit
 
 internal class PaymentIntentApiBuilder {
@@ -18,7 +19,11 @@ internal class PaymentIntentApiBuilder {
             .client(createHttpClient())
             .build()
 
-    private fun getBaseUrl() = "https://api.dojo.tech/"
+    private fun getBaseUrl() = if (DojoSdk.dojoSDKDebugConfig.dojoSDKURLConfig?.remote != null) {
+        DojoSdk.dojoSDKDebugConfig.dojoSDKURLConfig.remote
+    } else {
+        "https://api.dojo.tech/"
+    }
 
     private fun createHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
