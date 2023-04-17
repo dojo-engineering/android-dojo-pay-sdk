@@ -1,7 +1,7 @@
 package tech.dojo.pay.sdk.card.entities
 
 data class DojoSDKDebugConfig(
-    val dojoSDKURLConfig: DojoSDKURLConfig? = null,
+    val urlConfig: DojoSDKURLConfig? = null,
     val isSandboxIntent: Boolean = false,
     val isSandboxWallet: Boolean = false
 )

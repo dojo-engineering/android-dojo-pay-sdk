@@ -19,8 +19,8 @@ internal class PaymentMethodsApiBuilder {
             .client(createHttpClient())
             .build()
 
-    private fun getBaseUrl() = if (DojoSdk.dojoSDKDebugConfig.dojoSDKURLConfig?.remote != null) {
-        DojoSdk.dojoSDKDebugConfig.dojoSDKURLConfig.remote
+    private fun getBaseUrl() = if (DojoSdk.dojoSDKDebugConfig.urlConfig?.remote != null) {
+        DojoSdk.dojoSDKDebugConfig.urlConfig.remote
     } else {
         "https://api.dojo.tech/"
     }

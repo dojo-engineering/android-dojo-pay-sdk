@@ -22,7 +22,7 @@ internal class CardPaymentApiBuilder {
             .build()
 
     private fun getBaseUrl(): String {
-        val appCustomBaseUrl: String? = DojoSdk.dojoSDKDebugConfig.dojoSDKURLConfig?.connectE
+        val appCustomBaseUrl: String? = DojoSdk.dojoSDKDebugConfig.urlConfig?.connectE
         return if (!appCustomBaseUrl.isNullOrBlank()) {
             appCustomBaseUrl
         } else {
