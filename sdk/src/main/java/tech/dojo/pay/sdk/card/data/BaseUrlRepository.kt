@@ -10,12 +10,13 @@ import tech.dojo.pay.sdk.card.data.remote.baseurl.BaseUrlApiBuilder
 
 internal object BaseUrlRepository {
     private val api: BaseUrlApi = BaseUrlApiBuilder.create()
+    var dispatchers= Dispatchers.IO
     private var baseUrlRaw = ""
 
     fun getBaseUrl(): String {
         return runBlocking {
             val deferred = CompletableDeferred<String>()
-            val job = CoroutineScope(Dispatchers.IO).launch {
+            val job = CoroutineScope(dispatchers).launch {
                 val result = fetchBaseUrl()
                 deferred.complete(result)
             }
