@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 internal object BaseUrlRepository {
-    private val api: BaseUrlApi = BaseUrlApiBuilder.create()
+    internal var api: BaseUrlApi = BaseUrlApiBuilder.create()
     var dispatchers = Dispatchers.IO
     private var baseUrlRaw = ""
 
@@ -70,8 +70,8 @@ internal object BaseUrlRepository {
     }
 }
 
-private const val BASE_URL_GOOGLE_PROD =
+internal const val BASE_URL_GOOGLE_PROD =
     "https://storage.googleapis.com/rag-prod-manifest/rag-manifest.json"
-private const val BASE_URL_AWS_PROD = "https://d1vkrwwafyvizg.cloudfront.net/rag-manifest.json"
+internal const val BASE_URL_AWS_PROD = "https://d1vkrwwafyvizg.cloudfront.net/rag-manifest.json"
 
 private const val LAST_UPDATE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z"
