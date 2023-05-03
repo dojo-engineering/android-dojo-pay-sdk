@@ -35,20 +35,21 @@ internal interface CardPaymentApi {
     suspend fun processAuthorization(
         @Path("token") token: String,
         @Body payload: AuthorizationBody,
-        @Header("IS-MOBILE") isMobile: Boolean = true,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): PaymentResponse
 
     @POST("api/payments/recurring/{token}")
     suspend fun processPaymentForSaverCard(
         @Path("token") token: String,
-        @Body payload: PaymentDetails
+        @Body payload: PaymentDetails,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): PaymentResponse
 
     @POST("api/payments/{token}/google-pay/decrypt-token")
     suspend fun decryptGPayToken(
         @Path("token") token: String,
         @Body payload: DecryptGPayTokenBody,
-        @Header("IS-MOBILE") isMobile: Boolean = true,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): DecryptGPayTokenResponse
 
     @POST
@@ -62,6 +63,7 @@ internal interface CardPaymentApi {
     @POST("api/payments/{token}/google-pay")
     suspend fun processGPay(
         @Path("token") token: String,
-        @Body payload: GPayDetails
+        @Body payload: GPayDetails,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): PaymentResponse
 }

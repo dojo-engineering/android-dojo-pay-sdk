@@ -12,7 +12,8 @@ interface PaymentMethodsApi {
     suspend fun fetchSavedPayment(
         @Path("customerId") customerId: String,
         @Header("Authorization") authorization: String,
-        @Header("Version") version: String = API_VERSION
+        @Header("Version") version: String = API_VERSION,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): Response<JsonObject>
 
     @DELETE("customers/public/{customerId}/payment-methods/{paymentMethodId}")
@@ -20,7 +21,8 @@ interface PaymentMethodsApi {
         @Path("customerId") customerId: String,
         @Path("paymentMethodId") paymentMethodId: String,
         @Header("Authorization") authorization: String,
-        @Header("Version") version: String = API_VERSION
+        @Header("Version") version: String = API_VERSION,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): Response<JsonObject>
 }
 
