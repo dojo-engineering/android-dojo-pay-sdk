@@ -4,6 +4,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.runTest
 import okhttp3.Headers
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -22,9 +23,10 @@ class BaseUrlRepositoryTest {
     fun `getBaseUrl should return AWS URL when GCP request fails and AWS request succeeds`() {
         // Given
         val mockApi: BaseUrlApi = mockk()
-        baseUrlRepository = BaseUrlRepository
-        baseUrlRepository?.api = mockApi
-        baseUrlRepository?.dispatchers = Dispatchers.Unconfined
+        baseUrlRepository = BaseUrlRepository(
+            mockApi,
+            Dispatchers.Unconfined
+        )
         val responseForGoogle: Response<BaseUrlRaw> = mockk()
         every { responseForGoogle.isSuccessful } returns (false)
         coEvery { mockApi.getBaseUrl(BASE_URL_GOOGLE_PROD) } returns responseForGoogle
@@ -34,18 +36,41 @@ class BaseUrlRepositoryTest {
         every { responseForAWS.headers() }.returns(Headers.Builder().add("last-modified", "Tue, 03 May 2023 09:20:30 GMT").build())
         coEvery { mockApi.getBaseUrl(BASE_URL_AWS_PROD) } returns responseForAWS
         // When
-        val result = baseUrlRepository?.getBaseUrl()
+        val result = baseUrlRepository.getBaseUrl()
         // Then
         assertEquals(mockBaseUrlAWS, result)
+    }
+
+    @Test
+    fun `getBaseUrl should return GCP URL when GCP request succeeds and AWS request fails`() = runTest {
+        // Given
+        val mockApi: BaseUrlApi = mockk()
+        baseUrlRepository = BaseUrlRepository(
+            mockApi,
+            Dispatchers.Unconfined
+        )
+        val responseForGoogle: Response<BaseUrlRaw> = mockk()
+        coEvery { responseForGoogle.isSuccessful } returns (true)
+        coEvery { responseForGoogle.body() }.returns(BaseUrlRaw(baseUrl = "https://test-gcp.com", format = "Tue, 03 May 2023 10:20:30 GMT", baseClientEventUrl = "https://example.com/"))
+        coEvery { responseForGoogle.headers() }.returns(Headers.Builder().add("last-modified", "Tue, 03 May 2023 09:20:30 GMT").build())
+        coEvery { mockApi.getBaseUrl(BASE_URL_GOOGLE_PROD) } returns responseForGoogle
+        val responseForAWS: Response<BaseUrlRaw> = mockk()
+        coEvery { responseForAWS.isSuccessful } returns (false)
+        coEvery { mockApi.getBaseUrl(BASE_URL_AWS_PROD) } returns responseForAWS
+        // When
+        val result = baseUrlRepository.getBaseUrl()
+        // Then
+        assertEquals(mockBaseUrlGCP, result)
     }
 
     @Test
     fun `getBaseUrl should return latest URL when both GCP and AWS requests succeed`() {
         // Given
         val mockApi: BaseUrlApi = mockk()
-        baseUrlRepository = BaseUrlRepository
-        baseUrlRepository.dispatchers = Dispatchers.Unconfined
-        baseUrlRepository.api = mockApi
+        baseUrlRepository = BaseUrlRepository(
+            mockApi,
+            Dispatchers.Unconfined
+        )
         val responseForGoogle: Response<BaseUrlRaw> = mockk()
         every { responseForGoogle.isSuccessful } returns (true)
         every { responseForGoogle.body() }.returns(BaseUrlRaw(baseUrl = "https://test-gcp.com", format = "Tue, 03 May 2023 10:20:30 GMT", baseClientEventUrl = "https://example.com/"))
@@ -61,5 +86,26 @@ class BaseUrlRepositoryTest {
         val result = baseUrlRepository.getBaseUrl()
         // Then
         assertEquals(mockBaseUrlAWS, result)
+    }
+
+    @Test
+    fun `getBaseUrl should return default URL when both GCP and AWS requests fail`() {
+        // Given
+        val mockApi: BaseUrlApi = mockk()
+        baseUrlRepository = BaseUrlRepository(
+            mockApi,
+            Dispatchers.Unconfined
+        )
+        val responseForGoogle: Response<BaseUrlRaw> = mockk()
+        coEvery { responseForGoogle.isSuccessful } returns (false)
+        val responseForAWS: Response<BaseUrlRaw> = mockk()
+        coEvery { responseForAWS.isSuccessful } returns (false)
+        coEvery { mockApi.getBaseUrl(BASE_URL_AWS_PROD) } returns responseForAWS
+
+        // When
+        val result = baseUrlRepository.getBaseUrl()
+
+        // Then
+        assertEquals("", result)
     }
 }

@@ -26,7 +26,7 @@ internal class CardPaymentApiBuilder {
         return if (!appCustomBaseUrl.isNullOrBlank()) {
             appCustomBaseUrl
         } else {
-            BaseUrlRepository.getBaseUrl().ifEmpty { "https://web.e.connect.paymentsense.cloud/" }
+            BaseUrlRepository().getBaseUrl().ifEmpty { "https://web.e.connect.paymentsense.cloud/" }
         }
     }
 

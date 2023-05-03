@@ -1,6 +1,7 @@
 package tech.dojo.pay.sdk.card.data
 
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,9 +12,10 @@ import tech.dojo.pay.sdk.card.data.remote.baseurl.BaseUrlApiBuilder
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-internal object BaseUrlRepository {
-    internal var api: BaseUrlApi = BaseUrlApiBuilder.create()
-    var dispatchers = Dispatchers.IO
+internal class BaseUrlRepository(
+    private val api: BaseUrlApi = BaseUrlApiBuilder.create(),
+    private val dispatchers: CoroutineDispatcher = Dispatchers.IO
+) {
     private var baseUrlRaw = ""
 
     fun getBaseUrl(): String {
