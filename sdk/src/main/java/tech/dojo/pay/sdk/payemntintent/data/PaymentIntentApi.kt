@@ -12,13 +12,15 @@ interface PaymentIntentApi {
     @GET("payment-intents/public/{paymentId}")
     suspend fun fetchPaymentIntent(
         @Path("paymentId") paymentId: String,
-        @Header("Version") version: String = API_VERSION
+        @Header("Version") version: String = API_VERSION,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): Response<JsonObject>
 
     @POST("payment-intents/public/{paymentId}/refresh-client-session-secret")
     suspend fun refreshPaymentIntent(
         @Path("paymentId") paymentId: String,
-        @Header("Version") version: String = API_VERSION
+        @Header("Version") version: String = API_VERSION,
+        @Header("IS-MOBILE") isMobile: Boolean = true
     ): Response<JsonObject>
 }
 

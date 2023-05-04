@@ -133,7 +133,7 @@ object GooglePayJsonFactory {
      * off it will return prod environment
      */
     private fun getGpayEnvironment() = when {
-        DojoSdk.isWalletSandBox -> WalletConstants.ENVIRONMENT_TEST
+        DojoSdk.dojoSDKDebugConfig.isSandboxWallet -> WalletConstants.ENVIRONMENT_TEST
         else -> WalletConstants.ENVIRONMENT_PRODUCTION
     }
 
