@@ -13,6 +13,7 @@ internal data class PaymentIntentDomainEntity(
     val itemLines: List<ItemLinesDomainEntity>? = null,
     val customerId: String? = null,
     val collectionEmailRequired: Boolean = false,
+    val isVirtualTerminalPayment: Boolean = false,
     val collectionBillingAddressRequired: Boolean = false
 )
 

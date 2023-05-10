@@ -34,6 +34,9 @@ internal class PaymentFlowViewModel(
                     it?.let { paymentIntentResult ->
                         if (paymentIntentResult is PaymentIntentResult.Success) {
                             currentCustomerId = paymentIntentResult.result.customerId
+                            if (paymentIntentResult.result.isVirtualTerminalPayment) {
+                                navigateToCardsCheckoutScreenAsEntryPoint()
+                            }
                             fetchPaymentMethodsUseCase.fetchPaymentMethods(
                                 paymentIntentResult.result.customerId ?: "",
                                 customerSecret
@@ -48,6 +51,10 @@ internal class PaymentFlowViewModel(
                 closeFLowWithInternalError()
             }
         }
+    }
+
+    private fun navigateToCardsCheckoutScreenAsEntryPoint() {
+        navigationEvent.postValue(PaymentFlowNavigationEvents.CardDetailsCheckoutAsFirstScreen)
     }
 
     fun updatePaymentState(isActivity: Boolean) {
