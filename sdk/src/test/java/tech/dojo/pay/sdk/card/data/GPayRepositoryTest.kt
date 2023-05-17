@@ -44,7 +44,7 @@ internal class GPayRepositoryTest {
             md = "md"
         )
 
-        whenever(api.processGPay(any(), any())).thenReturn(
+        whenever(api.processGPay(any(), any(), any())).thenReturn(
             PaymentResponse(
                 statusCode = DojoPaymentResult.AUTHORIZING.code,
                 stepUpUrl = threeDSParams.stepUpUrl,
@@ -63,7 +63,7 @@ internal class GPayRepositoryTest {
     @Test
     fun `WHEN result code is not AUTHORIZING THEN completed result is returned`() = runTest {
         // arrange
-        whenever(api.processGPay(any(), any())).thenReturn(
+        whenever(api.processGPay(any(), any(), any())).thenReturn(
             PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
         )
         val expected = PaymentResult.Completed(DojoPaymentResult.SUCCESSFUL)
