@@ -11,7 +11,7 @@ import tech.dojo.pay.sdk.card.data.remote.baseurl.BaseUrlApi
 import tech.dojo.pay.sdk.card.data.remote.baseurl.BaseUrlApiBuilder
 import java.text.SimpleDateFormat
 import java.util.Locale
-
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class BaseUrlRepository(
     private val api: BaseUrlApi = BaseUrlApiBuilder.create(),
     private val dispatchers: CoroutineDispatcher = Dispatchers.IO
