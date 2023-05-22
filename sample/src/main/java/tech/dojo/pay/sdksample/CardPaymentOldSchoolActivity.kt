@@ -5,11 +5,15 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 
 class CardPaymentOldSchoolActivity : CardPaymentBaseActivity() {
 
     override fun onSandboxChecked(isChecked: Boolean) {
-        DojoSdk.isWalletSandBox = isChecked
+        val dojoSDKDebugConfig: DojoSDKDebugConfig = DojoSDKDebugConfig(
+            isSandboxWallet = isChecked
+        )
+        DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
     }
 
     override fun onPayClicked(token: String, payload: DojoCardPaymentPayLoad.FullCardPaymentPayload) {

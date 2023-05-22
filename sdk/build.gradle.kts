@@ -1,4 +1,4 @@
-version = "1.4.5"
+version = "1.4.6"
 
 plugins {
     id("com.android.library")
@@ -61,6 +61,7 @@ dependencies {
     testImplementation(MOCKITO.MOCKITO_INLINE)
     testImplementation(Coroutines.COROUTINES_Test)
     testImplementation(AndroidX.CORE_TESTING_ARCH)
+    testImplementation(TestingLib.MOCKK)
     androidTestImplementation(AndroidX.AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     testImplementation(TestingLib.JSON_TEST)
 }

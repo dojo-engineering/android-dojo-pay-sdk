@@ -12,6 +12,7 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
@@ -26,9 +27,7 @@ object DojoSdk {
     private val REQUEST_CODE_SAVED_CARD = "DOJO_PAY_SAVED_CARD".hashCode()
     private val REQUEST_CODE_CARD = "DOJO_PAY".hashCode()
     private val REQUEST_CODE_G_PAY = "DOJO_G_PAY".hashCode()
-
-    var isWalletSandBox: Boolean = false
-    var isCardSandBox: Boolean = false
+    var dojoSDKDebugConfig: DojoSDKDebugConfig = DojoSDKDebugConfig()
 
     /**
      * Returns handler which starts payment process for normal card payment .

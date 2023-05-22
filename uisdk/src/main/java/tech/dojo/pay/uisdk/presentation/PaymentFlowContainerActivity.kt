@@ -28,6 +28,7 @@ import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
@@ -111,8 +112,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun configureDojoPayCore() {
-        DojoSdk.isWalletSandBox = viewModel.isPaymentInSandBoxEnvironment()
-        DojoSdk.isCardSandBox = viewModel.isPaymentInSandBoxEnvironment()
+        configureDojoSDKDebugConfig()
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             viewModel.updateGpayPaymentState(false)
             viewModel.navigateToPaymentResult(it)
@@ -124,6 +124,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         savedCardPaymentHandler = DojoSdk.createSavedCardPaymentHandler(this) {
             viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
+        }
+    }
+
+    private fun configureDojoSDKDebugConfig() {
+        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
+            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
+        } else {
+            val dojoSDKDebugConfig = DojoSDKDebugConfig(
+                isSandboxWallet = viewModel.isPaymentInSandBoxEnvironment(),
+                isSandboxIntent = viewModel.isPaymentInSandBoxEnvironment()
+            )
+            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 

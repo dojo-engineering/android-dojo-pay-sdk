@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
@@ -14,6 +15,7 @@ object DojoSDKDropInUI {
     private val REQUEST_CODE_DROP_IN_UI = "DOJO_PAY_UI".hashCode()
 
     var dojoThemeSettings: DojoThemeSettings? = DojoThemeSettings()
+    var dojoSDKDebugConfig: DojoSDKDebugConfig? = null
 
     /**
      * Returns handler which handle payment process with UI .
