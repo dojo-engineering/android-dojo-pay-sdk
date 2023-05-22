@@ -106,7 +106,7 @@ internal class CardPaymentRepositoryTest {
                 paymentMethodId = "paymentMethodId"
             )
             whenever(requestMapper.mapToPaymentDetails(any())).thenReturn(paymentDetails)
-            whenever(api.processPaymentForSaverCard(any(), any())).thenReturn(
+            whenever(api.processPaymentForSaverCard(any(), any(), any())).thenReturn(
                 PaymentResponse(statusCode = DojoPaymentResult.SUCCESSFUL.code)
             )
             // act
