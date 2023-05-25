@@ -32,7 +32,8 @@ internal class PaymentIntentDomainEntityMapper {
             collectionBillingAddressRequired = raw.config?.billingAddress?.collectionRequired
                 ?: false,
             isVirtualTerminalPayment = raw.paymentSource?.let { it.lowercase() == "virtual-terminal" } ?: false,
-            isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" }?: false
+            isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" }?: false,
+            orderId = raw.reference?: ""
         )
     }
 
