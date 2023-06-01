@@ -101,6 +101,43 @@ internal class PaymentFlowViewModelTest {
         }
 
     @Test
+    fun `initialize view model with Success state from payment intent  from virtual terminal should emits CardDetailsCheckoutAsFirstScreen`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP"
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        isVirtualTerminalPayment = true,
+                        customerId = "customerId"
+                    )
+                )
+            )
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase
+            )
+            // assert
+            Assert.assertEquals(viewModel.navigationEvent.value, PaymentFlowNavigationEvents.CardDetailsCheckoutAsFirstScreen)
+        }
+
+    @Test
     fun `calling updatePaymentState should call updatePaymentSate from updatePaymentStateUseCase`() =
         runTest {
             // arrange

@@ -30,7 +30,8 @@ internal class PaymentIntentDomainEntityMapper {
             },
             collectionEmailRequired = raw.config?.customerEmail?.collectionRequired ?: false,
             collectionBillingAddressRequired = raw.config?.billingAddress?.collectionRequired
-                ?: false
+                ?: false,
+            isVirtualTerminalPayment = raw.paymentSource?.let { it == "virtual-terminal" } ?: false
         )
     }
 

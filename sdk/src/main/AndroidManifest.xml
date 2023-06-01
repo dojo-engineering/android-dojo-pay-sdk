@@ -15,6 +15,10 @@
             android:theme="@style/Theme.Transparent"/>
 
         <activity
+            android:name=".card.presentation.card.ui.DojoVirtualTerminalActivity"
+            android:theme="@style/Theme.Transparent"/>
+
+        <activity
             android:name=".card.presentation.gpay.ui.DojoGPayActivity"
             android:theme="@style/Theme.Transparent"/>
     </application>

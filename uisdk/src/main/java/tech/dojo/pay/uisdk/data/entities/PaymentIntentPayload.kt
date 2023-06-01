@@ -22,6 +22,7 @@ internal data class PaymentIntentPayload(
     val reference: String? = null,
     val description: String? = null,
     val merchantConfig: MerchantConfig? = null,
+    val paymentSource: String? = null,
     val config: Config? = null,
     val itemLines: List<ItemLines>? = null,
     val metadata: Metadata? = null

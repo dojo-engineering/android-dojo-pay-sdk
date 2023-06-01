@@ -9,6 +9,7 @@ import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
@@ -32,15 +33,21 @@ internal class CardDetailsCheckoutViewModel(
     private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper,
-    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator
+    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator,
+    private var virtualTerminalHandler: DojoVirtualTerminalHandler
 ) : ViewModel() {
     private lateinit var paymentToken: String
+    private var isVirtualTerminal = false
     private var currentState: CardDetailsCheckoutState
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
-    fun updateCardPaymentHandler(newDojoCardPaymentHandler: DojoCardPaymentHandler) {
+    fun updateCardPaymentHandler(
+        newDojoCardPaymentHandler: DojoCardPaymentHandler,
+        newVirtualTerminalHandler: DojoVirtualTerminalHandler
+    ) {
         dojoCardPaymentHandler = newDojoCardPaymentHandler
+        virtualTerminalHandler = newVirtualTerminalHandler
     }
     init {
         currentState = CardDetailsCheckoutState(
@@ -294,6 +301,7 @@ internal class CardDetailsCheckoutViewModel(
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
             paymentToken = paymentIntentResult.result.paymentToken
+            isVirtualTerminal = paymentIntentResult.result.isVirtualTerminalPayment
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
@@ -340,7 +348,11 @@ internal class CardDetailsCheckoutViewModel(
         viewModelScope.launch { observePaymentIntent() }
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         pushStateToUi(currentState.copy(isLoading = true))
-        dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
+        if (isVirtualTerminal) {
+            virtualTerminalHandler.executeVirtualTerminalPayment(paymentToken, getPaymentPayLoad())
+        } else {
+            dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
+        }
     }
 
     private fun pushStateToUi(state: CardDetailsCheckoutState) {

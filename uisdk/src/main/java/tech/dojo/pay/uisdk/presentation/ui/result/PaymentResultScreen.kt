@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -22,13 +21,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
@@ -196,95 +194,61 @@ private fun SuccessfulResult(
     onCloseFlowClicker: () -> Unit,
     showDojoBrand: Boolean,
 ) {
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .heightIn(min = 40.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val (img, status, orderInfo, description, doneBtn, footer) = createRefs()
-
         Image(
+            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
-            alignment = Alignment.Center,
-            modifier = Modifier
-                .size(80.dp)
-                .constrainAs(img) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            contentScale = ContentScale.Crop,
         )
-
         Text(
             text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
-            color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.constrainAs(status) {
-                top.linkTo(img.bottom, 24.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            color = DojoTheme.colors.primaryLabelTextColor
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": \n" + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             color = DojoTheme.colors.primaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(orderInfo) {
-                top.linkTo(status.bottom, 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 16.dp)
         )
+
         Text(
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_successful_description) + ": " + state.description,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(description) {
-                top.linkTo(orderInfo.bottom, 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        DojoFullGroundButton(
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
+            backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            onClick = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+                onCloseFlowClicker()
             }
         )
-        DojoFullGroundButton(
-            modifier = Modifier.constrainAs(doneBtn) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(description.bottom, 40.dp)
-                width = Dimension.fillToConstraints
-            },
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
-            backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
-        ) {
-            coroutineScope.launch {
-                sheetState.hide()
-            }
-            onCloseFlowClicker()
-        }
 
         if (showDojoBrand) {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 32.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
                 mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
             )
         } else {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 8.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
                 mode = DojoBrandFooterModes.NONE
             )
         }
@@ -303,24 +267,18 @@ private fun FailedResult(
     viewModel: PaymentResultViewModel,
     showDojoBrand: Boolean,
 ) {
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .heightIn(min = 40.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val (img, status, details, orderInfo, tryAgainBtn, doneBtn, footer) = createRefs()
-
         Image(
+            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
-            alignment = Alignment.Center,
-            modifier = Modifier
-                .size(80.dp)
-                .constrainAs(img) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            contentScale = ContentScale.Crop
         )
 
         Text(
@@ -328,89 +286,62 @@ private fun FailedResult(
             style = DojoTheme.typography.h5.bold,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.constrainAs(status) {
-                top.linkTo(img.bottom, 24.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 24.dp)
         )
+
         Text(
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.constrainAs(orderInfo) {
-                top.linkTo(status.bottom, 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 16.dp)
         )
+
         Text(
             text = stringResource(id = state.details),
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(details) {
-                top.linkTo(orderInfo.bottom, 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 16.dp)
         )
+
         DojoFullGroundButton(
-            modifier = Modifier.constrainAs(tryAgainBtn) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(details.bottom, 40.dp)
-                width = Dimension.fillToConstraints
-            },
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
             isLoading = state.isTryAgainLoading,
-            backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
-        ) {
-            if (!state.isTryAgainLoading) {
-                viewModel.onTryAgainClicked()
+            backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            onClick = {
+                if (!state.isTryAgainLoading) {
+                    viewModel.onTryAgainClicked()
+                }
             }
-        }
+        )
+
         DojoOutlinedButton(
-            modifier = Modifier.constrainAs(doneBtn) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(tryAgainBtn.bottom, 16.dp)
-                width = Dimension.fillToConstraints
-            },
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
-            borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor
-        ) {
-            coroutineScope.launch {
-                sheetState.hide()
-            }
-            onCloseFlowClicker()
-        }
+            borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
+            onClick = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+                onCloseFlowClicker()
+            },
+        )
 
         if (showDojoBrand) {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 32.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
                 mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
             )
         } else {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 8.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
                 mode = DojoBrandFooterModes.NONE
             )
         }
     }
+
     if (state.shouldNavigateToPreviousScreen) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
@@ -430,35 +361,25 @@ private fun FailedResultWithOutTryAgain(
     onCloseFlowClicker: () -> Unit,
     showDojoBrand: Boolean
 ) {
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .heightIn(min = 40.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val (img, status, details, doneBtn, footer) = createRefs()
-
         Image(
+            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
-            alignment = Alignment.Center,
-            modifier = Modifier
-                .size(80.dp)
-                .constrainAs(img) {
-                    top.linkTo(parent.top, 16.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            contentScale = ContentScale.Crop
         )
 
         Text(
             text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.constrainAs(status) {
-                top.linkTo(img.bottom, 24.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 24.dp)
         )
 
         Text(
@@ -466,48 +387,31 @@ private fun FailedResultWithOutTryAgain(
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.constrainAs(details) {
-                top.linkTo(status.bottom, 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = Modifier.padding(top = 16.dp)
         )
+
         DojoFullGroundButton(
-            modifier = Modifier.constrainAs(doneBtn) {
-                start.linkTo(parent.start, 8.dp)
-                end.linkTo(parent.end, 8.dp)
-                top.linkTo(details.bottom, 40.dp)
-                width = Dimension.fillToConstraints
+            modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
+            onClick = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                }
+                onCloseFlowClicker()
             },
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done)
-        ) {
-            coroutineScope.launch {
-                sheetState.hide()
-            }
-            onCloseFlowClicker()
-        }
+        )
+
         if (showDojoBrand) {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 32.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
                 mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
             )
         } else {
             DojoBrandFooter(
-                modifier = Modifier.constrainAs(footer) {
-                    start.linkTo(parent.start, 8.dp)
-                    end.linkTo(parent.end, 8.dp)
-                    top.linkTo(doneBtn.bottom, 8.dp)
-                    bottom.linkTo(parent.bottom, 8.dp)
-                    width = Dimension.fillToConstraints
-                },
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
                 mode = DojoBrandFooterModes.NONE
             )
         }
     }
+
 }

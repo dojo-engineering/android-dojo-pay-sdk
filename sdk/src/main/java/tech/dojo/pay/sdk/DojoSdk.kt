@@ -17,6 +17,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandlerImpl
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandlerImp
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
@@ -44,6 +45,15 @@ object DojoSdk {
         activity: ComponentActivity,
         onResult: (DojoPaymentResult) -> Unit
     ): DojoSavedCardPaymentHandler = DojoSavedCardPaymentHandlerImpl(activity, onResult)
+
+    /**
+     * Returns handler which starts payment process for virtual terminal payment .
+     */
+
+    fun createVirtualTerminalPaymentHandler(
+        activity: ComponentActivity,
+        onResult: (DojoPaymentResult) -> Unit
+    ): DojoVirtualTerminalHandlerImp = DojoVirtualTerminalHandlerImp(activity, onResult)
 
     /**
      * Returns handler which starts payment process G pay.

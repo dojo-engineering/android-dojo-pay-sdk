@@ -31,6 +31,7 @@ import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
@@ -64,6 +65,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private lateinit var gpayPaymentHandler: DojoGPayHandler
     private lateinit var cardPaymentHandler: DojoCardPaymentHandler
     private lateinit var savedCardPaymentHandler: DojoSavedCardPaymentHandler
+    private lateinit var virtualTerminalHandler: DojoVirtualTerminalHandler
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val viewModel: PaymentFlowViewModel by viewModels {
         PaymentFlowViewModelFactory(
@@ -125,6 +127,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             viewModel.updatePaymentState(false)
             viewModel.navigateToPaymentResult(it)
         }
+        virtualTerminalHandler = DojoSdk.createVirtualTerminalPaymentHandler(this) {
+            viewModel.updatePaymentState(false)
+            viewModel.navigateToPaymentResult(it)
+        }
     }
 
     private fun configureDojoSDKDebugConfig() {
@@ -169,6 +175,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod -> {
                 this.currentSelectedMethod = event.currentSelectedMethod
                 navController.popBackStack()
+            }
+            is PaymentFlowNavigationEvents.CardDetailsCheckoutAsFirstScreen -> {
+                navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout) { popUpTo(0) }
             }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -317,10 +326,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled, virtualTerminalHandler)
                 }
                 // this is to  handle unregistered activity when screen orientation change
-                cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler)
+                cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler, virtualTerminalHandler)
                 AnimatedVisibility(
                     visible = true,
                     enter = expandVertically(),
