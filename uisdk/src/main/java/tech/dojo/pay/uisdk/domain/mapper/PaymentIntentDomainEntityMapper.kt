@@ -31,12 +31,12 @@ internal class PaymentIntentDomainEntityMapper {
             collectionEmailRequired = raw.config?.customerEmail?.collectionRequired ?: false,
             collectionBillingAddressRequired = raw.config?.billingAddress?.collectionRequired
                 ?: false,
-            collectionShippingAddressRequired=  raw.config?.shippingDetails?.collectionRequired
+            collectionShippingAddressRequired = raw.config?.shippingDetails?.collectionRequired
                 ?: false,
             isVirtualTerminalPayment = raw.paymentSource?.let { it.lowercase() == "virtual-terminal" } ?: false,
-            isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" }?: false,
-            orderId = raw.reference?: "",
-            merchantName= raw.config?.tradingName?: ""
+            isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" } ?: false,
+            orderId = raw.reference ?: "",
+            merchantName = raw.config?.tradingName ?: ""
         )
     }
 
