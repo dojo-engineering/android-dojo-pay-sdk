@@ -118,8 +118,16 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onCardNumberValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
+        currentState = currentState.copy(
+            cardNumberInputField = InputFieldState(value = newValue),
+            isEnabled = isPayButtonEnabled(cardNumberValue = newValue)
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun validateCardNumber(cardNumberValue: String, focused: Boolean) {
+        if (cardNumberValue.isBlank()) {
+            currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
                     value = "",
                     isError = true,
@@ -127,20 +135,7 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 isEnabled = false
             )
-        } else {
-            currentState.copy(
-                cardNumberInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled(cardNumberValue = newValue)
-            )
-        }
-        pushStateToUi(currentState)
-    }
-
-    fun validateCardNumber(cardNumberValue: String, focused: Boolean) {
-        if (!focused &&
-            cardNumberValue.isNotBlank() &&
-            !cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue)
-        ) {
+        } else if (!cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue)) {
             currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
                     value = cardNumberValue,

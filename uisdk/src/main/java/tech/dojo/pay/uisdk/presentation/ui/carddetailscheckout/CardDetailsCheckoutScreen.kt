@@ -352,6 +352,7 @@ private fun CardNumberField(
         else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) THIRD_FIELD_OFF_SET_DP.dp.toPx()
         else SECOND_FIELD_OFF_SET_DP.dp.toPx()
     }
+    var focusedTextKey by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
         modifier = Modifier.onFocusChanged {
@@ -363,10 +364,15 @@ private fun CardNumberField(
                     )
                 }
             }
-            viewModel.validateCardNumber(
-                state.cardNumberInputField.value,
-                it.isFocused
-            )
+            focusedTextKey = if (it.isFocused) { true } else {
+                if (focusedTextKey) {
+                    viewModel.validateCardNumber(
+                        state.cardNumberInputField.value,
+                        it.isFocused
+                    )
+                }
+                false
+            }
         },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
