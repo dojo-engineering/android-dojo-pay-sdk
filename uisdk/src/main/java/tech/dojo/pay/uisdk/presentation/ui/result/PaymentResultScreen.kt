@@ -202,7 +202,7 @@ private fun SuccessfulResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop,
@@ -275,7 +275,7 @@ private fun FailedResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -369,7 +369,7 @@ private fun FailedResultWithOutTryAgain(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -413,5 +413,4 @@ private fun FailedResultWithOutTryAgain(
             )
         }
     }
-
 }

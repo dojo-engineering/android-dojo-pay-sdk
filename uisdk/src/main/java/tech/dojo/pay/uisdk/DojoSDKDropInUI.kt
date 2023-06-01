@@ -57,6 +57,7 @@ object DojoSDKDropInUI {
         )
         fragment.startActivityForResult(intent, REQUEST_CODE_DROP_IN_UI)
     }
+
     /**
      * Parses activity result to UI FLow.
      * If the result was not initiated by startUIPaymentFlowForResult , then null will be returned.
