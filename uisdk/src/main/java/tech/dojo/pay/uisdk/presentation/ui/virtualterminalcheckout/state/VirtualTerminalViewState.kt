@@ -17,6 +17,7 @@ internal data class PaymentDetailsViewState(
     val merchantName: String,
     val totalAmount: String,
     val amountCurrency: String,
+    val orderId: String
 )
 
 internal data class ShippingAddressViewState(

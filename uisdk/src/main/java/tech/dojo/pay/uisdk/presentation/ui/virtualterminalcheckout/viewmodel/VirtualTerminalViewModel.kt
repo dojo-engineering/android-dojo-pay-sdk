@@ -78,7 +78,8 @@ internal class VirtualTerminalViewModel(
         PaymentDetailsViewState(
             totalAmount = paymentIntentResult.result.amount.valueString,
             amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-            merchantName = paymentIntentResult.result.merchantName
+            merchantName = paymentIntentResult.result.merchantName,
+            orderId = paymentIntentResult.result.orderId
         )
 
     private fun getShippingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
@@ -170,7 +171,7 @@ internal class VirtualTerminalViewModel(
         }
     }
 
-    fun onShippingAddress2FieldChanged(newValue: String, isShipping: Boolean) {
+    fun onAddress2FieldChanged(newValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
                 currentState.shippingAddressSection?.addressLine2 =
