@@ -34,9 +34,6 @@ internal class PaymentFlowViewModel(
                     it?.let { paymentIntentResult ->
                         if (paymentIntentResult is PaymentIntentResult.Success) {
                             currentCustomerId = paymentIntentResult.result.customerId
-                            if (paymentIntentResult.result.isVirtualTerminalPayment) {
-                                navigateToCardsCheckoutScreenAsEntryPoint()
-                            }
                             fetchPaymentMethodsUseCase.fetchPaymentMethods(
                                 paymentIntentResult.result.customerId ?: "",
                                 customerSecret

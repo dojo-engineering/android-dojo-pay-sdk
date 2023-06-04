@@ -14,6 +14,9 @@ internal sealed class PaymentFlowNavigationEvents {
         PaymentFlowNavigationEvents()
 
     object CardDetailsCheckout : PaymentFlowNavigationEvents()
+
+    object VirtualTerminalCheckOutScreen : PaymentFlowNavigationEvents()
+
     data class ManagePaymentMethods(val customerId: String?) : PaymentFlowNavigationEvents()
 
     object CardDetailsCheckoutAsFirstScreen : PaymentFlowNavigationEvents()

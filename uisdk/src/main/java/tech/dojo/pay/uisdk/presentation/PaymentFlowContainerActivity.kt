@@ -59,6 +59,9 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.result.ShowResultSheetScreen
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
+import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.VirtualTerminalCheckOutScreen
+import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
+import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModelFactory
 
 class PaymentFlowContainerActivity : AppCompatActivity() {
     private val arguments: Bundle? by lazy { intent.extras }
@@ -179,6 +182,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             is PaymentFlowNavigationEvents.CardDetailsCheckoutAsFirstScreen -> {
                 navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout) { popUpTo(0) }
             }
+            is PaymentFlowNavigationEvents.VirtualTerminalCheckOutScreen -> {
+                navController.navigate(PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout)
+            }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
                 this.finish()
@@ -198,7 +204,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     ) {
         AnimatedNavHost(
             navController = navController,
-            startDestination = PaymentFlowScreens.PaymentMethodCheckout.rout,
+            startDestination = PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout,
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Left,
@@ -250,6 +256,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     showDojoBrand
                 )
             }
+
             composable(
                 route = PaymentFlowScreens.PaymentResult.rout,
                 arguments = listOf(
@@ -286,6 +293,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     )
                 }
             }
+
             composable(
                 route = PaymentFlowScreens.ManagePaymentMethods.rout,
                 arguments = listOf(
@@ -347,6 +355,23 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         showDojoBrand
                     )
                 }
+            }
+
+            composable(route = PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout) {
+                val virtualMachineErrorViewModel: VirtualTerminalViewModel by viewModels {
+                    VirtualTerminalViewModelFactory(isDarkModeEnabled, virtualTerminalHandler)
+                }
+                VirtualTerminalCheckOutScreen(
+                    windowSize,
+                    virtualMachineErrorViewModel,
+                    {
+                        returnResult(DojoPaymentResult.DECLINED)
+                        viewModel.onCloseFlowClicked()
+                    },
+                    viewModel::onBackClicked,
+                    isDarkModeEnabled,
+                    showDojoBrand
+                )
             }
         }
     }
