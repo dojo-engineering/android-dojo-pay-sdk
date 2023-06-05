@@ -75,15 +75,15 @@ internal fun VirtualTerminalCheckOutScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f)
-                        .padding(it)
-                ) {
-                    if (state.isLoading) {
-                        Loading()
-                    } else {
+                if (state.isLoading) {
+                    Loading()
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f)
+                            .padding(it)
+                    ) {
                         Column(
                             Modifier
                                 .verticalScroll(scrollState)
@@ -106,15 +106,16 @@ internal fun VirtualTerminalCheckOutScreen(
                             BillingAddressSection(viewModel = viewModel)
                             CardDetailsSection(viewModel = viewModel, isDarkModeEnabled = isDarkModeEnabled)
                         }
-                    }
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .background(DojoTheme.colors.primarySurfaceBackgroundColor)
-                    ) {
-                        PayButton(scrollState, state, viewModel)
-                        ScreenFooter(showDojoBrand)
+
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                        ) {
+                            PayButton(scrollState, state, viewModel)
+                            ScreenFooter(showDojoBrand)
+                        }
                     }
                 }
             }
