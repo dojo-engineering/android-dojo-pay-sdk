@@ -89,12 +89,16 @@ internal class VirtualTerminalViewModel(
             currentSelectedCountry = SupportedCountriesViewEntity("", "", true),
         )
 
-    private fun getBillingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
-        BillingAddressViewState(
-            isVisible = paymentIntentResult.result.collectionBillingAddressRequired,
+    private fun getBillingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success): BillingAddressViewState {
+        val isSectionVisible = if (paymentIntentResult.result.collectionShippingAddressRequired && paymentIntentResult.result.collectionBillingAddressRequired) {
+            false
+        } else paymentIntentResult.result.collectionBillingAddressRequired
+        return BillingAddressViewState(
+            isVisible = isSectionVisible,
             supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
             currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
         )
+    }
 
     private fun getCardDetailsSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
         CardDetailsViewState(
@@ -118,7 +122,10 @@ internal class VirtualTerminalViewModel(
 
     fun onNameFieldChanged(newValue: String) {
         currentState.shippingAddressSection?.let {
-            currentState.shippingAddressSection?.name = InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                shippingAddressSection = currentState
+                    .shippingAddressSection?.updateAddressName(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -126,10 +133,14 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateShippingNameField(finalValue: String) {
         currentState.shippingAddressSection?.let {
-            currentState.shippingAddressSection?.name =
-                virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    finalValue, InputFieldType.NAME
-                )
+            currentState = currentState.copy(
+                shippingAddressSection = currentState
+                    .shippingAddressSection?.updateAddressName(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.NAME
+                        )
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
@@ -137,14 +148,19 @@ internal class VirtualTerminalViewModel(
     fun onAddress1FieldChanged(newValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.addressLine1 =
-                    InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState
+                        .shippingAddressSection?.updateAddressLine1(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.addressLine1 = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    billingAddressSection = currentState
+                        .billingAddressSection?.updateAddressLine1(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
@@ -154,18 +170,24 @@ internal class VirtualTerminalViewModel(
     fun onValidateAddress1Field(finalValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.addressLine1 =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.ADDRESS1
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState.shippingAddressSection?.updateAddressLine1(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.ADDRESS1
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.addressLine1 =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.ADDRESS1
+                currentState = currentState.copy(
+                    billingAddressSection = currentState.billingAddressSection?.updateAddressLine1(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.ADDRESS1
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         }
@@ -174,13 +196,18 @@ internal class VirtualTerminalViewModel(
     fun onAddress2FieldChanged(newValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.addressLine2 =
-                    InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState
+                        .shippingAddressSection?.updateAddressLine2(InputFieldState(newValue))
+                )
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.addressLine2 = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    billingAddressSection = currentState
+                        .billingAddressSection?.updateAddressLine2(InputFieldState(newValue))
+                )
                 pushStateToUi(currentState)
             }
         }
@@ -189,13 +216,19 @@ internal class VirtualTerminalViewModel(
     fun onCityFieldChanged(newValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.city = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState
+                        .shippingAddressSection?.updateCity(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.city = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    billingAddressSection = currentState
+                        .billingAddressSection?.updateCity(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
@@ -205,18 +238,24 @@ internal class VirtualTerminalViewModel(
     fun onValidateCityField(finalValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.city =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.CITY
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState.shippingAddressSection?.updateCity(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.CITY
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.city =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.CITY
+                currentState = currentState.copy(
+                    billingAddressSection = currentState.billingAddressSection?.updateCity(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.CITY
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         }
@@ -225,13 +264,19 @@ internal class VirtualTerminalViewModel(
     fun onSPostalCodeFieldChanged(newValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.postalCode = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState
+                        .shippingAddressSection?.updatePostalCode(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.postalCode = InputFieldState(value = newValue)
+                currentState = currentState.copy(
+                    billingAddressSection = currentState
+                        .billingAddressSection?.updatePostalCode(InputFieldState(newValue))
+                )
                 updatePayButtonState()
                 pushStateToUi(currentState)
             }
@@ -241,18 +286,24 @@ internal class VirtualTerminalViewModel(
     fun onValidatePostalCodeField(finalValue: String, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.postalCode =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.POSTAL_CODE
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState.shippingAddressSection?.updatePostalCode(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.POSTAL_CODE
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.postalCode =
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue, InputFieldType.POSTAL_CODE
+                currentState = currentState.copy(
+                    billingAddressSection = currentState.billingAddressSection?.updatePostalCode(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.POSTAL_CODE
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         }
@@ -261,22 +312,28 @@ internal class VirtualTerminalViewModel(
     fun onCountrySelected(newValue: SupportedCountriesViewEntity, isShipping: Boolean) {
         if (isShipping) {
             currentState.shippingAddressSection?.let {
-                currentState.shippingAddressSection?.currentSelectedCountry =
-                    SupportedCountriesViewEntity(
-                        countryCode = newValue.countryCode,
-                        countryName = newValue.countryName,
-                        isPostalCodeEnabled = newValue.isPostalCodeEnabled
+                currentState = currentState.copy(
+                    shippingAddressSection = currentState.shippingAddressSection?.updateCurrentSelectedCountry(
+                        SupportedCountriesViewEntity(
+                            countryCode = newValue.countryCode,
+                            countryName = newValue.countryName,
+                            isPostalCodeEnabled = newValue.isPostalCodeEnabled
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         } else {
             currentState.billingAddressSection?.let {
-                currentState.billingAddressSection?.currentSelectedCountry =
-                    SupportedCountriesViewEntity(
-                        countryCode = newValue.countryCode,
-                        countryName = newValue.countryName,
-                        isPostalCodeEnabled = newValue.isPostalCodeEnabled
+                currentState = currentState.copy(
+                    billingAddressSection = currentState.billingAddressSection?.updateCurrentSelectedCountry(
+                        SupportedCountriesViewEntity(
+                            countryCode = newValue.countryCode,
+                            countryName = newValue.countryName,
+                            isPostalCodeEnabled = newValue.isPostalCodeEnabled
+                        )
                     )
+                )
                 pushStateToUi(currentState)
             }
         }
@@ -284,20 +341,26 @@ internal class VirtualTerminalViewModel(
 
     fun onShippingSameAsBillingChecked(isChecked: Boolean) {
         currentState.shippingAddressSection?.let {
-            currentState.shippingAddressSection?.isShippingSameAsBillingCheckBox = CheckBoxItem(
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
-                isChecked = isChecked,
-                isVisible = true
+            currentState = currentState.copy(
+                shippingAddressSection = currentState.shippingAddressSection?.updateIsShippingSameAsBillingCheckBox(
+                    CheckBoxItem(
+                        messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
+                        isChecked = isChecked,
+                        isVisible = true
+                    )
+                ),
+                billingAddressSection = currentState.billingAddressSection?.updateIsVisible(!isChecked)
             )
-            currentState.billingAddressSection?.isVisible = isChecked
             pushStateToUi(currentState)
         }
     }
 
     fun onCardHolderChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardHolderInputField =
-                InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardHolderInputField(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -305,18 +368,24 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateCardHolder(finalValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardHolderInputField =
-                virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    finalValue, InputFieldType.CARD_HOLDER_NAME
-                )
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardHolderInputField(
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue, InputFieldType.CARD_HOLDER_NAME
+                        )
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
 
     fun onCardNumberChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardNumberInputField =
-                InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardNumberInputField(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -324,15 +393,22 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateCardNumber(finalValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardHolderInputField =
-                virtualTerminalValidator.validateCardNumberInputField(finalValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardNumberInputField(
+                        virtualTerminalValidator.validateCardNumberInputField(finalValue)
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
 
     fun onCardCvvChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cvvInputFieldState = InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCvvInputFieldState(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -340,15 +416,22 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateCvv(finalValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cvvInputFieldState =
-                virtualTerminalValidator.validateCVVInputField(finalValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCvvInputFieldState(
+                        virtualTerminalValidator.validateCVVInputField(finalValue)
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
 
     fun onCardDateChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardExpireDateInputField = InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardExpireDateInputField(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -356,14 +439,21 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateCardDate(finalValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.cardExpireDateInputField =
-                virtualTerminalValidator.validateExpireDateInputField(finalValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateCardExpireDateInputField(
+                        virtualTerminalValidator.validateExpireDateInputField(finalValue)
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
     fun onEmailChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.emailInputField = InputFieldState(value = newValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateEmailInputField(InputFieldState(newValue))
+            )
             updatePayButtonState()
             pushStateToUi(currentState)
         }
@@ -371,8 +461,12 @@ internal class VirtualTerminalViewModel(
 
     fun onValidateEmail(finalValue: String) {
         currentState.cardDetailsSection?.let {
-            currentState.cardDetailsSection?.emailInputField =
-                virtualTerminalValidator.validateEmailInputField(finalValue)
+            currentState = currentState.copy(
+                cardDetailsSection = currentState
+                    .cardDetailsSection?.updateEmailInputField(
+                        virtualTerminalValidator.validateEmailInputField(finalValue)
+                    )
+            )
             pushStateToUi(currentState)
         }
     }
