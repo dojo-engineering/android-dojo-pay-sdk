@@ -45,24 +45,21 @@ internal fun CardDetailsSection(
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
             CardHolderInputField(state.cardDetailsSection, viewModel)
             CardNumberInputField(state.cardDetailsSection, viewModel, isDarkModeEnabled)
+
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
             ) {
-                Box(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    CardExpireDateField(state.cardDetailsSection, viewModel)
-                    Divider(modifier = Modifier.width(32.dp))
-                    CvvField(state.cardDetailsSection, viewModel)
-                }
+                Box(modifier = Modifier.weight(1f)) { CardExpireDateField(state.cardDetailsSection, viewModel) }
+                Divider(modifier = Modifier.width(32.dp))
+                Box(modifier = Modifier.weight(1f)) { CvvField(state.cardDetailsSection, viewModel) }
             }
             EmailInputField(state.cardDetailsSection, viewModel)
         }
@@ -75,7 +72,7 @@ private fun HeaderTitle() {
         text = "Payment Details",
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-        style = DojoTheme.typography.h1.medium,
+        style = DojoTheme.typography.h6.medium,
         color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
     )
 }
