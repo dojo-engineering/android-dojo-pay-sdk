@@ -47,30 +47,17 @@ internal class VirtualTerminalViewModel(
 
     init {
         currentState = VirtualTerminalViewState(isLoading = true)
-        viewModelScope.launch { observePaymentStatus() }
-        viewModelScope.launch { observePaymentIntent() }
         pushStateToUi(currentState)
+        viewModelScope.launch { observePaymentIntent() }
     }
 
-    private suspend fun observePaymentStatus() {
-        observePaymentStatus.observePaymentStates().collect {
-            if (!it) {
-                currentState = currentState.copy(
-                    payButtonSection = PayButtonViewState(
-                        isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
-                        isLoading = false
-                    )
-                )
-                pushStateToUi(currentState)
-            }
-        }
-    }
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
+            viewModelScope.launch { observePaymentStatus() }
             paymentToken = paymentIntentResult.result.paymentToken
             currentState = currentState.copy(
                 isLoading = false,
@@ -87,6 +74,19 @@ internal class VirtualTerminalViewModel(
                 payButtonSection = PayButtonViewState()
             )
             pushStateToUi(currentState)
+        }
+    }
+    private suspend fun observePaymentStatus() {
+        observePaymentStatus.observePaymentStates().collect {
+            if (!it) {
+                currentState = currentState.copy(
+                    payButtonSection = PayButtonViewState(
+                        isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
+                        isLoading = false
+                    )
+                )
+                pushStateToUi(currentState)
+            }
         }
     }
 
@@ -505,19 +505,20 @@ internal class VirtualTerminalViewModel(
     }
 
     fun onPayClicked() {
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
-        virtualTerminalHandler.executeVirtualTerminalPayment(
-            paymentToken,
-            fullCardPaymentPayloadMapper.apply(currentState)
-        )
         currentState = currentState.copy(
             payButtonSection = PayButtonViewState(
                 isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
                 isLoading = true
             )
         )
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
+        virtualTerminalHandler.executeVirtualTerminalPayment(
+            paymentToken,
+            fullCardPaymentPayloadMapper.apply(currentState)
+        )
         pushStateToUi(currentState)
     }
+
     private fun pushStateToUi(state: VirtualTerminalViewState) {
         mutableState.postValue(state)
     }
