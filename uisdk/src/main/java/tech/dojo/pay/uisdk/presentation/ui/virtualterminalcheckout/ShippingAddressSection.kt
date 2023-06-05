@@ -36,7 +36,7 @@ internal fun ShippingAddressSection(
     val state = viewModel.state.observeAsState().value ?: return
     if (state.shippingAddressSection?.isVisible == true) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
@@ -57,7 +57,7 @@ private fun HeaderTitle() {
         text = "Shipping Address",
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-        style = DojoTheme.typography.h1.medium,
+        style = DojoTheme.typography.h6.medium,
         color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
     )
 }

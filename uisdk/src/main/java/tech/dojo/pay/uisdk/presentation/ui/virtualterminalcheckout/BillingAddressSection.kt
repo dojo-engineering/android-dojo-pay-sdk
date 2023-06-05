@@ -35,8 +35,8 @@ internal fun BillingAddressSection(
     val state = viewModel.state.observeAsState().value ?: return
     if (state.billingAddressSection?.isVisible == true) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor),
         ) {
             HeaderTitle()
             Address1Field(state.billingAddressSection, viewModel)
@@ -54,7 +54,7 @@ private fun HeaderTitle() {
         text = "Billing Address",
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-        style = DojoTheme.typography.h1.medium,
+        style = DojoTheme.typography.h6.medium,
         color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
     )
 }
