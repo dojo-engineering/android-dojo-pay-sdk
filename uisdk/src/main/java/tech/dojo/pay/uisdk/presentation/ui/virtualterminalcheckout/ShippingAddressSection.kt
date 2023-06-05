@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Text
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
+import tech.dojo.pay.uisdk.presentation.components.DescriptionField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
@@ -46,6 +48,7 @@ internal fun ShippingAddressSection(
             CityField(state.shippingAddressSection, viewModel)
             PostalCodeField(state.shippingAddressSection, viewModel)
             CountryField(state.shippingAddressSection, viewModel)
+            DeliveryNotesField(state.shippingAddressSection, viewModel)
             SaveCardCheckBox(state.shippingAddressSection, viewModel)
         }
     }
@@ -108,7 +111,7 @@ private fun Address1Field(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.addressLine1.value,
         isError = shippingAddressSection.addressLine1.isError,
@@ -126,6 +129,8 @@ private fun Address2Field(
     viewModel: VirtualTerminalViewModel
 ) {
     InputFieldWithErrorMessage(
+        modifier = Modifier
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.addressLine2.value,
         isError = shippingAddressSection.addressLine2.isError,
@@ -153,7 +158,7 @@ private fun CityField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.city.value,
         isError = shippingAddressSection.city.isError,
@@ -183,7 +188,7 @@ private fun PostalCodeField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.postalCode.value,
         isError = shippingAddressSection.postalCode.isError,
@@ -201,9 +206,26 @@ private fun CountryField(
     viewModel: VirtualTerminalViewModel
 ) {
     CountrySelectorField(
+        modifier = Modifier
+            .padding(top = 16.dp),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
         supportedCountriesViewEntity = shippingAddressSection.supportedCountriesList,
         onCountrySelected = { viewModel.onCountrySelected(it, true) }
+    )
+}
+
+@Composable
+private fun DeliveryNotesField(
+    shippingAddressSection: ShippingAddressViewState,
+    viewModel: VirtualTerminalViewModel
+) {
+    DescriptionField(
+        value = shippingAddressSection.deliveryNotes.value,
+        onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
+        maxCharacters = 120,
+        label = buildAnnotatedString { append("DeliveryNotes (Optional)") },
+        modifier = Modifier
+            .padding(vertical = 16.dp)
     )
 }
 

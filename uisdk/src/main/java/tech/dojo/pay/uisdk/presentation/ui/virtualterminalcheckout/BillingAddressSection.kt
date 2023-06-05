@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Text
@@ -95,6 +96,8 @@ private fun Address2Field(
     viewModel: VirtualTerminalViewModel
 ) {
     InputFieldWithErrorMessage(
+        modifier = Modifier
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = billingAddressViewState.addressLine2.value,
         isError = billingAddressViewState.addressLine2.isError,
@@ -122,7 +125,7 @@ private fun CityField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = billingAddressViewState.city.value,
         isError = billingAddressViewState.city.isError,
@@ -152,7 +155,7 @@ private fun PostalCodeField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = billingAddressViewState.postalCode.value,
         isError = billingAddressViewState.postalCode.isError,
@@ -170,6 +173,8 @@ private fun CountryField(
     viewModel: VirtualTerminalViewModel
 ) {
     CountrySelectorField(
+        modifier = Modifier
+            .padding(vertical = 16.dp),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
         supportedCountriesViewEntity = billingAddressViewState.supportedCountriesList,
         onCountrySelected = { viewModel.onCountrySelected(it, false) }

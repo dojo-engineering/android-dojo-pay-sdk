@@ -12,6 +12,7 @@ internal data class ShippingAddressViewState(
     var postalCode: InputFieldState = InputFieldState(value = ""),
     val supportedCountriesList: List<SupportedCountriesViewEntity>,
     var currentSelectedCountry: SupportedCountriesViewEntity,
+    var deliveryNotes: InputFieldState = InputFieldState(value = ""),
     var isShippingSameAsBillingCheckBox: CheckBoxItem = CheckBoxItem(
         R.string.dojo_ui_sdk_card_details_checkout_save_card, isChecked = true, isVisible = true
     )
@@ -32,6 +33,9 @@ internal data class ShippingAddressViewState(
         copy(supportedCountriesList = newValue)
     fun updateCurrentSelectedCountry(newValue: SupportedCountriesViewEntity) =
         copy(currentSelectedCountry = newValue)
+
+    fun updateDeliveryNotes(newValue: InputFieldState) =
+        copy(deliveryNotes = newValue)
     fun updateIsShippingSameAsBillingCheckBox(newValue: CheckBoxItem) =
         copy(isShippingSameAsBillingCheckBox = newValue)
 }

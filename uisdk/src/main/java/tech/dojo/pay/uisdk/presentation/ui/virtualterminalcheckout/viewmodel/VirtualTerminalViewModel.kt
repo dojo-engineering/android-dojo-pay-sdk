@@ -339,6 +339,15 @@ internal class VirtualTerminalViewModel(
         }
     }
 
+    fun onDeliveryNotesFieldChanged(newValue: String) {
+        currentState.shippingAddressSection?.let {
+            currentState = currentState.copy(
+                shippingAddressSection = currentState
+                    .shippingAddressSection?.updateDeliveryNotes(InputFieldState(newValue))
+            )
+            pushStateToUi(currentState)
+        }
+    }
     fun onShippingSameAsBillingChecked(isChecked: Boolean) {
         currentState.shippingAddressSection?.let {
             currentState = currentState.copy(

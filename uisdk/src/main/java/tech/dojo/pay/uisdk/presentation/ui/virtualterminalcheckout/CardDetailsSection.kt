@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
@@ -32,6 +33,7 @@ import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
@@ -49,6 +51,7 @@ internal fun CardDetailsSection(
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
+            SupportedPaymentMethods(Modifier.padding(top = 0.dp), state.cardDetailsSection.allowedPaymentMethodsIcons)
             CardHolderInputField(state.cardDetailsSection, viewModel)
             CardNumberInputField(state.cardDetailsSection, viewModel, isDarkModeEnabled)
 
@@ -56,6 +59,7 @@ internal fun CardDetailsSection(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
+                    .padding(top = 16.dp)
             ) {
                 Box(modifier = Modifier.weight(1f)) { CardExpireDateField(state.cardDetailsSection, viewModel) }
                 Divider(modifier = Modifier.width(32.dp))
@@ -123,7 +127,7 @@ private fun CardNumberInputField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
@@ -222,7 +226,7 @@ private fun EmailInputField(
                 }
                 false
             }
-        },
+        }.padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = cardDetailsViewState.emailInputField.value,
         isError = cardDetailsViewState.emailInputField.isError,
