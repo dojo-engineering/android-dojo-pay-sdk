@@ -162,7 +162,7 @@ private fun PayButton(
         isLoading = state.payButtonSection?.isLoading ?: false,
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {
-        if (state.payButtonSection?.isLoading == false) { }
+        if (state.payButtonSection?.isLoading == false) { viewModel.onPayClicked() }
     }
 }
 

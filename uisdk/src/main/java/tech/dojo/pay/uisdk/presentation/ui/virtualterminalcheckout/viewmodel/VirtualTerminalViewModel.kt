@@ -15,6 +15,7 @@ import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.FullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CheckBoxItem
@@ -35,7 +36,8 @@ internal class VirtualTerminalViewModel(
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper,
     private val virtualTerminalValidator: VirtualTerminalValidator,
-    private var virtualTerminalHandler: DojoVirtualTerminalHandler
+    private var virtualTerminalHandler: DojoVirtualTerminalHandler,
+    private val fullCardPaymentPayloadMapper: FullCardPaymentPayloadMapper
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private var currentState: VirtualTerminalViewState
@@ -45,10 +47,24 @@ internal class VirtualTerminalViewModel(
 
     init {
         currentState = VirtualTerminalViewState(isLoading = true)
+        viewModelScope.launch { observePaymentStatus() }
         viewModelScope.launch { observePaymentIntent() }
         pushStateToUi(currentState)
     }
 
+    private suspend fun observePaymentStatus() {
+        observePaymentStatus.observePaymentStates().collect {
+            if (!it) {
+                currentState = currentState.copy(
+                    payButtonSection = PayButtonViewState(
+                        isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
+                        isLoading = false
+                    )
+                )
+                pushStateToUi(currentState)
+            }
+        }
+    }
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
     }
@@ -488,6 +504,20 @@ internal class VirtualTerminalViewModel(
         )
     }
 
+    fun onPayClicked() {
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
+        virtualTerminalHandler.executeVirtualTerminalPayment(
+            paymentToken,
+            fullCardPaymentPayloadMapper.apply(currentState)
+        )
+        currentState = currentState.copy(
+            payButtonSection = PayButtonViewState(
+                isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
+                isLoading = true
+            )
+        )
+        pushStateToUi(currentState)
+    }
     private fun pushStateToUi(state: VirtualTerminalViewState) {
         mutableState.postValue(state)
     }

@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
+import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.FullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator.VirtualTerminalValidator
 
 internal class VirtualTerminalViewModelFactory(
@@ -32,6 +33,7 @@ internal class VirtualTerminalViewModelFactory(
             AllowedPaymentMethodsViewEntityMapper(isDarkModeEnabled)
         val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
         val virtualTerminalValidator = VirtualTerminalValidator(cardCheckoutScreenValidator)
+        val fullCardPaymentPayloadMapper = FullCardPaymentPayloadMapper()
 
         return VirtualTerminalViewModel(
             observePaymentIntent,
@@ -41,7 +43,8 @@ internal class VirtualTerminalViewModelFactory(
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             virtualTerminalValidator,
-            virtualTerminalHandler
+            virtualTerminalHandler,
+            fullCardPaymentPayloadMapper
         ) as T
     }
 }
