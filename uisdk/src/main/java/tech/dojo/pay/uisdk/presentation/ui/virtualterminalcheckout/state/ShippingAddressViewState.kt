@@ -15,7 +15,7 @@ internal data class ShippingAddressViewState(
     var currentSelectedCountry: SupportedCountriesViewEntity,
     var deliveryNotes: InputFieldState = InputFieldState(value = ""),
     var isShippingSameAsBillingCheckBox: CheckBoxItem = CheckBoxItem(
-        R.string.dojo_ui_sdk_card_details_checkout_save_card, isChecked = true, isVisible = true
+        R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping, isChecked = true, isVisible = true
     )
 ) {
     fun updateIsVisible(newValue: Boolean) =

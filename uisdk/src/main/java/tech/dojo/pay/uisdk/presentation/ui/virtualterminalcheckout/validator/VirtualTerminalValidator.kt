@@ -17,7 +17,9 @@ internal class VirtualTerminalValidator(
         val isEmailValid: Boolean = cardCheckoutScreenValidator.isEmailValid(emailFieldNewValue)
         return if (emailFieldNewValue.isNotBlank() && !isEmailValid) {
             InputFieldState(
-                value = emailFieldNewValue, isError = true, errorMessages = null
+                value = emailFieldNewValue,
+                isError = true,
+                errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_email
             )
         } else {
             validateInputFieldIsNotEmpty(emailFieldNewValue, InputFieldType.Email)
@@ -29,7 +31,9 @@ internal class VirtualTerminalValidator(
             cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)
         return if (cardNumberFieldNewValue.isNotBlank() && !isCardValid) {
             InputFieldState(
-                value = cardNumberFieldNewValue, isError = true, errorMessages = null
+                value = cardNumberFieldNewValue,
+                isError = true,
+                errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_card_number
             )
         } else {
             validateInputFieldIsNotEmpty(cardNumberFieldNewValue, InputFieldType.CARD_NUMBER)
@@ -41,7 +45,9 @@ internal class VirtualTerminalValidator(
             cardCheckoutScreenValidator.isCardExpireDateValid(dateFieldNewValue)
         return if (dateFieldNewValue.isNotBlank() && !isDateValid) {
             InputFieldState(
-                value = dateFieldNewValue, isError = true, errorMessages = null
+                value = dateFieldNewValue,
+                isError = true,
+                errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_expiry
             )
         } else {
             validateInputFieldIsNotEmpty(dateFieldNewValue, InputFieldType.EXPIRE_DATA)
@@ -52,7 +58,9 @@ internal class VirtualTerminalValidator(
         val isCVValid: Boolean = cardCheckoutScreenValidator.isCvvValid(CVVFieldNewValue)
         return if (CVVFieldNewValue.isNotBlank() && !isCVValid) {
             InputFieldState(
-                value = CVVFieldNewValue, isError = true, errorMessages = null
+                value = CVVFieldNewValue,
+                isError = true,
+                errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_cvv
             )
         } else {
             validateInputFieldIsNotEmpty(CVVFieldNewValue, InputFieldType.CVV)
@@ -119,7 +127,17 @@ internal class VirtualTerminalValidator(
     }
 
     private fun getErrorMessageForEmptyInputField(type: InputFieldType): Int {
-        return R.string.dojo_ui_sdk_card_details_checkout_error_empty_billing_postcode
+        return when (type) {
+            InputFieldType.NAME -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_name
+            InputFieldType.ADDRESS1 -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_line_1
+            InputFieldType.CITY -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_city
+            InputFieldType.POSTAL_CODE -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_postal
+            InputFieldType.Email -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_email
+            InputFieldType.CARD_HOLDER_NAME -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_card_holder
+            InputFieldType.CARD_NUMBER -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_card_number
+            InputFieldType.CVV -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_cvv
+            InputFieldType.EXPIRE_DATA -> R.string.dojo_ui_sdk_card_details_checkout_error_empty_expiry
+        }
     }
 
     private fun isInPutFieldEmpty(inPutFieldValue: String): Boolean = inPutFieldValue.isBlank()

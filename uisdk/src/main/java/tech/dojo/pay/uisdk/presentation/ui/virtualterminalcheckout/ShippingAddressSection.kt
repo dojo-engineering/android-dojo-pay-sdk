@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,9 +20,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -97,7 +100,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState
             )
-            SaveCardCheckBox(
+            AddressesAreTheSameCheckBox(
                 state.shippingAddressSection,
                 viewModel
             )
@@ -108,7 +111,7 @@ internal fun ShippingAddressSection(
 @Composable
 private fun HeaderTitle() {
     Text(
-        text = "Shipping Address",
+        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title_shipping),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
         style = DojoTheme.typography.h6.medium,
@@ -152,7 +155,7 @@ private fun NameField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onNameFieldChanged(it) },
-        label = buildAnnotatedString { append("Name") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_name)) }
     )
 }
 
@@ -169,24 +172,26 @@ private fun Address1Field(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateAddress1Field(
+                            shippingAddressSection.addressLine1.value, true
+                        )
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateAddress1Field(
-                        shippingAddressSection.addressLine1.value, true
-                    )
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.addressLine1.value,
         isError = shippingAddressSection.addressLine1.isError,
@@ -194,7 +199,7 @@ private fun Address1Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress1FieldChanged(it, true) },
-        label = buildAnnotatedString { append("Address 1") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_1)) }
     )
 }
 
@@ -208,6 +213,11 @@ private fun Address2Field(
 ) {
     val scrollOffset = with(LocalDensity.current) {
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
+    val label = buildAnnotatedString {
+        append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
+        append(" ")
+        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
     }
     InputFieldWithErrorMessage(
         modifier = Modifier
@@ -229,7 +239,7 @@ private fun Address2Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress2FieldChanged(it, true) },
-        label = buildAnnotatedString { append("Address 2") }
+        label = label
     )
 }
 
@@ -246,22 +256,24 @@ private fun CityField(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateCityField(shippingAddressSection.city.value, true)
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateCityField(shippingAddressSection.city.value, true)
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.city.value,
         isError = shippingAddressSection.city.isError,
@@ -269,7 +281,7 @@ private fun CityField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onCityFieldChanged(it, true) },
-        label = buildAnnotatedString { append("City") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_city)) }
     )
 }
 
@@ -286,24 +298,26 @@ private fun PostalCodeField(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidatePostalCodeField(
+                            shippingAddressSection.postalCode.value, true
+                        )
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidatePostalCodeField(
-                        shippingAddressSection.postalCode.value, true
-                    )
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.postalCode.value,
         isError = shippingAddressSection.postalCode.isError,
@@ -311,7 +325,7 @@ private fun PostalCodeField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onSPostalCodeFieldChanged(it, true) },
-        label = buildAnnotatedString { append("Postal code") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_postcode)) }
     )
 }
 
@@ -323,7 +337,7 @@ private fun CountryField(
     CountrySelectorField(
         modifier = Modifier
             .padding(top = 16.dp),
-        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_shipping_country)) },
         supportedCountriesViewEntity = shippingAddressSection.supportedCountriesList,
         onCountrySelected = { viewModel.onCountrySelected(it, true) }
     )
@@ -340,13 +354,19 @@ private fun DeliveryNotesField(
     val scrollOffset = with(LocalDensity.current) {
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (8 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
+    val label = buildAnnotatedString {
+        append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes))
+        append(" ")
+        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+    }
     DescriptionField(
         value = shippingAddressSection.deliveryNotes.value,
         onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
         maxCharacters = 120,
-        label = buildAnnotatedString { append("DeliveryNotes (Optional)") },
+        label = label,
         modifier = Modifier
-            .padding(vertical = 16.dp).onFocusChanged {
+            .padding(vertical = 16.dp)
+            .onFocusChanged {
                 if (it.isFocused) {
                     coroutineScope.launch {
                         delay(300)
@@ -360,7 +380,7 @@ private fun DeliveryNotesField(
 }
 
 @Composable
-private fun SaveCardCheckBox(
+private fun AddressesAreTheSameCheckBox(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel
 ) {

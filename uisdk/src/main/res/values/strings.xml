@@ -3,7 +3,7 @@
     <string name = "dojo_ui_sdk_footer_powered_by_title">Powered by</string>
     <string name = "dojo_ui_sdk_footer_powered_by_terms">Terms</string>
     <string name = "dojo_ui_sdk_footer_powered_by_privacy">Privacy</string>
-    <string name = "dojo_ui_sdk_manage_payment_methods_title">Change payment method</string>
+    <string name = "dojo_ui_sdk_manage_payment_methods_title">Select payment method</string>
     <string name = "dojo_ui_sdk_manage_payment_methods_button_add_new_card">Add new card</string>
     <string name = "dojo_ui_sdk_card_details_checkout_title">Pay with new card</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_card_name">Name on card</string>
@@ -39,7 +39,7 @@
     <string name = "dojo_ui_sdk_payment_result_button_try_again">Try again</string>
     <string name = "dojo_ui_sdk_payment_ressult_button_please_wait">Please wait....</string>
     <string name = "dojo_ui_sdk_footer_dojo">Dojo</string>
-    <string name = "dojo_ui_sdk_payment_result_order_info">payment Id  </string>
+    <string name = "dojo_ui_sdk_payment_result_order_info">Payment ID:</string>
     <string name = "dojo_ui_sdk_payment_result_successful_description">you have paid </string>
     <string name = "dojo_ui_sdk_payment_result_failed_description">We could not verify your payment details</string>
     <string name = "dojo_ui_sdk_pay_with_this_method">Use this payment method</string>
@@ -49,4 +49,26 @@
     <string name = "dojo_ui_sdk_mange_payments_dialog_message">You are about to permanently delete this payment method.</string>
     <string name = "dojo_ui_sdk_mange_payments_dialog_confirm_text">Confirm</string>
     <string name = "dojo_ui_sdk_mange_payments_dialog_cancel_text">Cancel</string>
+    <string name = "dojo_ui_sdk_keyboard_additional_button_next">Next</string>
+    <string name = "dojo_ui_sdk_keyboard_additional_button_previous">Previous</string>
+    <string name = "dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional">(optional)</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_name">Name</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_line_1">Address line 1</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_line_2">Address line 2</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_city">City</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_postcode">Postcode</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_country">Country</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes">Delivery notes</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_field_subtitle_email_vt">Enter your customer\'s email address</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_title_shipping">Shipping address</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_title_billing">Billing address</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_billing_same_as_shipping">Billing address is same as shipping</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_title_payment_details">Payment details</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_transactions_are_secure">All transactions are secure and encrypted</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_name">Please fill in your name or company name</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_line_1">Please fill in address</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_city">Please fill in your city</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_postal">Please fill in your postal code</string>
+    <string name = "dojo_ui_sdk_order_info">Order:</string>
+
 </resources>

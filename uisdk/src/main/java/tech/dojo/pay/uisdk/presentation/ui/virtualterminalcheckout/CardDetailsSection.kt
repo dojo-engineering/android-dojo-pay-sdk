@@ -62,7 +62,8 @@ internal fun CardDetailsSection(
             HeaderTitle()
             SupportedPaymentMethods(
                 Modifier.padding(top = 0.dp),
-                state.cardDetailsSection.allowedPaymentMethodsIcons
+                state.cardDetailsSection.allowedPaymentMethodsIcons,
+                stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_transactions_are_secure)
             )
             CardHolderInputField(
                 state.cardDetailsSection,
@@ -182,22 +183,24 @@ private fun CardNumberInputField(
             (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     CardNumberInPutField(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
@@ -317,29 +320,34 @@ private fun EmailInputField(
         cardDetailsViewState.itemPoissonOffset.dp.toPx() +
             (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
+    val assistiveText = when (cardDetailsViewState.emailInputField.isError) {
+        true -> { cardDetailsViewState.emailInputField.errorMessages?.let { AnnotatedString(stringResource(id = it)) } }
+        else -> AnnotatedString(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_subtitle_email_vt))
+    }
+
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = cardDetailsViewState.emailInputField.value,
         isError = cardDetailsViewState.emailInputField.isError,
-        assistiveText = cardDetailsViewState.emailInputField.errorMessages?.let {
-            AnnotatedString(stringResource(id = it))
-        },
+        assistiveText = assistiveText,
         onValueChange = { viewModel.onEmailChanged(it) },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
     )

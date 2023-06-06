@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,9 +20,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -88,7 +91,7 @@ internal fun BillingAddressSection(
 @Composable
 private fun HeaderTitle() {
     Text(
-        text = "Billing Address",
+        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title_billing),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
         style = DojoTheme.typography.h6.medium,
@@ -134,7 +137,7 @@ private fun Address1Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress1FieldChanged(it, false) },
-        label = buildAnnotatedString { append("Address 1") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_1)) }
     )
 }
 
@@ -148,6 +151,11 @@ private fun Address2Field(
 ) {
     val scrollOffset = with(LocalDensity.current) {
         billingAddressViewState.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP.dp.toPx())
+    }
+    val label = buildAnnotatedString {
+        append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
+        append(" ")
+        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
     }
     InputFieldWithErrorMessage(
         modifier = Modifier
@@ -169,7 +177,7 @@ private fun Address2Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress2FieldChanged(it, false) },
-        label = buildAnnotatedString { append("Address 2") }
+        label = label
     )
 }
 
@@ -186,22 +194,24 @@ private fun CityField(
         billingAddressViewState.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP.dp.toPx())
     }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateCityField(billingAddressViewState.city.value, false)
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateCityField(billingAddressViewState.city.value, false)
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = billingAddressViewState.city.value,
         isError = billingAddressViewState.city.isError,
@@ -209,7 +219,7 @@ private fun CityField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onCityFieldChanged(it, false) },
-        label = buildAnnotatedString { append("cirty") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_city)) }
     )
 }
 
@@ -226,24 +236,26 @@ private fun PostalCodeField(
         billingAddressViewState.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP.dp.toPx())
     }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidatePostalCodeField(
+                            billingAddressViewState.postalCode.value, false
+                        )
+                    }
+                    false
                 }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidatePostalCodeField(
-                        billingAddressViewState.postalCode.value, false
-                    )
-                }
-                false
             }
-        }.padding(top = 16.dp),
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = billingAddressViewState.postalCode.value,
         isError = billingAddressViewState.postalCode.isError,
@@ -251,7 +263,7 @@ private fun PostalCodeField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onSPostalCodeFieldChanged(it, false) },
-        label = buildAnnotatedString { append("postal code") }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_postcode)) }
     )
 }
 

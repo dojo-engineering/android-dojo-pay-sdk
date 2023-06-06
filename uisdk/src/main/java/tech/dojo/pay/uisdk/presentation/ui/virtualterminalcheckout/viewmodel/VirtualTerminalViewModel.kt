@@ -374,7 +374,7 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 shippingAddressSection = currentState.shippingAddressSection?.updateIsShippingSameAsBillingCheckBox(
                     CheckBoxItem(
-                        messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
+                        messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                         isChecked = isChecked,
                         isVisible = true
                     )
