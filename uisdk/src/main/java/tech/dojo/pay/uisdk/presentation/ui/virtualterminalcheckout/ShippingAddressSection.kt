@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -217,7 +216,7 @@ private fun Address2Field(
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
-        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
     }
     InputFieldWithErrorMessage(
         modifier = Modifier
@@ -352,12 +351,12 @@ private fun DeliveryNotesField(
     scrollState: ScrollState
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (8 * NORMAL_FILED_SIZE_DP).dp.toPx()
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (7 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes))
         append(" ")
-        withStyle(SpanStyle(LocalContentColor.current.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
     }
     DescriptionField(
         value = shippingAddressSection.deliveryNotes.value,

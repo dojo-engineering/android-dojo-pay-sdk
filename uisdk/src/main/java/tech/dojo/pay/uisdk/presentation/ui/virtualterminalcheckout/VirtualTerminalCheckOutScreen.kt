@@ -101,7 +101,7 @@ internal fun VirtualTerminalCheckOutScreen(
                                 currencyLogo = state.paymentDetailsSection?.amountCurrency.orEmpty(),
                                 merchantName = state.paymentDetailsSection?.merchantName.orEmpty(),
                                 orderInfo = stringResource(id = R.string.dojo_ui_sdk_order_info) +
-                                        state.paymentDetailsSection?.orderId.orEmpty()
+                                    state.paymentDetailsSection?.orderId.orEmpty()
                             )
                             ShippingAddressSection(
                                 viewModel = viewModel,

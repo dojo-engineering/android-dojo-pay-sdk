@@ -1,17 +1,21 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,10 +35,29 @@ fun DescriptionField(
     focusRequester: FocusRequester? = null,
     onDescriptionChanged: (String) -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    val colors = TextFieldDefaults.outlinedTextFieldColors(
+        textColor = DojoTheme.colors.primaryLabelTextColor,
+        cursorColor = DojoTheme.colors.primaryLabelTextColor,
+        unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
+        backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
+        focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        errorBorderColor = DojoTheme.colors.errorTextColor,
+        errorCursorColor = DojoTheme.colors.errorTextColor,
+        errorLabelColor = DojoTheme.colors.errorTextColor,
+        errorLeadingIconColor = DojoTheme.colors.errorTextColor,
+        errorTrailingIconColor = DojoTheme.colors.errorTextColor
+    )
     val textFieldModifier = Modifier
         .height(textFieldHeight)
-        .fillMaxWidth()
-
+        .fillMaxWidth().border(
+            width = 1.dp,
+            color = colors.indicatorColor(enabled, false, interactionSource).value,
+            shape = DojoTheme.shapes.small
+        )
+        .background(DojoTheme.colors.inputFieldBackgroundColor)
     if (focusRequester != null) {
         textFieldModifier.focusRequester(focusRequester)
     }
@@ -61,16 +84,18 @@ fun DescriptionField(
             singleLine = false,
             modifier = textFieldModifier,
             enabled = enabled,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent
-            )
+            interactionSource = interactionSource,
+            colors = colors
         )
 
         Text(
             text = "${value.length} / $maxCharacters",
             textAlign = TextAlign.End,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            color = DojoTheme.colors.primaryLabelTextColor.copy(
+                alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
+            )
         )
     }
 }
