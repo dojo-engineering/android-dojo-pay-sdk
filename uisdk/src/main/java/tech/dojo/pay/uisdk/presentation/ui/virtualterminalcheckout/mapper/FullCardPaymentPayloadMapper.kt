@@ -18,8 +18,8 @@ internal class FullCardPaymentPayloadMapper {
         return DojoCardPaymentPayLoad.FullCardPaymentPayload(
             cardDetails = mapTODojoCardDetails(cardDetails),
             shippingDetails = mapToDojoShippingDetails(shippingAddress),
-            billingAddress = mapToDojoAddressDetails(shippingAddress, billingAddress)
-
+            billingAddress = mapToDojoAddressDetails(shippingAddress, billingAddress),
+            metaData = getMetaData(shippingAddress)
         )
     }
 
@@ -69,7 +69,6 @@ internal class FullCardPaymentPayloadMapper {
             expiryYear = getExpiryYear(cardDetails?.cardExpireDateInputField?.value),
             cv2 = cardDetails?.cvvInputFieldState?.value ?: ""
         )
-
     private fun getExpiryMonth(expireDateValueValue: String?) =
         if (!expireDateValueValue.isNullOrBlank()) {
             expireDateValueValue.substring(0, 2)
@@ -83,4 +82,9 @@ internal class FullCardPaymentPayloadMapper {
         } else {
             ""
         }
+
+    private fun getMetaData(shippingAddress: ShippingAddressViewState?): Map<String, String> {
+        val deliveryNotes: String = shippingAddress?.deliveryNotes?.value ?: ""
+        return mapOf("DeliveryNotes" to deliveryNotes)
+    }
 }
