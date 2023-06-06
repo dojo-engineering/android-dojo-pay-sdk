@@ -353,4 +353,4 @@ private fun EmailInputField(
     )
 }
 
-private const val NORMAL_FILED_SIZE_DP = 100
+private const val NORMAL_FILED_SIZE_DP = 120
