@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
@@ -20,9 +21,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -45,13 +48,15 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDet
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CardDetailsSection(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
@@ -70,7 +75,8 @@ internal fun CardDetailsSection(
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             CardNumberInputField(
                 state.cardDetailsSection,
@@ -78,7 +84,8 @@ internal fun CardDetailsSection(
                 isDarkModeEnabled,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             Row(
                 modifier = Modifier
@@ -92,7 +99,8 @@ internal fun CardDetailsSection(
                         viewModel,
                         coroutineScope,
                         scrollToPosition,
-                        scrollState
+                        scrollState,
+                        keyboardController
                     )
                 }
                 Divider(modifier = Modifier.width(32.dp))
@@ -102,7 +110,8 @@ internal fun CardDetailsSection(
                         viewModel,
                         coroutineScope,
                         scrollToPosition,
-                        scrollState
+                        scrollState,
+                        keyboardController
                     )
                 }
             }
@@ -111,7 +120,8 @@ internal fun CardDetailsSection(
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
         }
     }
@@ -128,13 +138,15 @@ private fun HeaderTitle() {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardHolderInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -158,6 +170,7 @@ private fun CardHolderInputField(
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = cardDetailsViewState.cardHolderInputField.value,
         isError = cardDetailsViewState.cardHolderInputField.isError,
         assistiveText = cardDetailsViewState.cardHolderInputField.errorMessages?.let {
@@ -168,6 +181,7 @@ private fun CardHolderInputField(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardNumberInputField(
     cardDetailsViewState: CardDetailsViewState,
@@ -175,7 +189,8 @@ private fun CardNumberInputField(
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -207,6 +222,7 @@ private fun CardNumberInputField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = cardDetailsViewState.cardNumberInputField.isError,
         assistiveText = cardDetailsViewState.cardNumberInputField.errorMessages?.let {
             AnnotatedString(
@@ -220,13 +236,15 @@ private fun CardNumberInputField(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardExpireDateField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -256,6 +274,7 @@ private fun CardExpireDateField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done
         ),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = cardDetailsViewState.cardExpireDateInputField.isError,
         assistiveText = cardDetailsViewState.cardExpireDateInputField.errorMessages?.let {
             AnnotatedString(stringResource(id = it))
@@ -266,13 +285,15 @@ private fun CardExpireDateField(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CvvField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -302,18 +323,26 @@ private fun CvvField(
         assistiveText = cardDetailsViewState.cvvInputFieldState.errorMessages?.let {
             AnnotatedString(stringResource(id = it))
         },
+        keyboardOptions =
+        KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCardCvvChanged(it) }
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun EmailInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -345,6 +374,7 @@ private fun EmailInputField(
             }
             .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = cardDetailsViewState.emailInputField.value,
         isError = cardDetailsViewState.emailInputField.isError,
         assistiveText = assistiveText,

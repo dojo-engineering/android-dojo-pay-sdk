@@ -107,20 +107,23 @@ internal fun VirtualTerminalCheckOutScreen(
                                 viewModel = viewModel,
                                 coroutineScope = coroutineScope,
                                 scrollToPosition = scrollToPosition,
-                                scrollState = scrollState
+                                scrollState = scrollState,
+                                keyboardController = keyboardController
                             )
                             BillingAddressSection(
                                 viewModel = viewModel,
                                 coroutineScope = coroutineScope,
                                 scrollToPosition = scrollToPosition,
-                                scrollState = scrollState
+                                scrollState = scrollState,
+                                keyboardController = keyboardController
                             )
                             CardDetailsSection(
                                 viewModel = viewModel,
                                 isDarkModeEnabled = isDarkModeEnabled,
                                 coroutineScope = coroutineScope,
                                 scrollToPosition = scrollToPosition,
-                                scrollState = scrollState
+                                scrollState = scrollState,
+                                keyboardController = keyboardController
                             )
                         }
 

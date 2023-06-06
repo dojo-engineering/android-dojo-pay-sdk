@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Text
@@ -14,9 +15,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -37,12 +40,14 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.Billing
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun BillingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.billingAddressSection?.isVisible == true) {
@@ -56,28 +61,32 @@ internal fun BillingAddressSection(
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             Address2Field(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             CityField(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             PostalCodeField(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
                 scrollToPosition,
-                scrollState
+                scrollState,
+                keyboardController
             )
             CountryField(
                 state.billingAddressSection,
@@ -98,13 +107,15 @@ private fun HeaderTitle() {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address1Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -130,6 +141,7 @@ private fun Address1Field(
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = billingAddressViewState.addressLine1.value,
         isError = billingAddressViewState.addressLine1.isError,
         assistiveText = billingAddressViewState.addressLine1.errorMessages?.let {
@@ -140,13 +152,15 @@ private fun Address1Field(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address2Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     val scrollOffset = with(LocalDensity.current) {
         billingAddressViewState.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP.dp.toPx())
@@ -170,6 +184,7 @@ private fun Address2Field(
                 }
             },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = billingAddressViewState.addressLine2.value,
         isError = billingAddressViewState.addressLine2.isError,
         assistiveText = billingAddressViewState.addressLine2.errorMessages?.let {
@@ -180,13 +195,15 @@ private fun Address2Field(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CityField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -212,6 +229,7 @@ private fun CityField(
             }
             .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = billingAddressViewState.city.value,
         isError = billingAddressViewState.city.isError,
         assistiveText = billingAddressViewState.city.errorMessages?.let {
@@ -222,13 +240,15 @@ private fun CityField(
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PostalCodeField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    scrollState: ScrollState
+    scrollState: ScrollState,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -256,6 +276,7 @@ private fun PostalCodeField(
             }
             .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = billingAddressViewState.postalCode.value,
         isError = billingAddressViewState.postalCode.isError,
         assistiveText = billingAddressViewState.postalCode.errorMessages?.let {
