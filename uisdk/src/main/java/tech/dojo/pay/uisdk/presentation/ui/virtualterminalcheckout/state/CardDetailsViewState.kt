@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state
 
 internal data class CardDetailsViewState(
     val isVisible: Boolean,
+    var itemPoissonOffset: Int,
     var emailInputField: InputFieldState,
     var cardHolderInputField: InputFieldState,
     var cardNumberInputField: InputFieldState,
@@ -11,6 +12,8 @@ internal data class CardDetailsViewState(
 ) {
     fun updateIsVisible(newValue: Boolean) =
         copy(isVisible = newValue)
+    fun updateItemPoissonOffset(newValue: Int) =
+        copy(itemPoissonOffset = newValue)
     fun updateEmailInputField(newValue: InputFieldState) =
         copy(emailInputField = newValue)
 

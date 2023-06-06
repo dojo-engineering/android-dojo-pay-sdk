@@ -102,9 +102,25 @@ internal fun VirtualTerminalCheckOutScreen(
                                 merchantName = state.paymentDetailsSection?.merchantName.orEmpty(),
                                 orderInfo = state.paymentDetailsSection?.orderId.orEmpty()
                             )
-                            ShippingAddressSection(viewModel = viewModel)
-                            BillingAddressSection(viewModel = viewModel)
-                            CardDetailsSection(viewModel = viewModel, isDarkModeEnabled = isDarkModeEnabled)
+                            ShippingAddressSection(
+                                viewModel = viewModel,
+                                coroutineScope = coroutineScope,
+                                scrollToPosition = scrollToPosition,
+                                scrollState = scrollState
+                            )
+                            BillingAddressSection(
+                                viewModel = viewModel,
+                                coroutineScope = coroutineScope,
+                                scrollToPosition = scrollToPosition,
+                                scrollState = scrollState
+                            )
+                            CardDetailsSection(
+                                viewModel = viewModel,
+                                isDarkModeEnabled = isDarkModeEnabled,
+                                coroutineScope = coroutineScope,
+                                scrollToPosition = scrollToPosition,
+                                scrollState = scrollState
+                            )
                         }
 
                         Column(
@@ -157,13 +173,13 @@ private fun PayButton(
 ) {
     SingleButtonView(
         scrollState = scrollState,
-        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " +
-            state.paymentDetailsSection?.amountCurrency + " " +
-            state.paymentDetailsSection?.totalAmount,
+        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.paymentDetailsSection?.amountCurrency + " " + state.paymentDetailsSection?.totalAmount,
         isLoading = state.payButtonSection?.isLoading ?: false,
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {
-        if (state.payButtonSection?.isLoading == false) { viewModel.onPayClicked() }
+        if (state.payButtonSection?.isLoading == false) {
+            viewModel.onPayClicked()
+        }
     }
 }
 

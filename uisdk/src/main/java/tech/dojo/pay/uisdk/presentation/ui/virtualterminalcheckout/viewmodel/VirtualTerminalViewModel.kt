@@ -101,6 +101,7 @@ internal class VirtualTerminalViewModel(
     private fun getShippingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
         ShippingAddressViewState(
             isVisible = paymentIntentResult.result.collectionShippingAddressRequired,
+            itemPoissonOffset = if (paymentIntentResult.result.collectionShippingAddressRequired) { FIRST_SECTION_OFF_SET_DP } else { 0 },
             supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
             currentSelectedCountry = SupportedCountriesViewEntity("", "", true),
         )
@@ -111,6 +112,7 @@ internal class VirtualTerminalViewModel(
         } else paymentIntentResult.result.collectionBillingAddressRequired
         return BillingAddressViewState(
             isVisible = isSectionVisible,
+            itemPoissonOffset = if (isSectionVisible) { FIRST_SECTION_OFF_SET_DP } else { 0 },
             supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
             currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
         )
@@ -119,6 +121,9 @@ internal class VirtualTerminalViewModel(
     private fun getCardDetailsSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
         CardDetailsViewState(
             isVisible = true,
+            itemPoissonOffset = if (paymentIntentResult.result.collectionShippingAddressRequired) { SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP } else {
+                SECOND_SECTION_WITH_BILLING_OFF_SET_DP
+            },
             emailInputField = InputFieldState(
                 value = "", isVisible = paymentIntentResult.result.collectionEmailRequired
             ),
@@ -376,7 +381,30 @@ internal class VirtualTerminalViewModel(
                 ),
                 billingAddressSection = currentState.billingAddressSection?.updateIsVisible(!isChecked)
             )
+            updateSectionsOffsets(isChecked)
             pushStateToUi(currentState)
+        }
+    }
+
+    private fun updateSectionsOffsets(isChecked: Boolean) {
+        currentState = if (isChecked) {
+            currentState.copy(
+                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
+                    0
+                ),
+                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
+                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
+                )
+            )
+        } else {
+            currentState.copy(
+                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
+                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
+                ),
+                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
+                    THIRD_SECTION_OFF_SET_DP
+                )
+            )
         }
     }
 
@@ -523,3 +551,7 @@ internal class VirtualTerminalViewModel(
         mutableState.postValue(state)
     }
 }
+private const val FIRST_SECTION_OFF_SET_DP = 50
+private const val SECOND_SECTION_WITH_BILLING_OFF_SET_DP = 650
+private const val SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP = 950
+private const val THIRD_SECTION_OFF_SET_DP = 1500

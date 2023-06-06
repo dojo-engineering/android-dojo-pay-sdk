@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +16,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
@@ -30,10 +35,14 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.ShippingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
+import kotlin.math.roundToInt
 
 @Composable
 internal fun ShippingAddressSection(
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.shippingAddressSection?.isVisible == true) {
@@ -42,14 +51,56 @@ internal fun ShippingAddressSection(
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
-            NameField(state.shippingAddressSection, viewModel)
-            Address1Field(state.shippingAddressSection, viewModel)
-            Address2Field(state.shippingAddressSection, viewModel)
-            CityField(state.shippingAddressSection, viewModel)
-            PostalCodeField(state.shippingAddressSection, viewModel)
-            CountryField(state.shippingAddressSection, viewModel)
-            DeliveryNotesField(state.shippingAddressSection, viewModel)
-            SaveCardCheckBox(state.shippingAddressSection, viewModel)
+            NameField(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            Address1Field(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            Address2Field(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            CityField(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            PostalCodeField(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            CountryField(
+                state.shippingAddressSection,
+                viewModel
+            )
+            DeliveryNotesField(
+                state.shippingAddressSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            SaveCardCheckBox(
+                state.shippingAddressSection,
+                viewModel
+            )
         }
     }
 }
@@ -68,12 +119,24 @@ private fun HeaderTitle() {
 @Composable
 private fun NameField(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -96,12 +159,24 @@ private fun NameField(
 @Composable
 private fun Address1Field(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -126,11 +201,27 @@ private fun Address1Field(
 @Composable
 private fun Address2Field(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier
-            .padding(top = 16.dp),
+            .padding(top = 16.dp)
+            .onFocusChanged {
+                if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                }
+            },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         value = shippingAddressSection.addressLine2.value,
         isError = shippingAddressSection.addressLine2.isError,
@@ -145,12 +236,24 @@ private fun Address2Field(
 @Composable
 private fun CityField(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -173,12 +276,24 @@ private fun CityField(
 @Composable
 private fun PostalCodeField(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -217,15 +332,30 @@ private fun CountryField(
 @Composable
 private fun DeliveryNotesField(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        shippingAddressSection.itemPoissonOffset.dp.toPx() + (8 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     DescriptionField(
         value = shippingAddressSection.deliveryNotes.value,
         onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
         maxCharacters = 120,
         label = buildAnnotatedString { append("DeliveryNotes (Optional)") },
         modifier = Modifier
-            .padding(vertical = 16.dp)
+            .padding(vertical = 16.dp).onFocusChanged {
+                if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                }
+            }
     )
 }
 
@@ -241,3 +371,4 @@ private fun SaveCardCheckBox(
         }
     )
 }
+private const val NORMAL_FILED_SIZE_DP = 100

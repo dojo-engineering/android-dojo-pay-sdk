@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -28,6 +30,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
@@ -38,11 +43,15 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
+import kotlin.math.roundToInt
 
 @Composable
 internal fun CardDetailsSection(
     viewModel: VirtualTerminalViewModel,
-    isDarkModeEnabled: Boolean
+    isDarkModeEnabled: Boolean,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
@@ -51,21 +60,58 @@ internal fun CardDetailsSection(
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
-            SupportedPaymentMethods(Modifier.padding(top = 0.dp), state.cardDetailsSection.allowedPaymentMethodsIcons)
-            CardHolderInputField(state.cardDetailsSection, viewModel)
-            CardNumberInputField(state.cardDetailsSection, viewModel, isDarkModeEnabled)
-
+            SupportedPaymentMethods(
+                Modifier.padding(top = 0.dp),
+                state.cardDetailsSection.allowedPaymentMethodsIcons
+            )
+            CardHolderInputField(
+                state.cardDetailsSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
+            CardNumberInputField(
+                state.cardDetailsSection,
+                viewModel,
+                isDarkModeEnabled,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
                     .padding(top = 16.dp)
             ) {
-                Box(modifier = Modifier.weight(1f)) { CardExpireDateField(state.cardDetailsSection, viewModel) }
+                Box(modifier = Modifier.weight(1f)) {
+                    CardExpireDateField(
+                        state.cardDetailsSection,
+                        viewModel,
+                        coroutineScope,
+                        scrollToPosition,
+                        scrollState
+                    )
+                }
                 Divider(modifier = Modifier.width(32.dp))
-                Box(modifier = Modifier.weight(1f)) { CvvField(state.cardDetailsSection, viewModel) }
+                Box(modifier = Modifier.weight(1f)) {
+                    CvvField(
+                        state.cardDetailsSection,
+                        viewModel,
+                        coroutineScope,
+                        scrollToPosition,
+                        scrollState
+                    )
+                }
             }
-            EmailInputField(state.cardDetailsSection, viewModel)
+            EmailInputField(
+                state.cardDetailsSection,
+                viewModel,
+                coroutineScope,
+                scrollToPosition,
+                scrollState
+            )
         }
     }
 }
@@ -84,12 +130,24 @@ private fun HeaderTitle() {
 @Composable
 private fun CardHolderInputField(
     cardDetailsViewState: CardDetailsViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -113,13 +171,25 @@ private fun CardHolderInputField(
 private fun CardNumberInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
-    isDarkModeEnabled: Boolean
+    isDarkModeEnabled: Boolean,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
-
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CardNumberInPutField(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -150,13 +220,25 @@ private fun CardNumberInputField(
 @Composable
 private fun CardExpireDateField(
     cardDetailsViewState: CardDetailsViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
-
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CardExpireDateInputField(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -184,13 +266,25 @@ private fun CardExpireDateField(
 @Composable
 private fun CvvField(
     cardDetailsViewState: CardDetailsViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
-
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CvvInputField(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -213,12 +307,25 @@ private fun CvvField(
 @Composable
 private fun EmailInputField(
     cardDetailsViewState: CardDetailsViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
+    scrollState: ScrollState
 ) {
     var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
             isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
                 true
             } else {
                 if (isTextNotFocused) {
@@ -237,3 +344,5 @@ private fun EmailInputField(
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
     )
 }
+
+private const val NORMAL_FILED_SIZE_DP = 100

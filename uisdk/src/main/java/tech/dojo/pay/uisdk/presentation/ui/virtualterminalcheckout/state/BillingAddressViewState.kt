@@ -4,6 +4,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 
 internal data class BillingAddressViewState(
     var isVisible: Boolean,
+    var itemPoissonOffset: Int,
     var addressLine1: InputFieldState = InputFieldState(value = ""),
     var addressLine2: InputFieldState = InputFieldState(value = ""),
     var city: InputFieldState = InputFieldState(value = ""),
@@ -13,6 +14,9 @@ internal data class BillingAddressViewState(
 ) {
     fun updateIsVisible(newValue: Boolean) =
         copy(isVisible = newValue)
+
+    fun updateItemPoissonOffset(newValue: Int) =
+        copy(itemPoissonOffset = newValue)
     fun updateAddressLine1(newValue: InputFieldState) =
         copy(addressLine1 = newValue)
     fun updateAddressLine2(newValue: InputFieldState) =
