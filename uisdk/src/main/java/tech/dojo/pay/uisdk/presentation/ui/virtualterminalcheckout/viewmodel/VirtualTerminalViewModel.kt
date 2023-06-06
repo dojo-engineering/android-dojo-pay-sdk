@@ -98,23 +98,36 @@ internal class VirtualTerminalViewModel(
             orderId = paymentIntentResult.result.orderId
         )
 
-    private fun getShippingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
-        ShippingAddressViewState(
+    private fun getShippingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success): ShippingAddressViewState {
+        val countryList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
+        val currentSelectedCountry = if (countryList.isNotEmpty()) {
+            getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)[0]
+        } else {
+            SupportedCountriesViewEntity("", "", true)
+        }
+        return ShippingAddressViewState(
             isVisible = paymentIntentResult.result.collectionShippingAddressRequired,
             itemPoissonOffset = if (paymentIntentResult.result.collectionShippingAddressRequired) { FIRST_SECTION_OFF_SET_DP } else { 0 },
-            supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", true),
+            supportedCountriesList = countryList,
+            currentSelectedCountry = currentSelectedCountry
         )
+    }
 
     private fun getBillingAddressSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success): BillingAddressViewState {
         val isSectionVisible = if (paymentIntentResult.result.collectionShippingAddressRequired && paymentIntentResult.result.collectionBillingAddressRequired) {
             false
         } else paymentIntentResult.result.collectionBillingAddressRequired
+        val countryList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
+        val currentSelectedCountry = if (countryList.isNotEmpty()) {
+            getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)[0]
+        } else {
+            SupportedCountriesViewEntity("", "", true)
+        }
         return BillingAddressViewState(
             isVisible = isSectionVisible,
             itemPoissonOffset = if (isSectionVisible) { FIRST_SECTION_OFF_SET_DP } else { 0 },
-            supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            supportedCountriesList = countryList,
+            currentSelectedCountry = currentSelectedCountry,
         )
     }
 

@@ -125,7 +125,7 @@ internal class CardDetailsCheckoutViewModel(
         pushStateToUi(currentState)
     }
 
-    fun validateCardNumber(cardNumberValue: String, focused: Boolean) {
+    fun validateCardNumber(cardNumberValue: String) {
         if (cardNumberValue.isBlank()) {
             currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
@@ -295,6 +295,12 @@ internal class CardDetailsCheckoutViewModel(
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
+            val countryList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
+            val currentSelectedCountry = if (countryList.isNotEmpty()) {
+                getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)[0]
+            } else {
+                SupportedCountriesViewEntity("", "", true)
+            }
             paymentToken = paymentIntentResult.result.paymentToken
             isVirtualTerminal = paymentIntentResult.result.isVirtualTerminalPayment
             currentState = currentState.copy(
@@ -306,7 +312,8 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
                 isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
-                supportedCountriesList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired),
+                supportedCountriesList = countryList,
+                currentSelectedCountry = currentSelectedCountry,
                 isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired
             )
             pushStateToUi(currentState)

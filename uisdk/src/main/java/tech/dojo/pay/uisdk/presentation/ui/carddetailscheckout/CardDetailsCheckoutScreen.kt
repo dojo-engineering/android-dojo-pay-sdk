@@ -367,8 +367,7 @@ private fun CardNumberField(
             focusedTextKey = if (it.isFocused) { true } else {
                 if (focusedTextKey) {
                     viewModel.validateCardNumber(
-                        state.cardNumberInputField.value,
-                        it.isFocused
+                        state.cardNumberInputField.value
                     )
                 }
                 false
