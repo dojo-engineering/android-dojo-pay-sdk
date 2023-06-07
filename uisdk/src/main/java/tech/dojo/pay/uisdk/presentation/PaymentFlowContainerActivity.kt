@@ -75,6 +75,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             arguments,
         )
     }
+    private val flowStartDestination: PaymentFlowScreens by lazy { viewModel.getFlowStartDestination() }
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -204,7 +205,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     ) {
         AnimatedNavHost(
             navController = navController,
-            startDestination = PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout,
+            startDestination = flowStartDestination.rout,
             enterTransition = {
                 slideIntoContainer(
                     AnimatedContentScope.SlideDirection.Left,
@@ -378,7 +379,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun returnResult(result: DojoPaymentResult) {
         val data = Intent()
         data.putExtra(DojoPaymentFlowHandlerResultContract.KEY_RESULT, result)
