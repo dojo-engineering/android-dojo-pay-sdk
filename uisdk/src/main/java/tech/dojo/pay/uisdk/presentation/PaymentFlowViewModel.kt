@@ -62,7 +62,7 @@ internal class PaymentFlowViewModel(
             true
         } else !result.isVirtualTerminalPayment && !isVirtualTerminalPayment
     }
-    
+
     fun updatePaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
