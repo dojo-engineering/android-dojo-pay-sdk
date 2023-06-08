@@ -5,10 +5,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,10 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
@@ -102,7 +100,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = Color.Black.copy(alpha = 0.2f),
                     ) {
-                        val navController = rememberAnimatedNavController()
+                        val navController = rememberNavController()
                         // Listen for navigation event
                         val viewLifecycleOwner = LocalLifecycleOwner.current
                         LaunchedEffect(Unit) {
@@ -203,33 +201,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         windowSize: WindowSize,
         showDojoBrand: Boolean
     ) {
-        AnimatedNavHost(
+        NavHost(
             navController = navController,
             startDestination = flowStartDestination.rout,
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300),
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Left,
-                    animationSpec = tween(300),
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300),
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentScope.SlideDirection.Right,
-                    animationSpec = tween(300),
-                )
-            },
         ) {
             composable(
                 route = PaymentFlowScreens.PaymentMethodCheckout.rout,

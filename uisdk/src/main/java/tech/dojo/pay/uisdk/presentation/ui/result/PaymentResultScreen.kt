@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -56,7 +55,7 @@ internal fun ShowResultSheetScreen(
 ) {
     val paymentResultSheetState =
         rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Hidden,
+            initialValue = ModalBottomSheetValue.Expanded,
             confirmStateChange = { false }
         )
     val coroutineScope = rememberCoroutineScope()
@@ -81,13 +80,7 @@ internal fun ShowResultSheetScreen(
                 showDojoBrand
             )
         }
-    ) {
-        LaunchedEffect(Unit) {
-            coroutineScope.launch {
-                paymentResultSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(800))
-            }
-        }
-    }
+    ) {}
 }
 
 @ExperimentalMaterialApi
@@ -230,7 +223,9 @@ private fun SuccessfulResult(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             onClick = {
@@ -306,7 +301,9 @@ private fun FailedResult(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
             isLoading = state.isTryAgainLoading,
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
@@ -318,7 +315,9 @@ private fun FailedResult(
         )
 
         DojoOutlinedButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             onClick = {
@@ -391,7 +390,9 @@ private fun FailedResultWithOutTryAgain(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             onClick = {
                 coroutineScope.launch {

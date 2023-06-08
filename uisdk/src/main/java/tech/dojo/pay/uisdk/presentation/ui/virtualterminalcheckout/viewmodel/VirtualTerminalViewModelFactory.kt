@@ -18,7 +18,8 @@ internal class VirtualTerminalViewModelFactory(
     private val isDarkModeEnabled: Boolean,
     private val virtualTerminalHandler: DojoVirtualTerminalHandler
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val observePaymentIntent =
             ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
         val observePaymentStatus =
