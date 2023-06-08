@@ -23,6 +23,7 @@ object Versions {
     const val JUNIT = "4.13.2"
     const val KTLINT = "0.43.2"
     const val COMPOSE_VERSION = "1.4.2"
+    const val COMPOSE_ANIMATION_VERSION = "1.5.0-alpha01"
     const val KOTLIN = "1.8.1"
     const val ACCOMPANIST = "0.23.0"
     const val COROUTINES = "1.6.1"
@@ -151,7 +152,7 @@ object AndroidX {
         const val iconsExtended =
             "androidx.compose.material:material-icons-extended:${Versions.COMPOSE_VERSION}"
 
-        const val animation = "androidx.compose.animation:animation:1.5.0-alpha01"
+        const val animation = "androidx.compose.animation:animation:${Versions.COMPOSE_ANIMATION_VERSION}"
         const val tooling = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE_VERSION}"
         const val uiTest = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE_VERSION}"
 
