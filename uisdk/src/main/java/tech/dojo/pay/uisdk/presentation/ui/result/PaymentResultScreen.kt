@@ -1,5 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -36,6 +39,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
+import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -55,15 +59,23 @@ internal fun ShowResultSheetScreen(
 ) {
     val paymentResultSheetState =
         rememberModalBottomSheetState(
-            initialValue = ModalBottomSheetValue.Expanded,
-            confirmStateChange = { false }
+            initialValue = ModalBottomSheetValue.Hidden,
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = FastOutSlowInEasing
+            ),
+            confirmValueChange = { false },
+            skipHalfExpanded= true
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(Unit) { keyboardController?.hide() }
+    LaunchedEffect(Unit) {
+        keyboardController?.hide()
+        paymentResultSheetState.show()
+    }
 
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
@@ -111,7 +123,7 @@ private fun BottomSheetItems(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
+            .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -190,7 +202,7 @@ private fun SuccessfulResult(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
+            .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -236,17 +248,11 @@ private fun SuccessfulResult(
             }
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+        )
+        DojoSpacer(height= 16.dp)
     }
 }
 
@@ -328,17 +334,11 @@ private fun FailedResult(
             },
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+        )
+        DojoSpacer(height= 16.dp)
     }
 
     if (state.shouldNavigateToPreviousScreen) {
@@ -402,16 +402,10 @@ private fun FailedResultWithOutTryAgain(
             },
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+        )
+        DojoSpacer(height= 16.dp)
     }
 }
