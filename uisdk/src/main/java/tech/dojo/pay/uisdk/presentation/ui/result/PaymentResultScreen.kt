@@ -65,7 +65,7 @@ internal fun ShowResultSheetScreen(
                 easing = FastOutSlowInEasing
             ),
             confirmValueChange = { false },
-            skipHalfExpanded= true
+            skipHalfExpanded = true
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
@@ -250,9 +250,9 @@ private fun SuccessfulResult(
 
         DojoBrandFooter(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
         )
-        DojoSpacer(height= 16.dp)
+        DojoSpacer(height = 16.dp)
     }
 }
 
@@ -336,9 +336,9 @@ private fun FailedResult(
 
         DojoBrandFooter(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
         )
-        DojoSpacer(height= 16.dp)
+        DojoSpacer(height = 16.dp)
     }
 
     if (state.shouldNavigateToPreviousScreen) {
@@ -404,8 +404,8 @@ private fun FailedResultWithOutTryAgain(
 
         DojoBrandFooter(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if(showDojoBrand){DojoBrandFooterModes.DOJO_BRAND_ONLY} else {DojoBrandFooterModes.NONE}
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
         )
-        DojoSpacer(height= 16.dp)
+        DojoSpacer(height = 16.dp)
     }
 }
