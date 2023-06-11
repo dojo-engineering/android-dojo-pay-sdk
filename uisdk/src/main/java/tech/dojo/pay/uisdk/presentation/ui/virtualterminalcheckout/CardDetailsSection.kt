@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +38,7 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
+import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -78,6 +77,7 @@ internal fun CardDetailsSection(
                 scrollState,
                 keyboardController
             )
+            DojoSpacer(height = 4.dp)
             CardNumberInputField(
                 state.cardDetailsSection,
                 viewModel,
@@ -87,13 +87,16 @@ internal fun CardDetailsSection(
                 scrollState,
                 keyboardController
             )
+
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
                     .padding(top = 16.dp)
             ) {
-                Box(modifier = Modifier.weight(1f)) {
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
                     CardExpireDateField(
                         state.cardDetailsSection,
                         viewModel,
@@ -103,7 +106,8 @@ internal fun CardDetailsSection(
                         keyboardController
                     )
                 }
-                Divider(modifier = Modifier.width(32.dp))
+
+                DojoSpacer(width = 32.dp)
                 Box(modifier = Modifier.weight(1f)) {
                     CvvField(
                         state.cardDetailsSection,
@@ -115,6 +119,7 @@ internal fun CardDetailsSection(
                     )
                 }
             }
+
             EmailInputField(
                 state.cardDetailsSection,
                 viewModel,
@@ -214,8 +219,7 @@ private fun CardNumberInputField(
                     }
                     false
                 }
-            }
-            .padding(top = 16.dp),
+            },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
