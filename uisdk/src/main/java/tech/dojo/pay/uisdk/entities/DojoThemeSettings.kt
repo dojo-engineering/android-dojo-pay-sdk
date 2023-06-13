@@ -3,14 +3,14 @@ package tech.dojo.pay.uisdk.entities
 import androidx.compose.ui.graphics.Color
 import java.io.Serializable
 
-data class DojoThemeSettings(
+data class DojoThemeSettings @JvmOverloads constructor(
     val lightColorPalette: LightColorPalette = LightColorPalette(),
     val DarkColorPalette: DarkColorPalette = DarkColorPalette(),
     val forceLightMode: Boolean = false,
     val showBranding: Boolean = true
 ) : Serializable
 
-data class LightColorPalette(
+data class LightColorPalette @JvmOverloads constructor(
     val primaryLabelTextColor: String = "#DD000000",
     val secondaryLabelTextColor: String = "#99000000",
     val headerTintColor: String = "#DD000000",
@@ -33,7 +33,7 @@ data class LightColorPalette(
     val inputElementDefaultTintColor: String = "#26000000"
 ) : Serializable
 
-data class DarkColorPalette(
+data class DarkColorPalette @JvmOverloads constructor(
     val primaryLabelTextColor: String = "#FFFFFFFF",
     val secondaryLabelTextColor: String = "#FFFFFFFF",
     val headerTintColor: String = "#FFFFFFFF",
