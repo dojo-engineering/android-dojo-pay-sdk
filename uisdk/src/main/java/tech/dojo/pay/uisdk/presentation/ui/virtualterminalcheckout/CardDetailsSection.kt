@@ -390,12 +390,12 @@ private fun EmailInputField(
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
     )
 }
+
 @Composable
 private fun ScreenFooter(showDojoBrand: Boolean) {
     DojoBrandFooter(
         mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
     )
 }
-
 
 private const val NORMAL_FILED_SIZE_DP = 140

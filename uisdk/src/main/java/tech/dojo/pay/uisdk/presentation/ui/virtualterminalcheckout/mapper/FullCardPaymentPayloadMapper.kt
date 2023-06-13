@@ -19,6 +19,7 @@ internal class FullCardPaymentPayloadMapper {
             cardDetails = mapTODojoCardDetails(cardDetails),
             shippingDetails = mapToDojoShippingDetails(shippingAddress),
             billingAddress = mapToDojoAddressDetails(shippingAddress, billingAddress),
+            userEmailAddress = cardDetails?.emailInputField?.value,
             metaData = getMetaData(shippingAddress)
         )
     }
