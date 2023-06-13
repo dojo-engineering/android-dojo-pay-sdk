@@ -552,12 +552,12 @@ internal class VirtualTerminalViewModel(
                 isLoading = true
             )
         )
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
+        pushStateToUi(currentState)
         virtualTerminalHandler.executeVirtualTerminalPayment(
             paymentToken,
             fullCardPaymentPayloadMapper.apply(currentState)
         )
-        pushStateToUi(currentState)
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
     }
 
     private fun pushStateToUi(state: VirtualTerminalViewState) {

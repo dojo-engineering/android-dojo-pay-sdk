@@ -69,6 +69,6 @@
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_line_1">Please fill in address</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_city">Please fill in your city</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_postal">Please fill in your postal code</string>
-    <string name = "dojo_ui_sdk_order_info">Order:</string>
+    <string name = "dojo_ui_sdk_order_info">Order: &#160;</string>
 
 </resources>
