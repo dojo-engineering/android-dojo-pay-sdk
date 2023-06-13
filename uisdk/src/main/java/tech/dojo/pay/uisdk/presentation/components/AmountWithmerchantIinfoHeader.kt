@@ -75,7 +75,7 @@ internal fun AmountWithMerchantIInfoHeader(
                 text = orderInfo,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = DojoTheme.typography.h6.medium,
+                style = DojoTheme.typography.subtitle1.medium,
                 color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
             )
         }

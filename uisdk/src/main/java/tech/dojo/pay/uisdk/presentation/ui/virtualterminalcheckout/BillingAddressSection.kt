@@ -295,7 +295,7 @@ private fun CountryField(
     CountrySelectorField(
         modifier = Modifier
             .padding(vertical = 16.dp),
-        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_shipping_country)) },
         supportedCountriesViewEntity = billingAddressViewState.supportedCountriesList,
         onCountrySelected = { viewModel.onCountrySelected(it, false) }
     )

@@ -37,8 +37,6 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AmountWithMerchantIInfoHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
-import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
-import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
@@ -93,7 +91,7 @@ internal fun VirtualTerminalCheckOutScreen(
                                         scrollState.value + layoutCoordinates.positionInRoot().y
                                 }
                                 .imePadding()
-                                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
+                                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp),
                             verticalArrangement = Arrangement.spacedBy(32.dp)
                         ) {
                             AmountWithMerchantIInfoHeader(
@@ -123,7 +121,8 @@ internal fun VirtualTerminalCheckOutScreen(
                                 coroutineScope = coroutineScope,
                                 scrollToPosition = scrollToPosition,
                                 scrollState = scrollState,
-                                keyboardController = keyboardController
+                                keyboardController = keyboardController,
+                                showDojoBrand = showDojoBrand
                             )
                         }
 
@@ -134,7 +133,6 @@ internal fun VirtualTerminalCheckOutScreen(
                                 .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                         ) {
                             PayButton(scrollState, state, viewModel)
-                            ScreenFooter(showDojoBrand)
                         }
                     }
                 }
@@ -162,7 +160,7 @@ private fun Loading() {
 @Composable
 private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit) {
     DojoAppBar(
-        title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title_payment_details),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
@@ -185,12 +183,4 @@ private fun PayButton(
             viewModel.onPayClicked()
         }
     }
-}
-
-@Composable
-private fun ScreenFooter(showDojoBrand: Boolean) {
-    DojoBrandFooter(
-        modifier = Modifier.padding(bottom = 24.dp),
-        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
-    )
 }

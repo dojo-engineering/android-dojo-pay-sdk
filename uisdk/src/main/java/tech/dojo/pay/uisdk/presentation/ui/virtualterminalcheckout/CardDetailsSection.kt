@@ -38,6 +38,8 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
+import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
@@ -55,7 +57,8 @@ internal fun CardDetailsSection(
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    showDojoBrand: Boolean
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
@@ -129,6 +132,7 @@ internal fun CardDetailsSection(
                 keyboardController
             )
         }
+        ScreenFooter(showDojoBrand)
     }
 }
 
@@ -386,5 +390,12 @@ private fun EmailInputField(
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
     )
 }
+@Composable
+private fun ScreenFooter(showDojoBrand: Boolean) {
+    DojoBrandFooter(
+        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
+    )
+}
+
 
 private const val NORMAL_FILED_SIZE_DP = 140

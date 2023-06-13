@@ -219,7 +219,7 @@ private fun SuccessfulResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": \n" + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + ": \n" + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             color = DojoTheme.colors.primaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -291,7 +291,7 @@ private fun FailedResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + ": " + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
