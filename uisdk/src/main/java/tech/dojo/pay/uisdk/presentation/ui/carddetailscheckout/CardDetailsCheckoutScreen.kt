@@ -35,6 +35,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -220,12 +221,14 @@ private fun SaveCardCheckBox(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PayButton(
     scrollState: ScrollState,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel
 ) {
+    val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
         text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
@@ -233,6 +236,7 @@ private fun PayButton(
         enabled = state.isEnabled
     ) {
         if (!state.isLoading) {
+            focusManager.clearFocus()
             viewModel.onPayWithCardClicked()
         }
     }

@@ -78,7 +78,6 @@ class VirtualTerminalViewModelTest {
     @Mock
     private lateinit var virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper
 
-
     @Test
     fun `given initialize view model with Success payment intent with billing address only then content state should be emitted with billing address only`() =
         runTest {
@@ -143,7 +142,7 @@ class VirtualTerminalViewModelTest {
             )
 
             // act
-             VirtualTerminalViewModel(
+            VirtualTerminalViewModel(
                 observePaymentIntent,
                 observePaymentStatus,
                 updatePaymentStateUseCase,

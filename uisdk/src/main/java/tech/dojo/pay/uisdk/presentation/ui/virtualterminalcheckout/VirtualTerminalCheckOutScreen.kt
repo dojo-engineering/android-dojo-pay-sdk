@@ -30,8 +30,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
@@ -133,12 +133,7 @@ internal fun VirtualTerminalCheckOutScreen(
                                 .align(Alignment.BottomCenter)
                                 .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                         ) {
-                            PayButton(
-                                scrollState,
-                                state,
-                                viewModel,
-                                keyboardController
-                            )
+                            PayButton(scrollState, state, viewModel)
                         }
                     }
                 }
@@ -179,8 +174,8 @@ private fun PayButton(
     scrollState: ScrollState,
     state: VirtualTerminalViewState,
     viewModel: VirtualTerminalViewModel,
-    keyboardController: SoftwareKeyboardController?,
 ) {
+    val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
         text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.paymentDetailsSection?.amountCurrency + " " + state.paymentDetailsSection?.totalAmount,
@@ -188,7 +183,7 @@ private fun PayButton(
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {
         if (state.payButtonSection?.isLoading == false) {
-            keyboardController?.hide()
+            focusManager.clearFocus()
             viewModel.onPayClicked()
         }
     }
