@@ -53,8 +53,10 @@ internal class VirtualTerminalViewModel(
         if (paymentIntentResult is PaymentIntentResult.Success) {
             viewModelScope.launch { observePaymentStatus() }
             paymentToken = paymentIntentResult.result.paymentToken
-            currentState = virtualTerminalViewEntityMapper.apply(paymentIntentResult, getSupportedCountriesDomainEntity())
-            pushStateToUi(currentState)
+            if (currentState.isLoading){
+                currentState = virtualTerminalViewEntityMapper.apply(paymentIntentResult, getSupportedCountriesDomainEntity())
+                pushStateToUi(currentState)
+            }
         }
     }
     private suspend fun observePaymentStatus() {
@@ -467,6 +469,8 @@ internal class VirtualTerminalViewModel(
     }
 
     fun onPayClicked() {
+        viewModelScope.launch { observePaymentIntent() }
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         currentState = currentState.copy(
             payButtonSection = PayButtonViewState(
                 isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
@@ -478,7 +482,6 @@ internal class VirtualTerminalViewModel(
             paymentToken,
             fullCardPaymentPayloadMapper.apply(currentState)
         )
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
     }
 
     private fun pushStateToUi(state: VirtualTerminalViewState) {

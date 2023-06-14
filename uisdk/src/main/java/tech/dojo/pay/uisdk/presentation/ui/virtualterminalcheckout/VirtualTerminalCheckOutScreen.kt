@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
@@ -132,7 +133,12 @@ internal fun VirtualTerminalCheckOutScreen(
                                 .align(Alignment.BottomCenter)
                                 .background(DojoTheme.colors.primarySurfaceBackgroundColor)
                         ) {
-                            PayButton(scrollState, state, viewModel)
+                            PayButton(
+                                scrollState,
+                                state,
+                                viewModel,
+                                keyboardController
+                            )
                         }
                     }
                 }
@@ -167,11 +173,13 @@ private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PayButton(
     scrollState: ScrollState,
     state: VirtualTerminalViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
+    keyboardController: SoftwareKeyboardController?,
 ) {
     SingleButtonView(
         scrollState = scrollState,
@@ -180,6 +188,7 @@ private fun PayButton(
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {
         if (state.payButtonSection?.isLoading == false) {
+            keyboardController?.hide()
             viewModel.onPayClicked()
         }
     }
