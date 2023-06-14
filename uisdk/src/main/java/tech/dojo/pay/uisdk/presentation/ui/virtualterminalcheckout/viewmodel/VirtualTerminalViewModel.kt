@@ -53,7 +53,7 @@ internal class VirtualTerminalViewModel(
         if (paymentIntentResult is PaymentIntentResult.Success) {
             viewModelScope.launch { observePaymentStatus() }
             paymentToken = paymentIntentResult.result.paymentToken
-            if (currentState.isLoading){
+            if (currentState.isLoading) {
                 currentState = virtualTerminalViewEntityMapper.apply(paymentIntentResult, getSupportedCountriesDomainEntity())
                 pushStateToUi(currentState)
             }
