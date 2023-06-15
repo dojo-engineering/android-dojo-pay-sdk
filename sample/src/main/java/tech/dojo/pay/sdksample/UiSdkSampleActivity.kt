@@ -45,7 +45,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
                         merchantName = "Dojo Cafe (Paymentsense)",
                         merchantId = "BCR2DN6T57R5ZI34",
                         gatewayMerchantId = "119784244252745"
-                    )
+                    ),
+                    isVirtualTerminalPayment = true
                 )
             )
         }
