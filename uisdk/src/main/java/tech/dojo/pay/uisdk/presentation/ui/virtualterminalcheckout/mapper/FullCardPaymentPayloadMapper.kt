@@ -16,7 +16,7 @@ internal class FullCardPaymentPayloadMapper {
         val shippingAddress = currentState.shippingAddressSection
         val billingAddress = currentState.billingAddressSection
         return DojoCardPaymentPayLoad.FullCardPaymentPayload(
-            cardDetails = mapTODojoCardDetails(cardDetails),
+            cardDetails = mapToDojoCardDetails(cardDetails),
             shippingDetails = mapToDojoShippingDetails(shippingAddress),
             billingAddress = mapToDojoAddressDetails(shippingAddress, billingAddress),
             userEmailAddress = cardDetails?.emailInputField?.value,
@@ -62,7 +62,7 @@ internal class FullCardPaymentPayloadMapper {
             null
         }
 
-    private fun mapTODojoCardDetails(cardDetails: CardDetailsViewState?) =
+    private fun mapToDojoCardDetails(cardDetails: CardDetailsViewState?) =
         DojoCardDetails(
             cardNumber = cardDetails?.cardNumberInputField?.value ?: "",
             cardName = cardDetails?.cardHolderInputField?.value ?: "",

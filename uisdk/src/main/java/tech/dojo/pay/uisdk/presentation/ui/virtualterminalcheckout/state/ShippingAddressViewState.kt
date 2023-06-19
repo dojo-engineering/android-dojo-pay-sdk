@@ -5,6 +5,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 
 internal data class ShippingAddressViewState(
     val isVisible: Boolean,
+    // this will be the start point to scroll to the input field when it got focus
     var itemPoissonOffset: Int,
     var name: InputFieldState = InputFieldState(value = ""),
     var addressLine1: InputFieldState = InputFieldState(value = ""),

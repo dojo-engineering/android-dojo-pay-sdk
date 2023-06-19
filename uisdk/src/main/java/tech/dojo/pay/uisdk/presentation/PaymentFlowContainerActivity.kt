@@ -160,7 +160,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.PaymentResult -> {
                 returnResult(event.dojoPaymentResult)
-                navController.navigate(PaymentFlowScreens.PaymentResult.createRoute(event.dojoPaymentResult)) {
+                navController.navigate(PaymentFlowScreens.PaymentResult.createRout(event.dojoPaymentResult)) {
                     if (event.popBackStack) {
                         popUpTo(0)
                     }
@@ -168,7 +168,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
                 navController.navigate(
-                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId),
+                    PaymentFlowScreens.ManagePaymentMethods.createRout(event.customerId),
                 )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {

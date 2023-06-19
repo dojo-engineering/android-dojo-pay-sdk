@@ -2,6 +2,7 @@ package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state
 
 internal data class CardDetailsViewState(
     val isVisible: Boolean,
+    // this will be the start point to scroll to the input field when it got focus
     var itemPoissonOffset: Int,
     var emailInputField: InputFieldState,
     var cardHolderInputField: InputFieldState,

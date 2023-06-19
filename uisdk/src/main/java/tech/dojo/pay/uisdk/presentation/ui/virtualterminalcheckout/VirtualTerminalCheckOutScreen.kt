@@ -178,7 +178,9 @@ private fun PayButton(
     val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
-        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.paymentDetailsSection?.amountCurrency + " " + state.paymentDetailsSection?.totalAmount,
+        text =
+        String
+            .format("%s %s %s", stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay), state.paymentDetailsSection?.amountCurrency, state.paymentDetailsSection?.totalAmount),
         isLoading = state.payButtonSection?.isLoading ?: false,
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {

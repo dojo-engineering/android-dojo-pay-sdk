@@ -43,16 +43,16 @@ internal class PaymentFlowViewModel(
                                     customerSecret
                                 )
                             } else {
-                                closeFLowWithInternalError()
+                                closeFlowWithInternalError()
                             }
                         }
                         if (paymentIntentResult is PaymentIntentResult.FetchFailure) {
-                            closeFLowWithInternalError()
+                            closeFlowWithInternalError()
                         }
                     }
                 }
             } catch (error: Throwable) {
-                closeFLowWithInternalError()
+                closeFlowWithInternalError()
             }
         }
     }
@@ -69,7 +69,7 @@ internal class PaymentFlowViewModel(
     fun updateGpayPaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
     }
-    private fun closeFLowWithInternalError() {
+    private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
 

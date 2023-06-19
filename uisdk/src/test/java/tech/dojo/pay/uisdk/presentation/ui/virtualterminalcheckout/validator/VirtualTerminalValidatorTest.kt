@@ -3,9 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.uisdk.R
@@ -23,14 +21,13 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator.Tes
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator.TestData.shippingAddress
 
 class VirtualTerminalValidatorTest {
-    @Mock
-    private lateinit var cardCheckoutScreenValidator: CardCheckoutScreenValidator
+
+    private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
 
     private lateinit var validator: VirtualTerminalValidator
 
     @Before
     fun setup() {
-        MockitoAnnotations.openMocks(this)
         validator = VirtualTerminalValidator(cardCheckoutScreenValidator)
     }
 
