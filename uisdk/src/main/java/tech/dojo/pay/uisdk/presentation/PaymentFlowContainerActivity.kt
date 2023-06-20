@@ -160,7 +160,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.PaymentResult -> {
                 returnResult(event.dojoPaymentResult)
-                navController.navigate(PaymentFlowScreens.PaymentResult.createRout(event.dojoPaymentResult)) {
+                navController.navigate(PaymentFlowScreens.PaymentResult.createRoute(event.dojoPaymentResult)) {
                     if (event.popBackStack) {
                         popUpTo(0)
                     }
@@ -168,21 +168,21 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
             is PaymentFlowNavigationEvents.ManagePaymentMethods -> {
                 navController.navigate(
-                    PaymentFlowScreens.ManagePaymentMethods.createRout(event.customerId),
+                    PaymentFlowScreens.ManagePaymentMethods.createRoute(event.customerId),
                 )
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckout -> {
-                navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout)
+                navController.navigate(PaymentFlowScreens.CardDetailsCheckout.route)
             }
             is PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod -> {
                 this.currentSelectedMethod = event.currentSelectedMethod
                 navController.popBackStack()
             }
             is PaymentFlowNavigationEvents.CardDetailsCheckoutAsFirstScreen -> {
-                navController.navigate(PaymentFlowScreens.CardDetailsCheckout.rout) { popUpTo(0) }
+                navController.navigate(PaymentFlowScreens.CardDetailsCheckout.route) { popUpTo(0) }
             }
             is PaymentFlowNavigationEvents.VirtualTerminalCheckOutScreen -> {
-                navController.navigate(PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout)
+                navController.navigate(PaymentFlowScreens.VirtualTerminalCheckOutScreen.route)
             }
             null -> {
                 returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -203,10 +203,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = flowStartDestination.rout,
+            startDestination = flowStartDestination.route,
         ) {
             composable(
-                route = PaymentFlowScreens.PaymentMethodCheckout.rout,
+                route = PaymentFlowScreens.PaymentMethodCheckout.route,
             ) {
                 val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
                     PaymentMethodCheckoutViewModelFactory(
@@ -233,7 +233,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
 
             composable(
-                route = PaymentFlowScreens.PaymentResult.rout,
+                route = PaymentFlowScreens.PaymentResult.route,
                 arguments = listOf(
                     navArgument(name = "dojoPaymentResult") {
                         type = NavType.EnumType(DojoPaymentResult::class.java)
@@ -270,7 +270,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             }
 
             composable(
-                route = PaymentFlowScreens.ManagePaymentMethods.rout,
+                route = PaymentFlowScreens.ManagePaymentMethods.route,
                 arguments = listOf(
                     navArgument(name = "customerId") {
                         type = NavType.StringType
@@ -307,7 +307,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 }
             }
 
-            composable(route = PaymentFlowScreens.CardDetailsCheckout.rout) {
+            composable(route = PaymentFlowScreens.CardDetailsCheckout.route) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
                     CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled, virtualTerminalHandler)
                 }
@@ -332,7 +332,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 }
             }
 
-            composable(route = PaymentFlowScreens.VirtualTerminalCheckOutScreen.rout) {
+            composable(route = PaymentFlowScreens.VirtualTerminalCheckOutScreen.route) {
                 val virtualMachineErrorViewModel: VirtualTerminalViewModel by viewModels {
                     VirtualTerminalViewModelFactory(isDarkModeEnabled, virtualTerminalHandler)
                 }

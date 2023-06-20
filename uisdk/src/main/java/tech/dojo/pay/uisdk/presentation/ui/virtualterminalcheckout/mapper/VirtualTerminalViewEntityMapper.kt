@@ -99,7 +99,9 @@ internal class VirtualTerminalViewEntityMapper(
     private fun getCardDetailsSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
         CardDetailsViewState(
             isVisible = true,
-            itemPoissonOffset = if (paymentIntentResult.result.collectionShippingAddressRequired) {
+            itemPoissonOffset = if (!paymentIntentResult.result.collectionShippingAddressRequired && !paymentIntentResult.result.collectionBillingAddressRequired) {
+                FIRST_SECTION_OFF_SET_DP
+            } else if (paymentIntentResult.result.collectionShippingAddressRequired) {
                 SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
             } else {
                 SECOND_SECTION_WITH_BILLING_OFF_SET_DP
