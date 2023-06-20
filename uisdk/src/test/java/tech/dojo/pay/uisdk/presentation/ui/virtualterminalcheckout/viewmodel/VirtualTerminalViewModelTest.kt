@@ -23,6 +23,7 @@ import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -78,6 +79,9 @@ class VirtualTerminalViewModelTest {
     @Mock
     private lateinit var virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper
 
+    @Mock
+    private lateinit var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase
+
     @Test
     fun `given initialize view model with Success payment intent with billing address only then content state should be emitted with billing address only`() =
         runTest {
@@ -102,7 +106,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // assert
@@ -150,7 +155,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
             // assert
             verify(observePaymentStatus).observePaymentStates()
@@ -179,7 +185,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
             // assert
             verify(getSupportedCountriesUseCase).getSupportedCountries()
@@ -259,7 +266,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -371,7 +379,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -429,7 +438,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -593,7 +603,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -651,7 +662,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -763,7 +775,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -821,7 +834,8 @@ class VirtualTerminalViewModelTest {
                 virtualTerminalValidator,
                 virtualTerminalHandler,
                 fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper
+                virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase
             )
 
             // act
@@ -1281,7 +1295,7 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onPayClicked called then loading state should be emitted and executeVirtualTerminalPayment from handler should be called `() =
+    fun `given onPayClicked called then loading state should be emitted and ,  refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
         runTest {
             // arrange
             val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -1315,11 +1329,13 @@ class VirtualTerminalViewModelTest {
                 fullCardPaymentPayloadMapper.apply(any())
             ).thenReturn(address)
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
-
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
             // act
             viewModel.onPayClicked()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
+            verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
             verify(virtualTerminalHandler).executeVirtualTerminalPayment(paymentIntentDomainEntity.paymentToken, address)
         }
 
@@ -1347,7 +1363,8 @@ class VirtualTerminalViewModelTest {
             virtualTerminalValidator,
             virtualTerminalHandler,
             fullCardPaymentPayloadMapper,
-            virtualTerminalViewEntityMapper
+            virtualTerminalViewEntityMapper,
+            refreshPaymentIntentUseCase
         )
         return viewModel
     }

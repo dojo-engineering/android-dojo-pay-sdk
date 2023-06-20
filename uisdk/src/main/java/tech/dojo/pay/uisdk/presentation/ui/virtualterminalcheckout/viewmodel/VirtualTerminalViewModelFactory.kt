@@ -6,6 +6,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandl
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
@@ -40,6 +41,8 @@ internal class VirtualTerminalViewModelFactory(
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper
         )
+        val refreshPaymentIntentUseCase =
+            RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
 
         return VirtualTerminalViewModel(
             observePaymentIntent,
@@ -49,7 +52,8 @@ internal class VirtualTerminalViewModelFactory(
             virtualTerminalValidator,
             virtualTerminalHandler,
             fullCardPaymentPayloadMapper,
-            virtualTerminalViewEntityMapper
+            virtualTerminalViewEntityMapper,
+            refreshPaymentIntentUseCase
         ) as T
     }
 }
