@@ -129,7 +129,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = false,
             supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "", countryCode = "", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -205,7 +205,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -283,7 +283,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -360,7 +360,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -495,7 +495,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -588,7 +588,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = "new"),
             emailInputField = InputFieldState(value = ""),
@@ -666,7 +666,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -746,7 +746,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = "new"),
@@ -837,7 +837,7 @@ class CardDetailsCheckoutViewModelTest {
             virtualTerminalHandler
         )
         viewModel.validateCvv("new", false)
-        viewModel.validateCardNumber("new", false)
+        viewModel.validateCardNumber("new")
         viewModel.validateEmailValue("new", false)
         viewModel.validateExpireDate("new", false)
         // assert

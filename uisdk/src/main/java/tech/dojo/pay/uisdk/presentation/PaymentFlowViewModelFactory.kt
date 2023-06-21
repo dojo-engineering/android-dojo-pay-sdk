@@ -25,6 +25,12 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val customerSecret =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.clientSecret
                 ?: ""
+        val isVirtualTerminalPayment =
+            (
+                arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
+                    DojoPaymentFlowParams
+                )?.isVirtualTerminalPayment
+                ?: false
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
         val updatePaymentStateUseCase = UpdatePaymentStateUseCase(paymentStatusRepository)
@@ -33,6 +39,7 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         return PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,

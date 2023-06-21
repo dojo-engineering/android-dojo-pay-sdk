@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -37,6 +39,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
+import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -57,14 +60,22 @@ internal fun ShowResultSheetScreen(
     val paymentResultSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
-            confirmStateChange = { false }
+            animationSpec = tween(
+                durationMillis = 500,
+                easing = FastOutSlowInEasing
+            ),
+            confirmValueChange = { false },
+            skipHalfExpanded = true
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    LaunchedEffect(Unit) { keyboardController?.hide() }
+    LaunchedEffect(Unit) {
+        keyboardController?.hide()
+        paymentResultSheetState.show()
+    }
 
     DojoBottomSheet(
         modifier = Modifier.fillMaxSize(),
@@ -81,13 +92,7 @@ internal fun ShowResultSheetScreen(
                 showDojoBrand
             )
         }
-    ) {
-        LaunchedEffect(Unit) {
-            coroutineScope.launch {
-                paymentResultSheetState.animateTo(ModalBottomSheetValue.Expanded, tween(800))
-            }
-        }
-    }
+    ) {}
 }
 
 @ExperimentalMaterialApi
@@ -118,7 +123,7 @@ private fun BottomSheetItems(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
+            .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -197,12 +202,12 @@ private fun SuccessfulResult(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 40.dp),
+            .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop,
@@ -214,7 +219,7 @@ private fun SuccessfulResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": \n" + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + "\n" + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             color = DojoTheme.colors.primaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -230,7 +235,9 @@ private fun SuccessfulResult(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             onClick = {
@@ -241,17 +248,11 @@ private fun SuccessfulResult(
             }
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
+        )
+        DojoSpacer(height = 16.dp)
     }
 }
 
@@ -275,7 +276,7 @@ private fun FailedResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -290,7 +291,7 @@ private fun FailedResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + ": " + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + "\n" + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
@@ -306,7 +307,9 @@ private fun FailedResult(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
             isLoading = state.isTryAgainLoading,
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
@@ -318,7 +321,9 @@ private fun FailedResult(
         )
 
         DojoOutlinedButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 16.dp, end = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
             onClick = {
@@ -329,17 +334,11 @@ private fun FailedResult(
             },
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
+        )
+        DojoSpacer(height = 16.dp)
     }
 
     if (state.shouldNavigateToPreviousScreen) {
@@ -369,7 +368,7 @@ private fun FailedResultWithOutTryAgain(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier=  Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -391,7 +390,9 @@ private fun FailedResultWithOutTryAgain(
         )
 
         DojoFullGroundButton(
-            modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             onClick = {
                 coroutineScope.launch {
@@ -401,17 +402,10 @@ private fun FailedResultWithOutTryAgain(
             },
         )
 
-        if (showDojoBrand) {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 32.dp),
-                mode = DojoBrandFooterModes.DOJO_BRAND_ONLY
-            )
-        } else {
-            DojoBrandFooter(
-                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                mode = DojoBrandFooterModes.NONE
-            )
-        }
+        DojoBrandFooter(
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
+        )
+        DojoSpacer(height = 16.dp)
     }
-
 }

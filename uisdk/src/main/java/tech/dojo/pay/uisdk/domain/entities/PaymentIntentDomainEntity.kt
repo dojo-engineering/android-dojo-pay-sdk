@@ -14,7 +14,11 @@ internal data class PaymentIntentDomainEntity(
     val customerId: String? = null,
     val collectionEmailRequired: Boolean = false,
     val isVirtualTerminalPayment: Boolean = false,
-    val collectionBillingAddressRequired: Boolean = false
+    val collectionBillingAddressRequired: Boolean = false,
+    val isPreAuthPayment: Boolean = false,
+    val orderId: String = "",
+    val collectionShippingAddressRequired: Boolean = false,
+    val merchantName: String = ""
 )
 
 data class AmountDomainEntity(

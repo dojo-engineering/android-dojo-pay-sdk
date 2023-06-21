@@ -42,7 +42,8 @@ internal data class Config(
     val tradingName: String,
     val branding: Branding,
     val customerEmail: CustomerEmail,
-    val billingAddress: BillingAddress
+    val billingAddress: BillingAddress,
+    val shippingDetails: ShippingAddress
 )
 
 internal data class CustomerEmail(
@@ -50,6 +51,10 @@ internal data class CustomerEmail(
 )
 
 data class BillingAddress(
+    val collectionRequired: Boolean
+)
+
+data class ShippingAddress(
     val collectionRequired: Boolean
 )
 

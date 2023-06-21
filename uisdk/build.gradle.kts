@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -61,7 +61,6 @@ dependencies {
     implementation(Material.MATERIAL)
     implementation(Navigation.NavigationFragment)
     implementation(Navigation.NavigationCompose)
-    implementation(Navigation.NavigationAnimationCompose)
     implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     implementation(AndroidX.Compose.compiler)

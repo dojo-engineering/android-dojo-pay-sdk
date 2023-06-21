@@ -161,6 +161,7 @@ internal class PaymentResultViewModelTest {
                         "100",
                         "GBP"
                     ),
+                    orderId = "orderId",
                     supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
@@ -170,7 +171,7 @@ internal class PaymentResultViewModelTest {
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
             imageId = R.drawable.ic_success_circle,
             status = R.string.dojo_ui_sdk_payment_result_title_success,
-            orderInfo = "id",
+            orderInfo = "orderId",
             description = "£100"
         )
         // act
@@ -200,6 +201,7 @@ internal class PaymentResultViewModelTest {
                         "100",
                         "GBP"
                     ),
+                    orderId = "orderId",
                     supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
@@ -210,7 +212,7 @@ internal class PaymentResultViewModelTest {
             imageId = R.drawable.ic_error_circle,
             showTryAgain = true,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
-            orderInfo = "id",
+            orderInfo = "orderId",
             details = R.string.dojo_ui_sdk_payment_result_failed_description,
             isTryAgainLoading = false,
             shouldNavigateToPreviousScreen = false
@@ -244,6 +246,7 @@ internal class PaymentResultViewModelTest {
                             "100",
                             "GBP"
                         ),
+                        orderId = "orderId",
                         supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )
@@ -254,7 +257,7 @@ internal class PaymentResultViewModelTest {
                 imageId = R.drawable.ic_error_circle,
                 showTryAgain = true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
-                orderInfo = "id",
+                orderInfo = "orderId",
                 details = R.string.dojo_ui_sdk_payment_result_failed_description,
                 isTryAgainLoading = false,
                 shouldNavigateToPreviousScreen = true
