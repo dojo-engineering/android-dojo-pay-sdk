@@ -108,7 +108,7 @@ private fun BottomSheetItems(
     showDojoBrand: Boolean
 ) {
     DojoAppBar(
-        modifier = Modifier.height(60.dp),
+        modifier = Modifier.height(120.dp),
         title = stringResource(id = state.appBarTitleId),
         titleGravity = TitleGravity.LEFT,
         titleColor = DojoTheme.colors.headerTintColor,
@@ -207,7 +207,7 @@ private fun SuccessfulResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop,
@@ -217,23 +217,7 @@ private fun SuccessfulResult(
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor
         )
-
-        Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + "\n" + state.orderInfo,
-            style = DojoTheme.typography.subtitle1.medium,
-            color = DojoTheme.colors.primaryLabelTextColor,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_successful_description) + ": " + state.description,
-            style = DojoTheme.typography.subtitle1,
-            color = DojoTheme.colors.secondaryLabelTextColor,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
+        DojoSpacer(height = 32.dp)
         DojoFullGroundButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -276,7 +260,7 @@ private fun FailedResult(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -287,11 +271,11 @@ private fun FailedResult(
             style = DojoTheme.typography.h5.bold,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 24.dp)
+            modifier = Modifier.padding(top = 16.dp)
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_order_info) + "\n" + state.orderInfo,
+            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + state.orderInfo,
             style = DojoTheme.typography.subtitle1.medium,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
@@ -368,7 +352,7 @@ private fun FailedResultWithOutTryAgain(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -378,7 +362,7 @@ private fun FailedResultWithOutTryAgain(
             text = stringResource(id = state.status),
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 24.dp)
+            modifier = Modifier.padding(top = 16.dp)
         )
 
         Text(
