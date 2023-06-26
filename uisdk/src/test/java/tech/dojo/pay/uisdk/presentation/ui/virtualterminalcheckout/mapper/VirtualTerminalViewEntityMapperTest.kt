@@ -129,7 +129,7 @@ private object TestDataVirtualTerminalViewEntityMapper {
         ),
         billingAddressSection = BillingAddressViewState(
             isVisible = true,
-            itemPoissonOffset = 50,
+            itemPoissonOffset = 30,
             addressLine1 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             addressLine2 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             city = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
