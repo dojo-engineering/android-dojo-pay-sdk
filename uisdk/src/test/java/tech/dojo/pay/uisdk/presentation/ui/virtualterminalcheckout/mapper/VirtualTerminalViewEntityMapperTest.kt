@@ -154,7 +154,7 @@ private object TestDataVirtualTerminalViewEntityMapper {
         ),
         cardDetailsSection = CardDetailsViewState(
             isVisible = true,
-            itemPoissonOffset = 700,
+            itemPoissonOffset = 670,
             emailInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = false),
             cardHolderInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cardNumberInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),

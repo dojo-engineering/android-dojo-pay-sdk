@@ -495,6 +495,6 @@ internal class VirtualTerminalViewModel(
     }
 }
 internal const val FIRST_SECTION_OFF_SET_DP = 30
-internal const val SECOND_SECTION_WITH_BILLING_OFF_SET_DP = 700
-internal const val SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP = 950
-internal const val THIRD_SECTION_OFF_SET_DP = 1500
+internal const val SECOND_SECTION_WITH_BILLING_OFF_SET_DP = 670
+internal const val SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP = 920
+internal const val THIRD_SECTION_OFF_SET_DP = 1420
