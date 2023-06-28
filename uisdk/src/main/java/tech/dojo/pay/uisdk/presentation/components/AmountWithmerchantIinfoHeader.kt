@@ -23,8 +23,7 @@ internal fun AmountWithMerchantIInfoHeader(
     modifier: Modifier = Modifier,
     amount: String,
     currencyLogo: String,
-    merchantName: String,
-    orderInfo: String
+    merchantName: String
 ) {
     Box(modifier = modifier) {
         Column(
@@ -71,13 +70,6 @@ internal fun AmountWithMerchantIInfoHeader(
                     color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
                 )
             }
-            Text(
-                text = orderInfo,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = DojoTheme.typography.subtitle1.medium,
-                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
-            )
         }
     }
 }
@@ -88,7 +80,6 @@ internal fun PreviewHeader() = DojoPreview {
     AmountWithMerchantIInfoHeader(
         amount = "95.70",
         currencyLogo = "£",
-        merchantName = "Dojo Cafe",
-        orderInfo = "0-00001"
+        merchantName = "Dojo Cafe"
     )
 }

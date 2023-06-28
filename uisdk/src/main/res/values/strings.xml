@@ -31,7 +31,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_error_invalid_expiry">Enter a valid expiry date</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_invalid_cvv">Enter a valid security code</string>
     <string name = "dojo_ui_sdk_card_details_checkout_save_card">Save card for future use</string>
-    <string name = "dojo_ui_sdk_payment_result_title_success">Payment completed</string>
+    <string name = "dojo_ui_sdk_payment_result_title_success">Payment successful</string>
     <string name = "dojo_ui_sdk_payment_result_title_fail">Payment failed</string>
     <string name = "dojo_ui_sdk_payment_result_main_title_success">Payment successful</string>
     <string name = "dojo_ui_sdk_payment_result_main_title_fail">Payment failed</string>
@@ -39,7 +39,7 @@
     <string name = "dojo_ui_sdk_payment_result_button_try_again">Try again</string>
     <string name = "dojo_ui_sdk_payment_ressult_button_please_wait">Please wait....</string>
     <string name = "dojo_ui_sdk_footer_dojo">Dojo</string>
-    <string name = "dojo_ui_sdk_payment_result_order_info">Payment ID:</string>
+    <string name = "dojo_ui_sdk_payment_result_order_info">Payment ID:&#160;</string>
     <string name = "dojo_ui_sdk_payment_result_successful_description">you have paid </string>
     <string name = "dojo_ui_sdk_payment_result_failed_description">We could not verify your payment details</string>
     <string name = "dojo_ui_sdk_pay_with_this_method">Use this payment method</string>

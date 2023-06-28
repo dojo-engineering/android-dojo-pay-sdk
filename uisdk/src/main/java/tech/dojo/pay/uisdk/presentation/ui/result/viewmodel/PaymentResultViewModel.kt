@@ -60,7 +60,7 @@ internal class PaymentResultViewModel(
                 appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
                 imageId = R.drawable.ic_success_circle,
                 status = R.string.dojo_ui_sdk_payment_result_title_success,
-                orderInfo = paymentIntentResult.result.orderId,
+                orderInfo = paymentIntentResult.result.id,
                 description = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol +
                     paymentIntentResult.result.amount.valueString
             )
@@ -70,7 +70,7 @@ internal class PaymentResultViewModel(
                 imageId = getErrorImage(),
                 showTryAgain = true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
-                orderInfo = paymentIntentResult.result.orderId,
+                orderInfo = paymentIntentResult.result.id,
                 isTryAgainLoading = false,
                 shouldNavigateToPreviousScreen = false,
                 details = R.string.dojo_ui_sdk_payment_result_failed_description

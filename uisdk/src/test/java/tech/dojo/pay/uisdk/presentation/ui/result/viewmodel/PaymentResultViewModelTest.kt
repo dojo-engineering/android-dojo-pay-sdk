@@ -171,7 +171,7 @@ internal class PaymentResultViewModelTest {
             appBarTitleId = R.string.dojo_ui_sdk_payment_result_title_success,
             imageId = R.drawable.ic_success_circle,
             status = R.string.dojo_ui_sdk_payment_result_title_success,
-            orderInfo = "orderId",
+            orderInfo = "id",
             description = "£100"
         )
         // act
@@ -212,7 +212,7 @@ internal class PaymentResultViewModelTest {
             imageId = R.drawable.ic_error_circle,
             showTryAgain = true,
             status = R.string.dojo_ui_sdk_payment_result_title_fail,
-            orderInfo = "orderId",
+            orderInfo = "id",
             details = R.string.dojo_ui_sdk_payment_result_failed_description,
             isTryAgainLoading = false,
             shouldNavigateToPreviousScreen = false
@@ -257,7 +257,7 @@ internal class PaymentResultViewModelTest {
                 imageId = R.drawable.ic_error_circle,
                 showTryAgain = true,
                 status = R.string.dojo_ui_sdk_payment_result_title_fail,
-                orderInfo = "orderId",
+                orderInfo = "id",
                 details = R.string.dojo_ui_sdk_payment_result_failed_description,
                 isTryAgainLoading = false,
                 shouldNavigateToPreviousScreen = true
