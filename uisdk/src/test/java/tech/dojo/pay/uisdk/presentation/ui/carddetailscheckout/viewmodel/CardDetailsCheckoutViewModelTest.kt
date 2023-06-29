@@ -15,6 +15,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandlerImp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -51,6 +52,7 @@ class CardDetailsCheckoutViewModelTest {
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
     private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
+    private val virtualTerminalHandler: DojoVirtualTerminalHandlerImp = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -91,7 +93,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -126,7 +129,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = false,
             supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "", countryCode = "", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -153,7 +156,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -201,7 +205,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -229,7 +233,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -278,7 +283,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -306,14 +311,15 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
     }
 
     @Test
-    fun `test state when user clicks on pay button`() = runTest {
+    fun `test state when user clicks on pay button with normal card payment`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -354,7 +360,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -381,13 +387,70 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         viewModel.onPayWithCardClicked()
         // assert
         verify(updatePaymentStateUseCase).updatePaymentSate(any())
         verify(dojoCardPaymentHandler).executeCardPayment(any(), any())
         Assert.assertEquals(expected, viewModel.state.value)
+    }
+
+    @Test
+    fun `when user click on pay for virtual terminal payment should call executeVirtualTerminalPayment from virtualTerminalHandler`() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
+            countryName = "EGP",
+            countryCode = "EG",
+            isPostalCodeEnabled = true,
+        )
+        val supportedIcons = listOf(1, 2, 3)
+        whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+        paymentIntentFakeFlow.tryEmit(
+            PaymentIntentResult.Success(
+                result = PaymentIntentDomainEntity(
+                    "id",
+                    "token",
+                    AmountDomainEntity(
+                        10L,
+                        "100",
+                        "GBP"
+                    ),
+                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                    collectionBillingAddressRequired = true,
+                    isVirtualTerminalPayment = true
+                )
+            )
+        )
+        paymentStateFakeFlow.tryEmit(true)
+        whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
+            listOf(
+                SupportedCountriesDomainEntity("", "", false)
+            )
+        )
+        whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
+
+        whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)
+        // act
+        val viewModel = CardDetailsCheckoutViewModel(
+            observePaymentIntent,
+            dojoCardPaymentHandler,
+            observePaymentStatus,
+            updatePaymentStateUseCase,
+            getSupportedCountriesUseCase,
+            supportedCountriesViewEntityMapper,
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
+        )
+        viewModel.onPayWithCardClicked()
+        // assert
+        verify(updatePaymentStateUseCase).updatePaymentSate(any())
+        verify(virtualTerminalHandler).executeVirtualTerminalPayment(any(), any())
     }
 
     @Test
@@ -432,7 +495,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -459,7 +522,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         viewModel.onPayWithCardClicked()
         paymentStateFakeFlow.tryEmit(false)
@@ -524,7 +588,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = "new"),
             emailInputField = InputFieldState(value = ""),
@@ -551,7 +615,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
 
         viewModel.onCardHolderValueChanged("new")
@@ -601,7 +666,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = ""),
@@ -628,7 +693,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         viewModel.onCardNumberValueChanged("new")
         viewModel.onCvvValueChanged("new")
@@ -680,7 +746,7 @@ class CardDetailsCheckoutViewModelTest {
             amountCurrency = "£",
             isBillingCountryFieldRequired = true,
             supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            currentSelectedCountry = SupportedCountriesViewEntity(countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true),
             allowedPaymentMethodsIcons = listOf(1, 2, 3),
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = "new"),
@@ -708,7 +774,8 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         viewModel.onEmailValueChanged("new")
         // assert
@@ -766,10 +833,11 @@ class CardDetailsCheckoutViewModelTest {
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator
+            cardCheckoutScreenValidator,
+            virtualTerminalHandler
         )
         viewModel.validateCvv("new", false)
-        viewModel.validateCardNumber("new", false)
+        viewModel.validateCardNumber("new")
         viewModel.validateEmailValue("new", false)
         viewModel.validateExpireDate("new", false)
         // assert

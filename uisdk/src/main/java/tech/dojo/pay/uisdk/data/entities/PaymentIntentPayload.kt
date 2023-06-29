@@ -22,6 +22,7 @@ internal data class PaymentIntentPayload(
     val reference: String? = null,
     val description: String? = null,
     val merchantConfig: MerchantConfig? = null,
+    val paymentSource: String? = null,
     val config: Config? = null,
     val itemLines: List<ItemLines>? = null,
     val metadata: Metadata? = null
@@ -41,7 +42,8 @@ internal data class Config(
     val tradingName: String,
     val branding: Branding,
     val customerEmail: CustomerEmail,
-    val billingAddress: BillingAddress
+    val billingAddress: BillingAddress,
+    val shippingDetails: ShippingAddress
 )
 
 internal data class CustomerEmail(
@@ -49,6 +51,10 @@ internal data class CustomerEmail(
 )
 
 data class BillingAddress(
+    val collectionRequired: Boolean
+)
+
+data class ShippingAddress(
     val collectionRequired: Boolean
 )
 

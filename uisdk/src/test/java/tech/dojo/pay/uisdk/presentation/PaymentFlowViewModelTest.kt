@@ -36,6 +36,7 @@ internal class PaymentFlowViewModelTest {
 
     private val paymentId: String = "paymentId"
     private val customerSecret: String = "customerSecret"
+    private val isVirtualTerminalPayment: Boolean = false
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase = mock()
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase = mock()
@@ -54,6 +55,7 @@ internal class PaymentFlowViewModelTest {
             val viewModel = PaymentFlowViewModel(
                 paymentId,
                 customerSecret,
+                isVirtualTerminalPayment,
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
@@ -91,6 +93,7 @@ internal class PaymentFlowViewModelTest {
             PaymentFlowViewModel(
                 paymentId,
                 customerSecret,
+                isVirtualTerminalPayment,
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
@@ -127,6 +130,7 @@ internal class PaymentFlowViewModelTest {
             val viewModel = PaymentFlowViewModel(
                 paymentId,
                 customerSecret,
+                isVirtualTerminalPayment,
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
@@ -164,6 +168,7 @@ internal class PaymentFlowViewModelTest {
             val viewModel = PaymentFlowViewModel(
                 paymentId,
                 customerSecret,
+                isVirtualTerminalPayment,
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
@@ -201,6 +206,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -239,6 +245,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -277,6 +284,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -315,6 +323,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -353,6 +362,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -391,6 +401,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -429,6 +440,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -467,6 +479,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -484,6 +497,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             paymentId,
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
@@ -501,6 +515,7 @@ internal class PaymentFlowViewModelTest {
         val viewModel = PaymentFlowViewModel(
             "Sandbox_paymentId",
             customerSecret,
+            isVirtualTerminalPayment,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
