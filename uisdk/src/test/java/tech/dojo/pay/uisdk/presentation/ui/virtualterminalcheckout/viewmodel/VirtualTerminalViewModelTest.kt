@@ -43,6 +43,7 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator.Vir
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.TestData.paymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.TestData.virtualTerminalViewState
 
+@Suppress("LargeClass")
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class VirtualTerminalViewModelTest {

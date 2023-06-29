@@ -44,6 +44,7 @@ import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.VirtualTerminalViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
+import java.util.Locale
 
 @Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
@@ -178,7 +179,7 @@ private fun PayButton(
         scrollState = scrollState,
         text =
         String
-            .format("%s %s %s", stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay), state.paymentDetailsSection?.amountCurrency, state.paymentDetailsSection?.totalAmount),
+            .format(Locale.getDefault(), "%s %s %s", stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay), state.paymentDetailsSection?.amountCurrency, state.paymentDetailsSection?.totalAmount),
         isLoading = state.payButtonSection?.isLoading ?: false,
         enabled = state.payButtonSection?.isEnabled ?: false
     ) {
