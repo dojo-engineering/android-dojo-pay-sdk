@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.data.supportedcountries
 
+import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,6 +14,7 @@ class SupportedCountriesRepositoryTest {
 
     private val dataSource = mockk<SupportedCountriesDataSource>()
     private val domainMapper = mockk<SupportedCountriesDomainMapper>()
+    private val context: Context = mockk()
     private lateinit var repository: SupportedCountriesRepository
 
     @Before
@@ -22,13 +24,13 @@ class SupportedCountriesRepositoryTest {
 
     @Test
     fun `test getSupportedCountries returns empty list`() {
-        every { dataSource.getSupportedCountries() } returns mutableListOf()
+        every { dataSource.getSupportedCountries(context) } returns mutableListOf()
         every { domainMapper.apply(any()) } returns SupportedCountriesDomainEntity("", "", false)
 
-        val result = repository.getSupportedCountries()
+        val result = repository.getSupportedCountries(context)
 
         assert(result.isEmpty())
-        verify(exactly = 1) { dataSource.getSupportedCountries() }
+        verify(exactly = 1) { dataSource.getSupportedCountries(context) }
         verify(exactly = 0) { domainMapper.apply(any()) }
     }
 
@@ -43,17 +45,17 @@ class SupportedCountriesRepositoryTest {
             SupportedCountriesDomainEntity("Canada", "CA", true),
         )
 
-        every { dataSource.getSupportedCountries() } returns countryRawList
+        every { dataSource.getSupportedCountries(context) } returns countryRawList
         every { domainMapper.apply(any()) } answers {
             val raw = firstArg<SupportedCountryRaw>()
             val domain = SupportedCountriesDomainEntity(raw.countryName, raw.countryCode, true)
             domain
         }
 
-        val result = repository.getSupportedCountries()
+        val result = repository.getSupportedCountries(context)
 
         assert(result == countryDomainList)
-        verify(exactly = 1) { dataSource.getSupportedCountries() }
+        verify(exactly = 1) { dataSource.getSupportedCountries(context) }
         verify(exactly = 2) { domainMapper.apply(any()) }
     }
 }

@@ -1,9 +1,11 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
+import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -16,7 +18,8 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardChe
 class CardDetailsCheckoutViewModelFactory(
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val isDarkModeEnabled: Boolean,
-    private val virtualTerminalHandler: DojoVirtualTerminalHandler
+    private val virtualTerminalHandler: DojoVirtualTerminalHandler,
+    private val context: Context
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -27,7 +30,10 @@ class CardDetailsCheckoutViewModelFactory(
         val updatePaymentStateUseCase =
             UpdatePaymentStateUseCase(PaymentFlowViewModelFactory.paymentStatusRepository)
         val getSupportedCountriesUseCase =
-            GetSupportedCountriesUseCase()
+            GetSupportedCountriesUseCase(
+                supportedCountriesRepository = SupportedCountriesRepository(),
+                context = context
+            )
         val supportedCountriesViewEntityMapper =
             SupportedCountriesViewEntityMapper()
         val allowedPaymentMethodsViewEntityMapper =
