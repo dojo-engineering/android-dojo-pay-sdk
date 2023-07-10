@@ -12,13 +12,13 @@ dependencyResolutionManagement {
         flatDir {
             dirs 'libs'
         }
-        maven{
-            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
-            credentials {
-                username = cardinalCredentialsPropertiesFile.getProperty("jfrog.user")
-                password = cardinalCredentialsPropertiesFile.getProperty("jfrog.key")
-            }
-        }
+//        maven{
+//            url = uri("https://cardinalcommerceprod.jfrog.io/artifactory/android")
+//            credentials {
+//                username = cardinalCredentialsPropertiesFile.getProperty("jfrog.user")
+//                password = cardinalCredentialsPropertiesFile.getProperty("jfrog.key")
+//            }
+//        }
         google()
         mavenCentral()
     }
