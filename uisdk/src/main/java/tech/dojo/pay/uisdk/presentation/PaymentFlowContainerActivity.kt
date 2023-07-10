@@ -309,7 +309,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.CardDetailsCheckout.route) {
                 val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
-                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled, virtualTerminalHandler)
+                    CardDetailsCheckoutViewModelFactory(cardPaymentHandler, isDarkModeEnabled, virtualTerminalHandler, this@PaymentFlowContainerActivity)
                 }
                 // this is to  handle unregistered activity when screen orientation change
                 cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler, virtualTerminalHandler)
@@ -334,7 +334,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
             composable(route = PaymentFlowScreens.VirtualTerminalCheckOutScreen.route) {
                 val virtualMachineErrorViewModel: VirtualTerminalViewModel by viewModels {
-                    VirtualTerminalViewModelFactory(isDarkModeEnabled, virtualTerminalHandler)
+                    VirtualTerminalViewModelFactory(isDarkModeEnabled, virtualTerminalHandler, this@PaymentFlowContainerActivity)
                 }
                 VirtualTerminalCheckOutScreen(
                     windowSize,

@@ -41,9 +41,7 @@ internal fun BasicCountrySelectorField(
     )
 
     var selectedCountry: SupportedCountriesViewEntity by remember {
-        mutableStateOf(
-            supportedCountriesViewEntity[0]
-        )
+        mutableStateOf(supportedCountriesViewEntity[0])
     }
     var expanded by remember { mutableStateOf(false) }
 
