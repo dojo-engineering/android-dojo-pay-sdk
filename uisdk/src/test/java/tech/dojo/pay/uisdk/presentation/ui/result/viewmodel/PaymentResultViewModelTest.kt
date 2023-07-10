@@ -161,6 +161,7 @@ internal class PaymentResultViewModelTest {
                         "100",
                         "GBP"
                     ),
+                    orderId = "orderId",
                     supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
@@ -200,6 +201,7 @@ internal class PaymentResultViewModelTest {
                         "100",
                         "GBP"
                     ),
+                    orderId = "orderId",
                     supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                 )
             )
@@ -244,6 +246,7 @@ internal class PaymentResultViewModelTest {
                             "100",
                             "GBP"
                         ),
+                        orderId = "orderId",
                         supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
                     )
                 )

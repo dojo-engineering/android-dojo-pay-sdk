@@ -8,13 +8,14 @@ internal class SupportedPaymentMethodsDomainMapper {
 
     fun apply(raw: PaymentMethodsRaw): PaymentMethodsDomainEntity {
         val items = mutableListOf<PaymentMethodsDomainEntityItem>()
-        raw.savedPaymentMethods.forEach {
+        val savedPaymentMethods = raw.savedPaymentMethods
+        for (savedPaymentMethod in savedPaymentMethods) {
             items.add(
                 PaymentMethodsDomainEntityItem(
-                    id = it.id,
-                    pan = it.cardDetails.pan,
-                    expiryDate = it.cardDetails.expiryDate,
-                    scheme = it.cardDetails.scheme
+                    id = savedPaymentMethod.id,
+                    pan = savedPaymentMethod.cardDetails.pan,
+                    expiryDate = savedPaymentMethod.cardDetails.expiryDate,
+                    scheme = savedPaymentMethod.cardDetails.scheme
                 )
             )
         }

@@ -1,4 +1,4 @@
-version = "1.1.4"
+version = "1.2.0"
 
 plugins {
     id("com.android.library")
@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -61,7 +61,6 @@ dependencies {
     implementation(Material.MATERIAL)
     implementation(Navigation.NavigationFragment)
     implementation(Navigation.NavigationCompose)
-    implementation(Navigation.NavigationAnimationCompose)
     implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     implementation(AndroidX.Compose.compiler)
@@ -77,8 +76,6 @@ dependencies {
     implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.Compose.livedata)
     implementation(AndroidX.Compose.tooling)
-    implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT_COMPOSE)
-    implementation(AndroidX.ConstraintLayout.CONSTRAINT_LAYOUT)
     implementation(AndroidX.Logging.TIMBER)
     implementation(AndroidX.Network.GSON)
     implementation(project(":sdk"))

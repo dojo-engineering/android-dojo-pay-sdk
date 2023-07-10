@@ -31,7 +31,8 @@ internal class PaymentIntentDomainEntityMapperTest {
                     10L,
                     "GBP"
                 ),
-                merchantConfig = MerchantConfig(supportedPaymentMethods = SupportedPaymentMethods(cardSchemes = listOf(CardsSchemes.MASTERCARD)))
+                merchantConfig = MerchantConfig(supportedPaymentMethods = SupportedPaymentMethods(cardSchemes = listOf(CardsSchemes.MASTERCARD))),
+                reference = "reference"
             )
             val expected = PaymentIntentDomainEntity(
                 id = "id",
@@ -41,7 +42,8 @@ internal class PaymentIntentDomainEntityMapperTest {
                     "0.10",
                     "GBP"
                 ),
-                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
+                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+                orderId = "reference"
             )
             // act
             val actual = PaymentIntentDomainEntityMapper().apply(raw)

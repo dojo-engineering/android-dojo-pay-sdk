@@ -10,13 +10,16 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
+import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class PaymentFlowViewModel(
     private val paymentId: String,
     customerSecret: String,
+    private val isVirtualTerminalPayment: Boolean,
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase,
     private val observePaymentIntent: ObservePaymentIntent,
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
@@ -33,21 +36,31 @@ internal class PaymentFlowViewModel(
                 observePaymentIntent.observePaymentIntent().collect {
                     it?.let { paymentIntentResult ->
                         if (paymentIntentResult is PaymentIntentResult.Success) {
-                            currentCustomerId = paymentIntentResult.result.customerId
-                            fetchPaymentMethodsUseCase.fetchPaymentMethods(
-                                paymentIntentResult.result.customerId ?: "",
-                                customerSecret
-                            )
+                            if (isSDKInitiatedCorrectly(paymentIntentResult.result)) {
+                                currentCustomerId = paymentIntentResult.result.customerId
+                                fetchPaymentMethodsUseCase.fetchPaymentMethods(
+                                    paymentIntentResult.result.customerId ?: "",
+                                    customerSecret
+                                )
+                            } else {
+                                closeFlowWithInternalError()
+                            }
                         }
                         if (paymentIntentResult is PaymentIntentResult.FetchFailure) {
-                            closeFLowWithInternalError()
+                            closeFlowWithInternalError()
                         }
                     }
                 }
             } catch (error: Throwable) {
-                closeFLowWithInternalError()
+                closeFlowWithInternalError()
             }
         }
+    }
+
+    private fun isSDKInitiatedCorrectly(result: PaymentIntentDomainEntity): Boolean {
+        return if (result.isVirtualTerminalPayment && isVirtualTerminalPayment) {
+            true
+        } else !result.isVirtualTerminalPayment && !isVirtualTerminalPayment
     }
 
     fun updatePaymentState(isActivity: Boolean) {
@@ -56,7 +69,7 @@ internal class PaymentFlowViewModel(
     fun updateGpayPaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
     }
-    private fun closeFLowWithInternalError() {
+    private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
 
@@ -98,5 +111,12 @@ internal class PaymentFlowViewModel(
         navigationEvent.value = PaymentFlowNavigationEvents.CardDetailsCheckout
     }
 
+    fun getFlowStartDestination(): PaymentFlowScreens {
+        return if (isVirtualTerminalPayment) {
+            PaymentFlowScreens.VirtualTerminalCheckOutScreen
+        } else {
+            PaymentFlowScreens.PaymentMethodCheckout
+        }
+    }
     fun isPaymentInSandBoxEnvironment(): Boolean = paymentId.lowercase().contains("sandbox")
 }
