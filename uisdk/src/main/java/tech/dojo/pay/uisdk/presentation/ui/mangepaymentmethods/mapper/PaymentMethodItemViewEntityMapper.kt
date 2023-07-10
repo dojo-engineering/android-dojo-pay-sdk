@@ -18,10 +18,11 @@ internal class PaymentMethodItemViewEntityMapper(private val isDarkModeEnabled: 
             items.add(PaymentMethodItemViewEntityItem.WalletItemItem)
         }
         if (FetchPaymentMethodsResult is FetchPaymentMethodsResult.Success) {
-            FetchPaymentMethodsResult.result.items.forEach {
+            val paymentMethodsDomainEntityItems = FetchPaymentMethodsResult.result.items
+            for (paymentMethodsDomainEntityItem in paymentMethodsDomainEntityItems) {
                 items.add(
                     mapToCardItem(
-                        it,
+                        paymentMethodsDomainEntityItem,
                         isDarkModeEnabled
                     )
                 )

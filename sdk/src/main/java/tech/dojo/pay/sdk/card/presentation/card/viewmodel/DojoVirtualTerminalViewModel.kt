@@ -8,6 +8,7 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.CardPaymentRepository
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 
+@Suppress("SwallowedException")
 internal class DojoVirtualTerminalViewModel(
     private val cardPaymentRepository: CardPaymentRepository,
 ) : ViewModel() {
