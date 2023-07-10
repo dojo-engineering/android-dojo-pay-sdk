@@ -6,8 +6,8 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    def cardinalCredentialsPropertiesFile = new Properties()
-    file("cardinal.properties").withInputStream { cardinalCredentialsPropertiesFile.load(it) }
+//    def cardinalCredentialsPropertiesFile = new Properties()
+//    file("cardinal.properties").withInputStream { cardinalCredentialsPropertiesFile.load(it) }
     repositories {
         flatDir {
             dirs 'libs'

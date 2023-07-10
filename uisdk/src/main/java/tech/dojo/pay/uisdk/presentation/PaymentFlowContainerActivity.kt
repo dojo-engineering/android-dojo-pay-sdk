@@ -147,6 +147,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
+    private fun configureDojoSDKDebugConfig() {
+        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
+            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
+        } else {
+            val dojoSDKDebugConfig = DojoSDKDebugConfig(
+                isSandboxWallet = viewModel.isPaymentInSandBoxEnvironment(),
+                isSandboxIntent = viewModel.isPaymentInSandBoxEnvironment()
+            )
+            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
+        }
+    }
+
     private fun onNavigationEvent(
         event: PaymentFlowNavigationEvents?,
         navController: NavHostController,
