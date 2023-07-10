@@ -1,15 +1,14 @@
 package tech.dojo.pay.uisdk.data.supportedcountries
 
-import android.content.Context
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.domain.mapper.SupportedCountriesDomainMapper
 
 internal class SupportedCountriesRepository(
-    private val dataSource: SupportedCountriesDataSource = SupportedCountriesDataSource(),
+    private val dataSource: SupportedCountriesDataSource,
     private val domainMapper: SupportedCountriesDomainMapper = SupportedCountriesDomainMapper()
 ) {
-    fun getSupportedCountries(context: Context): List<SupportedCountriesDomainEntity> =
+    fun getSupportedCountries(): List<SupportedCountriesDomainEntity> =
         dataSource
-            .getSupportedCountries(context)
+            .getSupportedCountries()
             .map { domainMapper.apply(it) }
 }

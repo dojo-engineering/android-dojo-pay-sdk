@@ -6,8 +6,10 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.SupportedCountryRaw
 import java.io.InputStream
 
-internal class SupportedCountriesDataSource {
-    fun getSupportedCountries(context: Context): MutableList<SupportedCountryRaw> {
+internal class SupportedCountriesDataSource(
+    private val context: Context
+) {
+    fun getSupportedCountries(): MutableList<SupportedCountryRaw> {
         val stream: InputStream = context.resources.openRawResource(R.raw.countries)
         val supportedCountriesList = mutableListOf<SupportedCountryRaw>()
         csvReader()

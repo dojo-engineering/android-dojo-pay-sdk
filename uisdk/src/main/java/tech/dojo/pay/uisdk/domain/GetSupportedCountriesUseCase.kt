@@ -1,13 +1,11 @@
 package tech.dojo.pay.uisdk.domain
 
-import android.content.Context
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 
 internal class GetSupportedCountriesUseCase(
-    private val supportedCountriesRepository: SupportedCountriesRepository,
-    private val context: Context
+    private val supportedCountriesRepository: SupportedCountriesRepository
 ) {
     fun getSupportedCountries() =
         supportedCountriesRepository
-            .getSupportedCountries(context)
+            .getSupportedCountries()
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
+import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
@@ -29,11 +30,12 @@ class CardDetailsCheckoutViewModelFactory(
             ObservePaymentStatus(PaymentFlowViewModelFactory.paymentStatusRepository)
         val updatePaymentStateUseCase =
             UpdatePaymentStateUseCase(PaymentFlowViewModelFactory.paymentStatusRepository)
-        val getSupportedCountriesUseCase =
-            GetSupportedCountriesUseCase(
-                supportedCountriesRepository = SupportedCountriesRepository(),
-                context = context
-            )
+        val supportedCountriesRepository = SupportedCountriesRepository(
+            dataSource = SupportedCountriesDataSource(context)
+        )
+        val getSupportedCountriesUseCase = GetSupportedCountriesUseCase(
+            supportedCountriesRepository = supportedCountriesRepository
+        )
         val supportedCountriesViewEntityMapper =
             SupportedCountriesViewEntityMapper()
         val allowedPaymentMethodsViewEntityMapper =
