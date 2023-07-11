@@ -15,17 +15,19 @@ internal fun CountrySelectorField(
     isError: Boolean = false,
     enabled: Boolean = true,
 ) {
-    LabelAndAssistiveTextWrapper(
-        modifier = modifier,
-        label = label,
-        assistiveText = assistiveText,
-        isError = isError,
-        enabled = enabled
-    ) {
-        BasicCountrySelectorField(
-            supportedCountriesViewEntity,
-            onCountrySelected,
-            enabled,
-        )
+    if (supportedCountriesViewEntity.isNotEmpty()) {
+        LabelAndAssistiveTextWrapper(
+            modifier = modifier,
+            label = label,
+            assistiveText = assistiveText,
+            isError = isError,
+            enabled = enabled
+        ) {
+            BasicCountrySelectorField(
+                supportedCountriesViewEntity,
+                onCountrySelected,
+                enabled,
+            )
+        }
     }
 }
