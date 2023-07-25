@@ -39,6 +39,8 @@ import tech.dojo.pay.uisdk.presentation.components.rememberWindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.LocalDojoColors
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
+import tech.dojo.pay.uisdk.presentation.navigation.CUSTOMER_ID_PARAMS_KEY
+import tech.dojo.pay.uisdk.presentation.navigation.DOJO_PAYMENT_RESULT_PARAMS_KEY
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsCheckoutScreen
@@ -253,7 +255,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         composable(
             route = PaymentFlowScreens.ManagePaymentMethods.route,
             arguments = listOf(
-                navArgument(name = "customerId") {
+                navArgument(name = CUSTOMER_ID_PARAMS_KEY) {
                     type = NavType.StringType
                     defaultValue = ""
                     nullable = true
@@ -265,7 +267,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 enter = expandVertically(),
                 exit = shrinkVertically(),
             ) {
-                val customerId = it.arguments?.get("customerId") as String
+                val customerId = it.arguments?.getString(CUSTOMER_ID_PARAMS_KEY) ?: ""
 
                 val mangePaymentViewModel: MangePaymentViewModel by viewModels {
                     MangePaymentViewModelFactory(
@@ -369,14 +371,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         composable(
             route = PaymentFlowScreens.PaymentResult.route,
             arguments = listOf(
-                navArgument(name = "dojoPaymentResult") {
+                navArgument(name = DOJO_PAYMENT_RESULT_PARAMS_KEY) {
                     type = NavType.EnumType(DojoPaymentResult::class.java)
                     defaultValue = DojoPaymentResult.DECLINED
                     nullable = false
                 },
             ),
         ) {
-            val result = it.arguments?.get("dojoPaymentResult") as DojoPaymentResult
+            val result = it.arguments?.get(DOJO_PAYMENT_RESULT_PARAMS_KEY) as DojoPaymentResult
             val refreshPaymentIntent =
                 RefreshPaymentIntentUseCase(PaymentFlowViewModelFactory.paymentIntentRepository)
             val observePaymentIntent =
@@ -408,6 +410,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         val data = Intent()
         data.putExtra(DojoPaymentFlowHandlerResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
-        overridePendingTransition(0, tech.dojo.pay.sdk.R.anim.exit)
+        overridePendingTransition(200, tech.dojo.pay.sdk.R.anim.exit)
     }
 }
