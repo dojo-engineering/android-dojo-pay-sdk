@@ -22,6 +22,10 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.entities.DarkColorPalette
+import tech.dojo.pay.uisdk.entities.LightColorPalette
+import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
+import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -59,7 +63,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
-                updatePaymentStateUseCase
+                updatePaymentStateUseCase,
             )
             val actual = viewModel.navigationEvent.value
             // assert
@@ -81,13 +85,13 @@ internal class PaymentFlowViewModelTest {
                         AmountDomainEntity(
                             10L,
                             "100",
-                            "GBP"
+                            "GBP",
                         ),
                         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                         collectionBillingAddressRequired = true,
-                        customerId = "customerId"
-                    )
-                )
+                        customerId = "customerId",
+                    ),
+                ),
             )
             // act
             PaymentFlowViewModel(
@@ -97,7 +101,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
-                updatePaymentStateUseCase
+                updatePaymentStateUseCase,
             )
             // assert
             verify(fetchPaymentMethodsUseCase).fetchPaymentMethods("customerId", customerSecret)
@@ -118,13 +122,13 @@ internal class PaymentFlowViewModelTest {
                         AmountDomainEntity(
                             10L,
                             "100",
-                            "GBP"
+                            "GBP",
                         ),
                         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                         collectionBillingAddressRequired = true,
-                        customerId = "customerId"
-                    )
-                )
+                        customerId = "customerId",
+                    ),
+                ),
             )
             // act
             val viewModel = PaymentFlowViewModel(
@@ -134,7 +138,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
-                updatePaymentStateUseCase
+                updatePaymentStateUseCase,
             )
             viewModel.updatePaymentState(isActivity = false)
             // assert
@@ -156,13 +160,13 @@ internal class PaymentFlowViewModelTest {
                         AmountDomainEntity(
                             10L,
                             "100",
-                            "GBP"
+                            "GBP",
                         ),
                         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                         collectionBillingAddressRequired = true,
-                        customerId = "customerId"
-                    )
-                )
+                        customerId = "customerId",
+                    ),
+                ),
             )
             // act
             val viewModel = PaymentFlowViewModel(
@@ -172,7 +176,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentIntentUseCase,
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
-                updatePaymentStateUseCase
+                updatePaymentStateUseCase,
             )
             viewModel.updateGpayPaymentState(isActivity = false)
             // assert
@@ -193,13 +197,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.OnBack
         // act
@@ -210,7 +214,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.onBackClicked()
         val actual = viewModel.navigationEvent.value
@@ -232,13 +236,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod()
         // act
@@ -249,7 +253,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.onBackClickedWithSavedPaymentMethod()
         val actual = viewModel.navigationEvent.value
@@ -271,13 +275,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.OnCloseFlow
         // act
@@ -288,7 +292,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.onCloseFlowClicked()
         val actual = viewModel.navigationEvent.value
@@ -310,13 +314,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SUCCESSFUL, true)
         // act
@@ -327,7 +331,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
         val actual = viewModel.navigationEvent.value
@@ -349,13 +353,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR, false)
         // act
@@ -366,7 +370,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         val actual = viewModel.navigationEvent.value
@@ -388,13 +392,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.FAILED, false)
         // act
@@ -405,7 +409,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.navigateToPaymentResult(DojoPaymentResult.FAILED)
         val actual = viewModel.navigationEvent.value
@@ -427,13 +431,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.CardDetailsCheckout
         // act
@@ -444,7 +448,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.navigateToCardDetailsCheckoutScreen()
         val actual = viewModel.navigationEvent.value
@@ -466,13 +470,13 @@ internal class PaymentFlowViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
-                    customerId = "customerId"
-                )
-            )
+                    customerId = "customerId",
+                ),
+            ),
         )
         val expected = PaymentFlowNavigationEvents.ManagePaymentMethods("customerId")
         // act
@@ -483,7 +487,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         viewModel.navigateToManagePaymentMethods()
         val actual = viewModel.navigationEvent.value
@@ -501,7 +505,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         // act
         val actual = viewModel.isPaymentInSandBoxEnvironment()
@@ -519,11 +523,49 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
         )
         // act
         val actual = viewModel.isPaymentInSandBoxEnvironment()
         // assert
         Assert.assertTrue(actual)
+    }
+
+    @Test
+    fun `call getCustomColorPalette with isDarkModeEnabled as true  should return darkColorPalette `() = runTest {
+        // arrange
+        val expected = darkColorPalette(DarkColorPalette())
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            isVirtualTerminalPayment,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase,
+        )
+        // act
+        val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = true)
+        // assert
+        Assert.assertEquals(expected.primarySurfaceBackgroundColor, actual.primarySurfaceBackgroundColor)
+    }
+
+    @Test
+    fun `call getCustomColorPalette with isDarkModeEnabled as false should return LightColorPalette `() = runTest {
+        // arrange
+        val expected = lightColorPalette(LightColorPalette())
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            isVirtualTerminalPayment,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase,
+        )
+        // act
+        val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
+        // assert
+        Assert.assertEquals(expected.primarySurfaceBackgroundColor, actual.primarySurfaceBackgroundColor)
     }
 }
