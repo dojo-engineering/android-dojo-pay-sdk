@@ -74,11 +74,11 @@ internal class PaymentFlowViewModel(
         }
     }
 
-    private fun isSDKInitiatedCorrectly(result: PaymentIntentDomainEntity): Boolean {
-        return if (result.isVirtualTerminalPayment && isVirtualTerminalPayment) {
+    private fun isSDKInitiatedCorrectly(paymentIntent: PaymentIntentDomainEntity): Boolean {
+        return if (paymentIntent.isVirtualTerminalPayment && isVirtualTerminalPayment) {
             true
         } else {
-            !result.isVirtualTerminalPayment && !isVirtualTerminalPayment
+            !paymentIntent.isVirtualTerminalPayment && !isVirtualTerminalPayment
         }
     }
 
