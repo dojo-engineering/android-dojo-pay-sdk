@@ -303,15 +303,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 CardDetailsCheckoutViewModelFactory(
                     cardPaymentHandler,
                     isDarkModeEnabled,
-                    virtualTerminalHandler,
                     this@PaymentFlowContainerActivity,
                 )
             }
             // this is to handle unregistered activity when screen orientation change
-            cardDetailsCheckoutViewModel.updateCardPaymentHandler(
-                cardPaymentHandler,
-                virtualTerminalHandler,
-            )
+            cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler)
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),

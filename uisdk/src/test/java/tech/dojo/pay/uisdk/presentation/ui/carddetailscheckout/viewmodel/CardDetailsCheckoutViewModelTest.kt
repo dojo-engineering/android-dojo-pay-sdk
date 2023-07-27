@@ -15,7 +15,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
-import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandlerImp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -52,7 +51,6 @@ class CardDetailsCheckoutViewModelTest {
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
     private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
-    private val virtualTerminalHandler: DojoVirtualTerminalHandlerImp = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -76,13 +74,13 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = true,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -94,7 +92,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -116,11 +113,11 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX)
-                )
-            )
+                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)
@@ -141,11 +138,11 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -157,7 +154,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -184,18 +180,18 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -217,11 +213,11 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
 
         )
         // act
@@ -234,7 +230,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -261,19 +256,19 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     customerId = "customerId",
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -295,11 +290,11 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
 
         )
         // act
@@ -312,7 +307,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -339,18 +333,18 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -371,12 +365,12 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = true,
-            isEnabled = false
+            isEnabled = false,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -388,69 +382,12 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         viewModel.onPayWithCardClicked()
         // assert
         verify(updatePaymentStateUseCase).updatePaymentSate(any())
         verify(dojoCardPaymentHandler).executeCardPayment(any(), any())
         Assert.assertEquals(expected, viewModel.state.value)
-    }
-
-    @Test
-    fun `when user click on pay for virtual terminal payment should call executeVirtualTerminalPayment from virtualTerminalHandler`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP"
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    isVirtualTerminalPayment = true
-                )
-            )
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
-        )
-        whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
-
-        whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            virtualTerminalHandler
-        )
-        viewModel.onPayWithCardClicked()
-        // assert
-        verify(updatePaymentStateUseCase).updatePaymentSate(any())
-        verify(virtualTerminalHandler).executeVirtualTerminalPayment(any(), any())
     }
 
     @Test
@@ -474,18 +411,18 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -506,12 +443,12 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -523,7 +460,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         viewModel.onPayWithCardClicked()
         paymentStateFakeFlow.tryEmit(false)
@@ -542,14 +478,14 @@ class CardDetailsCheckoutViewModelTest {
         whenever(
             cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
                 any(),
-                any()
-            )
+                any(),
+            ),
         ).thenReturn(true)
         whenever(
             cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
                 any(),
-                any()
-            )
+                any(),
+            ),
         ).thenReturn(true)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
@@ -567,18 +503,18 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -599,12 +535,12 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = true
+            isEnabled = true,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -616,7 +552,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
 
         viewModel.onCardHolderValueChanged("new")
@@ -645,18 +580,18 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true
-                )
-            )
+                    collectionBillingAddressRequired = true,
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -677,12 +612,12 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -694,7 +629,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         viewModel.onCardNumberValueChanged("new")
         viewModel.onCvvValueChanged("new")
@@ -724,19 +658,19 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
                     collectionEmailRequired = true,
-                )
-            )
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -754,7 +688,7 @@ class CardDetailsCheckoutViewModelTest {
             saveCardCheckBox = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card
+                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
@@ -762,7 +696,7 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
             isLoading = false,
-            isEnabled = false
+            isEnabled = false,
 
         )
         // act
@@ -775,7 +709,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         viewModel.onEmailValueChanged("new")
         // assert
@@ -807,19 +740,19 @@ class CardDetailsCheckoutViewModelTest {
                     AmountDomainEntity(
                         10L,
                         "100",
-                        "GBP"
+                        "GBP",
                     ),
                     supportedCardsSchemes = listOf(CardsSchemes.AMEX),
                     collectionBillingAddressRequired = true,
                     collectionEmailRequired = true,
-                )
-            )
+                ),
+            ),
         )
         paymentStateFakeFlow.tryEmit(true)
         whenever(getSupportedCountriesUseCase.getSupportedCountries()).thenReturn(
             listOf(
-                SupportedCountriesDomainEntity("", "", false)
-            )
+                SupportedCountriesDomainEntity("", "", false),
+            ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
 
@@ -834,7 +767,6 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
-            virtualTerminalHandler
         )
         viewModel.validateCvv("new", false)
         viewModel.validateCardNumber("new")
