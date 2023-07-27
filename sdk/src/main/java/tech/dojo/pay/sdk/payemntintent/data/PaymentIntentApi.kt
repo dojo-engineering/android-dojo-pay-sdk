@@ -16,7 +16,7 @@ interface PaymentIntentApi {
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): Response<JsonObject>
 
-    @GET("payment-intents/public/{paymentId}")
+    @GET("setup-intents/public/{paymentId}")
     suspend fun fetchSetUpIntent(
         @Path("paymentId") paymentId: String,
         @Header("Version") version: String = API_VERSION,
