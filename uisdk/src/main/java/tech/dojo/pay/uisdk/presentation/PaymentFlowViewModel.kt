@@ -132,10 +132,10 @@ internal class PaymentFlowViewModel(
     }
 
     fun getFlowStartDestination(): PaymentFlowScreens {
-        return if (paymentType == DojoPaymentType.VIRTUAL_TERMINAL) {
-            PaymentFlowScreens.VirtualTerminalCheckOutScreen
-        } else {
-            PaymentFlowScreens.PaymentMethodCheckout
+        return when (paymentType) {
+            DojoPaymentType.PAYMENT_CARD -> PaymentFlowScreens.PaymentMethodCheckout
+            DojoPaymentType.CARD_ON_FILE -> PaymentFlowScreens.CardDetailsCheckout
+            DojoPaymentType.VIRTUAL_TERMINAL -> PaymentFlowScreens.VirtualTerminalCheckOutScreen
         }
     }
     fun isPaymentInSandBoxEnvironment(): Boolean = paymentId.lowercase().contains("sandbox")

@@ -233,16 +233,16 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             paymentMethodCheckoutViewModel.updateSavedCardPaymentHandler(savedCardPaymentHandler)
             paymentMethodCheckoutViewModel.updateGpayHandler(gpayPaymentHandler)
             PaymentMethodsCheckOutScreen(
-                windowSize,
-                currentSelectedMethod,
-                paymentMethodCheckoutViewModel,
-                {
+                windowSize = windowSize,
+                currentSelectedMethod = currentSelectedMethod,
+                viewModel = paymentMethodCheckoutViewModel,
+                onAppBarIconClicked = {
                     returnResult(DojoPaymentResult.DECLINED)
                     viewModel.onCloseFlowClicked()
                 },
-                viewModel::navigateToManagePaymentMethods,
-                viewModel::navigateToCardDetailsCheckoutScreen,
-                showDojoBrand,
+                onManagePaymentClicked = viewModel::navigateToManagePaymentMethods,
+                onPayByCard = viewModel::navigateToCardDetailsCheckoutScreen,
+                showDojoBrand = showDojoBrand,
             )
         }
     }
@@ -278,15 +278,15 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     )
                 }
                 ManagePaymentMethods(
-                    windowSize,
-                    mangePaymentViewModel,
-                    {
+                    windowSize = windowSize,
+                    viewModel = mangePaymentViewModel,
+                    onCloseClicked = {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
                     },
-                    viewModel::onBackClickedWithSavedPaymentMethod,
-                    viewModel::navigateToCardDetailsCheckoutScreen,
-                    showDojoBrand,
+                    onBackClicked = viewModel::onBackClickedWithSavedPaymentMethod,
+                    onNewCardButtonClicked = viewModel::navigateToCardDetailsCheckoutScreen,
+                    showDojoBrand = showDojoBrand,
                 )
             }
         }
@@ -307,7 +307,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     this@PaymentFlowContainerActivity,
                 )
             }
-            // this is to  handle unregistered activity when screen orientation change
+            // this is to handle unregistered activity when screen orientation change
             cardDetailsCheckoutViewModel.updateCardPaymentHandler(
                 cardPaymentHandler,
                 virtualTerminalHandler,
@@ -318,15 +318,22 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 exit = shrinkVertically(),
             ) {
                 CardDetailsCheckoutScreen(
-                    windowSize,
-                    cardDetailsCheckoutViewModel,
-                    {
+                    windowSize = windowSize,
+                    viewModel = cardDetailsCheckoutViewModel,
+                    onCloseClicked = {
                         returnResult(DojoPaymentResult.DECLINED)
                         viewModel.onCloseFlowClicked()
                     },
-                    viewModel::onBackClicked,
-                    isDarkModeEnabled,
-                    showDojoBrand,
+                    onBackClicked = {
+                        if (flowStartDestination == PaymentFlowScreens.CardDetailsCheckout) {
+                            returnResult(DojoPaymentResult.DECLINED)
+                            viewModel.onCloseFlowClicked()
+                        } else {
+                            viewModel.onBackClicked()
+                        }
+                    },
+                    isDarkModeEnabled = isDarkModeEnabled,
+                    showDojoBrand = showDojoBrand,
                 )
             }
         }
@@ -347,18 +354,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 )
             }
             VirtualTerminalCheckOutScreen(
-                windowSize,
-                virtualMachineErrorViewModel,
-                {
+                windowSize = windowSize,
+                viewModel = virtualMachineErrorViewModel,
+                onCloseClicked = {
                     returnResult(DojoPaymentResult.DECLINED)
                     viewModel.onCloseFlowClicked()
                 },
-                {
+                onBackClicked = {
                     returnResult(DojoPaymentResult.DECLINED)
                     viewModel.onCloseFlowClicked()
                 },
-                isDarkModeEnabled,
-                showDojoBrand,
+                isDarkModeEnabled = isDarkModeEnabled,
+                showDojoBrand = showDojoBrand,
             )
         }
     }

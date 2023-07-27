@@ -28,6 +28,7 @@ import tech.dojo.pay.uisdk.entities.LightColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
+import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -41,7 +42,7 @@ internal class PaymentFlowViewModelTest {
 
     private val paymentId: String = "paymentId"
     private val customerSecret: String = "customerSecret"
-    private val paymentType: DojoPaymentType = DojoPaymentType.PAYMENT_CARD
+    private var paymentType: DojoPaymentType = DojoPaymentType.PAYMENT_CARD
     private val fetchPaymentIntentUseCase: FetchPaymentIntentUseCase = mock()
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase = mock()
@@ -568,5 +569,68 @@ internal class PaymentFlowViewModelTest {
         val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
         // assert
         Assert.assertEquals(expected.primarySurfaceBackgroundColor, actual.primarySurfaceBackgroundColor)
+    }
+
+    @Test
+    fun`given calling getFlowStartDestination with PAYMENT_CARD type the start destination should be PaymentMethodCheckout`() = runTest {
+        // arrange
+        val expected = PaymentFlowScreens.PaymentMethodCheckout
+        paymentType = DojoPaymentType.PAYMENT_CARD
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            paymentType,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase,
+        )
+
+        // act
+        val actual = viewModel.getFlowStartDestination()
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun`given calling getFlowStartDestination with CARD_ON_FILE type the start destination should be CardDetailsCheckout`() = runTest {
+        // arrange
+        val expected = PaymentFlowScreens.CardDetailsCheckout
+        paymentType = DojoPaymentType.CARD_ON_FILE
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            paymentType,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase,
+        )
+
+        // act
+        val actual = viewModel.getFlowStartDestination()
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun`given calling getFlowStartDestination with VIRTUAL_TERMINAL type the start destination should be VirtualTerminalCheckOutScreen`() = runTest {
+        // arrange
+        val expected = PaymentFlowScreens.VirtualTerminalCheckOutScreen
+        paymentType = DojoPaymentType.VIRTUAL_TERMINAL
+        val viewModel = PaymentFlowViewModel(
+            "Sandbox_paymentId",
+            customerSecret,
+            paymentType,
+            fetchPaymentIntentUseCase,
+            observePaymentIntent,
+            fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase,
+        )
+
+        // act
+        val actual = viewModel.getFlowStartDestination()
+        // assert
+        Assert.assertEquals(expected, actual)
     }
 }
