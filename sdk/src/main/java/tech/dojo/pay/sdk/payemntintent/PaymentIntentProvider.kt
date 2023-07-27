@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.payemntintent
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,9 +13,10 @@ internal class PaymentIntentProvider(
     private val paymentIntentRepository: PaymentIntentRepository = PaymentIntentRepository(
         PaymentIntentApiBuilder().create(),
     ),
-    private val repositoryScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
 
+    private val repositoryScope: CoroutineScope = CoroutineScope(dispatcher)
     fun fetchPaymentIntent(
         paymentId: String,
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,

@@ -1,13 +1,16 @@
 package tech.dojo.pay.sdk.payemntintent
 
+import io.mockk.called
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import tech.dojo.pay.sdk.DojoPaymentIntentResult
 import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
@@ -16,15 +19,19 @@ import tech.dojo.pay.sdk.payemntintent.data.PaymentIntentRepository
 internal class PaymentIntentProviderTest {
 
     private val paymentIntentRepository: PaymentIntentRepository = mockk()
-    private val repositoryScope: CoroutineScope = CoroutineScope(UnconfinedTestDispatcher())
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private lateinit var paymentIntentProvider: PaymentIntentProvider
 
-    private val paymentIntentProvider = PaymentIntentProvider(
-        paymentIntentRepository,
-        repositoryScope,
-    )
+    @Before
+    fun setup() {
+        paymentIntentProvider = PaymentIntentProvider(
+            paymentIntentRepository,
+            testDispatcher,
+        )
+    }
 
     @Test
-    fun `when fetchPaymentIntent success onPaymentIntentSuccess should be invoked`() = runTest {
+    fun `when fetchPaymentIntent success onPaymentIntentSuccess should be called with  service json `() = runTest {
         // arrange
         val paymentId = "paymentId"
         val paymentIntent = "paymentIntent"
@@ -37,13 +44,13 @@ internal class PaymentIntentProviderTest {
             actualPaymentIntentResult = paymentIntent
         }
         val onPaymentIntentFailed: () -> Unit = {}
+
         // act
         paymentIntentProvider.fetchPaymentIntent(
             paymentId,
             onPaymentIntentSuccess,
             onPaymentIntentFailed,
         )
-
         // assert
         assertEquals(actualPaymentIntentResult, paymentIntent)
     }
@@ -242,5 +249,14 @@ internal class PaymentIntentProviderTest {
 
         // assert
         assertTrue(actualPaymentIntentResult.isBlank())
+    }
+
+    @After
+    fun tearDown() {
+        coVerify {
+            paymentIntentRepository.getPaymentIntent(any()) wasNot called
+            paymentIntentRepository.getSetUpIntent(any()) wasNot called
+            paymentIntentRepository.refreshPaymentIntent(any()) wasNot called
+        }
     }
 }
