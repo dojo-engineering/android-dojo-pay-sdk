@@ -38,7 +38,7 @@ internal class PaymentFlowViewModel(
     init {
         viewModelScope.launch {
             try {
-                fetchPaymentIntentUseCase.fetchPaymentIntent(paymentId)
+                fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
                     it?.let { paymentIntentResult -> handlePaymentIntentResult(paymentIntentResult, customerSecret) }
                 }
@@ -66,9 +66,11 @@ internal class PaymentFlowViewModel(
     ) {
         if (isSDKInitiatedCorrectly(paymentIntentResult.result)) {
             currentCustomerId = paymentIntentResult.result.customerId
-            fetchPaymentMethodsUseCase.fetchPaymentMethods(
+            fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
+                paymentType,
                 paymentIntentResult.result.customerId ?: "",
                 customerSecret,
+
             )
         } else {
             closeFlowWithInternalError()

@@ -11,7 +11,7 @@ import tech.dojo.pay.uisdk.domain.mapper.PaymentIntentDomainEntityMapper
 internal class PaymentIntentRepository(
     private val dataSource: PaymentIntentDataSource = PaymentIntentDataSource(),
     private val gson: Gson = Gson(),
-    private val mapper: PaymentIntentDomainEntityMapper = PaymentIntentDomainEntityMapper()
+    private val mapper: PaymentIntentDomainEntityMapper = PaymentIntentDomainEntityMapper(),
 ) {
     private lateinit var paymentIntentResult: MutableStateFlow<PaymentIntentResult?>
 
@@ -20,16 +20,24 @@ internal class PaymentIntentRepository(
         dataSource.fetchPaymentIntent(
             paymentId,
             { handleSuccessPaymentIntent(it) },
-            { paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure) }
+            { paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure) },
         )
     }
 
+    fun fetchSetUpIntent(paymentId: String) {
+        paymentIntentResult = MutableStateFlow(null)
+        dataSource.fetchSetUpIntent(
+            paymentId,
+            { handleSuccessPaymentIntent(it) },
+            { paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure) },
+        )
+    }
     fun refreshPaymentIntent(paymentId: String) {
         paymentIntentResult = MutableStateFlow(null)
         dataSource.refreshPaymentIntent(
             paymentId,
             { handleSuccessRefresh(it) },
-            { paymentIntentResult.tryEmit(PaymentIntentResult.RefreshFailure) }
+            { paymentIntentResult.tryEmit(PaymentIntentResult.RefreshFailure) },
         )
     }
 

@@ -33,7 +33,7 @@ internal class PaymentIntentRepositoryTest {
             dataSource.fetchPaymentIntent(
                 any(),
                 any(),
-                any()
+                any(),
             )
         }.answers { thirdArg<() -> Unit>().invoke() }
         val expectedValue = PaymentIntentResult.FetchFailure
@@ -48,23 +48,26 @@ internal class PaymentIntentRepositoryTest {
     }
 
     @Test
-    fun `when fetchPaymentIntent success  PaymentIntent stream should emits Success with domainEntity`() =
+    fun `when fetchPaymentIntent success PaymentIntent stream should emits Success with domainEntity`() =
         runTest {
             // arrange
             val paymentId = "paymentId"
             val paymentIntentJson = "paymentIntentJson"
             val paymentIntentDomainEntity = PaymentIntentDomainEntity(
-                id = "id", paymentToken = "clientSessionSecret",
+                id = "id",
+                paymentToken = "clientSessionSecret",
                 amount = AmountDomainEntity(
-                    10L, "0.10", "GBP"
+                    10L,
+                    "0.10",
+                    "GBP",
                 ),
-                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
+                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
             )
             every {
                 dataSource.fetchPaymentIntent(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             }.answers { secondArg<(paymentIntentJson: String) -> Unit>().invoke(paymentIntentJson) }
             every { mapper.apply(any()) } returns paymentIntentDomainEntity
@@ -72,6 +75,63 @@ internal class PaymentIntentRepositoryTest {
             // act
             val sut = PaymentIntentRepository(dataSource, gson, mapper)
             sut.fetchPaymentIntent(paymentId)
+            val stream = sut.observePaymentIntent()
+
+            // assert
+            val job = launch { stream.collectLatest { assertEquals(expectedValue, it) } }
+            job.cancel()
+        }
+
+    @Test
+    fun `when fetchSetUpIntent fails PaymentIntent stream should emits FetchFailure`() = runTest {
+        // arrange
+        val paymentId = "paymentId"
+        every {
+            dataSource.fetchSetUpIntent(
+                any(),
+                any(),
+                any(),
+            )
+        }.answers { thirdArg<() -> Unit>().invoke() }
+        val expectedValue = PaymentIntentResult.FetchFailure
+        // act
+        val sut = PaymentIntentRepository(dataSource, gson, mapper)
+        sut.fetchSetUpIntent(paymentId)
+        val stream = sut.observePaymentIntent()
+
+        // assert
+        val job = launch { stream.collectLatest { assertEquals(expectedValue, it) } }
+        job.cancel()
+    }
+
+    @Test
+    fun `when fetchSetUpIntent success PaymentIntent stream should emits Success with domainEntity`() =
+        runTest {
+            // arrange
+            val paymentId = "paymentId"
+            val paymentIntentJson = "paymentIntentJson"
+            val paymentIntentDomainEntity = PaymentIntentDomainEntity(
+                id = "id",
+                paymentToken = "clientSessionSecret",
+                amount = AmountDomainEntity(
+                    10L,
+                    "0.10",
+                    "GBP",
+                ),
+                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
+            )
+            every {
+                dataSource.fetchSetUpIntent(
+                    any(),
+                    any(),
+                    any(),
+                )
+            }.answers { secondArg<(paymentIntentJson: String) -> Unit>().invoke(paymentIntentJson) }
+            every { mapper.apply(any()) } returns paymentIntentDomainEntity
+            val expectedValue = PaymentIntentResult.Success(paymentIntentDomainEntity)
+            // act
+            val sut = PaymentIntentRepository(dataSource, gson, mapper)
+            sut.fetchSetUpIntent(paymentId)
             val stream = sut.observePaymentIntent()
 
             // assert
@@ -89,7 +149,7 @@ internal class PaymentIntentRepositoryTest {
                 dataSource.fetchPaymentIntent(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             }.answers { secondArg<(paymentIntentJson: String) -> Unit>().invoke(paymentIntentJson) }
             every { mapper.apply(any()) } throws RuntimeException("A mock exception occurred!")
@@ -113,7 +173,7 @@ internal class PaymentIntentRepositoryTest {
                 dataSource.refreshPaymentIntent(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             }.answers { thirdArg<() -> Unit>().invoke() }
             val expectedValue = PaymentIntentResult.RefreshFailure
@@ -134,17 +194,20 @@ internal class PaymentIntentRepositoryTest {
             val paymentId = "paymentId"
             val paymentIntentJson = "paymentIntentJson"
             val paymentIntentDomainEntity = PaymentIntentDomainEntity(
-                id = "id", paymentToken = "clientSessionSecret",
+                id = "id",
+                paymentToken = "clientSessionSecret",
                 amount = AmountDomainEntity(
-                    10L, "0.10", "GBP"
+                    10L,
+                    "0.10",
+                    "GBP",
                 ),
-                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD)
+                supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
             )
             every {
                 dataSource.refreshPaymentIntent(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             }.answers { secondArg<(paymentIntentJson: String) -> Unit>().invoke(paymentIntentJson) }
             every { mapper.apply(any()) } returns paymentIntentDomainEntity
@@ -169,7 +232,7 @@ internal class PaymentIntentRepositoryTest {
                 dataSource.refreshPaymentIntent(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             }.answers { secondArg<(paymentIntentJson: String) -> Unit>().invoke(paymentIntentJson) }
             every { mapper.apply(any()) } throws RuntimeException("A mock exception occurred!")

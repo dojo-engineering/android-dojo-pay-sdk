@@ -106,7 +106,7 @@ internal class PaymentFlowViewModelTest {
                 updatePaymentStateUseCase,
             )
             // assert
-            verify(fetchPaymentMethodsUseCase).fetchPaymentMethods("customerId", customerSecret)
+            verify(fetchPaymentMethodsUseCase).fetchPaymentMethodsWithPaymentType(DojoPaymentType.PAYMENT_CARD, "customerId", customerSecret)
         }
 
     @Test
