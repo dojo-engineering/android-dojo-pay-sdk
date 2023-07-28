@@ -35,7 +35,7 @@ object DojoSdk {
      */
     fun createCardPaymentHandler(
         activity: ComponentActivity,
-        onResult: (DojoPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit,
     ): DojoCardPaymentHandler = DojoCardPaymentHandlerImpl(activity, onResult)
 
     /**
@@ -43,7 +43,7 @@ object DojoSdk {
      */
     fun createSavedCardPaymentHandler(
         activity: ComponentActivity,
-        onResult: (DojoPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit,
     ): DojoSavedCardPaymentHandler = DojoSavedCardPaymentHandlerImpl(activity, onResult)
 
     /**
@@ -52,7 +52,7 @@ object DojoSdk {
 
     fun createVirtualTerminalPaymentHandler(
         activity: ComponentActivity,
-        onResult: (DojoPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit,
     ): DojoVirtualTerminalHandlerImp = DojoVirtualTerminalHandlerImp(activity, onResult)
 
     /**
@@ -60,7 +60,7 @@ object DojoSdk {
      */
     fun createGPayHandler(
         activity: ComponentActivity,
-        onResult: (DojoPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit,
     ): DojoGPayHandler = DojoGPayHandlerImpl(activity, onResult)
 
     /**
@@ -71,11 +71,11 @@ object DojoSdk {
     fun startCardPayment(
         activity: Activity,
         token: String,
-        payload: FullCardPaymentPayload
+        payload: FullCardPaymentPayload,
     ) {
         val intent = DojoCardPaymentResultContract().createIntent(
             activity,
-            DojoCardPaymentParams(token, payload)
+            DojoCardPaymentParams(token, payload),
         )
         activity.startActivityForResult(intent, REQUEST_CODE_CARD)
     }
@@ -88,11 +88,11 @@ object DojoSdk {
     fun startSavedCardPayment(
         activity: Activity,
         token: String,
-        payload: SavedCardPaymentPayLoad
+        payload: SavedCardPaymentPayLoad,
     ) {
         val intent = DojoCardPaymentResultContract().createIntent(
             activity,
-            DojoCardPaymentParams(token, payload)
+            DojoCardPaymentParams(token, payload),
         )
         activity.startActivityForResult(intent, REQUEST_CODE_SAVED_CARD)
     }
@@ -105,12 +105,12 @@ object DojoSdk {
     fun startGPay(
         activity: Activity,
         GPayPayload: DojoGPayPayload,
-        paymentIntent: DojoPaymentIntent
+        paymentIntent: DojoPaymentIntent,
 
     ) {
         val intent = DojoGPayResultContract().createIntent(
             activity,
-            DojoGPayParams(GPayPayload, paymentIntent)
+            DojoGPayParams(GPayPayload, paymentIntent),
         )
         activity.startActivityForResult(intent, REQUEST_CODE_G_PAY)
     }
@@ -122,7 +122,7 @@ object DojoSdk {
         activity: Activity,
         dojoGPayConfig: DojoGPayConfig,
         onGpayAvailable: () -> Unit,
-        onGpayUnavailable: () -> Unit
+        onGpayUnavailable: () -> Unit,
     ) {
         DojoGPayEngine(activity)
             .isReadyToPay(dojoGPayConfig, { onGpayAvailable() }, { onGpayUnavailable() })
@@ -135,7 +135,7 @@ object DojoSdk {
     fun parseGPayPaymentResult(
         requestCode: Int,
         resultCode: Int,
-        intent: Intent?
+        intent: Intent?,
     ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE_G_PAY) return null
         return DojoGPayResultContract().parseResult(resultCode, intent)
@@ -148,7 +148,7 @@ object DojoSdk {
     fun parseCardPaymentResult(
         requestCode: Int,
         resultCode: Int,
-        intent: Intent?
+        intent: Intent?,
     ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE_CARD) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
@@ -161,7 +161,7 @@ object DojoSdk {
     fun parseSavedCardPaymentResult(
         requestCode: Int,
         resultCode: Int,
-        intent: Intent?
+        intent: Intent?,
     ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE_SAVED_CARD) return null
         return DojoCardPaymentResultContract().parseResult(resultCode, intent)
@@ -173,10 +173,22 @@ object DojoSdk {
     fun fetchPaymentIntent(
         paymentId: String,
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
-        onPaymentIntentFailed: () -> Unit
+        onPaymentIntentFailed: () -> Unit,
     ) {
         PaymentIntentProvider()
             .fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
+    }
+
+    /**
+     * fetch setUp payment intent object in format of json for specific payment id
+     */
+    fun fetchSetUpIntent(
+        paymentId: String,
+        onSetUpIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onSetUpIntentFailed: () -> Unit,
+    ) {
+        PaymentIntentProvider()
+            .fetchSetUpIntent(paymentId, onSetUpIntentSuccess, onSetUpIntentFailed)
     }
 
     /**
@@ -185,7 +197,7 @@ object DojoSdk {
     fun refreshPaymentIntent(
         paymentId: String,
         onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit,
-        onPaymentIntentFailed: () -> Unit
+        onPaymentIntentFailed: () -> Unit,
     ) {
         PaymentIntentProvider()
             .refreshPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
@@ -199,13 +211,13 @@ object DojoSdk {
         customerId: String,
         customerSecret: String,
         onFetchPaymentMethodsSuccess: (paymentMethodsJson: String) -> Unit,
-        onFetchPaymentMethodsFailed: () -> Unit
+        onFetchPaymentMethodsFailed: () -> Unit,
     ) {
         PaymentMethodsProvider().fetchPaymentMethods(
             customerId,
             customerSecret,
             onFetchPaymentMethodsSuccess,
-            onFetchPaymentMethodsFailed
+            onFetchPaymentMethodsFailed,
         )
     }
 
@@ -218,14 +230,14 @@ object DojoSdk {
         customerSecret: String,
         paymentMethodId: String,
         onDeletePaymentMethodsSuccess: () -> Unit,
-        onDeletePaymentMethodsFailed: () -> Unit
+        onDeletePaymentMethodsFailed: () -> Unit,
     ) {
         PaymentMethodsProvider().deletePaymentMethod(
             customerId,
             customerSecret,
             paymentMethodId,
             onDeletePaymentMethodsSuccess,
-            onDeletePaymentMethodsFailed
+            onDeletePaymentMethodsFailed,
         )
     }
 }
