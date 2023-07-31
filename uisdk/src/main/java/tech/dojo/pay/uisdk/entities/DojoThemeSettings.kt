@@ -5,9 +5,9 @@ import java.io.Serializable
 
 data class DojoThemeSettings @JvmOverloads constructor(
     val lightColorPalette: LightColorPalette = LightColorPalette(),
-    val DarkColorPalette: DarkColorPalette = DarkColorPalette(),
+    val darkColorPalette: DarkColorPalette = DarkColorPalette(),
     val forceLightMode: Boolean = false,
-    val showBranding: Boolean = true
+    val showBranding: Boolean = true,
 ) : Serializable
 
 data class LightColorPalette @JvmOverloads constructor(
@@ -30,7 +30,7 @@ data class LightColorPalette @JvmOverloads constructor(
     val inputFieldDefaultBorderColor: String = "#26000000",
     val inputFieldSelectedBorderColor: String = "#FF00857D",
     val inputElementActiveTintColor: String = "#FF00857D",
-    val inputElementDefaultTintColor: String = "#26000000"
+    val inputElementDefaultTintColor: String = "#26000000",
 ) : Serializable
 
 data class DarkColorPalette @JvmOverloads constructor(
@@ -53,7 +53,7 @@ data class DarkColorPalette @JvmOverloads constructor(
     val inputFieldDefaultBorderColor: String = "#26FFFFFF",
     val inputFieldSelectedBorderColor: String = "#FFFFFFFF",
     val inputElementActiveTintColor: String = "#FFFFFFFF",
-    val inputElementDefaultTintColor: String = "#FFFFFFFF"
+    val inputElementDefaultTintColor: String = "#FFFFFFFF",
 ) : Serializable
 
 internal val String.color

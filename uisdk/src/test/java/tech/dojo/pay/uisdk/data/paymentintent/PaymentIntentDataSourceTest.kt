@@ -23,7 +23,26 @@ internal class PaymentIntentDataSourceTest {
         sut.fetchPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
         verify {
             DojoSdk.fetchPaymentIntent(
-                paymentId, onPaymentIntentSuccess, onPaymentIntentFailed
+                paymentId,
+                onPaymentIntentSuccess,
+                onPaymentIntentFailed,
+            )
+        }
+    }
+
+    @Test
+    fun `when calling fetchSetUpIntent , fetchSetUpIntent from DojoSdk should be called`() {
+        val paymentId = "paymentId"
+        val onPaymentIntentSuccess: (paymentIntentJson: String) -> Unit = {}
+        val onPaymentIntentFailed: () -> Unit = {}
+        val sut = PaymentIntentDataSource()
+
+        sut.fetchSetUpIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
+        verify {
+            DojoSdk.fetchSetUpIntent(
+                paymentId,
+                onPaymentIntentSuccess,
+                onPaymentIntentFailed,
             )
         }
     }
@@ -38,7 +57,9 @@ internal class PaymentIntentDataSourceTest {
         sut.refreshPaymentIntent(paymentId, onPaymentIntentSuccess, onPaymentIntentFailed)
         verify {
             DojoSdk.refreshPaymentIntent(
-                paymentId, onPaymentIntentSuccess, onPaymentIntentFailed
+                paymentId,
+                onPaymentIntentSuccess,
+                onPaymentIntentFailed,
             )
         }
     }
