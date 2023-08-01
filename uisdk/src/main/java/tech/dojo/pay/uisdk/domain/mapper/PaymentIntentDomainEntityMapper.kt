@@ -17,7 +17,7 @@ internal class PaymentIntentDomainEntityMapper {
             amount = AmountDomainEntity(
                 valueLong = requireNotNull(raw.amount?.value),
                 valueString = requireNotNull(raw.amount?.value?.centsToString()),
-                currencyCode = requireNotNull(raw.amount?.currencyCode)
+                currencyCode = requireNotNull(raw.amount?.currencyCode),
             ),
             supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }),
             supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets
@@ -25,7 +25,7 @@ internal class PaymentIntentDomainEntityMapper {
             itemLines = raw.itemLines?.map {
                 ItemLinesDomainEntity(
                     amount = it.amountTotal,
-                    caption = it.caption
+                    caption = it.caption,
                 )
             },
             collectionEmailRequired = raw.config?.customerEmail?.collectionRequired ?: false,
@@ -36,7 +36,8 @@ internal class PaymentIntentDomainEntityMapper {
             isVirtualTerminalPayment = raw.paymentSource?.let { it.lowercase() == "virtual-terminal" } ?: false,
             isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" } ?: false,
             orderId = raw.reference ?: "",
-            merchantName = raw.config?.tradingName ?: ""
+            isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.setupSource.isNullOrBlank(),
+            merchantName = raw.config?.tradingName ?: "",
         )
     }
 

@@ -12,7 +12,7 @@ internal class FetchPaymentMethodsUseCase(
         customerId: String,
         customerSecret: String,
     ) {
-        if (paymentType != DojoPaymentType.CARD_ON_FILE) {
+        if (paymentType != DojoPaymentType.SETUP_INTENT) {
             fetchPaymentMethods(customerId, customerSecret)
         }
     }

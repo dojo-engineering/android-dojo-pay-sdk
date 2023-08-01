@@ -106,7 +106,11 @@ internal class PaymentFlowViewModelTest {
                 updatePaymentStateUseCase,
             )
             // assert
-            verify(fetchPaymentMethodsUseCase).fetchPaymentMethodsWithPaymentType(DojoPaymentType.PAYMENT_CARD, "customerId", customerSecret)
+            verify(fetchPaymentMethodsUseCase).fetchPaymentMethodsWithPaymentType(
+                DojoPaymentType.PAYMENT_CARD,
+                "customerId",
+                customerSecret,
+            )
         }
 
     @Test
@@ -225,43 +229,45 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling onBackClickedWithSavedPaymentMethod should emits PaymentMethodsCheckOutWithSelectedPaymentMethod`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
+    fun `calling onBackClickedWithSavedPaymentMethod should emits PaymentMethodsCheckOutWithSelectedPaymentMethod`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
                 ),
-            ),
-        )
-        val expected = PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod()
-        // act
-        val viewModel = PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        viewModel.onBackClickedWithSavedPaymentMethod()
-        val actual = viewModel.navigationEvent.value
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            )
+            val expected =
+                PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod()
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            viewModel.onBackClickedWithSavedPaymentMethod()
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
     fun `calling onCloseFlowClicked should emits OnCloseFlow`() = runTest {
@@ -303,121 +309,129 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToPaymentResult with SUCCESSFUL should emits PaymentResult with popBackStack as true `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
+    fun `calling navigateToPaymentResult with SUCCESSFUL should emits PaymentResult with popBackStack as true `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
                 ),
-            ),
-        )
-        val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SUCCESSFUL, true)
-        // act
-        val viewModel = PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        viewModel.navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
-        val actual = viewModel.navigationEvent.value
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            )
+            val expected =
+                PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SUCCESSFUL, true)
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            viewModel.navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
-    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as false `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
+    fun `calling navigateToPaymentResult with SDK_INTERNAL_ERROR should emits PaymentResult with popBackStack as false `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
                 ),
-            ),
-        )
-        val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR, false)
-        // act
-        val viewModel = PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        viewModel.navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-        val actual = viewModel.navigationEvent.value
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            )
+            val expected = PaymentFlowNavigationEvents.PaymentResult(
+                DojoPaymentResult.SDK_INTERNAL_ERROR,
+                false,
+            )
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            viewModel.navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
-    fun `calling navigateToPaymentResult with FAILED should emits PaymentResult with popBackStack as false `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
+    fun `calling navigateToPaymentResult with FAILED should emits PaymentResult with popBackStack as false `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
                 ),
-            ),
-        )
-        val expected = PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.FAILED, false)
-        // act
-        val viewModel = PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        viewModel.navigateToPaymentResult(DojoPaymentResult.FAILED)
-        val actual = viewModel.navigationEvent.value
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            )
+            val expected =
+                PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.FAILED, false)
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            viewModel.navigateToPaymentResult(DojoPaymentResult.FAILED)
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
     fun `calling navigateToCardDetailsCheckoutScreen should emits CardDetailsCheckout`() = runTest {
@@ -459,43 +473,44 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `calling navigateToManagePaymentMethods should emits ManagePaymentMethods with customer id `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
-        whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
+    fun `calling navigateToManagePaymentMethods should emits ManagePaymentMethods with customer id `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
                     ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
                 ),
-            ),
-        )
-        val expected = PaymentFlowNavigationEvents.ManagePaymentMethods("customerId")
-        // act
-        val viewModel = PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        viewModel.navigateToManagePaymentMethods()
-        val actual = viewModel.navigationEvent.value
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            )
+            val expected = PaymentFlowNavigationEvents.ManagePaymentMethods("customerId")
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            viewModel.navigateToManagePaymentMethods()
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
     fun `call isPaymentInSandBoxEnvironment with prod paymentID should return false `() = runTest {
@@ -516,121 +531,133 @@ internal class PaymentFlowViewModelTest {
     }
 
     @Test
-    fun `call isPaymentInSandBoxEnvironment with sankBox paymentID should return true `() = runTest {
-        // arrange
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        // act
-        val actual = viewModel.isPaymentInSandBoxEnvironment()
-        // assert
-        Assert.assertTrue(actual)
-    }
+    fun `call isPaymentInSandBoxEnvironment with sankBox paymentID should return true `() =
+        runTest {
+            // arrange
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            // act
+            val actual = viewModel.isPaymentInSandBoxEnvironment()
+            // assert
+            Assert.assertTrue(actual)
+        }
 
     @Test
-    fun `call getCustomColorPalette with isDarkModeEnabled as true  should return darkColorPalette `() = runTest {
-        // arrange
-        val expected = darkColorPalette(DarkColorPalette())
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        // act
-        val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = true)
-        // assert
-        Assert.assertEquals(expected.primarySurfaceBackgroundColor, actual.primarySurfaceBackgroundColor)
-    }
+    fun `call getCustomColorPalette with isDarkModeEnabled as true  should return darkColorPalette `() =
+        runTest {
+            // arrange
+            val expected = darkColorPalette(DarkColorPalette())
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            // act
+            val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = true)
+            // assert
+            Assert.assertEquals(
+                expected.primarySurfaceBackgroundColor,
+                actual.primarySurfaceBackgroundColor,
+            )
+        }
 
     @Test
-    fun `call getCustomColorPalette with isDarkModeEnabled as false should return LightColorPalette `() = runTest {
-        // arrange
-        val expected = lightColorPalette(LightColorPalette())
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-        // act
-        val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
-        // assert
-        Assert.assertEquals(expected.primarySurfaceBackgroundColor, actual.primarySurfaceBackgroundColor)
-    }
+    fun `call getCustomColorPalette with isDarkModeEnabled as false should return LightColorPalette `() =
+        runTest {
+            // arrange
+            val expected = lightColorPalette(LightColorPalette())
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+            // act
+            val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
+            // assert
+            Assert.assertEquals(
+                expected.primarySurfaceBackgroundColor,
+                actual.primarySurfaceBackgroundColor,
+            )
+        }
 
     @Test
-    fun`given calling getFlowStartDestination with PAYMENT_CARD type the start destination should be PaymentMethodCheckout`() = runTest {
-        // arrange
-        val expected = PaymentFlowScreens.PaymentMethodCheckout
-        paymentType = DojoPaymentType.PAYMENT_CARD
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
+    fun `given calling getFlowStartDestination with PAYMENT_CARD type the start destination should be PaymentMethodCheckout`() =
+        runTest {
+            // arrange
+            val expected = PaymentFlowScreens.PaymentMethodCheckout
+            paymentType = DojoPaymentType.PAYMENT_CARD
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
 
-        // act
-        val actual = viewModel.getFlowStartDestination()
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
-
-    @Test
-    fun`given calling getFlowStartDestination with CARD_ON_FILE type the start destination should be CardDetailsCheckout`() = runTest {
-        // arrange
-        val expected = PaymentFlowScreens.CardDetailsCheckout
-        paymentType = DojoPaymentType.CARD_ON_FILE
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
-
-        // act
-        val actual = viewModel.getFlowStartDestination()
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            // act
+            val actual = viewModel.getFlowStartDestination()
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 
     @Test
-    fun`given calling getFlowStartDestination with VIRTUAL_TERMINAL type the start destination should be VirtualTerminalCheckOutScreen`() = runTest {
-        // arrange
-        val expected = PaymentFlowScreens.VirtualTerminalCheckOutScreen
-        paymentType = DojoPaymentType.VIRTUAL_TERMINAL
-        val viewModel = PaymentFlowViewModel(
-            "Sandbox_paymentId",
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-        )
+    fun `given calling getFlowStartDestination with CARD_ON_FILE type the start destination should be CardDetailsCheckout`() =
+        runTest {
+            // arrange
+            val expected = PaymentFlowScreens.CardDetailsCheckout
+            paymentType = DojoPaymentType.SETUP_INTENT
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
 
-        // act
-        val actual = viewModel.getFlowStartDestination()
-        // assert
-        Assert.assertEquals(expected, actual)
-    }
+            // act
+            val actual = viewModel.getFlowStartDestination()
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `given calling getFlowStartDestination with VIRTUAL_TERMINAL type the start destination should be VirtualTerminalCheckOutScreen`() =
+        runTest {
+            // arrange
+            val expected = PaymentFlowScreens.VirtualTerminalCheckOutScreen
+            paymentType = DojoPaymentType.VIRTUAL_TERMINAL
+            val viewModel = PaymentFlowViewModel(
+                "Sandbox_paymentId",
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+            )
+
+            // act
+            val actual = viewModel.getFlowStartDestination()
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
 }

@@ -26,7 +26,7 @@ class FetchPaymentMethodsUseCaseTest {
 
         // when
         useCase.fetchPaymentMethodsWithPaymentType(
-            DojoPaymentType.CARD_ON_FILE,
+            DojoPaymentType.SETUP_INTENT,
             customerId,
             customerSecret,
         )

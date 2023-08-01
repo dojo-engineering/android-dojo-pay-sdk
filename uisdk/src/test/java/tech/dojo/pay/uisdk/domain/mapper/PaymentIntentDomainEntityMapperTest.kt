@@ -29,10 +29,10 @@ internal class PaymentIntentDomainEntityMapperTest {
                 clientSessionSecret = "clientSessionSecret",
                 amount = Amount(
                     10L,
-                    "GBP"
+                    "GBP",
                 ),
                 merchantConfig = MerchantConfig(supportedPaymentMethods = SupportedPaymentMethods(cardSchemes = listOf(CardsSchemes.MASTERCARD))),
-                reference = "reference"
+                reference = "reference",
             )
             val expected = PaymentIntentDomainEntity(
                 id = "id",
@@ -40,10 +40,10 @@ internal class PaymentIntentDomainEntityMapperTest {
                 amount = AmountDomainEntity(
                     10L,
                     "0.10",
-                    "GBP"
+                    "GBP",
                 ),
                 supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
-                orderId = "reference"
+                orderId = "reference",
             )
             // act
             val actual = PaymentIntentDomainEntityMapper().apply(raw)
@@ -58,7 +58,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             val raw = PaymentIntentPayload()
             // act
             val actual = assertThrows(
-                EssentialParamMissingException::class.java
+                EssentialParamMissingException::class.java,
             ) { PaymentIntentDomainEntityMapper().apply(raw) }
             // assert
             assertTrue(actual.message?.contains("clientSessionSecret") ?: false)

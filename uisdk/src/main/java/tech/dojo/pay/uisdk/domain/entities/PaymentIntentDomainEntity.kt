@@ -18,16 +18,17 @@ internal data class PaymentIntentDomainEntity(
     val isPreAuthPayment: Boolean = false,
     val orderId: String = "",
     val collectionShippingAddressRequired: Boolean = false,
-    val merchantName: String = ""
+    val isSetUpIntentPayment: Boolean = false,
+    val merchantName: String = "",
 )
 
 data class AmountDomainEntity(
     val valueLong: Long,
     val valueString: String,
-    val currencyCode: String
+    val currencyCode: String,
 )
 
 internal data class ItemLinesDomainEntity(
     val caption: String,
-    val amount: Amount
+    val amount: Amount,
 )

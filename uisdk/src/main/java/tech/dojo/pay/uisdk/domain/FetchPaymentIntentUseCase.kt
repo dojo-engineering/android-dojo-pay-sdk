@@ -10,7 +10,7 @@ internal class FetchPaymentIntentUseCase(
         when (paymentType) {
             DojoPaymentType.PAYMENT_CARD -> fetchPaymentIntent(paymentId)
             DojoPaymentType.VIRTUAL_TERMINAL -> fetchPaymentIntent(paymentId)
-            DojoPaymentType.CARD_ON_FILE -> fetchSetUpIntent(paymentId)
+            DojoPaymentType.SETUP_INTENT -> fetchSetUpIntent(paymentId)
         }
     }
     private fun fetchPaymentIntent(paymentId: String) {

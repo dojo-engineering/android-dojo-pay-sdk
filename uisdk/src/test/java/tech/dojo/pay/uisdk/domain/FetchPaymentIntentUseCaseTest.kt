@@ -52,7 +52,7 @@ class FetchPaymentIntentUseCaseTest {
         val paymentId = "paymentId"
 
         // when
-        useCase.fetchPaymentIntentWithPaymentType(DojoPaymentType.CARD_ON_FILE, paymentId)
+        useCase.fetchPaymentIntentWithPaymentType(DojoPaymentType.SETUP_INTENT, paymentId)
 
         // then
         verify {
