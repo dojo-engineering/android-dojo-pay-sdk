@@ -232,10 +232,10 @@ private fun PayButton(
     SingleButtonView(
         scrollState = scrollState,
         text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
-        isLoading = state.isLoading,
-        enabled = state.isEnabled
+        isLoading = state.actionButtonState.isLoading,
+        enabled = state.actionButtonState.isEnabled
     ) {
-        if (!state.isLoading) {
+        if (!state.actionButtonState.isLoading) {
             focusManager.clearFocus()
             viewModel.onPayWithCardClicked()
         }

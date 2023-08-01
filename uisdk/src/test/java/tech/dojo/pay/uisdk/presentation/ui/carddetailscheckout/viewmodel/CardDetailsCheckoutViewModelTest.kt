@@ -28,6 +28,7 @@ import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.ActionButtonState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
@@ -79,8 +80,7 @@ class CardDetailsCheckoutViewModelTest {
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -141,8 +141,7 @@ class CardDetailsCheckoutViewModelTest {
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -216,9 +215,7 @@ class CardDetailsCheckoutViewModelTest {
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
-
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -293,9 +290,7 @@ class CardDetailsCheckoutViewModelTest {
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
             ),
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
-
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -369,8 +364,7 @@ class CardDetailsCheckoutViewModelTest {
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            isLoading = true,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(isLoading = true),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -447,8 +441,7 @@ class CardDetailsCheckoutViewModelTest {
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -539,8 +532,7 @@ class CardDetailsCheckoutViewModelTest {
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = true,
+            actionButtonState = ActionButtonState(isEnabled = true),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -616,8 +608,7 @@ class CardDetailsCheckoutViewModelTest {
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -695,8 +686,7 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            isLoading = false,
-            isEnabled = false,
+            actionButtonState = ActionButtonState(),
 
         )
         // act
@@ -773,6 +763,6 @@ class CardDetailsCheckoutViewModelTest {
         viewModel.validateEmailValue("new", false)
         viewModel.validateExpireDate("new", false)
         // assert
-        Assert.assertEquals(false, viewModel.state.value?.isEnabled)
+        Assert.assertEquals(false, viewModel.state.value?.actionButtonState?.isEnabled)
     }
 }

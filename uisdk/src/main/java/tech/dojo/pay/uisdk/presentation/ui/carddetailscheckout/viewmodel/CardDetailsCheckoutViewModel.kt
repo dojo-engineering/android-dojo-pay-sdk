@@ -18,8 +18,8 @@ import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.ActionButtonState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
-import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import java.util.Currency
@@ -40,33 +40,13 @@ internal class CardDetailsCheckoutViewModel(
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
         get() = mutableState
+
     fun updateCardPaymentHandler(newDojoCardPaymentHandler: DojoCardPaymentHandler) {
         dojoCardPaymentHandler = newDojoCardPaymentHandler
     }
+
     init {
-        currentState = CardDetailsCheckoutState(
-            totalAmount = "",
-            amountCurrency = "",
-            allowedPaymentMethodsIcons = emptyList(),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            isBillingCountryFieldRequired = false,
-            supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
-            isPostalCodeFieldRequired = false,
-            postalCodeField = InputFieldState(value = ""),
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            saveCardCheckBox = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
-            ),
-            isLoading = false,
-            isEnabled = false,
-        )
+        currentState = CardDetailsCheckoutState()
         pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
         viewModelScope.launch { observePaymentStatus() }
@@ -80,12 +60,12 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_card_holder,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else {
             currentState.copy(
                 cardHolderInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled(cardHolderValue = newValue),
+                actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(cardHolderValue = newValue)),
             )
         }
 
@@ -100,12 +80,12 @@ internal class CardDetailsCheckoutViewModel(
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_billing_postcode,
                     isError = true,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else {
             currentState.copy(
                 postalCodeField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled(postalCodeValue = newValue),
+                actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(postalCodeValue = newValue)),
             )
         }
         pushStateToUi(currentState)
@@ -114,7 +94,7 @@ internal class CardDetailsCheckoutViewModel(
     fun onCardNumberValueChanged(newValue: String) {
         currentState = currentState.copy(
             cardNumberInputField = InputFieldState(value = newValue),
-            isEnabled = isPayButtonEnabled(cardNumberValue = newValue),
+            actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(cardNumberValue = newValue)),
         )
         pushStateToUi(currentState)
     }
@@ -127,7 +107,7 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_card_number,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else if (!cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue)) {
             currentState = currentState.copy(
@@ -136,7 +116,7 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_card_number,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         }
         pushStateToUi(currentState)
@@ -150,12 +130,12 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_cvv,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else {
             currentState.copy(
                 cvvInputFieldState = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled(cvvValue = newValue),
+                actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(cvvValue = newValue)),
             )
         }
 
@@ -173,7 +153,7 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_cvv,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         }
         pushStateToUi(currentState)
@@ -187,12 +167,12 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_expiry,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else {
             currentState.copy(
                 cardExpireDateInputField = InputFieldState(newValue),
-                isEnabled = isPayButtonEnabled(cardExpireDate = newValue),
+                actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(cardExpireDate = newValue)),
             )
         }
         pushStateToUi(currentState)
@@ -209,7 +189,7 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_expiry,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         }
         pushStateToUi(currentState)
@@ -223,12 +203,12 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_email,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         } else {
             currentState.copy(
                 emailInputField = InputFieldState(value = newValue),
-                isEnabled = isPayButtonEnabled(emailValue = newValue),
+                actionButtonState = ActionButtonState(isEnabled = isPayButtonEnabled(emailValue = newValue)),
             )
         }
         pushStateToUi(currentState)
@@ -245,7 +225,7 @@ internal class CardDetailsCheckoutViewModel(
                     isError = true,
                     errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_email,
                 ),
-                isEnabled = false,
+                actionButtonState = ActionButtonState(isEnabled = false),
             )
         }
         pushStateToUi(currentState)
@@ -289,7 +269,8 @@ internal class CardDetailsCheckoutViewModel(
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
-            val countryList = getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
+            val countryList =
+                getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
             val currentSelectedCountry = if (countryList.isNotEmpty()) {
                 getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)[0]
             } else {
@@ -300,7 +281,10 @@ internal class CardDetailsCheckoutViewModel(
             currentState = currentState.copy(
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                saveCardCheckBox = currentState.saveCardCheckBox.copy(isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(), isChecked = !paymentIntentResult.result.customerId.isNullOrBlank()),
+                saveCardCheckBox = currentState.saveCardCheckBox.copy(
+                    isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(),
+                    isChecked = !paymentIntentResult.result.customerId.isNullOrBlank(),
+                ),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes,
                 ),
@@ -325,16 +309,20 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     private fun applyIsPostalCodeFieldRequiredLogic(
-        SupportedCountryItem: SupportedCountriesViewEntity,
+        supportedCountryItem: SupportedCountriesViewEntity,
         collectionBillingAddressRequired: Boolean,
     ): Boolean {
-        return SupportedCountryItem.isPostalCodeEnabled && collectionBillingAddressRequired
+        return supportedCountryItem.isPostalCodeEnabled && collectionBillingAddressRequired
     }
 
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
             if (!it) {
-                pushStateToUi(currentState.copy(isLoading = false))
+                pushStateToUi(
+                    currentState.copy(
+                        actionButtonState = ActionButtonState(isLoading = false),
+                    ),
+                )
             }
         }
     }
@@ -347,7 +335,11 @@ internal class CardDetailsCheckoutViewModel(
     fun onPayWithCardClicked() {
         viewModelScope.launch { observePaymentIntent() }
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
-        pushStateToUi(currentState.copy(isLoading = true))
+        pushStateToUi(
+            currentState.copy(
+                actionButtonState = ActionButtonState(isLoading = true),
+            ),
+        )
         dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
     }
 
