@@ -5,6 +5,10 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
+    @StringRes var errorMessages: Int = R.string.dojo_ui_sdk_card_details_checkout_title,
+    var orderId: String? = null,
+    var merchantName: String? = null,
+    var isLoading: Boolean = false,
     var totalAmount: String = "",
     var amountCurrency: String = "",
     var allowedPaymentMethodsIcons: List<Int> = listOf(),
@@ -23,7 +27,7 @@ internal data class CardDetailsCheckoutState(
     ),
     var isPostalCodeFieldRequired: Boolean = false,
     var postalCodeField: InputFieldState = InputFieldState(value = ""),
-    var saveCardCheckBox: CheckBoxItem = CheckBoxItem(
+    var checkBoxItem: CheckBoxItem = CheckBoxItem(
         isVisible = false,
         isChecked = true,
         messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,

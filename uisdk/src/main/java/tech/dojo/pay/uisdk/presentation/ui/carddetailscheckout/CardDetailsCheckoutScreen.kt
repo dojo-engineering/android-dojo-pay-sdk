@@ -211,9 +211,9 @@ private fun SaveCardCheckBox(
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel
 ) {
-    if (state.saveCardCheckBox.isVisible) {
+    if (state.checkBoxItem.isVisible) {
         CheckBoxItem(
-            itemText = stringResource(id = state.saveCardCheckBox.messageText),
+            itemText = stringResource(id = state.checkBoxItem.messageText),
             onCheckedChange = {
                 viewModel.onSaveCardChecked(it)
             }

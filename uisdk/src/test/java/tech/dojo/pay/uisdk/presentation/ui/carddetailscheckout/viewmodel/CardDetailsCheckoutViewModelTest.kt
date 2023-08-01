@@ -72,7 +72,7 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = false,
             postalCodeField = InputFieldState(value = ""),
             isEmailInputFieldRequired = false,
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -135,7 +135,7 @@ class CardDetailsCheckoutViewModelTest {
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = false,
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -209,7 +209,7 @@ class CardDetailsCheckoutViewModelTest {
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -284,7 +284,7 @@ class CardDetailsCheckoutViewModelTest {
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             isPostalCodeFieldRequired = true,
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -357,7 +357,7 @@ class CardDetailsCheckoutViewModelTest {
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -434,7 +434,7 @@ class CardDetailsCheckoutViewModelTest {
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -525,7 +525,7 @@ class CardDetailsCheckoutViewModelTest {
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -601,7 +601,7 @@ class CardDetailsCheckoutViewModelTest {
             cardNumberInputField = InputFieldState(value = "new"),
             cardExpireDateInputField = InputFieldState(value = "new"),
             cvvInputFieldState = InputFieldState(value = "new"),
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
@@ -676,7 +676,7 @@ class CardDetailsCheckoutViewModelTest {
             cardHolderInputField = InputFieldState(value = ""),
             emailInputField = InputFieldState(value = "new"),
             isEmailInputFieldRequired = true,
-            saveCardCheckBox = CheckBoxItem(
+            checkBoxItem = CheckBoxItem(
                 isVisible = false,
                 isChecked = false,
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
