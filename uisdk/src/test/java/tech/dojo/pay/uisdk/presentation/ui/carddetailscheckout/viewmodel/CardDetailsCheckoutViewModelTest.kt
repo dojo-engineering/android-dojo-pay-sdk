@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -14,6 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
@@ -27,6 +29,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.ActionButtonState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -52,6 +55,7 @@ class CardDetailsCheckoutViewModelTest {
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper =
         mock()
     private val cardCheckoutScreenValidator: CardCheckoutScreenValidator = mock()
+    private val cardCheckOutFullCardPaymentPayloadMapper: CardCheckOutFullCardPaymentPayloadMapper = mock()
 
     @Test
     fun `test initial state`() = runTest {
@@ -92,6 +96,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -153,6 +158,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -227,6 +233,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -302,6 +309,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         // assert
         Assert.assertEquals(expected, viewModel.state.value)
@@ -310,6 +318,7 @@ class CardDetailsCheckoutViewModelTest {
     @Test
     fun `test state when user clicks on pay button with normal card payment`() = runTest {
         // arrange
+        val fullCardPaymentPayload: DojoCardPaymentPayLoad.FullCardPaymentPayload = mockk()
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
@@ -342,7 +351,7 @@ class CardDetailsCheckoutViewModelTest {
             ),
         )
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(supportedCountriesViewEntity)
-
+        whenever(cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(any())).thenReturn(fullCardPaymentPayload)
         whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)
         val expected = CardDetailsCheckoutState(
             totalAmount = "100",
@@ -376,6 +385,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         viewModel.onPayWithCardClicked()
         // assert
@@ -453,6 +463,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         viewModel.onPayWithCardClicked()
         paymentStateFakeFlow.tryEmit(false)
@@ -544,6 +555,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
 
         viewModel.onCardHolderValueChanged("new")
@@ -620,6 +632,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         viewModel.onCardNumberValueChanged("new")
         viewModel.onCvvValueChanged("new")
@@ -699,6 +712,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         viewModel.onEmailValueChanged("new")
         // assert
@@ -757,6 +771,7 @@ class CardDetailsCheckoutViewModelTest {
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
         )
         viewModel.validateCvv("new", false)
         viewModel.validateCardNumber("new")

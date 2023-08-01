@@ -5,9 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardDetails
-import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -17,6 +14,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.ActionButtonState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -33,6 +31,7 @@ internal class CardDetailsCheckoutViewModel(
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
     private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper,
     private val cardCheckoutScreenValidator: CardCheckoutScreenValidator,
+    private val fullCardPaymentPayloadMapper: CardCheckOutFullCardPaymentPayloadMapper,
 ) : ViewModel() {
     private lateinit var paymentToken: String
     private var isVirtualTerminal = false
@@ -340,41 +339,10 @@ internal class CardDetailsCheckoutViewModel(
                 actionButtonState = ActionButtonState(isLoading = true),
             ),
         )
-        dojoCardPaymentHandler.executeCardPayment(paymentToken, getPaymentPayLoad())
+        dojoCardPaymentHandler.executeCardPayment(paymentToken, fullCardPaymentPayloadMapper.getPaymentPayLoad(currentState))
     }
 
     private fun pushStateToUi(state: CardDetailsCheckoutState) {
         mutableState.postValue(state)
     }
-
-    private fun getPaymentPayLoad(): DojoCardPaymentPayLoad.FullCardPaymentPayload =
-        DojoCardPaymentPayLoad.FullCardPaymentPayload(
-            userEmailAddress = if (currentState.isEmailInputFieldRequired) currentState.emailInputField.value else null,
-            billingAddress = DojoAddressDetails(
-                countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
-                postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null,
-            ),
-            savePaymentMethod = currentState.checkBoxItem.isChecked,
-            cardDetails = DojoCardDetails(
-                cardNumber = currentState.cardNumberInputField.value,
-                cardName = currentState.cardHolderInputField.value,
-                expiryMonth = getExpiryMonth(currentState.cardExpireDateInputField.value),
-                expiryYear = getExpiryYear(currentState.cardExpireDateInputField.value),
-                cv2 = currentState.cvvInputFieldState.value,
-            ),
-        )
-
-    private fun getExpiryMonth(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank()) {
-            currentState.cardExpireDateInputField.value.substring(0, 2)
-        } else {
-            ""
-        }
-
-    private fun getExpiryYear(expireDateValueValue: String) =
-        if (expireDateValueValue.isNotBlank() && expireDateValueValue.length > 2) {
-            currentState.cardExpireDateInputField.value.substring(2, 4)
-        } else {
-            ""
-        }
 }
