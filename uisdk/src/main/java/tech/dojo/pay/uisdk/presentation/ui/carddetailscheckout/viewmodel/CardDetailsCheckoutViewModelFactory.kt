@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
@@ -41,6 +42,7 @@ class CardDetailsCheckoutViewModelFactory(
             AllowedPaymentMethodsViewEntityMapper(isDarkModeEnabled)
         val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
         val fullCardPaymentPayloadMapper = CardCheckOutFullCardPaymentPayloadMapper()
+        val stringProvider = StringProvider(context)
 
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
@@ -52,6 +54,7 @@ class CardDetailsCheckoutViewModelFactory(
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
             fullCardPaymentPayloadMapper,
+            stringProvider,
         ) as T
     }
 }

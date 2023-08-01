@@ -1,11 +1,9 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
-import androidx.annotation.StringRes
-import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
-    @StringRes var errorMessages: Int = R.string.dojo_ui_sdk_card_details_checkout_title,
+    var toolbarTitle: String = "",
     var orderId: String? = null,
     var merchantName: String? = null,
     var isLoading: Boolean = false,
@@ -30,19 +28,19 @@ internal data class CardDetailsCheckoutState(
     var checkBoxItem: CheckBoxItem = CheckBoxItem(
         isVisible = false,
         isChecked = true,
-        messageText = R.string.dojo_ui_sdk_card_details_checkout_save_card,
+        messageText = "",
     ),
     var actionButtonState: ActionButtonState = ActionButtonState(),
 )
 
 internal data class InputFieldState(
     val value: String,
-    @StringRes val errorMessages: Int? = null,
+    val errorMessages: String? = null,
     val isError: Boolean = false,
 )
 
 internal data class CheckBoxItem(
-    @StringRes val messageText: Int,
+    val messageText: String,
     val isChecked: Boolean,
     val isVisible: Boolean,
 )
@@ -51,4 +49,13 @@ internal data class ActionButtonState(
     val isLoading: Boolean = false,
     val isEnabled: Boolean = false,
     val text: String = "",
-)
+) {
+    fun updateIsEnabled(newValue: Boolean) =
+        copy(isEnabled = newValue)
+
+    fun updateIsLoading(newValue: Boolean) =
+        copy(isLoading = newValue)
+
+    fun updateText(newValue: String) =
+        copy(text = newValue)
+}

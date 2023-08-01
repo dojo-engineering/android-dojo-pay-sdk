@@ -213,7 +213,7 @@ private fun SaveCardCheckBox(
 ) {
     if (state.checkBoxItem.isVisible) {
         CheckBoxItem(
-            itemText = stringResource(id = state.checkBoxItem.messageText),
+            itemText = state.checkBoxItem.messageText,
             onCheckedChange = {
                 viewModel.onSaveCardChecked(it)
             }
@@ -231,7 +231,7 @@ private fun PayButton(
     val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
-        text = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay) + " " + state.amountCurrency + " " + state.totalAmount,
+        text = state.actionButtonState.text,
         isLoading = state.actionButtonState.isLoading,
         enabled = state.actionButtonState.isEnabled
     ) {
@@ -277,9 +277,7 @@ private fun CvvField(
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
         cvvValue = state.cvvInputFieldState.value,
         isError = state.cvvInputFieldState.isError,
-        assistiveText = state.cvvInputFieldState.errorMessages?.let {
-            AnnotatedString(stringResource(id = it))
-        },
+        assistiveText = state.cvvInputFieldState.errorMessages?.let { AnnotatedString(it) },
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
         }),
@@ -331,9 +329,7 @@ private fun CardExpireDateField(
             keyboardController?.hide()
         }),
         isError = state.cardExpireDateInputField.isError,
-        assistiveText = state.cardExpireDateInputField.errorMessages?.let {
-            AnnotatedString(stringResource(id = it))
-        },
+        assistiveText = state.cardExpireDateInputField.errorMessages?.let { AnnotatedString(it) },
         expireDateValue = state.cardExpireDateInputField.value,
         expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
         onExpireDateValueChanged = { viewModel.onExpireDateValueChanged(it) }
@@ -386,9 +382,7 @@ private fun CardNumberField(
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = state.cardNumberInputField.isError,
         assistiveText = state.cardNumberInputField.errorMessages?.let {
-            AnnotatedString(
-                stringResource(id = it)
-            )
+            AnnotatedString(it)
         },
         cardNumberValue = state.cardNumberInputField.value,
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
@@ -428,11 +422,7 @@ private fun CardHolderNameField(
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = state.cardHolderInputField.value,
         isError = state.cardHolderInputField.isError,
-        assistiveText = state.cardHolderInputField.errorMessages?.let {
-            AnnotatedString(
-                stringResource(id = it)
-            )
-        },
+        assistiveText = state.cardHolderInputField.errorMessages?.let { AnnotatedString(it) },
         onValueChange = { viewModel.onCardHolderValueChanged(it) },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) }
     )
@@ -471,9 +461,7 @@ private fun EmailField(
                 },
             isError = state.emailInputField.isError,
             assistiveText = state.emailInputField.errorMessages?.let {
-                AnnotatedString(
-                    stringResource(id = it)
-                )
+                AnnotatedString(it)
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
@@ -529,7 +517,7 @@ private fun PostalCodeField(
             value = state.postalCodeField.value,
             isError = state.postalCodeField.isError,
             assistiveText =
-            state.postalCodeField.errorMessages?.let { AnnotatedString(stringResource(id = it)) },
+            state.postalCodeField.errorMessages?.let { AnnotatedString(it) },
             onValueChange = { viewModel.onPostalCodeValueChanged(it) },
             label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode)) }
         )
