@@ -9,9 +9,9 @@ import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.entities.DojoPaymentType.*
@@ -31,6 +31,7 @@ internal class PaymentFlowViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
+    private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase,
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
@@ -70,7 +71,11 @@ internal class PaymentFlowViewModel(
         paymentIntentResult: PaymentIntentResult.Success,
         customerSecret: String,
     ) {
-        if (isSDKInitiatedCorrectly(paymentIntentResult.result)) {
+        val isInitCorrectly = isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(
+            paymentIntentResult.result,
+            paymentType,
+        )
+        if (isInitCorrectly) {
             currentCustomerId = paymentIntentResult.result.customerId
             fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
                 paymentType,
@@ -80,18 +85,6 @@ internal class PaymentFlowViewModel(
             )
         } else {
             closeFlowWithInternalError()
-        }
-    }
-
-    private fun isSDKInitiatedCorrectly(paymentIntent: PaymentIntentDomainEntity): Boolean {
-        return if (paymentIntent.isVirtualTerminalPayment && paymentType == VIRTUAL_TERMINAL) {
-            true
-        } else {
-            if (paymentIntent.isSetUpIntentPayment && paymentType == SETUP_INTENT) {
-                true
-            } else {
-                !paymentIntent.isVirtualTerminalPayment && !paymentIntent.isSetUpIntentPayment && paymentType == PAYMENT_CARD
-            }
         }
     }
 

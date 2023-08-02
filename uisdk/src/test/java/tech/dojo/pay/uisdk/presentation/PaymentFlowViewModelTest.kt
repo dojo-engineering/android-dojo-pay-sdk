@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -18,6 +19,7 @@ import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
@@ -47,30 +49,7 @@ internal class PaymentFlowViewModelTest {
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase = mock()
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
-
-    @Test
-    fun `initialize view model with FetchFailure state from payment intent should close the flow with Internal error `() =
-        runTest {
-            // arrange
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-            paymentIntentFakeFlow.tryEmit(PaymentIntentResult.FetchFailure)
-            val expected = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
-            // act
-            val viewModel = PaymentFlowViewModel(
-                paymentId,
-                customerSecret,
-                paymentType,
-                fetchPaymentIntentUseCase,
-                observePaymentIntent,
-                fetchPaymentMethodsUseCase,
-                updatePaymentStateUseCase,
-            )
-            val actual = viewModel.navigationEvent.value
-            // assert
-            Assert.assertEquals(expected, actual)
-        }
+    private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase = mock()
 
     @Test
     fun `initialize view model with Success state from payment intent should call fetch payment methods `() =
@@ -79,6 +58,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -104,6 +84,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             // assert
             verify(fetchPaymentMethodsUseCase).fetchPaymentMethodsWithPaymentType(
@@ -114,12 +95,40 @@ internal class PaymentFlowViewModelTest {
         }
 
     @Test
-    fun `calling updatePaymentState should call updatePaymentSate from updatePaymentStateUseCase`() =
+    fun `initialize view model with FetchFailure state from payment intent should close the flow with Internal error `() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            paymentIntentFakeFlow.tryEmit(PaymentIntentResult.FetchFailure)
+            val expected = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
+            )
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `initialize view model with Success state from payment intent and false from isSDKInitializedCorrectlyUseCase should close the flow with Internal error `() =
+        runTest {
+            // arrange
+            val expected = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
+
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(false)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -145,6 +154,47 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
+            )
+            val actual = viewModel.navigationEvent.value
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `calling updatePaymentState should call updatePaymentSate from updatePaymentStateUseCase`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        customerId = "customerId",
+                    ),
+                ),
+            )
+            // act
+            val viewModel = PaymentFlowViewModel(
+                paymentId,
+                customerSecret,
+                paymentType,
+                fetchPaymentIntentUseCase,
+                observePaymentIntent,
+                fetchPaymentMethodsUseCase,
+                updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.updatePaymentState(isActivity = false)
             // assert
@@ -158,6 +208,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -183,6 +234,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.updateGpayPaymentState(isActivity = false)
             // assert
@@ -195,6 +247,7 @@ internal class PaymentFlowViewModelTest {
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
@@ -221,6 +274,7 @@ internal class PaymentFlowViewModelTest {
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase,
         )
         viewModel.onBackClicked()
         val actual = viewModel.navigationEvent.value
@@ -235,6 +289,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -262,6 +317,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.onBackClickedWithSavedPaymentMethod()
             val actual = viewModel.navigationEvent.value
@@ -275,6 +331,7 @@ internal class PaymentFlowViewModelTest {
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
@@ -301,6 +358,7 @@ internal class PaymentFlowViewModelTest {
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase,
         )
         viewModel.onCloseFlowClicked()
         val actual = viewModel.navigationEvent.value
@@ -315,6 +373,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -342,6 +401,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
             val actual = viewModel.navigationEvent.value
@@ -356,6 +416,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -385,6 +446,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
             val actual = viewModel.navigationEvent.value
@@ -399,6 +461,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -426,6 +489,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.FAILED)
             val actual = viewModel.navigationEvent.value
@@ -439,6 +503,7 @@ internal class PaymentFlowViewModelTest {
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
             MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+        whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 result = PaymentIntentDomainEntity(
@@ -465,7 +530,9 @@ internal class PaymentFlowViewModelTest {
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase,
         )
+
         viewModel.navigateToCardDetailsCheckoutScreen()
         val actual = viewModel.navigationEvent.value
         // assert
@@ -479,6 +546,7 @@ internal class PaymentFlowViewModelTest {
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     result = PaymentIntentDomainEntity(
@@ -505,6 +573,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             viewModel.navigateToManagePaymentMethods()
             val actual = viewModel.navigationEvent.value
@@ -523,6 +592,7 @@ internal class PaymentFlowViewModelTest {
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase,
         )
         // act
         val actual = viewModel.isPaymentInSandBoxEnvironment()
@@ -542,6 +612,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             // act
             val actual = viewModel.isPaymentInSandBoxEnvironment()
@@ -562,6 +633,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             // act
             val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = true)
@@ -585,6 +657,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
             // act
             val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
@@ -609,6 +682,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
 
             // act
@@ -631,6 +705,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
 
             // act
@@ -653,6 +728,7 @@ internal class PaymentFlowViewModelTest {
                 observePaymentIntent,
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
+                isSDKInitializedCorrectlyUseCase,
             )
 
             // act
