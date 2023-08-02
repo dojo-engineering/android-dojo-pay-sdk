@@ -301,9 +301,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         composable(route = PaymentFlowScreens.CardDetailsCheckout.route) {
             val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
                 CardDetailsCheckoutViewModelFactory(
-                    cardPaymentHandler,
-                    isDarkModeEnabled,
-                    this@PaymentFlowContainerActivity,
+                    dojoCardPaymentHandler = cardPaymentHandler,
+                    isDarkModeEnabled = isDarkModeEnabled,
+                    context = this@PaymentFlowContainerActivity,
+                    isStartDestination = flowStartDestination == PaymentFlowScreens.CardDetailsCheckout,
                 )
             }
             // this is to handle unregistered activity when screen orientation change

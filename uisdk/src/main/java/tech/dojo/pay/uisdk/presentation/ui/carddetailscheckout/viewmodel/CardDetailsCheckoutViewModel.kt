@@ -17,6 +17,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
@@ -35,9 +36,9 @@ internal class CardDetailsCheckoutViewModel(
     private val cardCheckoutScreenValidator: CardCheckoutScreenValidator,
     private val fullCardPaymentPayloadMapper: CardCheckOutFullCardPaymentPayloadMapper,
     private val stringProvider: StringProvider,
+    private val isStartDestination: Boolean,
 ) : ViewModel() {
     private lateinit var paymentToken: String
-    private var isVirtualTerminal = false
     private var currentState: CardDetailsCheckoutState
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
@@ -49,15 +50,23 @@ internal class CardDetailsCheckoutViewModel(
 
     init {
         currentState = CardDetailsCheckoutState(
+            toolbarTitle = getToolBarTitle(),
+            isLoading = isStartDestination,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = true,
-                messageText = stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_save_card),
+                isChecked = false,
+                messageText = "",
             ),
         )
         pushStateToUi(currentState)
         viewModelScope.launch { observePaymentIntent() }
         viewModelScope.launch { observePaymentStatus() }
+    }
+
+    private fun getToolBarTitle() = if (isStartDestination) {
+        stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
+    } else {
+        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
     }
 
     fun onCardHolderValueChanged(newValue: String) {
@@ -289,8 +298,11 @@ internal class CardDetailsCheckoutViewModel(
                 SupportedCountriesViewEntity("", "", true)
             }
             paymentToken = paymentIntentResult.result.paymentToken
-            isVirtualTerminal = paymentIntentResult.result.isVirtualTerminalPayment
             currentState = currentState.copy(
+                isLoading = false,
+                headerType = if (isStartDestination) { CardCheckOutHeaderType.MERCHANT_HEADER } else { CardCheckOutHeaderType.AMOUNT_HEADER },
+                orderId = paymentIntentResult.result.orderId,
+                merchantName = paymentIntentResult.result.merchantName,
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
                 checkBoxItem = currentState.checkBoxItem.copy(
@@ -305,19 +317,24 @@ internal class CardDetailsCheckoutViewModel(
                 supportedCountriesList = countryList,
                 currentSelectedCountry = currentSelectedCountry,
                 isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
-                actionButtonState = currentState.actionButtonState.updateText(
-                    newValue = String.format(
-                        Locale.getDefault(),
-                        "%s %s %s",
-                        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_button_pay),
-                        Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                        paymentIntentResult.result.amount.valueString,
-                    ),
-                ),
+                actionButtonState = currentState.actionButtonState.updateText(newValue = getActionButtonTitle(paymentIntentResult)),
             )
             pushStateToUi(currentState)
         }
     }
+
+    private fun getActionButtonTitle(paymentIntentResult: PaymentIntentResult.Success) =
+        if (isStartDestination) {
+            stringProvider.getString(R.string.dojo_ui_sdk_save_card_button_text)
+        } else {
+            String.format(
+                Locale.getDefault(),
+                "%s %s %s",
+                stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_button_pay),
+                Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+                paymentIntentResult.result.amount.valueString,
+            )
+        }
 
     private fun getSupportedCountriesList(collectionBillingAddressRequired: Boolean): List<SupportedCountriesViewEntity> {
         return if (collectionBillingAddressRequired) {

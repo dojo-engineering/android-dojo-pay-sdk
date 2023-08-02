@@ -15,7 +15,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_button_pay">Pay</string>
     <string name = "dojo_ui_sdk_card_details_checkout_button_processing">Processing....</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_email">Email</string>
-    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Billing Country</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Country</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_postcode">Postcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_zipcode">Zipcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_expiry_date">Expiry date</string>
@@ -51,7 +51,7 @@
     <string name = "dojo_ui_sdk_mange_payments_dialog_cancel_text">Cancel</string>
     <string name = "dojo_ui_sdk_keyboard_additional_button_next">Next</string>
     <string name = "dojo_ui_sdk_keyboard_additional_button_previous">Previous</string>
-    <string name = "dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional">(optional)</string>
+    <string name = "dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional">optional</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_name">Name</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_line_1">Address line 1</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_shipping_line_2">Address line 2</string>
@@ -70,5 +70,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_city">Please fill in your city</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_postal">Please fill in your postal code</string>
     <string name = "dojo_ui_sdk_order_info">Order: &#160;</string>
-
+    <string name = "dojo_ui_sdk_save_card_confirmation_message">requires your payment card information to secure this booking and you may be charged for no-shows or cancellations in accordance with their booking policy.</string>
+    <string name = "dojo_ui_sdk_save_card_title">Save card details</string>
+    <string name = "dojo_ui_sdk_save_card_button_text">Save card</string>
 </resources>

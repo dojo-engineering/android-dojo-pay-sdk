@@ -88,7 +88,7 @@ internal fun CardDetailsCheckoutScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
-        topBar = { AppBarItem(onBackClicked, onCloseClicked) },
+        topBar = { AppBarItem(onBackClicked, onCloseClicked, state.toolbarTitle) },
         content = {
             Column(
                 modifier = Modifier
@@ -573,9 +573,9 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
 }
 
 @Composable
-private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit) {
+private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit, toolbarTitle: String?) {
     DojoAppBar(
-        title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = toolbarTitle?:stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },

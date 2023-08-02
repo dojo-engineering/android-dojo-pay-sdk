@@ -21,6 +21,7 @@ class CardDetailsCheckoutViewModelFactory(
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val isDarkModeEnabled: Boolean,
     private val context: Context,
+    private val isStartDestination: Boolean,
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -55,6 +56,7 @@ class CardDetailsCheckoutViewModelFactory(
             cardCheckoutScreenValidator,
             fullCardPaymentPayloadMapper,
             stringProvider,
+            isStartDestination,
         ) as T
     }
 }
