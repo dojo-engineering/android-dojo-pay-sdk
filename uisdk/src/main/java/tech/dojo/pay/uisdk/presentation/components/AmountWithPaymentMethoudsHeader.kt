@@ -21,7 +21,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun AmountWithPaymentMethodsHeader(
+internal fun HeaderItem(
     modifier: Modifier = Modifier,
     amount: String,
     currencyLogo: String,
@@ -80,5 +80,5 @@ internal fun AmountWithPaymentMethodsHeader(
 @Preview("AmountBanner", group = "Footer")
 @Composable
 internal fun PreviewAmountBanner() = DojoPreview {
-    AmountWithPaymentMethodsHeader(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
+    HeaderItem(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
 }

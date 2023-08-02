@@ -7,6 +7,7 @@ internal data class CardDetailsCheckoutState(
     var orderId: String? = null,
     var merchantName: String? = null,
     var isLoading: Boolean = false,
+    var headerType: CardCheckOutHeaderType = CardCheckOutHeaderType.AMOUNT_HEADER,
     var totalAmount: String = "",
     var amountCurrency: String = "",
     var allowedPaymentMethodsIcons: List<Int> = listOf(),
@@ -58,4 +59,9 @@ internal data class ActionButtonState(
 
     fun updateText(newValue: String) =
         copy(text = newValue)
+}
+
+internal enum class CardCheckOutHeaderType {
+    AMOUNT_HEADER,
+    MERCHANT_HEADER,
 }

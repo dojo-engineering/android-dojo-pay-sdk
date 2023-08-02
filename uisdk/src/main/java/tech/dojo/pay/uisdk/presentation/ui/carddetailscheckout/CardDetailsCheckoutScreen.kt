@@ -48,7 +48,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.presentation.components.AmountWithPaymentMethodsHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
@@ -58,14 +57,18 @@ import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
+import tech.dojo.pay.uisdk.presentation.components.HeaderItem
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.MerchantIInfoWithSupportedNetworksHeader
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import kotlin.math.roundToInt
+
 @Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -92,13 +95,13 @@ internal fun CardDetailsCheckoutScreen(
                     .fillMaxWidth()
                     .heightIn(min = 40.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
                         .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f)
-                        .padding(it)
+                        .padding(it),
                 ) {
                     Column(
                         Modifier
@@ -110,20 +113,20 @@ internal fun CardDetailsCheckoutScreen(
                             }
                             .imePadding()
                             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
-                        verticalArrangement = Arrangement.spacedBy(32.dp)
+                        verticalArrangement = Arrangement.spacedBy(32.dp),
                     ) {
-                        AmountWithPaymentMethodsHeader(state)
+                        HeaderItem(state)
                         EmailField(
                             scrollState,
                             coroutineScope,
                             scrollToPosition,
                             state,
                             keyboardController,
-                            viewModel
+                            viewModel,
                         )
                         BillingCountryField(
                             state,
-                            viewModel
+                            viewModel,
                         )
                         PostalCodeField(
                             scrollState,
@@ -131,7 +134,7 @@ internal fun CardDetailsCheckoutScreen(
                             scrollToPosition,
                             state,
                             keyboardController,
-                            viewModel
+                            viewModel,
                         )
                         CardHolderNameField(
                             scrollState,
@@ -139,7 +142,7 @@ internal fun CardDetailsCheckoutScreen(
                             scrollToPosition,
                             keyboardController,
                             state,
-                            viewModel
+                            viewModel,
                         )
                         CardNumberField(
                             scrollState,
@@ -148,15 +151,15 @@ internal fun CardDetailsCheckoutScreen(
                             keyboardController,
                             state,
                             viewModel,
-                            isDarkModeEnabled
+                            isDarkModeEnabled,
                         )
                         Row(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .heightIn(48.dp)
+                                .heightIn(48.dp),
                         ) {
                             Box(
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             ) {
                                 CardExpireDateField(
                                     scrollState,
@@ -164,7 +167,7 @@ internal fun CardDetailsCheckoutScreen(
                                     scrollToPosition,
                                     keyboardController,
                                     state,
-                                    viewModel
+                                    viewModel,
                                 )
                             }
 
@@ -176,7 +179,7 @@ internal fun CardDetailsCheckoutScreen(
                                     scrollToPosition,
                                     state,
                                     keyboardController,
-                                    viewModel
+                                    viewModel,
                                 )
                             }
                         }
@@ -187,14 +190,14 @@ internal fun CardDetailsCheckoutScreen(
                         verticalArrangement = Arrangement.spacedBy(0.dp),
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
-                            .background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                            .background(DojoTheme.colors.primarySurfaceBackgroundColor),
                     ) {
                         PayButton(scrollState, state, viewModel)
                         ScreenFooter(showDojoBrand)
                     }
                 }
             }
-        }
+        },
     )
 }
 
@@ -202,21 +205,21 @@ internal fun CardDetailsCheckoutScreen(
 private fun ScreenFooter(showDojoBrand: Boolean) {
     DojoBrandFooter(
         modifier = Modifier.padding(bottom = 24.dp),
-        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
+        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY,
     )
 }
 
 @Composable
 private fun SaveCardCheckBox(
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.checkBoxItem.isVisible) {
         CheckBoxItem(
             itemText = state.checkBoxItem.messageText,
             onCheckedChange = {
                 viewModel.onSaveCardChecked(it)
-            }
+            },
         )
     }
 }
@@ -226,14 +229,14 @@ private fun SaveCardCheckBox(
 private fun PayButton(
     scrollState: ScrollState,
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
         text = state.actionButtonState.text,
         isLoading = state.actionButtonState.isLoading,
-        enabled = state.actionButtonState.isEnabled
+        enabled = state.actionButtonState.isEnabled,
     ) {
         if (!state.actionButtonState.isLoading) {
             focusManager.clearFocus()
@@ -250,12 +253,16 @@ private fun CvvField(
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) FORTH_FIELD_OFF_SET_DP.dp.toPx()
-        else THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+            FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        }
     }
 
     CvvInputField(
@@ -265,13 +272,13 @@ private fun CvvField(
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                         )
                     }
                 }
                 viewModel.validateCvv(
                     state.cvvInputFieldState.value,
-                    it.isFocused
+                    it.isFocused,
                 )
             },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
@@ -282,7 +289,7 @@ private fun CvvField(
             keyboardController?.hide()
         }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
-        onCvvValueChanged = { viewModel.onCvvValueChanged(it) }
+        onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
     )
 }
 
@@ -294,12 +301,16 @@ private fun CardExpireDateField(
     scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) FORTH_FIELD_OFF_SET_DP.dp.toPx()
-        else THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+            FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        }
     }
 
     CardExpireDateInputField(
@@ -310,20 +321,20 @@ private fun CardExpireDateField(
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                         )
                     }
                 }
                 viewModel.validateExpireDate(
                     state.cardExpireDateInputField.value,
-                    it.isFocused
+                    it.isFocused,
                 )
             },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
@@ -332,7 +343,7 @@ private fun CardExpireDateField(
         assistiveText = state.cardExpireDateInputField.errorMessages?.let { AnnotatedString(it) },
         expireDateValue = state.cardExpireDateInputField.value,
         expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
-        onExpireDateValueChanged = { viewModel.onExpireDateValueChanged(it) }
+        onExpireDateValueChanged = { viewModel.onExpireDateValueChanged(it) },
     )
 }
 
@@ -345,12 +356,16 @@ private fun CardNumberField(
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
-    isDarkModeEnabled: Boolean
+    isDarkModeEnabled: Boolean,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) FORTH_FIELD_OFF_SET_DP.dp.toPx()
-        else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) THIRD_FIELD_OFF_SET_DP.dp.toPx()
-        else SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        }
     }
     var focusedTextKey by remember { mutableStateOf(false) }
 
@@ -360,14 +375,16 @@ private fun CardNumberField(
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                     )
                 }
             }
-            focusedTextKey = if (it.isFocused) { true } else {
+            focusedTextKey = if (it.isFocused) {
+                true
+            } else {
                 if (focusedTextKey) {
                     viewModel.validateCardNumber(
-                        state.cardNumberInputField.value
+                        state.cardNumberInputField.value,
                     )
                 }
                 false
@@ -377,7 +394,7 @@ private fun CardNumberField(
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done
+            imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = state.cardNumberInputField.isError,
@@ -387,7 +404,7 @@ private fun CardNumberField(
         cardNumberValue = state.cardNumberInputField.value,
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
         onCardNumberValueChanged = { viewModel.onCardNumberValueChanged(it) },
-        isDarkModeEnabled = isDarkModeEnabled
+        isDarkModeEnabled = isDarkModeEnabled,
     )
 }
 
@@ -399,12 +416,16 @@ private fun CardHolderNameField(
     scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) THIRD_FIELD_OFF_SET_DP.dp.toPx()
-        else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) SECOND_FIELD_OFF_SET_DP.dp.toPx()
-        else FIRST_FIELD_OFF_SET_DP.dp.toPx()
+        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            FIRST_FIELD_OFF_SET_DP.dp.toPx()
+        }
     }
 
     InputFieldWithErrorMessage(
@@ -413,7 +434,7 @@ private fun CardHolderNameField(
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                     )
                 }
             }
@@ -424,7 +445,7 @@ private fun CardHolderNameField(
         isError = state.cardHolderInputField.isError,
         assistiveText = state.cardHolderInputField.errorMessages?.let { AnnotatedString(it) },
         onValueChange = { viewModel.onCardHolderValueChanged(it) },
-        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) }
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) },
     )
 }
 
@@ -436,7 +457,7 @@ private fun EmailField(
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isEmailInputFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
@@ -450,13 +471,13 @@ private fun EmailField(
                         coroutineScope.launch {
                             delay(300)
                             scrollState.animateScrollTo(
-                                scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                                scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                             )
                         }
                     }
                     viewModel.validateEmailValue(
                         state.emailInputField.value,
-                        it.isFocused
+                        it.isFocused,
                     )
                 },
             isError = state.emailInputField.isError,
@@ -467,7 +488,7 @@ private fun EmailField(
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = state.emailInputField.value,
             onValueChange = { viewModel.onEmailValueChanged(it) },
-            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
+            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) },
         )
     }
 }
@@ -475,13 +496,13 @@ private fun EmailField(
 @Composable
 private fun BillingCountryField(
     state: CardDetailsCheckoutState,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isBillingCountryFieldRequired) {
         CountrySelectorField(
             label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_country)) },
             supportedCountriesViewEntity = state.supportedCountriesList,
-            onCountrySelected = { viewModel.onCountrySelected(it) }
+            onCountrySelected = { viewModel.onCountrySelected(it) },
         )
     }
 }
@@ -494,12 +515,15 @@ private fun PostalCodeField(
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
-    viewModel: CardDetailsCheckoutViewModel
+    viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isPostalCodeFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            if (state.isEmailInputFieldRequired) SECOND_FIELD_OFF_SET_DP.dp.toPx()
-            else FIRST_FIELD_OFF_SET_DP.dp.toPx()
+            if (state.isEmailInputFieldRequired) {
+                SECOND_FIELD_OFF_SET_DP.dp.toPx()
+            } else {
+                FIRST_FIELD_OFF_SET_DP.dp.toPx()
+            }
         }
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
@@ -507,7 +531,7 @@ private fun PostalCodeField(
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                         )
                     }
                 }
@@ -519,18 +543,33 @@ private fun PostalCodeField(
             assistiveText =
             state.postalCodeField.errorMessages?.let { AnnotatedString(it) },
             onValueChange = { viewModel.onPostalCodeValueChanged(it) },
-            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode)) }
+            label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_billing_postcode)) },
         )
     }
 }
 
 @Composable
-private fun AmountWithPaymentMethodsHeader(state: CardDetailsCheckoutState) {
-    AmountWithPaymentMethodsHeader(
-        amount = state.totalAmount,
-        currencyLogo = state.amountCurrency,
-        allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons
-    )
+private fun HeaderItem(state: CardDetailsCheckoutState) {
+    when(state.headerType){
+        CardCheckOutHeaderType.AMOUNT_HEADER->{
+            HeaderItem(
+                amount = state.totalAmount,
+                currencyLogo = state.amountCurrency,
+                allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,
+            )
+        }
+        CardCheckOutHeaderType.MERCHANT_HEADER->{
+            state.orderId?.let { orderId ->
+                state.merchantName?.let { merchantName ->
+                    MerchantIInfoWithSupportedNetworksHeader(
+                        merchantName = merchantName,
+                        orderId = orderId,
+                        allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -539,7 +578,7 @@ private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit) {
         title = stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
-        actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() }
+        actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
     )
 }
 
