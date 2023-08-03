@@ -28,6 +28,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cardExpireDateInputField.value } returns "1225"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
@@ -68,6 +69,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
             "",
             false,
         )
+        every { currentState.checkBoxItem.isVisible } returns true
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
@@ -104,6 +106,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cardExpireDateInputField.value } returns "1225"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
@@ -137,6 +140,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cardExpireDateInputField.value } returns "1225"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
@@ -158,6 +162,8 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardNumberInputField.value } returns "1234567812345678"
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
+
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
         val expiryMonth = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryMonth
@@ -178,6 +184,8 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardNumberInputField.value } returns "1234567812345678"
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
+
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
         val expiryYear = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryYear
@@ -198,6 +206,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cardNumberInputField.value } returns "1234567812345678"
         every { currentState.cardHolderInputField.value } returns "John Doe"
         every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
@@ -205,5 +214,87 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Assert
         assertEquals("", expiryYear)
+    }
+
+    @Test
+    fun `given calling getPaymentPayLoad with isStartDestination as true  should returns correct payload with savePaymentMethod as null and mitConsentGiven as checkBox state`() {
+        // Arrange
+        val currentState = mockk<CardDetailsCheckoutState>()
+        every { currentState.isEmailInputFieldRequired } returns true
+        every { currentState.emailInputField.value } returns "test@example.com"
+        every { currentState.isBillingCountryFieldRequired } returns true
+        every { currentState.currentSelectedCountry.countryCode } returns "US"
+        every { currentState.isPostalCodeFieldRequired } returns true
+        every { currentState.postalCodeField.value } returns "12345"
+        every { currentState.checkBoxItem.isChecked } returns true
+        every { currentState.cardNumberInputField.value } returns "1234567812345678"
+        every { currentState.cardHolderInputField.value } returns "John Doe"
+        every { currentState.cardExpireDateInputField.value } returns "1225"
+        every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns true
+
+        // Act
+        val mapper = CardCheckOutFullCardPaymentPayloadMapper()
+        val paymentPayload = mapper.getPaymentPayLoad(
+            currentState = currentState,
+            isStartDestination = true,
+        )
+
+        // Assert
+        val expectedPayload = DojoCardPaymentPayLoad.FullCardPaymentPayload(
+            userEmailAddress = "test@example.com",
+            billingAddress = DojoAddressDetails(countryCode = "US", postcode = "12345"),
+            savePaymentMethod = null,
+            cardDetails = DojoCardDetails(
+                cardNumber = "1234567812345678",
+                cardName = "John Doe",
+                expiryMonth = "12",
+                expiryYear = "25",
+                cv2 = "123",
+                mitConsentGiven = true,
+            ),
+        )
+        assertEquals(expectedPayload, paymentPayload)
+    }
+
+    @Test
+    fun `given calling getPaymentPayLoad with isStartDestination as false and checkBox is inVisible  should returns correct payload with savePaymentMethod as null`() {
+        // Arrange
+        val currentState = mockk<CardDetailsCheckoutState>()
+        every { currentState.isEmailInputFieldRequired } returns true
+        every { currentState.emailInputField.value } returns "test@example.com"
+        every { currentState.isBillingCountryFieldRequired } returns true
+        every { currentState.currentSelectedCountry.countryCode } returns "US"
+        every { currentState.isPostalCodeFieldRequired } returns true
+        every { currentState.postalCodeField.value } returns "12345"
+        every { currentState.checkBoxItem.isChecked } returns true
+        every { currentState.cardNumberInputField.value } returns "1234567812345678"
+        every { currentState.cardHolderInputField.value } returns "John Doe"
+        every { currentState.cardExpireDateInputField.value } returns "1225"
+        every { currentState.cvvInputFieldState.value } returns "123"
+        every { currentState.checkBoxItem.isVisible } returns false
+
+        // Act
+        val mapper = CardCheckOutFullCardPaymentPayloadMapper()
+        val paymentPayload = mapper.getPaymentPayLoad(
+            currentState = currentState,
+            isStartDestination = false,
+        )
+
+        // Assert
+        val expectedPayload = DojoCardPaymentPayLoad.FullCardPaymentPayload(
+            userEmailAddress = "test@example.com",
+            billingAddress = DojoAddressDetails(countryCode = "US", postcode = "12345"),
+            savePaymentMethod = null,
+            cardDetails = DojoCardDetails(
+                cardNumber = "1234567812345678",
+                cardName = "John Doe",
+                expiryMonth = "12",
+                expiryYear = "25",
+                cv2 = "123",
+                mitConsentGiven = null,
+            ),
+        )
+        assertEquals(expectedPayload, paymentPayload)
     }
 }

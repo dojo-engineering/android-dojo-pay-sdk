@@ -63,12 +63,6 @@ internal class CardDetailsCheckoutViewModel(
         viewModelScope.launch { observePaymentStatus() }
     }
 
-    private fun getToolBarTitle() = if (!isStartDestination) {
-        stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
-    } else {
-        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
-    }
-
     fun onCardHolderValueChanged(newValue: String) {
         currentState = if (newValue.isBlank()) {
             currentState.copy(
@@ -320,37 +314,55 @@ internal class CardDetailsCheckoutViewModel(
                 SupportedCountriesViewEntity("", "", true)
             }
             paymentToken = paymentIntentResult.result.paymentToken
-            currentState = currentState.copy(
-                isLoading = false,
-                headerType = if (isStartDestination) {
-                    CardCheckOutHeaderType.MERCHANT_HEADER
-                } else {
-                    CardCheckOutHeaderType.AMOUNT_HEADER
-                },
-                orderId = paymentIntentResult.result.orderId,
-                merchantName = paymentIntentResult.result.merchantName,
-                totalAmount = paymentIntentResult.result.amount.valueString,
-                amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                checkBoxItem = currentState
-                    .checkBoxItem
-                    .updateIsVisible(!paymentIntentResult.result.customerId.isNullOrBlank())
-                    .updateText(getCheckBoxMessage(paymentIntentResult)),
-                allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
-                    paymentIntentResult.result.supportedCardsSchemes,
-                ),
-                isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
-                isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
-                supportedCountriesList = countryList,
-                currentSelectedCountry = currentSelectedCountry,
-                isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
-                actionButtonState = currentState.actionButtonState.updateText(
-                    newValue = getActionButtonTitle(
-                        paymentIntentResult,
-                    ),
-                ),
+            currentState = updateCurrentStateWithPaymentIntent(
+                paymentIntentResult,
+                countryList,
+                currentSelectedCountry,
             )
             pushStateToUi(currentState)
         }
+    }
+
+    private fun updateCurrentStateWithPaymentIntent(
+        paymentIntentResult: PaymentIntentResult.Success,
+        countryList: List<SupportedCountriesViewEntity>,
+        currentSelectedCountry: SupportedCountriesViewEntity,
+    ) = currentState.copy(
+        isLoading = false,
+        headerType = getHeaderType(),
+        orderId = paymentIntentResult.result.orderId,
+        merchantName = paymentIntentResult.result.merchantName,
+        totalAmount = paymentIntentResult.result.amount.valueString,
+        amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+        checkBoxItem = currentState
+            .checkBoxItem
+            .updateIsVisible(!paymentIntentResult.result.customerId.isNullOrBlank())
+            .updateText(getCheckBoxMessage(paymentIntentResult)),
+        allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
+            paymentIntentResult.result.supportedCardsSchemes,
+        ),
+        isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
+        isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
+        supportedCountriesList = countryList,
+        currentSelectedCountry = currentSelectedCountry,
+        isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
+        actionButtonState = currentState.actionButtonState.updateText(
+            newValue = getActionButtonTitle(
+                paymentIntentResult,
+            ),
+        ),
+    )
+
+    private fun getHeaderType() = if (isStartDestination) {
+        CardCheckOutHeaderType.MERCHANT_HEADER
+    } else {
+        CardCheckOutHeaderType.AMOUNT_HEADER
+    }
+
+    private fun getToolBarTitle() = if (!isStartDestination) {
+        stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
+    } else {
+        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
     }
 
     private fun getCheckBoxMessage(paymentIntentResult: PaymentIntentResult.Success) =

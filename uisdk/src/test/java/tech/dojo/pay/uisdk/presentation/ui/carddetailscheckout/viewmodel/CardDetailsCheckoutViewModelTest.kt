@@ -10,10 +10,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
@@ -67,11 +67,15 @@ class CardDetailsCheckoutViewModelTest {
     fun setUp() {
         val toolBarTitle = "toolBarTitle"
         val payTitle = "pay"
-        whenever(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)).thenReturn(
-            toolBarTitle,
-        )
+        val checkBoxMessage = "checkBoxMessage"
         whenever(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_button_pay)).thenReturn(
             payTitle,
+        )
+        whenever(stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)).thenReturn(
+            toolBarTitle,
+        )
+        whenever(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_save_card)).thenReturn(
+            checkBoxMessage,
         )
     }
 
@@ -98,7 +102,7 @@ class CardDetailsCheckoutViewModelTest {
             isEmailInputFieldRequired = false,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = true,
                 messageText = "",
             ),
             cardNumberInputField = InputFieldState(value = ""),
@@ -172,8 +176,8 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = false,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             postalCodeField = InputFieldState(value = ""),
             actionButtonState = ActionButtonState(text = payText),
@@ -259,8 +263,8 @@ class CardDetailsCheckoutViewModelTest {
             isPostalCodeFieldRequired = true,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             postalCodeField = InputFieldState(value = ""),
             actionButtonState = ActionButtonState(text = payText),
@@ -284,7 +288,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when paymentIntent emits with collect userId  `() = runTest {
+    fun `test state when paymentIntent emits with collect userId`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
@@ -347,7 +351,7 @@ class CardDetailsCheckoutViewModelTest {
             checkBoxItem = CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
-                messageText = "",
+                messageText = "checkBoxMessage",
             ),
             postalCodeField = InputFieldState(value = ""),
             actionButtonState = ActionButtonState(text = payText),
@@ -411,7 +415,7 @@ class CardDetailsCheckoutViewModelTest {
         whenever(
             cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(
                 any(),
-                isStartDestination,
+                any(),
             ),
         ).thenReturn(
             fullCardPaymentPayload,
@@ -440,8 +444,8 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
@@ -529,8 +533,8 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
@@ -632,12 +636,12 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = ""),
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(isEnabled = true, text = payText),
+            actionButtonState = ActionButtonState(isEnabled = false, text = payText),
         )
         // act
         val viewModel = CardDetailsCheckoutViewModel(
@@ -720,8 +724,8 @@ class CardDetailsCheckoutViewModelTest {
             cvvInputFieldState = InputFieldState(value = "new"),
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             isPostalCodeFieldRequired = true,
             postalCodeField = InputFieldState(value = ""),
@@ -807,8 +811,8 @@ class CardDetailsCheckoutViewModelTest {
             isEmailInputFieldRequired = true,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
-                messageText = "",
+                isChecked = true,
+                messageText = "checkBoxMessage",
             ),
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
