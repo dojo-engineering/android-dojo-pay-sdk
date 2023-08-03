@@ -17,7 +17,7 @@ internal class CardCheckOutFullCardPaymentPayloadMapper {
                 countryCode = if (currentState.isBillingCountryFieldRequired) currentState.currentSelectedCountry.countryCode else null,
                 postcode = if (currentState.isPostalCodeFieldRequired) currentState.postalCodeField.value else null,
             ),
-            savePaymentMethod = if (!isStartDestination) currentState.checkBoxItem.isChecked else null,
+            savePaymentMethod = if (!isStartDestination && currentState.checkBoxItem.isVisible) currentState.checkBoxItem.isChecked else null,
             cardDetails = DojoCardDetails(
                 cardNumber = currentState.cardNumberInputField.value,
                 cardName = currentState.cardHolderInputField.value,

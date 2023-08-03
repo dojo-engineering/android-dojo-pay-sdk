@@ -3,11 +3,11 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
+    var isLoading: Boolean = false,
     var toolbarTitle: String = "",
+    var headerType: CardCheckOutHeaderType = CardCheckOutHeaderType.AMOUNT_HEADER,
     var orderId: String? = null,
     var merchantName: String? = null,
-    var isLoading: Boolean = false,
-    var headerType: CardCheckOutHeaderType = CardCheckOutHeaderType.AMOUNT_HEADER,
     var totalAmount: String = "",
     var amountCurrency: String = "",
     var allowedPaymentMethodsIcons: List<Int> = listOf(),
@@ -28,7 +28,7 @@ internal data class CardDetailsCheckoutState(
     var postalCodeField: InputFieldState = InputFieldState(value = ""),
     var checkBoxItem: CheckBoxItem = CheckBoxItem(
         isVisible = false,
-        isChecked = true,
+        isChecked = false,
         messageText = "",
     ),
     var actionButtonState: ActionButtonState = ActionButtonState(),
@@ -44,7 +44,16 @@ internal data class CheckBoxItem(
     val messageText: String,
     val isChecked: Boolean,
     val isVisible: Boolean,
-)
+){
+    fun updateText(newValue: String) =
+        copy(messageText = newValue)
+
+    fun updateIsChecked(newValue: Boolean) =
+        copy(isChecked = newValue)
+
+    fun updateIsVisible(newValue: Boolean) =
+        copy(isVisible = newValue)
+}
 
 internal data class ActionButtonState(
     val isLoading: Boolean = false,

@@ -54,7 +54,7 @@ internal class CardDetailsCheckoutViewModel(
             isLoading = isStartDestination,
             checkBoxItem = CheckBoxItem(
                 isVisible = false,
-                isChecked = false,
+                isChecked = !isStartDestination,
                 messageText = "",
             ),
         )
@@ -63,7 +63,7 @@ internal class CardDetailsCheckoutViewModel(
         viewModelScope.launch { observePaymentStatus() }
     }
 
-    private fun getToolBarTitle() = if (isStartDestination) {
+    private fun getToolBarTitle() = if (!isStartDestination) {
         stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
     } else {
         stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
@@ -329,11 +329,10 @@ internal class CardDetailsCheckoutViewModel(
                 merchantName = paymentIntentResult.result.merchantName,
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                checkBoxItem = currentState.checkBoxItem.copy(
-                    isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(),
-                    isChecked = !paymentIntentResult.result.customerId.isNullOrBlank() && !isStartDestination,
-                    messageText = getCheckBoxMessage(paymentIntentResult),
-                ),
+                checkBoxItem = currentState
+                    .checkBoxItem
+                    .updateIsVisible(!paymentIntentResult.result.customerId.isNullOrBlank())
+                    .updateText(getCheckBoxMessage(paymentIntentResult)),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes,
                 ),
@@ -361,7 +360,7 @@ internal class CardDetailsCheckoutViewModel(
                 stringProvider.getString(R.string.dojo_ui_sdk_save_card_confirmation_message),
             )
         } else {
-            stringProvider.getString(R.string.dojo_ui_sdk_save_card_confirmation_message)
+            stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_save_card)
         }
 
     private fun getActionButtonTitle(paymentIntentResult: PaymentIntentResult.Success) =
