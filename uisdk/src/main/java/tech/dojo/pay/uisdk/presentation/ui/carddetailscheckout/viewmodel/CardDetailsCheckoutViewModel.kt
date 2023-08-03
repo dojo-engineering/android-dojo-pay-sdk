@@ -290,6 +290,7 @@ internal class CardDetailsCheckoutViewModel(
         cardExpireDate: String = currentState.cardExpireDateInputField.value,
         emailValue: String = currentState.emailInputField.value,
         postalCodeValue: String = currentState.postalCodeField.value,
+        isCheckBoxChecked: Boolean = currentState.checkBoxItem.isChecked,
     ) =
         cardHolderValue.isNotBlank() &&
             cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) &&
@@ -302,7 +303,8 @@ internal class CardDetailsCheckoutViewModel(
             cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
                 postalCodeValue,
                 currentState.isPostalCodeFieldRequired,
-            )
+            ) &&
+            cardCheckoutScreenValidator.isCheckBoxValid(isStartDestination, isCheckBoxChecked)
 
     private suspend fun observePaymentIntent() {
         observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
@@ -405,9 +407,15 @@ internal class CardDetailsCheckoutViewModel(
         }
     }
 
-    fun onSaveCardChecked(isChecked: Boolean) {
+    fun onCheckBoxChecked(isChecked: Boolean) {
         val newCheckBoxItem = currentState.checkBoxItem.copy(isChecked = isChecked)
-        currentState = currentState.copy(checkBoxItem = newCheckBoxItem)
+        currentState = currentState.copy(
+            checkBoxItem = newCheckBoxItem,
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                isPayButtonEnabled(isCheckBoxChecked = isChecked),
+            ),
+        )
+        pushStateToUi(currentState)
     }
 
     fun onPayWithCardClicked() {

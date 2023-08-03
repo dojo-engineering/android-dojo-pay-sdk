@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -97,6 +99,7 @@ internal fun CardDetailsCheckoutScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Loading(isVisible = state.isLoading)
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -202,6 +205,23 @@ internal fun CardDetailsCheckoutScreen(
 }
 
 @Composable
+private fun Loading(isVisible: Boolean) {
+    if (isVisible) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(DojoTheme.colors.primarySurfaceBackgroundColor.copy(alpha = 0.8f))
+                .clickable(false) {},
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator(
+                color = DojoTheme.colors.loadingIndicatorColor,
+            )
+        }
+    }
+}
+
+@Composable
 private fun ScreenFooter(showDojoBrand: Boolean) {
     DojoBrandFooter(
         modifier = Modifier.padding(bottom = 24.dp),
@@ -219,7 +239,7 @@ private fun SaveCardCheckBox(
             itemText = state.checkBoxItem.messageText,
             isChecked = state.checkBoxItem.isChecked,
             onCheckedChange = {
-                viewModel.onSaveCardChecked(it)
+                viewModel.onCheckBoxChecked(it)
             },
         )
     }
@@ -551,15 +571,15 @@ private fun PostalCodeField(
 
 @Composable
 private fun HeaderItem(state: CardDetailsCheckoutState) {
-    when(state.headerType){
-        CardCheckOutHeaderType.AMOUNT_HEADER->{
+    when (state.headerType) {
+        CardCheckOutHeaderType.AMOUNT_HEADER -> {
             HeaderItem(
                 amount = state.totalAmount,
                 currencyLogo = state.amountCurrency,
                 allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,
             )
         }
-        CardCheckOutHeaderType.MERCHANT_HEADER->{
+        CardCheckOutHeaderType.MERCHANT_HEADER -> {
             state.orderId?.let { orderId ->
                 state.merchantName?.let { merchantName ->
                     MerchantIInfoWithSupportedNetworksHeader(
@@ -576,7 +596,7 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
 @Composable
 private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit, toolbarTitle: String?) {
     DojoAppBar(
-        title = toolbarTitle?:stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = toolbarTitle ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
