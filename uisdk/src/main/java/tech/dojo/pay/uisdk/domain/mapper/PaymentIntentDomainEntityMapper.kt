@@ -15,9 +15,9 @@ internal class PaymentIntentDomainEntityMapper {
             customerId = raw.customer?.id,
             paymentToken = requireNotNull(raw.clientSessionSecret),
             amount = AmountDomainEntity(
-                valueLong = requireNotNull(raw.amount?.value),
-                valueString = requireNotNull(raw.amount?.value?.centsToString()),
-                currencyCode = requireNotNull(raw.amount?.currencyCode),
+                valueLong = requireNotNull(raw.amount?.value ?: raw.intendedAmount?.value),
+                valueString = requireNotNull(raw.amount?.value?.centsToString() ?: raw.intendedAmount?.value?.centsToString()),
+                currencyCode = requireNotNull(raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode),
             ),
             supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }),
             supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets
@@ -45,7 +45,7 @@ internal class PaymentIntentDomainEntityMapper {
         val invalidParams: MutableList<String> = mutableListOf()
         if (raw.id == null) invalidParams.add("id")
         if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
-        if (raw.amount == null) invalidParams.add("amount")
+        if (raw.amount == null && raw.intendedAmount == null) invalidParams.add("amount")
         if (raw.merchantConfig == null) invalidParams.add("merchantConfig")
         if (raw.merchantConfig?.supportedPaymentMethods == null) invalidParams.add("supportedPaymentMethods")
         if (raw.merchantConfig?.supportedPaymentMethods?.cardSchemes == null) invalidParams.add("cardSchemes")
