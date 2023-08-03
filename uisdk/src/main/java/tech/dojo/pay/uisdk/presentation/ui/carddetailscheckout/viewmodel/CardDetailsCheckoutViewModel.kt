@@ -106,7 +106,11 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 postalCodeField = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = isPayButtonEnabled(postalCodeValue = newValue)),
+                actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                    newValue = isPayButtonEnabled(
+                        postalCodeValue = newValue,
+                    ),
+                ),
             )
         }
         pushStateToUi(currentState)
@@ -115,7 +119,11 @@ internal class CardDetailsCheckoutViewModel(
     fun onCardNumberValueChanged(newValue: String) {
         currentState = currentState.copy(
             cardNumberInputField = InputFieldState(value = newValue),
-            actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = isPayButtonEnabled(cardNumberValue = newValue)),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    cardNumberValue = newValue,
+                ),
+            ),
         )
         pushStateToUi(currentState)
     }
@@ -156,7 +164,11 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 cvvInputFieldState = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = isPayButtonEnabled(cvvValue = newValue)),
+                actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                    newValue = isPayButtonEnabled(
+                        cvvValue = newValue,
+                    ),
+                ),
             )
         }
 
@@ -193,7 +205,11 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 cardExpireDateInputField = InputFieldState(newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = isPayButtonEnabled(cardExpireDate = newValue)),
+                actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                    newValue = isPayButtonEnabled(
+                        cardExpireDate = newValue,
+                    ),
+                ),
             )
         }
         pushStateToUi(currentState)
@@ -229,7 +245,11 @@ internal class CardDetailsCheckoutViewModel(
         } else {
             currentState.copy(
                 emailInputField = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = isPayButtonEnabled(emailValue = newValue)),
+                actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                    newValue = isPayButtonEnabled(
+                        emailValue = newValue,
+                    ),
+                ),
             )
         }
         pushStateToUi(currentState)
@@ -300,14 +320,19 @@ internal class CardDetailsCheckoutViewModel(
             paymentToken = paymentIntentResult.result.paymentToken
             currentState = currentState.copy(
                 isLoading = false,
-                headerType = if (isStartDestination) { CardCheckOutHeaderType.MERCHANT_HEADER } else { CardCheckOutHeaderType.AMOUNT_HEADER },
+                headerType = if (isStartDestination) {
+                    CardCheckOutHeaderType.MERCHANT_HEADER
+                } else {
+                    CardCheckOutHeaderType.AMOUNT_HEADER
+                },
                 orderId = paymentIntentResult.result.orderId,
                 merchantName = paymentIntentResult.result.merchantName,
                 totalAmount = paymentIntentResult.result.amount.valueString,
                 amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
                 checkBoxItem = currentState.checkBoxItem.copy(
                     isVisible = !paymentIntentResult.result.customerId.isNullOrBlank(),
-                    isChecked = !paymentIntentResult.result.customerId.isNullOrBlank(),
+                    isChecked = !paymentIntentResult.result.customerId.isNullOrBlank() && !isStartDestination,
+                    messageText = getCheckBoxMessage(paymentIntentResult),
                 ),
                 allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                     paymentIntentResult.result.supportedCardsSchemes,
@@ -317,11 +342,27 @@ internal class CardDetailsCheckoutViewModel(
                 supportedCountriesList = countryList,
                 currentSelectedCountry = currentSelectedCountry,
                 isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
-                actionButtonState = currentState.actionButtonState.updateText(newValue = getActionButtonTitle(paymentIntentResult)),
+                actionButtonState = currentState.actionButtonState.updateText(
+                    newValue = getActionButtonTitle(
+                        paymentIntentResult,
+                    ),
+                ),
             )
             pushStateToUi(currentState)
         }
     }
+
+    private fun getCheckBoxMessage(paymentIntentResult: PaymentIntentResult.Success) =
+        if (isStartDestination) {
+            String.format(
+                Locale.getDefault(),
+                "%s %s",
+                paymentIntentResult.result.merchantName,
+                stringProvider.getString(R.string.dojo_ui_sdk_save_card_confirmation_message),
+            )
+        } else {
+            stringProvider.getString(R.string.dojo_ui_sdk_save_card_confirmation_message)
+        }
 
     private fun getActionButtonTitle(paymentIntentResult: PaymentIntentResult.Success) =
         if (isStartDestination) {
@@ -380,7 +421,7 @@ internal class CardDetailsCheckoutViewModel(
         )
         dojoCardPaymentHandler.executeCardPayment(
             paymentToken,
-            fullCardPaymentPayloadMapper.getPaymentPayLoad(currentState),
+            fullCardPaymentPayloadMapper.getPaymentPayLoad(currentState, isStartDestination),
         )
     }
 

@@ -408,7 +408,12 @@ class CardDetailsCheckoutViewModelTest {
         whenever(supportedCountriesViewEntityMapper.apply(any())).thenReturn(
             supportedCountriesViewEntity,
         )
-        whenever(cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(any())).thenReturn(
+        whenever(
+            cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(
+                any(),
+                isStartDestination,
+            ),
+        ).thenReturn(
             fullCardPaymentPayload,
         )
         whenever(allowedPaymentMethodsViewEntityMapper.apply(any())).thenReturn(supportedIcons)

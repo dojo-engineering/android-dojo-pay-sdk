@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -26,50 +28,52 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 internal fun CheckBoxItem(
     modifier: Modifier = Modifier,
     itemText: String,
-    onCheckedChange: (Boolean) -> (Unit),
+    onCheckedChange: (Boolean) -> Unit,
 ) {
     val checkedState = remember { mutableStateOf(true) }
-    Box(modifier = modifier) {
-        Row(
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                checkedState.value = !checkedState.value
+                onCheckedChange(checkedState.value)
+            },
+        verticalAlignment = Alignment.Top,
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(30.dp),
-            verticalAlignment = Alignment.CenterVertically
-
+                .width(25.dp)
+                .height(30.dp)
+                .padding(vertical = 4.dp)
+                .border(
+                    width = 1.dp,
+                    color = if (checkedState.value) DojoTheme.colors.inputElementActiveTintColor else DojoTheme.colors.inputElementDefaultTintColor,
+                    shape = DojoTheme.shapes.small,
+                )
+                .background(DojoTheme.colors.primarySurfaceBackgroundColor),
+            contentAlignment = Alignment.Center,
         ) {
-            Box(
-                modifier = Modifier
-                    .size(25.dp)
-                    .border(
-                        width = 1.dp,
-                        color = if (checkedState.value) DojoTheme.colors.inputElementActiveTintColor else DojoTheme.colors.inputElementDefaultTintColor,
-                        shape = DojoTheme.shapes.small
-                    )
-                    .background(DojoTheme.colors.primarySurfaceBackgroundColor)
-                    .clickable {
-                        checkedState.value = !checkedState.value
-                        onCheckedChange(checkedState.value)
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                if (checkedState.value) {
-                    Icon(
-                        Icons.Default.Check,
-                        contentDescription = "",
-                        tint = DojoTheme.colors.inputElementActiveTintColor
-                    )
-                }
+            if (checkedState.value) {
+                Icon(
+                    Icons.Default.Check,
+                    contentDescription = "",
+                    tint = DojoTheme.colors.inputElementActiveTintColor,
+                )
             }
-            DojoSpacer(16.dp)
-
-            Text(
-                text = itemText,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                color = DojoTheme.colors.secondaryLabelTextColor,
-                style = DojoTheme.typography.subtitle1
-            )
         }
+        DojoSpacer(width = 12.dp)
+        Text(
+            text = itemText,
+            modifier = Modifier
+                .weight(1f)
+                .wrapContentHeight(),
+            overflow = TextOverflow.Ellipsis,
+            softWrap = true,
+            maxLines = 4,
+            color = DojoTheme.colors.secondaryLabelTextColor,
+            style = DojoTheme.typography.subtitle1,
+        )
     }
 }
 

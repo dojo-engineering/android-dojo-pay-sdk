@@ -36,7 +36,7 @@ internal class PaymentIntentDomainEntityMapper {
             isVirtualTerminalPayment = raw.paymentSource?.let { it.lowercase() == "virtual-terminal" } ?: false,
             isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" } ?: false,
             orderId = raw.reference ?: "",
-            isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.setupSource.isNullOrBlank(),
+            isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
             merchantName = raw.config?.tradingName ?: "",
         )
     }

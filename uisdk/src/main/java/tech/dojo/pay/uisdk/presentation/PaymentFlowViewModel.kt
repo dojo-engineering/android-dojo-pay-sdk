@@ -77,12 +77,14 @@ internal class PaymentFlowViewModel(
         )
         if (isInitCorrectly) {
             currentCustomerId = paymentIntentResult.result.customerId
-            fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
-                paymentType,
-                paymentIntentResult.result.customerId ?: "",
-                customerSecret,
+            if (paymentType == PAYMENT_CARD) {
+                fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
+                    paymentType,
+                    paymentIntentResult.result.customerId ?: "",
+                    customerSecret,
 
-            )
+                )
+            }
         } else {
             closeFlowWithInternalError()
         }

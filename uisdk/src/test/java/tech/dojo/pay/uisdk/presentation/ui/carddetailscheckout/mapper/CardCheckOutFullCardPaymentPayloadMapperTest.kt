@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 
 class CardCheckOutFullCardPaymentPayloadMapperTest {
+    private val isStartDestination: Boolean = false
 
     @Test
     fun `given calling getPaymentPayLoad with email and billing enabled should returns correct payload with email and billing address`() {
@@ -30,7 +31,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val paymentPayload = mapper.getPaymentPayLoad(currentState)
+        val paymentPayload = mapper.getPaymentPayLoad(currentState, isStartDestination)
 
         // Assert
         val expectedPayload = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -70,7 +71,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val paymentPayload = mapper.getPaymentPayLoad(currentState)
+        val paymentPayload = mapper.getPaymentPayLoad(currentState, isStartDestination)
 
         // Assert
         val expectedPayload = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -106,7 +107,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val paymentPayload = mapper.getPaymentPayLoad(currentState)
+        val paymentPayload = mapper.getPaymentPayLoad(currentState, isStartDestination)
 
         // Assert
         val expectedPayload = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -139,7 +140,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val expiryMonth = mapper.getPaymentPayLoad(currentState).cardDetails.expiryMonth
+        val expiryMonth = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryMonth
 
         // Assert
         assertEquals("12", expiryMonth)
@@ -159,7 +160,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cvvInputFieldState.value } returns "123"
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val expiryMonth = mapper.getPaymentPayLoad(currentState).cardDetails.expiryMonth
+        val expiryMonth = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryMonth
 
         // Assert
         assertEquals("", expiryMonth)
@@ -179,7 +180,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
         every { currentState.cvvInputFieldState.value } returns "123"
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val expiryYear = mapper.getPaymentPayLoad(currentState).cardDetails.expiryYear
+        val expiryYear = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryYear
 
         // Assert
         assertEquals("25", expiryYear)
@@ -200,7 +201,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
 
         // Act
         val mapper = CardCheckOutFullCardPaymentPayloadMapper()
-        val expiryYear = mapper.getPaymentPayLoad(currentState).cardDetails.expiryYear
+        val expiryYear = mapper.getPaymentPayLoad(currentState, isStartDestination).cardDetails.expiryYear
 
         // Assert
         assertEquals("", expiryYear)
