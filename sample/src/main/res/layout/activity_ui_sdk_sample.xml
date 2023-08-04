@@ -8,7 +8,7 @@
 
 
     <Button
-        android:id="@+id/startPaymentFlowWithTheme"
+        android:id="@+id/startPaymentFlowWithVT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -18,6 +18,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startPaymentFlow"
         app:layout_constraintVertical_bias="0.192" />
+
+    <Button
+        android:id="@+id/startPaymentFlowCOF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="start Set UP Intent  Payment With force lightTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startPaymentFlowWithVT"
+        app:layout_constraintVertical_bias="0.192" />
+
 
     <FrameLayout
         android:id="@+id/viewProgress"

@@ -36,7 +36,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
                 DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()),
             )
         }
-        uiSdkSampleBinding.startPaymentFlowWithTheme.setOnClickListener {
+        uiSdkSampleBinding.startPaymentFlowWithVT.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
@@ -48,6 +48,21 @@ class UiSdkSampleActivity : AppCompatActivity() {
                         gatewayMerchantId = "119784244252745",
                     ),
                     paymentType = DojoPaymentType.VIRTUAL_TERMINAL,
+                ),
+            )
+        }
+        uiSdkSampleBinding.startPaymentFlowCOF.setOnClickListener {
+            DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
+            dojoPayUI.startPaymentFlow(
+                DojoPaymentFlowParams(
+                    uiSdkSampleBinding.token.text.toString(),
+                    secret,
+                    GPayConfig = DojoGPayConfig(
+                        merchantName = "Dojo Cafe (Paymentsense)",
+                        merchantId = "BCR2DN6T57R5ZI34",
+                        gatewayMerchantId = "119784244252745",
+                    ),
+                    paymentType = DojoPaymentType.SETUP_INTENT,
                 ),
             )
         }
