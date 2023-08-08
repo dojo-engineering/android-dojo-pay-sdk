@@ -29,7 +29,6 @@
         app:layout_constraintTop_toBottomOf="@+id/startPaymentFlowWithVT"
         app:layout_constraintVertical_bias="0.192" />
 
-
     <FrameLayout
         android:id="@+id/viewProgress"
         android:layout_width="match_parent"
