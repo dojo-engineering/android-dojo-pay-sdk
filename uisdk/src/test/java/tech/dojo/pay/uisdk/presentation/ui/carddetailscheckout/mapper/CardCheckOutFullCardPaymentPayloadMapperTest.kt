@@ -23,7 +23,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with email and billing enabled then should returns correct payload with email and billing address`() {
+    fun `given calling getPaymentPayLoad with email and billing enabled then should returns correct payload with email and billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
@@ -77,7 +77,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with email enabled and billing is disabled then should returns correct payload with email but without billing address`() {
+    fun `given calling getPaymentPayLoad with email enabled and billing is disabled then should returns correct payload with email but without billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
@@ -135,7 +135,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with email and billing is disabled then should returns correct payload without email and billing address`() {
+    fun `given calling getPaymentPayLoad with email and billing is disabled then should returns correct payload without email and billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
@@ -174,7 +174,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with valid month then should returns correct month`() {
+    fun `given calling getPaymentPayLoad with valid month then should returns correct month`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
@@ -202,7 +202,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with blank month then should returns empty string`() {
+    fun `given calling getPaymentPayLoad with blank month then should returns empty string`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
@@ -230,7 +230,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with valid year then should returns correct year`() {
+    fun `given calling getPaymentPayLoad with valid year then should returns correct year`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
@@ -258,7 +258,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when  calling getPaymentPayLoad with blank year then should returns empty string`() {
+    fun `given calling getPaymentPayLoad with blank year then should returns empty string`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
@@ -286,7 +286,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with isStartDestination as true then should returns correct payload with savePaymentMethod as null and mitConsentGiven as checkBox state`() {
+    fun `given calling getPaymentPayLoad with isStartDestination as true then should returns correct payload with savePaymentMethod as null and mitConsentGiven as checkBox state`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
@@ -339,7 +339,7 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `when calling getPaymentPayLoad with isStartDestination as false and checkBox is inVisible then  should returns correct payload with savePaymentMethod as null`() {
+    fun `given calling getPaymentPayLoad with isStartDestination as false and checkBox is inVisible then  should returns correct payload with savePaymentMethod as null`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
         whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
