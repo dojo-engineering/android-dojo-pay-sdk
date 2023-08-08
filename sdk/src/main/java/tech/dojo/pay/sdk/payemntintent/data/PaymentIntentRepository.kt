@@ -31,4 +31,13 @@ internal class PaymentIntentRepository(
             DojoPaymentIntentResult.Failed
         }
     }
+
+    suspend fun refreshSetUpIntent(paymentId: String): DojoPaymentIntentResult {
+        val response = api.refreshSetupIntent(paymentId)
+        return if (response.isSuccessful) {
+            DojoPaymentIntentResult.Success(response.body().toString())
+        } else {
+            DojoPaymentIntentResult.Failed
+        }
+    }
 }
