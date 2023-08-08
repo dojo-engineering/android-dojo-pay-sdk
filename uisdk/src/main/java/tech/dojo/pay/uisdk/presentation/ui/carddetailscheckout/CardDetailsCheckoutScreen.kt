@@ -61,7 +61,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.HeaderItem
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
-import tech.dojo.pay.uisdk.presentation.components.MerchantIInfoWithSupportedNetworksHeader
+import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetworksHeader
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
@@ -582,7 +582,7 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
         CardCheckOutHeaderType.MERCHANT_HEADER -> {
             state.orderId?.let { orderId ->
                 state.merchantName?.let { merchantName ->
-                    MerchantIInfoWithSupportedNetworksHeader(
+                    MerchantInfoWithSupportedNetworksHeader(
                         merchantName = merchantName,
                         orderId = orderId,
                         allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,

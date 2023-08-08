@@ -19,7 +19,7 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun MerchantIInfoWithSupportedNetworksHeader(
+internal fun MerchantInfoWithSupportedNetworksHeader(
     modifier: Modifier = Modifier,
     merchantName: String,
     orderId: String,
@@ -54,6 +54,6 @@ internal fun MerchantIInfoWithSupportedNetworksHeader(
 
 @Preview("MerchantIInfoWithSupportedNetworksHeader", group = "MerchantIInfoWithSupportedNetworksHeader")
 @Composable
-internal fun PreviewMerchantIInfoWithSupportedNetworksHeader() = DojoPreview {
-    MerchantIInfoWithSupportedNetworksHeader(merchantName = "El pastor", orderId = "12312312", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
+private fun PreviewMerchantIInfoWithSupportedNetworksHeader() = DojoPreview {
+    MerchantInfoWithSupportedNetworksHeader(merchantName = "El pastor", orderId = "12312312", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
 }

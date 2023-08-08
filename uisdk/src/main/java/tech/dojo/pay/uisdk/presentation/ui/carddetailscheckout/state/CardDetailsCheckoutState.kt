@@ -44,7 +44,7 @@ internal data class CheckBoxItem(
     val messageText: String,
     val isChecked: Boolean,
     val isVisible: Boolean,
-){
+) {
     fun updateText(newValue: String) =
         copy(messageText = newValue)
 

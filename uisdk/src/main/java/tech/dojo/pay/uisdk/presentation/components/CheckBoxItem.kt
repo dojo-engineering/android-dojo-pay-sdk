@@ -30,7 +30,6 @@ internal fun CheckBoxItem(
     onCheckedChange: (Boolean) -> Unit,
 ) {
     val checkedState = remember { mutableStateOf(isChecked) }
-
     Row(
         modifier = modifier
             .fillMaxWidth()

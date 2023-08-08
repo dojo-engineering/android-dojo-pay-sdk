@@ -47,6 +47,7 @@
             android:layout_gravity="center" />
 
     </FrameLayout>
+
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkboxSandbox"
         android:layout_width="wrap_content"

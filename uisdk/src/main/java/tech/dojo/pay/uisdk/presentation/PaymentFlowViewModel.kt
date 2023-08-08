@@ -14,7 +14,6 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
-import tech.dojo.pay.uisdk.entities.DojoPaymentType.*
 import tech.dojo.pay.uisdk.entities.LightColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.darkColorPalette
 import tech.dojo.pay.uisdk.presentation.components.theme.lightColorPalette
@@ -77,7 +76,7 @@ internal class PaymentFlowViewModel(
         )
         if (isInitCorrectly) {
             currentCustomerId = paymentIntentResult.result.customerId
-            if (paymentType == PAYMENT_CARD) {
+            if (paymentType == DojoPaymentType.PAYMENT_CARD) {
                 fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
                     paymentType,
                     paymentIntentResult.result.customerId ?: "",
@@ -142,9 +141,9 @@ internal class PaymentFlowViewModel(
 
     fun getFlowStartDestination(): PaymentFlowScreens {
         return when (paymentType) {
-            PAYMENT_CARD -> PaymentFlowScreens.PaymentMethodCheckout
-            SETUP_INTENT -> PaymentFlowScreens.CardDetailsCheckout
-            VIRTUAL_TERMINAL -> PaymentFlowScreens.VirtualTerminalCheckOutScreen
+            DojoPaymentType.PAYMENT_CARD -> PaymentFlowScreens.PaymentMethodCheckout
+            DojoPaymentType.SETUP_INTENT -> PaymentFlowScreens.CardDetailsCheckout
+            DojoPaymentType.VIRTUAL_TERMINAL -> PaymentFlowScreens.VirtualTerminalCheckOutScreen
         }
     }
 

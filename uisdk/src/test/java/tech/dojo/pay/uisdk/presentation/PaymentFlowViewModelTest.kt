@@ -56,25 +56,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             // act
             PaymentFlowViewModel(
                 paymentId,
@@ -126,25 +110,9 @@ internal class PaymentFlowViewModelTest {
             val expected = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
 
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(false)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             // act
             val viewModel = PaymentFlowViewModel(
                 paymentId,
@@ -166,25 +134,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             // act
             val viewModel = PaymentFlowViewModel(
                 paymentId,
@@ -206,25 +158,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             // act
             val viewModel = PaymentFlowViewModel(
                 paymentId,
@@ -245,25 +181,9 @@ internal class PaymentFlowViewModelTest {
     fun `calling onBackClicked should emits OnBack`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
+            MutableStateFlow(successPaymentIntent())
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
-                ),
-            ),
-        )
         val expected = PaymentFlowNavigationEvents.OnBack
         // act
         val viewModel = PaymentFlowViewModel(
@@ -287,25 +207,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             val expected =
                 PaymentFlowNavigationEvents.PaymentMethodsCheckOutWithSelectedPaymentMethod()
             // act
@@ -329,25 +233,9 @@ internal class PaymentFlowViewModelTest {
     fun `calling onCloseFlowClicked should emits OnCloseFlow`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
+            MutableStateFlow(successPaymentIntent())
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
-                ),
-            ),
-        )
         val expected = PaymentFlowNavigationEvents.OnCloseFlow
         // act
         val viewModel = PaymentFlowViewModel(
@@ -371,25 +259,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             val expected =
                 PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.SUCCESSFUL, true)
             // act
@@ -414,25 +286,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             val expected = PaymentFlowNavigationEvents.PaymentResult(
                 DojoPaymentResult.SDK_INTERNAL_ERROR,
                 false,
@@ -459,25 +315,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             val expected =
                 PaymentFlowNavigationEvents.PaymentResult(DojoPaymentResult.FAILED, false)
             // act
@@ -501,25 +341,9 @@ internal class PaymentFlowViewModelTest {
     fun `calling navigateToCardDetailsCheckoutScreen should emits CardDetailsCheckout`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
+            MutableStateFlow(successPaymentIntent())
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    customerId = "customerId",
-                ),
-            ),
-        )
         val expected = PaymentFlowNavigationEvents.CardDetailsCheckout
         // act
         val viewModel = PaymentFlowViewModel(
@@ -544,25 +368,9 @@ internal class PaymentFlowViewModelTest {
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+                MutableStateFlow(successPaymentIntent())
             whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
             whenever(isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(any(), any())).thenReturn(true)
-            paymentIntentFakeFlow.tryEmit(
-                PaymentIntentResult.Success(
-                    result = PaymentIntentDomainEntity(
-                        "id",
-                        "token",
-                        AmountDomainEntity(
-                            10L,
-                            "100",
-                            "GBP",
-                        ),
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                        collectionBillingAddressRequired = true,
-                        customerId = "customerId",
-                    ),
-                ),
-            )
             val expected = PaymentFlowNavigationEvents.ManagePaymentMethods("customerId")
             // act
             val viewModel = PaymentFlowViewModel(
@@ -736,4 +544,19 @@ internal class PaymentFlowViewModelTest {
             // assert
             Assert.assertEquals(expected, actual)
         }
+
+    private fun successPaymentIntent() = PaymentIntentResult.Success(
+        result = PaymentIntentDomainEntity(
+            "id",
+            "token",
+            AmountDomainEntity(
+                10L,
+                "100",
+                "GBP",
+            ),
+            supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+            collectionBillingAddressRequired = true,
+            customerId = "customerId",
+        ),
+    )
 }

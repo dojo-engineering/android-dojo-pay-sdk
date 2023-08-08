@@ -28,17 +28,19 @@ internal class CardCheckOutFullCardPaymentPayloadMapper {
             ),
         )
 
-    private fun getExpiryMonth(currentState: CardDetailsCheckoutState) =
-        if (currentState.cardExpireDateInputField.value.isNotBlank()) {
+    private fun getExpiryMonth(currentState: CardDetailsCheckoutState): String {
+        return if (currentState.cardExpireDateInputField.value.isNotBlank() && currentState.cardExpireDateInputField.value.length > 2) {
             currentState.cardExpireDateInputField.value.substring(0, 2)
         } else {
             ""
         }
+    }
 
-    private fun getExpiryYear(currentState: CardDetailsCheckoutState) =
-        if (currentState.cardExpireDateInputField.value.isNotBlank() && currentState.cardExpireDateInputField.value.length > 2) {
+    private fun getExpiryYear(currentState: CardDetailsCheckoutState): String {
+        return if (currentState.cardExpireDateInputField.value.isNotBlank() && currentState.cardExpireDateInputField.value.length == 4) {
             currentState.cardExpireDateInputField.value.substring(2, 4)
         } else {
             ""
         }
+    }
 }

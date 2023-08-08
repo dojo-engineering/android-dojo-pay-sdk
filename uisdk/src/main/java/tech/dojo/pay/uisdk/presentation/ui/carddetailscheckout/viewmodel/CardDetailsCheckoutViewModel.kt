@@ -359,7 +359,7 @@ internal class CardDetailsCheckoutViewModel(
         CardCheckOutHeaderType.AMOUNT_HEADER
     }
 
-    private fun getToolBarTitle() = if (!isStartDestination) {
+    private fun getToolBarTitle() = if (isStartDestination) {
         stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
     } else {
         stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
