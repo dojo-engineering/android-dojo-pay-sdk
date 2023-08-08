@@ -3,8 +3,8 @@ package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
@@ -23,33 +23,33 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with email and billing enabled then should returns correct payload with email and billing address`() {
+    fun `when calling getPaymentPayLoad with email and billing enabled then should returns correct payload with email and billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
-        whenever(currentState.emailInputField).thenReturn(InputFieldState("test@example.com"))
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(true)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(true)
-        whenever(currentState.currentSelectedCountry).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(true)
+        given(currentState.emailInputField).willReturn(InputFieldState("test@example.com"))
+        given(currentState.isBillingCountryFieldRequired).willReturn(true)
+        given(currentState.isPostalCodeFieldRequired).willReturn(true)
+        given(currentState.currentSelectedCountry).willReturn(
             SupportedCountriesViewEntity(
                 countryCode = "US",
                 countryName = "USA",
                 isPostalCodeEnabled = false,
             ),
         )
-        whenever(currentState.postalCodeField).thenReturn(InputFieldState("12345"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.postalCodeField).willReturn(InputFieldState("12345"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = false,
                 isChecked = true,
                 messageText = "",
             ),
         )
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
@@ -77,33 +77,33 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with email enabled and billing is disabled then should returns correct payload with email but without billing address`() {
+    fun `when calling getPaymentPayLoad with email enabled and billing is disabled then should returns correct payload with email but without billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
-        whenever(currentState.emailInputField).thenReturn(InputFieldState("test@example.com"))
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.currentSelectedCountry).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(true)
+        given(currentState.emailInputField).willReturn(InputFieldState("test@example.com"))
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.currentSelectedCountry).willReturn(
             SupportedCountriesViewEntity(
                 countryCode = "US",
                 countryName = "USA",
                 isPostalCodeEnabled = false,
             ),
         )
-        whenever(currentState.postalCodeField).thenReturn(InputFieldState("12345"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.postalCodeField).willReturn(InputFieldState("12345"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = false,
                 isChecked = true,
                 messageText = "",
             ),
         )
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
@@ -135,17 +135,17 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with email and billing is disabled then should returns correct payload without email and billing address`() {
+    fun `when calling getPaymentPayLoad with email and billing is disabled then should returns correct payload without email and billing address`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(false)
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = false,
@@ -174,17 +174,17 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with valid month then should returns correct month`() {
+    fun `when calling getPaymentPayLoad with valid month then should returns correct month`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(false)
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = false,
@@ -202,17 +202,17 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with blank month then should returns empty string`() {
+    fun `when calling getPaymentPayLoad with blank month then should returns empty string`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState(""))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(false)
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState(""))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = false,
@@ -230,17 +230,17 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with valid year then should returns correct year`() {
+    fun `when calling getPaymentPayLoad with valid year then should returns correct year`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(false)
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = false,
@@ -258,17 +258,17 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with blank year then should returns empty string`() {
+    fun `when calling getPaymentPayLoad with blank year then should returns empty string`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(false)
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(false)
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(false)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState(""))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(false)
+        given(currentState.isBillingCountryFieldRequired).willReturn(false)
+        given(currentState.isPostalCodeFieldRequired).willReturn(false)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState(""))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = false,
@@ -286,27 +286,27 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with isStartDestination as true then should returns correct payload with savePaymentMethod as null and mitConsentGiven as checkBox state`() {
+    fun `when calling getPaymentPayLoad with isStartDestination as true then should returns correct payload with savePaymentMethod as null and mitConsentwhen as checkBox state`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
-        whenever(currentState.emailInputField).thenReturn(InputFieldState("test@example.com"))
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(true)
-        whenever(currentState.currentSelectedCountry).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(true)
+        given(currentState.emailInputField).willReturn(InputFieldState("test@example.com"))
+        given(currentState.isBillingCountryFieldRequired).willReturn(true)
+        given(currentState.currentSelectedCountry).willReturn(
             SupportedCountriesViewEntity(
                 countryCode = "US",
                 countryName = "USA",
                 isPostalCodeEnabled = false,
             ),
         )
-        whenever(currentState.postalCodeField).thenReturn(InputFieldState("12345"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(true)
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState(""))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.postalCodeField).willReturn(InputFieldState("12345"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.isPostalCodeFieldRequired).willReturn(true)
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState(""))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = true,
                 isChecked = true,
@@ -339,26 +339,26 @@ class CardCheckOutFullCardPaymentPayloadMapperTest {
     }
 
     @Test
-    fun `given calling getPaymentPayLoad with isStartDestination as false and checkBox is inVisible then  should returns correct payload with savePaymentMethod as null`() {
+    fun `when calling getPaymentPayLoad with isStartDestination as false and checkBox is inVisible then  should returns correct payload with savePaymentMethod as null`() {
         // Arrange
         val currentState: CardDetailsCheckoutState = mock()
-        whenever(currentState.isEmailInputFieldRequired).thenReturn(true)
-        whenever(currentState.emailInputField).thenReturn(InputFieldState("test@example.com"))
-        whenever(currentState.isBillingCountryFieldRequired).thenReturn(true)
-        whenever(currentState.currentSelectedCountry).thenReturn(
+        given(currentState.isEmailInputFieldRequired).willReturn(true)
+        given(currentState.emailInputField).willReturn(InputFieldState("test@example.com"))
+        given(currentState.isBillingCountryFieldRequired).willReturn(true)
+        given(currentState.currentSelectedCountry).willReturn(
             SupportedCountriesViewEntity(
                 countryCode = "US",
                 countryName = "USA",
                 isPostalCodeEnabled = false,
             ),
         )
-        whenever(currentState.isPostalCodeFieldRequired).thenReturn(true)
-        whenever(currentState.postalCodeField).thenReturn(InputFieldState("12345"))
-        whenever(currentState.cardNumberInputField).thenReturn(InputFieldState("1234567812345678"))
-        whenever(currentState.cardHolderInputField).thenReturn(InputFieldState("John Doe"))
-        whenever(currentState.cardExpireDateInputField).thenReturn(InputFieldState("1225"))
-        whenever(currentState.cvvInputFieldState).thenReturn(InputFieldState("123"))
-        whenever(currentState.checkBoxItem).thenReturn(
+        given(currentState.isPostalCodeFieldRequired).willReturn(true)
+        given(currentState.postalCodeField).willReturn(InputFieldState("12345"))
+        given(currentState.cardNumberInputField).willReturn(InputFieldState("1234567812345678"))
+        given(currentState.cardHolderInputField).willReturn(InputFieldState("John Doe"))
+        given(currentState.cardExpireDateInputField).willReturn(InputFieldState("1225"))
+        given(currentState.cvvInputFieldState).willReturn(InputFieldState("123"))
+        given(currentState.checkBoxItem).willReturn(
             CheckBoxItem(
                 isVisible = false,
                 isChecked = true,

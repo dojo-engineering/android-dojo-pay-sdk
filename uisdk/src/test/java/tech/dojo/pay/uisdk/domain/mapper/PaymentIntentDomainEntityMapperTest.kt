@@ -30,7 +30,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 @RunWith(MockitoJUnitRunner::class)
 internal class PaymentIntentDomainEntityMapperTest {
     @Test
-    fun `given calling apply with valid PaymentIntentPayload then should map to PaymentIntentDomainEntity with all valid data`() =
+    fun `when calling apply with valid PaymentIntentPayload then should map to PaymentIntentDomainEntity with all valid data`() =
         runTest {
             // arrange
             val raw = createValidPaymentIntentPayload()
@@ -42,7 +42,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         }
 
     @Test
-    fun `given calling apply with invalid PaymentIntentPayload should Thrown EssentialParamMissingException that contains all the missing fields`() =
+    fun `when calling apply with invalid PaymentIntentPayload should Thrown EssentialParamMissingException that contains all the missing fields`() =
         runTest {
             // arrange
             val raw = PaymentIntentPayload()
