@@ -52,8 +52,15 @@ internal fun MerchantInfoWithSupportedNetworksHeader(
     }
 }
 
-@Preview("MerchantIInfoWithSupportedNetworksHeader", group = "MerchantIInfoWithSupportedNetworksHeader")
+@Preview(
+    "MerchantInfoWithSupportedNetworksHeader",
+    group = "MerchantInfoWithSupportedNetworksHeader",
+)
 @Composable
-private fun PreviewMerchantIInfoWithSupportedNetworksHeader() = DojoPreview {
-    MerchantInfoWithSupportedNetworksHeader(merchantName = "El pastor", orderId = "12312312", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
+private fun PreviewMerchantInfoWithSupportedNetworksHeader() = DojoPreview {
+    MerchantInfoWithSupportedNetworksHeader(
+        merchantName = "El pastor",
+        orderId = "12312312",
+        allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex),
+    )
 }

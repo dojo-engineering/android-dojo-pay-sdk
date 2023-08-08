@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.domain
 
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
@@ -8,6 +9,12 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 
 class IsSDKInitializedCorrectlyUseCaseTest {
+    private lateinit var useCase: IsSDKInitializedCorrectlyUseCase
+
+    @Before
+    fun setUp() {
+        useCase = IsSDKInitializedCorrectlyUseCase()
+    }
 
     @Test
     fun `when calling isSDKInitiatedCorrectly with Virtual Terminal PaymentIntent, isSDKInitiatedCorrectly then should return true`() {
@@ -15,7 +22,6 @@ class IsSDKInitializedCorrectlyUseCaseTest {
         val paymentIntent: PaymentIntentDomainEntity = mock()
         val paymentType = DojoPaymentType.VIRTUAL_TERMINAL
         given(paymentIntent.isVirtualTerminalPayment).willReturn(true)
-        val useCase = IsSDKInitializedCorrectlyUseCase()
 
         // when
         val result = useCase.isSDKInitiatedCorrectly(paymentIntent, paymentType)
@@ -30,7 +36,6 @@ class IsSDKInitializedCorrectlyUseCaseTest {
         val paymentIntent: PaymentIntentDomainEntity = mock()
         val paymentType = DojoPaymentType.SETUP_INTENT
         given(paymentIntent.isSetUpIntentPayment).willReturn(true)
-        val useCase = IsSDKInitializedCorrectlyUseCase()
 
         // when
         val result = useCase.isSDKInitiatedCorrectly(paymentIntent, paymentType)
@@ -44,7 +49,6 @@ class IsSDKInitializedCorrectlyUseCaseTest {
         // Given
         val paymentIntent: PaymentIntentDomainEntity = mock()
         val paymentType = DojoPaymentType.PAYMENT_CARD
-        val useCase = IsSDKInitializedCorrectlyUseCase()
 
         // when
         val result = useCase.isSDKInitiatedCorrectly(paymentIntent, paymentType)
@@ -58,7 +62,6 @@ class IsSDKInitializedCorrectlyUseCaseTest {
         // Given
         val paymentIntent: PaymentIntentDomainEntity = mock()
         val paymentType = DojoPaymentType.SETUP_INTENT
-        val useCase = IsSDKInitializedCorrectlyUseCase()
 
         // when
         val result = useCase.isSDKInitiatedCorrectly(paymentIntent, paymentType)
