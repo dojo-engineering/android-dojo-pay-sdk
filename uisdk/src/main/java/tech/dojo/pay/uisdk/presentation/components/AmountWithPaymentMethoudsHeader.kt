@@ -79,6 +79,6 @@ internal fun HeaderItem(
 
 @Preview("AmountBanner", group = "Footer")
 @Composable
-internal fun PreviewAmountBanner() = DojoPreview {
+private fun PreviewAmountBanner() = DojoPreview {
     HeaderItem(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
 }
