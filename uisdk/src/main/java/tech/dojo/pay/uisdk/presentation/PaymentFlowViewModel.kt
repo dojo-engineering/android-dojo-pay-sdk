@@ -9,9 +9,9 @@ import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.entities.LightColorPalette
@@ -30,6 +30,7 @@ internal class PaymentFlowViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
+    private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase,
 ) : ViewModel() {
 
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
@@ -40,7 +41,12 @@ internal class PaymentFlowViewModel(
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
-                    it?.let { paymentIntentResult -> handlePaymentIntentResult(paymentIntentResult, customerSecret) }
+                    it?.let { paymentIntentResult ->
+                        handlePaymentIntentResult(
+                            paymentIntentResult,
+                            customerSecret,
+                        )
+                    }
                 }
             } catch (error: Throwable) {
                 closeFlowWithInternalError()
@@ -64,33 +70,33 @@ internal class PaymentFlowViewModel(
         paymentIntentResult: PaymentIntentResult.Success,
         customerSecret: String,
     ) {
-        if (isSDKInitiatedCorrectly(paymentIntentResult.result)) {
+        val isInitCorrectly = isSDKInitializedCorrectlyUseCase.isSDKInitiatedCorrectly(
+            paymentIntentResult.result,
+            paymentType,
+        )
+        if (isInitCorrectly) {
             currentCustomerId = paymentIntentResult.result.customerId
-            fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
-                paymentType,
-                paymentIntentResult.result.customerId ?: "",
-                customerSecret,
+            if (paymentType == DojoPaymentType.PAYMENT_CARD) {
+                fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
+                    paymentType,
+                    paymentIntentResult.result.customerId ?: "",
+                    customerSecret,
 
-            )
+                )
+            }
         } else {
             closeFlowWithInternalError()
-        }
-    }
-
-    private fun isSDKInitiatedCorrectly(paymentIntent: PaymentIntentDomainEntity): Boolean {
-        return if (paymentIntent.isVirtualTerminalPayment && paymentType == DojoPaymentType.VIRTUAL_TERMINAL) {
-            true
-        } else {
-            !paymentIntent.isVirtualTerminalPayment && paymentType == DojoPaymentType.PAYMENT_CARD
         }
     }
 
     fun updatePaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updatePaymentSate(isActivity)
     }
+
     fun updateGpayPaymentState(isActivity: Boolean) {
         updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
     }
+
     private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
@@ -136,10 +142,11 @@ internal class PaymentFlowViewModel(
     fun getFlowStartDestination(): PaymentFlowScreens {
         return when (paymentType) {
             DojoPaymentType.PAYMENT_CARD -> PaymentFlowScreens.PaymentMethodCheckout
-            DojoPaymentType.CARD_ON_FILE -> PaymentFlowScreens.CardDetailsCheckout
+            DojoPaymentType.SETUP_INTENT -> PaymentFlowScreens.CardDetailsCheckout
             DojoPaymentType.VIRTUAL_TERMINAL -> PaymentFlowScreens.VirtualTerminalCheckOutScreen
         }
     }
+
     fun isPaymentInSandBoxEnvironment(): Boolean = paymentId.lowercase().contains("sandbox")
 
     fun getCustomColorPalette(isDarkModeEnabled: Boolean) = if (isDarkModeEnabled) {

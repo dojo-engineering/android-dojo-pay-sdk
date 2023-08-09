@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
+import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
@@ -12,6 +13,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.SupportedCountriesViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 
@@ -19,6 +21,7 @@ class CardDetailsCheckoutViewModelFactory(
     private val dojoCardPaymentHandler: DojoCardPaymentHandler,
     private val isDarkModeEnabled: Boolean,
     private val context: Context,
+    private val isStartDestination: Boolean,
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -39,6 +42,8 @@ class CardDetailsCheckoutViewModelFactory(
         val allowedPaymentMethodsViewEntityMapper =
             AllowedPaymentMethodsViewEntityMapper(isDarkModeEnabled)
         val cardCheckoutScreenValidator = CardCheckoutScreenValidator()
+        val fullCardPaymentPayloadMapper = CardCheckOutFullCardPaymentPayloadMapper()
+        val stringProvider = StringProvider(context)
 
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
@@ -49,6 +54,9 @@ class CardDetailsCheckoutViewModelFactory(
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
             cardCheckoutScreenValidator,
+            fullCardPaymentPayloadMapper,
+            stringProvider,
+            isStartDestination,
         ) as T
     }
 }

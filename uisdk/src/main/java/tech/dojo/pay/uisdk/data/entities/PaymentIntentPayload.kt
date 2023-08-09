@@ -12,6 +12,7 @@ internal data class PaymentIntentPayload(
     val status: String? = null,
     val paymentMethods: List<String>? = null,
     val amount: Amount? = null,
+    val intendedAmount: Amount? = null,
     val tipsAmount: Amount? = null,
     val requestedAmount: Amount? = null,
     val customer: Customer? = null,
@@ -25,17 +26,18 @@ internal data class PaymentIntentPayload(
     val paymentSource: String? = null,
     val config: Config? = null,
     val itemLines: List<ItemLines>? = null,
-    val metadata: Metadata? = null
+    val merchantInitiatedType: String? = null,
+    val metadata: Metadata? = null,
 )
 
 internal data class ItemLines(
     val caption: String,
-    val amountTotal: Amount
+    val amountTotal: Amount,
 )
 
 internal data class Amount(
     val value: Long,
-    val currencyCode: String
+    val currencyCode: String,
 )
 
 internal data class Config(
@@ -43,33 +45,33 @@ internal data class Config(
     val branding: Branding,
     val customerEmail: CustomerEmail,
     val billingAddress: BillingAddress,
-    val shippingDetails: ShippingAddress
+    val shippingDetails: ShippingAddress,
 )
 
 internal data class CustomerEmail(
-    val collectionRequired: Boolean
+    val collectionRequired: Boolean,
 )
 
 data class BillingAddress(
-    val collectionRequired: Boolean
+    val collectionRequired: Boolean,
 )
 
 data class ShippingAddress(
-    val collectionRequired: Boolean
+    val collectionRequired: Boolean,
 )
 
 internal data class Branding(
     val logoURL: String,
-    val faviconURL: String
+    val faviconURL: String,
 )
 
 internal data class MerchantConfig(
-    val supportedPaymentMethods: SupportedPaymentMethods? = null
+    val supportedPaymentMethods: SupportedPaymentMethods? = null,
 )
 
 internal data class SupportedPaymentMethods(
     val cardSchemes: List<CardsSchemes>? = null,
-    val wallets: List<WalletSchemes>? = null
+    val wallets: List<WalletSchemes>? = null,
 )
 
 data class Metadata(val locationID: String)

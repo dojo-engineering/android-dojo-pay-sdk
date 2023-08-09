@@ -21,11 +21,11 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun AmountWithPaymentMethodsHeader(
+internal fun HeaderItem(
     modifier: Modifier = Modifier,
     amount: String,
     currencyLogo: String,
-    allowedPaymentMethodsIcons: List<Int>
+    allowedPaymentMethodsIcons: List<Int>,
 ) {
     Box(modifier = modifier) {
         Column(
@@ -40,7 +40,7 @@ internal fun AmountWithPaymentMethodsHeader(
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = DojoTheme.typography.h6.medium,
-                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
+                color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
             )
 
             Row(
@@ -48,7 +48,7 @@ internal fun AmountWithPaymentMethodsHeader(
                     .fillMaxWidth()
                     .heightIn(min = 30.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
 
             ) {
                 Text(
@@ -56,20 +56,20 @@ internal fun AmountWithPaymentMethodsHeader(
                         start = 0.dp,
                         top = 12.dp,
                         bottom = 2.dp,
-                        end = 8.dp
+                        end = 8.dp,
                     ),
                     text = currencyLogo,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.h3.medium,
-                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
+                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
                 )
                 Text(
                     text = amount,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = DojoTheme.typography.h1.medium,
-                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
+                    color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
                 )
             }
             SupportedPaymentMethods(Modifier.padding(top = 16.dp), allowedPaymentMethodsIcons)
@@ -79,6 +79,6 @@ internal fun AmountWithPaymentMethodsHeader(
 
 @Preview("AmountBanner", group = "Footer")
 @Composable
-internal fun PreviewAmountBanner() = DojoPreview {
-    AmountWithPaymentMethodsHeader(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
+private fun PreviewAmountBanner() = DojoPreview {
+    HeaderItem(amount = "95.70", currencyLogo = "£", allowedPaymentMethodsIcons = listOf(R.drawable.ic_amex))
 }

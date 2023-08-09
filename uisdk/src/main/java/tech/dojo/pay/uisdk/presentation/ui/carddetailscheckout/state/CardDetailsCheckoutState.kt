@@ -1,36 +1,76 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
-import androidx.annotation.StringRes
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
-    val totalAmount: String,
-    val amountCurrency: String,
-    val allowedPaymentMethodsIcons: List<Int>,
-    val cardHolderInputField: InputFieldState,
-    val emailInputField: InputFieldState,
-    val isEmailInputFieldRequired: Boolean,
-    val cardNumberInputField: InputFieldState,
-    val cardExpireDateInputField: InputFieldState,
-    val cvvInputFieldState: InputFieldState,
-    val isBillingCountryFieldRequired: Boolean,
-    val supportedCountriesList: List<SupportedCountriesViewEntity>,
-    val currentSelectedCountry: SupportedCountriesViewEntity,
-    val isPostalCodeFieldRequired: Boolean,
-    val postalCodeField: InputFieldState,
-    val saveCardCheckBox: CheckBoxItem,
-    val isLoading: Boolean,
-    val isEnabled: Boolean
+    var isLoading: Boolean = false,
+    var toolbarTitle: String = "",
+    var headerType: CardCheckOutHeaderType = CardCheckOutHeaderType.AMOUNT_HEADER,
+    var orderId: String? = null,
+    var merchantName: String? = null,
+    var totalAmount: String = "",
+    var amountCurrency: String = "",
+    var allowedPaymentMethodsIcons: List<Int> = listOf(),
+    var cardHolderInputField: InputFieldState = InputFieldState(value = ""),
+    var emailInputField: InputFieldState = InputFieldState(value = ""),
+    var isEmailInputFieldRequired: Boolean = false,
+    var cardNumberInputField: InputFieldState = InputFieldState(value = ""),
+    var cardExpireDateInputField: InputFieldState = InputFieldState(value = ""),
+    var cvvInputFieldState: InputFieldState = InputFieldState(value = ""),
+    var isBillingCountryFieldRequired: Boolean = false,
+    var supportedCountriesList: List<SupportedCountriesViewEntity> = listOf(),
+    var currentSelectedCountry: SupportedCountriesViewEntity = SupportedCountriesViewEntity(
+        "",
+        "",
+        false,
+    ),
+    var isPostalCodeFieldRequired: Boolean = false,
+    var postalCodeField: InputFieldState = InputFieldState(value = ""),
+    var checkBoxItem: CheckBoxItem = CheckBoxItem(
+        isVisible = false,
+        isChecked = false,
+        messageText = "",
+    ),
+    var actionButtonState: ActionButtonState = ActionButtonState(),
 )
 
 internal data class InputFieldState(
     val value: String,
-    @StringRes val errorMessages: Int? = null,
-    val isError: Boolean = false
+    val errorMessages: String? = null,
+    val isError: Boolean = false,
 )
 
 internal data class CheckBoxItem(
-    @StringRes val messageText: Int,
+    val messageText: String,
     val isChecked: Boolean,
-    val isVisible: Boolean
-)
+    val isVisible: Boolean,
+) {
+    fun updateText(newValue: String) =
+        copy(messageText = newValue)
+
+    fun updateIsChecked(newValue: Boolean) =
+        copy(isChecked = newValue)
+
+    fun updateIsVisible(newValue: Boolean) =
+        copy(isVisible = newValue)
+}
+
+internal data class ActionButtonState(
+    val isLoading: Boolean = false,
+    val isEnabled: Boolean = false,
+    val text: String = "",
+) {
+    fun updateIsEnabled(newValue: Boolean) =
+        copy(isEnabled = newValue)
+
+    fun updateIsLoading(newValue: Boolean) =
+        copy(isLoading = newValue)
+
+    fun updateText(newValue: String) =
+        copy(text = newValue)
+}
+
+internal enum class CardCheckOutHeaderType {
+    AMOUNT_HEADER,
+    MERCHANT_HEADER,
+}

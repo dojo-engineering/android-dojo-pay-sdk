@@ -7,5 +7,6 @@ data class DojoCardDetails(
     val cardName: String? = null,
     val expiryMonth: String? = null,
     val expiryYear: String? = null,
-    val cv2: String? = null
+    val cv2: String? = null,
+    val mitConsentGiven: Boolean? = null,
 ) : Serializable

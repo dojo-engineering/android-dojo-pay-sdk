@@ -4,6 +4,6 @@ import java.io.Serializable
 
 enum class DojoPaymentType : Serializable {
     PAYMENT_CARD,
-    CARD_ON_FILE,
+    SETUP_INTENT,
     VIRTUAL_TERMINAL,
 }
