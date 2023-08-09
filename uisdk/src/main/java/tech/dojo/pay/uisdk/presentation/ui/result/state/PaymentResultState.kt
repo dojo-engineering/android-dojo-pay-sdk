@@ -1,35 +1,21 @@
 package tech.dojo.pay.uisdk.presentation.ui.result.state
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-
-sealed class PaymentResultState(
-    @StringRes
-    open val appBarTitleId: Int
-) {
-    data class SuccessfulResult(
-        @StringRes
-        override val appBarTitleId: Int,
-        @DrawableRes
+internal sealed class PaymentResultState( open val appBarTitle: String) {
+    internal data class SuccessfulResult(
+        override val appBarTitle: String,
         val imageId: Int,
-        @StringRes
-        val status: Int,
+        val status: String,
         val orderInfo: String,
         val description: String,
-    ) : PaymentResultState(appBarTitleId)
+    ) : PaymentResultState(appBarTitle)
 
-    data class FailedResult(
-        @StringRes
-        override val appBarTitleId: Int,
-        @DrawableRes
+    internal data class FailedResult(
+        override val appBarTitle: String,
         val imageId: Int,
-        val showTryAgain: Boolean,
-        @StringRes
-        val status: Int,
+        val status: String,
         val orderInfo: String,
         val isTryAgainLoading: Boolean,
         val shouldNavigateToPreviousScreen: Boolean,
-        @StringRes
-        val details: Int
-    ) : PaymentResultState(appBarTitleId)
+        val details: Int,
+    ) : PaymentResultState(appBarTitle)
 }

@@ -32,6 +32,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHand
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
+import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.rememberWindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -53,7 +54,6 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.Payme
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.result.ShowResultSheetScreen
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
-import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.VirtualTerminalCheckOutScreen
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModelFactory
@@ -401,13 +401,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         ) {
             val result = it.arguments?.get(DOJO_PAYMENT_RESULT_PARAMS_KEY) as DojoPaymentResult
 
-            val paymentResultViewModel: PaymentResultViewModel by viewModels {
-                PaymentResultViewModelFactory(
-                    result,
-                    arguments,
-                    isDarkModeEnabled
-                )
-            }
+            val paymentResultViewModel = PaymentResultViewModel(result,isDarkModeEnabled,StringProvider(this@PaymentFlowContainerActivity))
 
             AnimatedVisibility(
                 visible = true,
