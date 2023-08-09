@@ -251,6 +251,80 @@ internal class PaymentIntentProviderTest {
         assertTrue(actualPaymentIntentResult.isBlank())
     }
 
+    @Test
+    fun `when refreshSetupIntent success onRefreshSetUpIntentSuccess should be invoked`() = runTest {
+        // arrange
+        val paymentId = "paymentId"
+        val paymentIntent = "paymentIntent"
+        var actualPaymentIntentResult = ""
+
+        coEvery {
+            paymentIntentRepository.refreshSetUpIntent(any())
+        }.answers { DojoPaymentIntentResult.Success(paymentIntent) }
+        val onRefreshSetUpIntentSuccess: (paymentIntentJson: String) -> Unit = {
+            actualPaymentIntentResult = paymentIntent
+        }
+        val onRefreshSetUpIntentFailed: () -> Unit = {}
+        // act
+        paymentIntentProvider.refreshSetUpIntent(
+            paymentId = paymentId,
+            onRefreshSetUpIntentSuccess = onRefreshSetUpIntentSuccess,
+            onRefreshSetUpIntentFailed = onRefreshSetUpIntentFailed,
+        )
+
+        // assert
+        assertEquals(actualPaymentIntentResult, paymentIntent)
+    }
+
+    @Test
+    fun `when refreshSetupIntent fails onRefreshSetUpIntentFailed should be invoked`() = runTest {
+        // arrange
+        val paymentId = "paymentId"
+        var actualPaymentIntentResult = ""
+
+        coEvery {
+            paymentIntentRepository.refreshSetUpIntent(any())
+        }.answers { DojoPaymentIntentResult.Failed }
+        val onRefreshSetUpIntentSuccess: (paymentIntentJson: String) -> Unit = {}
+        val onRefreshSetUpIntentFailed: () -> Unit = {
+            actualPaymentIntentResult = ""
+        }
+        // act
+        paymentIntentProvider.refreshSetUpIntent(
+            paymentId = paymentId,
+            onRefreshSetUpIntentSuccess = onRefreshSetUpIntentSuccess,
+            onRefreshSetUpIntentFailed = onRefreshSetUpIntentFailed,
+        )
+
+        // assert
+        assertTrue(actualPaymentIntentResult.isBlank())
+    }
+
+    @Test
+    fun `when refreshSetupIntent Throws onRefreshSetUpIntentFailed should be invoked`() = runTest {
+        // arrange
+        val paymentId = "paymentId"
+        var actualPaymentIntentResult = ""
+        val exception = Exception()
+
+        coEvery {
+            paymentIntentRepository.refreshSetUpIntent(any())
+        }.throws(exception)
+        val onRefreshSetUpIntentSuccess: (paymentIntentJson: String) -> Unit = {}
+        val onRefreshSetUpIntentFailed: () -> Unit = {
+            actualPaymentIntentResult = ""
+        }
+        // act
+        paymentIntentProvider.refreshSetUpIntent(
+            paymentId = paymentId,
+            onRefreshSetUpIntentSuccess = onRefreshSetUpIntentSuccess,
+            onRefreshSetUpIntentFailed = onRefreshSetUpIntentFailed,
+        )
+
+        // assert
+        assertTrue(actualPaymentIntentResult.isBlank())
+    }
+
     @After
     fun tearDown() {
         coVerify {

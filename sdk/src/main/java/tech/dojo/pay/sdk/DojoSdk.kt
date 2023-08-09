@@ -204,6 +204,18 @@ object DojoSdk {
     }
 
     /**
+     * refresh setUp intent object in format of json for specific payment id
+     */
+    fun refreshSetupIntent(
+        paymentId: String,
+        onRefreshSetUpIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onRefreshSetUpIntentFailed: () -> Unit,
+    ) {
+        PaymentIntentProvider()
+            .refreshSetUpIntent(paymentId, onRefreshSetUpIntentSuccess, onRefreshSetUpIntentFailed)
+    }
+
+    /**
      * fetch saved payment methods object in format of json for specific customer
      */
 

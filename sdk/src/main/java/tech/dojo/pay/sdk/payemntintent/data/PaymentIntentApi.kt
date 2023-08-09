@@ -29,6 +29,13 @@ interface PaymentIntentApi {
         @Header("Version") version: String = API_VERSION,
         @Header("IS-MOBILE") isMobile: Boolean = true,
     ): Response<JsonObject>
+
+    @POST("setup-intents/public/{paymentId}/refresh-client-session-secret")
+    suspend fun refreshSetupIntent(
+        @Path("paymentId") paymentId: String,
+        @Header("Version") version: String = API_VERSION,
+        @Header("IS-MOBILE") isMobile: Boolean = true,
+    ): Response<JsonObject>
 }
 
 private const val API_VERSION = "2022-04-07"

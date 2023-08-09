@@ -67,4 +67,21 @@ internal class PaymentIntentProvider(
             }
         }
     }
+
+    fun refreshSetUpIntent(
+        paymentId: String,
+        onRefreshSetUpIntentSuccess: (paymentIntentJson: String) -> Unit,
+        onRefreshSetUpIntentFailed: () -> Unit,
+    ) {
+        repositoryScope.launch {
+            try {
+                when (val result = paymentIntentRepository.refreshSetUpIntent(paymentId)) {
+                    is DojoPaymentIntentResult.Success -> onRefreshSetUpIntentSuccess(result.paymentIntentJson)
+                    is DojoPaymentIntentResult.Failed -> onRefreshSetUpIntentFailed()
+                }
+            } catch (throwable: Throwable) {
+                onRefreshSetUpIntentFailed()
+            }
+        }
+    }
 }
