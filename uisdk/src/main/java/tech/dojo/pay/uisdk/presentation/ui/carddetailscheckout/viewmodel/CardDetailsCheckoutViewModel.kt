@@ -368,7 +368,7 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     private fun getToolBarTitle() = if (isStartDestination) {
-        stringProvider.getString(R.string.dojo_ui_sdk_save_card_title)
+        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title_setup_intent)
     } else {
         stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
     }
@@ -379,7 +379,7 @@ internal class CardDetailsCheckoutViewModel(
                 Locale.getDefault(),
                 "%s %s",
                 paymentIntentResult.result.merchantName,
-                stringProvider.getString(R.string.dojo_ui_sdk_save_card_confirmation_message),
+                stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_consent_terms),
             )
         } else {
             stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_save_card)
@@ -387,7 +387,7 @@ internal class CardDetailsCheckoutViewModel(
 
     private fun getActionButtonTitle(paymentIntentResult: PaymentIntentResult.Success) =
         if (isStartDestination) {
-            stringProvider.getString(R.string.dojo_ui_sdk_save_card_button_text)
+            stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title_setup_intent)
         } else {
             String.format(
                 Locale.getDefault(),

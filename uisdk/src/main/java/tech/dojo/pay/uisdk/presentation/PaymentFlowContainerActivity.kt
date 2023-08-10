@@ -33,6 +33,9 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandl
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.StringProvider
+import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.rememberWindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -53,6 +56,7 @@ import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.PaymentMethodsC
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.viewmodel.PaymentMethodCheckoutViewModelFactory
 import tech.dojo.pay.uisdk.presentation.ui.result.ShowResultSheetScreen
+import tech.dojo.pay.uisdk.presentation.ui.result.mapper.PaymentResultViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.VirtualTerminalCheckOutScreen
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
@@ -401,9 +405,24 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             ),
         ) {
             val result = it.arguments?.get(DOJO_PAYMENT_RESULT_PARAMS_KEY) as DojoPaymentResult
+            val observePaymentIntent =
+                ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
+            val paymentType =
+                (
+                    arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
+                        DojoPaymentFlowParams
+                    )?.paymentType ?: DojoPaymentType.PAYMENT_CARD
+            val paymentResultViewEntityMapper = PaymentResultViewEntityMapper(
+                StringProvider(this@PaymentFlowContainerActivity),
+                paymentType,
+                isDarkModeEnabled,
 
-            val paymentResultViewModel = PaymentResultViewModel(result, isDarkModeEnabled, StringProvider(this@PaymentFlowContainerActivity))
-
+            )
+            val paymentResultViewModel = PaymentResultViewModel(
+                result,
+                observePaymentIntent,
+                paymentResultViewEntityMapper,
+            )
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),

@@ -44,7 +44,6 @@ import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
-import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
 
@@ -184,6 +183,14 @@ private fun SuccessfulResult(
             style = DojoTheme.typography.h5.bold,
             color = DojoTheme.colors.primaryLabelTextColor,
         )
+        Text(
+            text = state.orderInfo,
+            style = DojoTheme.typography.subtitle1,
+            textAlign = TextAlign.Center,
+            color = DojoTheme.colors.primaryLabelTextColor,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+
         DojoSpacer(height = 32.dp)
         DojoFullGroundButton(
             modifier = Modifier
@@ -246,15 +253,7 @@ private fun FailedResult(
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + state.orderInfo,
-            style = DojoTheme.typography.subtitle1.medium,
-            textAlign = TextAlign.Center,
-            color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 16.dp),
-        )
-
-        Text(
-            text = stringResource(id = state.details),
+            text = state.details,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -266,13 +265,8 @@ private fun FailedResult(
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
-            isLoading = state.isTryAgainLoading,
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-            onClick = {
-                if (!state.isTryAgainLoading) {
-                    viewModel.onTryAgainClicked()
-                }
-            },
+            onClick = { viewModel.onTryAgainClicked() },
         )
 
         DojoOutlinedButton(

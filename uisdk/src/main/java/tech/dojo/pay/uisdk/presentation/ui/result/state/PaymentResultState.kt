@@ -1,6 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.result.state
 
-internal sealed class PaymentResultState( open val appBarTitle: String) {
+internal sealed class PaymentResultState(open val appBarTitle: String) {
     internal data class SuccessfulResult(
         override val appBarTitle: String,
         val imageId: Int,
@@ -13,9 +13,7 @@ internal sealed class PaymentResultState( open val appBarTitle: String) {
         override val appBarTitle: String,
         val imageId: Int,
         val status: String,
-        val orderInfo: String,
-        val isTryAgainLoading: Boolean,
+        val details: String,
         val shouldNavigateToPreviousScreen: Boolean,
-        val details: Int,
     ) : PaymentResultState(appBarTitle)
 }

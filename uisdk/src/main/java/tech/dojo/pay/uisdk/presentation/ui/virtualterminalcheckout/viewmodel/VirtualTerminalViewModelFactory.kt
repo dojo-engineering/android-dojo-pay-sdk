@@ -57,11 +57,8 @@ internal class VirtualTerminalViewModelFactory(
         )
 
         val paymentType =
-            (
-                arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
-                    DojoPaymentFlowParams
-                )?.paymentType
-                ?: DojoPaymentType.PAYMENT_CARD
+            (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
+                    DojoPaymentFlowParams)?.paymentType ?: DojoPaymentType.PAYMENT_CARD
 
         val refreshPaymentIntentRepository = RefreshPaymentIntentRepository()
 
