@@ -15,6 +15,7 @@ internal class RefreshPaymentIntentRepository(
         MutableStateFlow(null)
 
     fun refreshPaymentIntent(paymentId: String) {
+        paymentIntentResult = MutableStateFlow(null)
         dataSource
             .refreshPaymentIntent(
                 paymentId,
@@ -26,6 +27,7 @@ internal class RefreshPaymentIntentRepository(
     fun refreshSetupIntent(
         paymentId: String,
     ) {
+        paymentIntentResult = MutableStateFlow(null)
         dataSource
             .refreshSetupIntent(
                 paymentId,

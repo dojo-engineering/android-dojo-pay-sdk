@@ -4,15 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
@@ -37,8 +42,11 @@ internal class CardDetailsCheckoutViewModel(
     private val fullCardPaymentPayloadMapper: CardCheckOutFullCardPaymentPayloadMapper,
     private val stringProvider: StringProvider,
     private val isStartDestination: Boolean,
+    private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase,
+    private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
+    private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
 ) : ViewModel() {
-    private lateinit var paymentToken: String
+    private lateinit var paymentIntentId: String
     private var currentState: CardDetailsCheckoutState
     private val mutableState = MutableLiveData<CardDetailsCheckoutState>()
     val state: LiveData<CardDetailsCheckoutState>
@@ -313,7 +321,7 @@ internal class CardDetailsCheckoutViewModel(
             } else {
                 SupportedCountriesViewEntity("", "", true)
             }
-            paymentToken = paymentIntentResult.result.paymentToken
+            paymentIntentId = paymentIntentResult.result.id
             currentState = updateCurrentStateWithPaymentIntent(
                 paymentIntentResult,
                 countryList,
@@ -431,16 +439,31 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onPayWithCardClicked() {
-        viewModelScope.launch { observePaymentIntent() }
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
-        pushStateToUi(
-            currentState.copy(
-                actionButtonState = currentState.actionButtonState.updateIsLoading(newValue = true),
-            ),
-        )
+        viewModelScope.launch() {
+            updatePaymentStateUseCase.updatePaymentSate(isActive = true)
+            refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
+            pushStateToUi(
+                currentState.copy(actionButtonState = currentState.actionButtonState.updateIsLoading(newValue = true)),
+            )
+            getRefreshedPaymentTokenFlow
+                .getUpdatedPaymentTokenFlow()
+                .collectLatest {
+                    if (it is RefreshPaymentIntentResult.Success) {
+                        executeCardPayment(paymentToken = it.result)
+                    } else if (it is RefreshPaymentIntentResult.RefreshFailure) {
+                        navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                    }
+                }
+        }
+    }
+
+    private fun executeCardPayment(paymentToken: String) {
         dojoCardPaymentHandler.executeCardPayment(
-            paymentToken,
-            fullCardPaymentPayloadMapper.getPaymentPayLoad(currentState, isStartDestination),
+            token = paymentToken,
+            payload = fullCardPaymentPayloadMapper.getPaymentPayLoad(
+                currentState,
+                isStartDestination,
+            ),
         )
     }
 

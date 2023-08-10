@@ -320,7 +320,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     isDarkModeEnabled = isDarkModeEnabled,
                     context = this@PaymentFlowContainerActivity,
                     isStartDestination = flowStartDestination == PaymentFlowScreens.CardDetailsCheckout,
-                )
+                    arguments = arguments,
+                ) { viewModel.navigateToPaymentResult(it) }
             }
             // this is to handle unregistered activity when screen orientation change
             cardDetailsCheckoutViewModel.updateCardPaymentHandler(cardPaymentHandler)
@@ -363,7 +364,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     isDarkModeEnabled,
                     virtualTerminalHandler,
                     this@PaymentFlowContainerActivity,
-                    arguments
+                    arguments,
                 )
             }
             VirtualTerminalCheckOutScreen(
@@ -401,7 +402,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         ) {
             val result = it.arguments?.get(DOJO_PAYMENT_RESULT_PARAMS_KEY) as DojoPaymentResult
 
-            val paymentResultViewModel = PaymentResultViewModel(result,isDarkModeEnabled,StringProvider(this@PaymentFlowContainerActivity))
+            val paymentResultViewModel = PaymentResultViewModel(result, isDarkModeEnabled, StringProvider(this@PaymentFlowContainerActivity))
 
             AnimatedVisibility(
                 visible = true,
