@@ -368,8 +368,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     isDarkModeEnabled,
                     virtualTerminalHandler,
                     this@PaymentFlowContainerActivity,
-                    arguments,
-                )
+                    arguments
+                ) { viewModel.navigateToPaymentResult(it) }
             }
             VirtualTerminalCheckOutScreen(
                 windowSize = windowSize,

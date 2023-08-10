@@ -4,10 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.uisdk.data.paymentintent.RefreshPaymentIntentRepository
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
+import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -29,6 +31,7 @@ internal class VirtualTerminalViewModelFactory(
     private val virtualTerminalHandler: DojoVirtualTerminalHandler,
     private val context: Context,
     private val arguments: Bundle?,
+    private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -57,8 +60,10 @@ internal class VirtualTerminalViewModelFactory(
         )
 
         val paymentType =
-            (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
-                    DojoPaymentFlowParams)?.paymentType ?: DojoPaymentType.PAYMENT_CARD
+            (
+                arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
+                    DojoPaymentFlowParams
+                )?.paymentType ?: DojoPaymentType.PAYMENT_CARD
 
         val refreshPaymentIntentRepository = RefreshPaymentIntentRepository()
 
@@ -67,6 +72,7 @@ internal class VirtualTerminalViewModelFactory(
                 refreshPaymentIntentRepository,
                 paymentType,
             )
+        val getRefreshedPaymentTokenFlow = GetRefreshedPaymentTokenFlow(repo = refreshPaymentIntentRepository)
 
         return VirtualTerminalViewModel(
             observePaymentIntent,
@@ -78,6 +84,8 @@ internal class VirtualTerminalViewModelFactory(
             fullCardPaymentPayloadMapper,
             virtualTerminalViewEntityMapper,
             refreshPaymentIntentUseCase,
+            getRefreshedPaymentTokenFlow,
+            navigateToCardResult,
         ) as T
     }
 }
