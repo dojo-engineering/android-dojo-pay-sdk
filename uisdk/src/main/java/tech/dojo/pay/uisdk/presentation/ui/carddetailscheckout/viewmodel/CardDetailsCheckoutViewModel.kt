@@ -442,13 +442,11 @@ internal class CardDetailsCheckoutViewModel(
         viewModelScope.launch() {
             updatePaymentStateUseCase.updatePaymentSate(isActive = true)
             refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
-            pushStateToUi(
-                currentState.copy(actionButtonState = currentState.actionButtonState.updateIsLoading(newValue = true)),
-            )
             getRefreshedPaymentTokenFlow
                 .getUpdatedPaymentTokenFlow()
                 .collectLatest {
                     if (it is RefreshPaymentIntentResult.Success) {
+                        showLoadingOnActionButton()
                         executeCardPayment(paymentToken = it.result)
                     } else if (it is RefreshPaymentIntentResult.RefreshFailure) {
                         navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -464,6 +462,11 @@ internal class CardDetailsCheckoutViewModel(
                 currentState,
                 isStartDestination,
             ),
+        )
+    }
+    private fun showLoadingOnActionButton() {
+        pushStateToUi(
+            currentState.copy(actionButtonState = currentState.actionButtonState.updateIsLoading(newValue = true)),
         )
     }
 

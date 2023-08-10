@@ -486,17 +486,11 @@ internal class VirtualTerminalViewModel(
         viewModelScope.launch() {
             refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
             updatePaymentStateUseCase.updatePaymentSate(isActive = true)
-            currentState = currentState.copy(
-                payButtonSection = PayButtonViewState(
-                    isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
-                    isLoading = true,
-                ),
-            )
-            pushStateToUi(currentState)
             getRefreshedPaymentTokenFlow
                 .getUpdatedPaymentTokenFlow()
                 .collectLatest {
                     if (it is RefreshPaymentIntentResult.Success) {
+                        showLoadingOnActionButton()
                         executePayment(paymentToken = it.result)
                     } else if (it is RefreshPaymentIntentResult.RefreshFailure) {
                         navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
@@ -510,6 +504,16 @@ internal class VirtualTerminalViewModel(
             paymentToken,
             fullCardPaymentPayloadMapper.apply(currentState),
         )
+    }
+
+    private fun showLoadingOnActionButton() {
+        currentState = currentState.copy(
+            payButtonSection = PayButtonViewState(
+                isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
+                isLoading = true,
+            ),
+        )
+        pushStateToUi(currentState)
     }
     private fun pushStateToUi(state: VirtualTerminalViewState) {
         mutableState.postValue(state)
