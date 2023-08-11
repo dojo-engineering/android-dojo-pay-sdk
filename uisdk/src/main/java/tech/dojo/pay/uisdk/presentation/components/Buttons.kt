@@ -17,10 +17,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -46,16 +42,9 @@ private fun DojoButton(
     loadingColor: Color,
     onClick: () -> Unit
 ) {
-    var hasBeenClicked by remember { mutableStateOf(false) }
-    val handleClick: () -> Unit = {
-        if (!hasBeenClicked) {
-            hasBeenClicked = true
-            onClick()
-        }
-    }
     Button(
         modifier = modifier.height(DojoButtonHeight),
-        onClick = handleClick,
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor,
             contentColor = contentColor,
