@@ -13,7 +13,7 @@ import tech.dojo.pay.uisdk.presentation.ui.result.mapper.PaymentResultViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 
 internal class PaymentResultViewModel(
-    private val result: DojoPaymentResult,
+    result: DojoPaymentResult,
     private val observePaymentIntent: ObservePaymentIntent,
     private val paymentResultViewEntityMapper: PaymentResultViewEntityMapper,
 ) : ViewModel() {
@@ -43,9 +43,11 @@ internal class PaymentResultViewModel(
     }
 
     fun onTryAgainClicked() {
-        currentState =
-            (currentState as PaymentResultState.FailedResult).copy(shouldNavigateToPreviousScreen = true)
-        postStateToUi(currentState)
+        if (currentState is PaymentResultState.FailedResult) {
+            currentState =
+                (currentState as PaymentResultState.FailedResult).copy(shouldNavigateToPreviousScreen = true)
+            postStateToUi(currentState)
+        }
     }
 
     private fun postStateToUi(currentState: PaymentResultState) =
