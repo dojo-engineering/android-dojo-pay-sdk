@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -1316,7 +1317,7 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onPayClicked called then loading state should be emitted and ,  refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
+    fun `when onPayClicked called with updated Token then loading state should be emitted and ,refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
         runTest {
             // arrange
             val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -1342,13 +1343,13 @@ class VirtualTerminalViewModelTest {
                     isLoading = true,
                 ),
             )
-            whenever(
+            given(
                 virtualTerminalValidator.isAllDataValid(any()),
-            ).thenReturn(true)
+            ).willReturn(true)
 
-            whenever(
+            given(
                 fullCardPaymentPayloadMapper.apply(any()),
-            ).thenReturn(address)
+            ).willReturn(address)
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
             given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
@@ -1356,7 +1357,7 @@ class VirtualTerminalViewModelTest {
                     RefreshPaymentIntentResult.Success(result = "token"),
                 ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             // act
             viewModel.onPayClicked()
             // assert
@@ -1366,6 +1367,51 @@ class VirtualTerminalViewModelTest {
                 paymentIntentDomainEntity.paymentToken,
                 address,
             )
+        }
+
+    @Test
+    fun `when onPayClicked called failure from  updated Token then , viewModel  should call navigateToCardResult`() =
+        runTest {
+            // arrange
+            val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
+                DojoCardDetails(
+                    cardNumber = "cardNumber",
+                ),
+            )
+            val initPaymentIntent = virtualTerminalViewState.copy(
+                shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
+                    true,
+                ),
+                billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
+                    true,
+                ),
+                payButtonSection = PayButtonViewState(
+                    isEnabled = true,
+                    isLoading = false,
+                ),
+            )
+            given(
+                virtualTerminalValidator.isAllDataValid(any()),
+            ).willReturn(true)
+
+            given(
+                fullCardPaymentPayloadMapper.apply(any()),
+            ).willReturn(address)
+            val captor = argumentCaptor<DojoPaymentResult>()
+            val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+                MutableStateFlow(
+                    RefreshPaymentIntentResult.RefreshFailure,
+                ),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            // act
+            viewModel.onPayClicked()
+            // assert
+            verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
+            verify(navigateToCardResult).invoke(captor.capture())
+            Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
         }
 
     private fun initViewModelWithPaymentIntent(initPaymentIntent: VirtualTerminalViewState): VirtualTerminalViewModel {
