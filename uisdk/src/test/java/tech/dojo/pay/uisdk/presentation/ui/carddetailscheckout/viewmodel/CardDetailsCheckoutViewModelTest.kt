@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import tech.dojo.pay.sdk.DojoPaymentResult
@@ -67,12 +68,13 @@ class CardDetailsCheckoutViewModelTest {
     private val stringProvider: StringProvider = mock()
     private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase = mock()
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow = mock()
-    private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit = {}
-    private val isStartDestination: Boolean = false
+    private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit = mock()
+    private var isStartDestination: Boolean = false
 
     @Before
     fun setUp() {
         val toolBarTitle = "toolBarTitle"
+        val saveCardToolBar = "saveCardToolBar"
         val payTitle = "pay"
         val checkBoxMessage = "checkBoxMessage"
         given(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_button_pay)).willReturn(
@@ -84,17 +86,21 @@ class CardDetailsCheckoutViewModelTest {
         given(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_save_card)).willReturn(
             checkBoxMessage,
         )
+        given(stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title_setup_intent)).willReturn(
+            saveCardToolBar,
+        )
     }
 
     @Test
-    fun `test initial state`() = runTest {
+    fun `when init viewModel with isStartDestination as false should emit correct state`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
         given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
 
         val expected = CardDetailsCheckoutState(
+            isLoading = false,
             toolbarTitle = "toolBarTitle",
             totalAmount = "",
             amountCurrency = "",
@@ -139,7 +145,61 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when paymentIntent emits with collect billing address false`() = runTest {
+    fun `when init viewModel with isStartDestination as true should emit correct state with full loading as true  and correct toolBar title `() = runTest {
+        // arrange
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
+        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+        isStartDestination = true
+
+        val expected = CardDetailsCheckoutState(
+            isLoading = true,
+            toolbarTitle = "saveCardToolBar",
+            totalAmount = "",
+            amountCurrency = "",
+            allowedPaymentMethodsIcons = emptyList(),
+            cardHolderInputField = InputFieldState(value = ""),
+            emailInputField = InputFieldState(value = ""),
+            isBillingCountryFieldRequired = false,
+            supportedCountriesList = emptyList(),
+            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+            isPostalCodeFieldRequired = false,
+            postalCodeField = InputFieldState(value = ""),
+            isEmailInputFieldRequired = false,
+            checkBoxItem = CheckBoxItem(
+                isVisible = false,
+                isChecked = false,
+                messageText = "",
+            ),
+            cardNumberInputField = InputFieldState(value = ""),
+            cardExpireDateInputField = InputFieldState(value = ""),
+            cvvInputFieldState = InputFieldState(value = ""),
+            actionButtonState = ActionButtonState(),
+        )
+        // act
+        val viewModel = CardDetailsCheckoutViewModel(
+            observePaymentIntent,
+            dojoCardPaymentHandler,
+            observePaymentStatus,
+            updatePaymentStateUseCase,
+            getSupportedCountriesUseCase,
+            supportedCountriesViewEntityMapper,
+            allowedPaymentMethodsViewEntityMapper,
+            cardCheckoutScreenValidator,
+            cardCheckOutFullCardPaymentPayloadMapper,
+            stringProvider,
+            isStartDestination,
+            refreshPaymentIntentUseCase,
+            getRefreshedPaymentTokenFlow,
+            navigateToCardResult,
+        )
+        // assert
+        Assert.assertEquals(expected, viewModel.state.value)
+    }
+
+    @Test
+    fun `when payment intent flow collect with collect billing address false viewModel should emit state without billing country `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -214,7 +274,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when paymentIntent emits with collect billing address true`() = runTest {
+    fun `when payment intent flow collect with collect billing address true viewModel should emit state with  billing country `() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -304,7 +364,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when paymentIntent emits with collect userId`() = runTest {
+    fun `when payment intent flow collect with collect userId viewModel should emit state with save card checkBox and default as true`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -394,7 +454,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user clicks on pay button with normal card payment`() = runTest {
+    fun `when onPayWithCardClicked called with success from  getRefreshedPaymentTokenFlow ,executeCardPayment from dojoCardPaymentHandler should be called and viewModel state should emits Loading on action button`() = runTest {
         // arrange
         val fullCardPaymentPayload: DojoCardPaymentPayLoad.FullCardPaymentPayload = mockk()
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
@@ -500,10 +560,15 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test loading state when paymentState emits after clicking on pay `() = runTest {
+    fun `when onPayWithCardClicked called with failure from  getRefreshedPaymentTokenFlow , viewModel  should call navigateToCardResult`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+        given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+            MutableStateFlow(
+                RefreshPaymentIntentResult.RefreshFailure,
+            ),
+        )
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
         val supportedCountriesViewEntity = SupportedCountriesViewEntity(
             countryName = "EGP",
@@ -536,37 +601,8 @@ class CardDetailsCheckoutViewModelTest {
         given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
             supportedCountriesViewEntity,
         )
-        val payText = "pay £ 100"
         given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
-                countryName = "EGP",
-                countryCode = "EG",
-                isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            isPostalCodeFieldRequired = true,
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
-        )
+        val captor = argumentCaptor<DojoPaymentResult>()
         // act
         val viewModel = CardDetailsCheckoutViewModel(
             observePaymentIntent,
@@ -585,13 +621,14 @@ class CardDetailsCheckoutViewModelTest {
             navigateToCardResult,
         )
         viewModel.onPayWithCardClicked()
-        paymentStateFakeFlow.tryEmit(false)
         // assert
-        Assert.assertEquals(expected, viewModel.state.value)
+        verify(updatePaymentStateUseCase).updatePaymentSate(any())
+        verify(navigateToCardResult).invoke(captor.capture())
+        Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
     }
 
     @Test
-    fun `test state when user update card holder field `() = runTest {
+    fun `when  onCardHolderValueChanged called state should have the new value and should be emitted`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -697,7 +734,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user update card information field `() = runTest {
+    fun `when all card related fields is edited state should have the new values and should be emitted`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -789,7 +826,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `test state when user update email address  field `() = runTest {
+    fun `when onEmailValueChanged called  state should have the new value and should be emitted`() = runTest {
         // arrange
         val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
@@ -881,7 +918,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `pay button should be disabled if any of cardCheckoutScreenValidator methods return false `() =
+    fun ` when any of cardCheckoutScreenValidator methods return false  pay button should be disabled if `() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
