@@ -3,7 +3,7 @@ package tech.dojo.pay.uisdk.presentation.ui.result.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
