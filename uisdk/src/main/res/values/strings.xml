@@ -76,5 +76,5 @@
     <string name = "dojo_ui_sdk_payment_result_title_setup_intent_success">Card saved</string>
     <string name = "dojo_ui_sdk_payment_result_title_setup_intent_fail">Card was not saved</string>
     <string name = "dojo_ui_sdk_payment_result_main_title_setup_intent_success">Card saved successfully</string>
-    <string name = "dojo_ui_sdk_payment_result_main_title_setup_intent_fail">Failed to save card details</string>
+    <string name = "dojo_ui_sdk_payment_result_main_title_setup_intent_fail">we could not save your card details</string>
 </resources>

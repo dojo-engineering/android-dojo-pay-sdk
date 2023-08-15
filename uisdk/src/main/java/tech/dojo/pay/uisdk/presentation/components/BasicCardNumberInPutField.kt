@@ -117,7 +117,7 @@ internal fun BasicCardNumberInputField(
         unfocusedBorderColor = DojoTheme.colors.inputFieldDefaultBorderColor,
         backgroundColor = DojoTheme.colors.inputFieldBackgroundColor,
         focusedBorderColor = DojoTheme.colors.inputFieldSelectedBorderColor,
-        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor,
+        placeholderColor = DojoTheme.colors.inputFieldPlaceholderColor.copy(alpha = 0.5f),
         errorBorderColor = DojoTheme.colors.errorTextColor,
         errorCursorColor = DojoTheme.colors.errorTextColor,
         errorLabelColor = DojoTheme.colors.errorTextColor,
