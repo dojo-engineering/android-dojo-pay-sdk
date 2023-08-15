@@ -19,7 +19,7 @@ internal class RefreshPaymentIntentRepository(
         dataSource
             .refreshPaymentIntent(
                 paymentId,
-                { handleRefreshSuccess(it) },
+                { paymentIntentPayloadJson -> handleRefreshSuccess(paymentIntentPayloadJson) },
                 { handleRefreshFailure() },
             )
     }
@@ -31,17 +31,19 @@ internal class RefreshPaymentIntentRepository(
         dataSource
             .refreshSetupIntent(
                 paymentId,
-                { handleRefreshSuccess(it) },
+                { paymentIntentPayloadJson -> handleRefreshSuccess(paymentIntentPayloadJson) },
                 { handleRefreshFailure() },
             )
     }
 
-    private fun handleRefreshSuccess(it: String) {
+    private fun handleRefreshSuccess(paymentIntentPayloadJson: String) {
         try {
             paymentIntentResult.tryEmit(
                 RefreshPaymentIntentResult.Success(
                     paymentIntentDomainEntityMapper.apply(
-                        paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(it),
+                        paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(
+                            paymentIntentPayloadJson,
+                        ),
                     ).paymentToken,
                 ),
             )

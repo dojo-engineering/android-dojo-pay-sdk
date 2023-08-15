@@ -1,22 +1,19 @@
-import org.junit.Before
+
+import org.junit.After
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.uisdk.data.paymentintent.RefreshPaymentIntentRepository
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 
 class RefreshPaymentIntentUseCaseTest {
 
-    private lateinit var repo: RefreshPaymentIntentRepository
+    private val repo: RefreshPaymentIntentRepository = mock()
     private lateinit var useCase: RefreshPaymentIntentUseCase
-
-    @Before
-    fun setUp() {
-        repo = mock()
-    }
 
     @Test
     fun `when paymentType is PAYMENT_CARD, refreshPaymentIntent should call repo refreshPaymentIntent`() {
@@ -58,5 +55,10 @@ class RefreshPaymentIntentUseCaseTest {
         // assert
         verify(repo).refreshPaymentIntent(paymentId)
         verify(repo, never()).refreshSetupIntent(any())
+    }
+
+    @After
+    fun tearDown() {
+        verifyNoMoreInteractions(repo)
     }
 }

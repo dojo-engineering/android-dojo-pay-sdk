@@ -445,11 +445,15 @@ internal class CardDetailsCheckoutViewModel(
             getRefreshedPaymentTokenFlow
                 .getUpdatedPaymentTokenFlow()
                 .collectLatest {
-                    if (it is RefreshPaymentIntentResult.Success) {
-                        showLoadingOnActionButton()
-                        executeCardPayment(paymentToken = it.result)
-                    } else if (it is RefreshPaymentIntentResult.RefreshFailure) {
-                        navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+                    when (it) {
+                        is RefreshPaymentIntentResult.Success -> {
+                            showLoadingOnActionButton()
+                            executeCardPayment(paymentToken = it.token)
+                        }
+                        is RefreshPaymentIntentResult.RefreshFailure ->
+                            navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+
+                        null -> Unit
                     }
                 }
         }

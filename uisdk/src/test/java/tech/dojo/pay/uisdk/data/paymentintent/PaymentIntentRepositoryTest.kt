@@ -9,10 +9,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
@@ -42,10 +40,11 @@ internal class PaymentIntentRepositoryTest {
     fun `when fetchPaymentIntent fails PaymentIntent stream should emits FetchFailure`() = runTest {
         // arrange
         val paymentId = "paymentId"
-        doAnswer {
-            val onFailure: () -> Unit = it.arguments[2] as () -> Unit
-            onFailure.invoke()
-        }.whenever(dataSource).fetchPaymentIntent(any(), any(), any())
+        given(dataSource.fetchPaymentIntent(any(), any(), any()))
+            .willAnswer {
+                val onFailure: () -> Unit = it.arguments[2] as () -> Unit
+                onFailure.invoke()
+            }
         val expectedValue = PaymentIntentResult.FetchFailure
         // act
         sut.fetchPaymentIntent(paymentId)
@@ -71,10 +70,11 @@ internal class PaymentIntentRepositoryTest {
                 ),
                 supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
             )
-            doAnswer { invocation ->
-                val successCallback = invocation.arguments[1] as (String) -> Unit
-                successCallback.invoke(paymentIntentJson)
-            }.whenever(dataSource).fetchPaymentIntent(any(), any(), any())
+            given(dataSource.fetchPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
@@ -92,10 +92,11 @@ internal class PaymentIntentRepositoryTest {
     fun `when fetchSetUpIntent fails PaymentIntent stream should emits FetchFailure`() = runTest {
         // arrange
         val paymentId = "paymentId"
-        doAnswer {
-            val onFailure: () -> Unit = it.arguments[2] as () -> Unit
-            onFailure.invoke()
-        }.whenever(dataSource).fetchSetUpIntent(any(), any(), any())
+        given(dataSource.fetchSetUpIntent(any(), any(), any()))
+            .willAnswer {
+                val onFailure: () -> Unit = it.arguments[2] as () -> Unit
+                onFailure.invoke()
+            }
         val expectedValue = PaymentIntentResult.FetchFailure
         // act
         sut.fetchSetUpIntent(paymentId)
@@ -120,11 +121,11 @@ internal class PaymentIntentRepositoryTest {
                 ),
                 supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
             )
-            doAnswer { invocation ->
-                val successCallback = invocation.arguments[1] as (String) -> Unit
-                successCallback.invoke(paymentIntentJson)
-            }.whenever(dataSource).fetchSetUpIntent(any(), any(), any())
-
+            given(dataSource.fetchSetUpIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
@@ -143,10 +144,11 @@ internal class PaymentIntentRepositoryTest {
             // arrange
             val paymentId = "paymentId"
             val paymentIntentJson = "paymentIntentJson"
-            doAnswer { invocation ->
-                val successCallback = invocation.arguments[1] as (String) -> Unit
-                successCallback.invoke(paymentIntentJson)
-            }.whenever(dataSource).fetchPaymentIntent(any(), any(), any())
+            given(dataSource.fetchPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )

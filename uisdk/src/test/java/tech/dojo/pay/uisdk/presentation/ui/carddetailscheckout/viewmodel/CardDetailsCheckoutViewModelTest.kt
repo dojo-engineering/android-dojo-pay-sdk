@@ -461,7 +461,7 @@ class CardDetailsCheckoutViewModelTest {
         given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
         given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
             MutableStateFlow(
-                RefreshPaymentIntentResult.Success(result = "token"),
+                RefreshPaymentIntentResult.Success(token = "token"),
             ),
         )
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)

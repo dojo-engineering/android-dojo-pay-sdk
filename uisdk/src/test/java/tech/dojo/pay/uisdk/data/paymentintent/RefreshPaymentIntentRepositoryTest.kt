@@ -49,7 +49,7 @@ class RefreshPaymentIntentRepositoryTest {
     }
 
     @Test
-    fun `when refreshPaymentIntent success  PaymentIntent stream should emits Success with domainEntity`() =
+    fun `when refreshPaymentIntent success PaymentIntent stream should emits Success with domainEntity`() =
         runTest {
             // arrange
             val paymentId = "paymentId"

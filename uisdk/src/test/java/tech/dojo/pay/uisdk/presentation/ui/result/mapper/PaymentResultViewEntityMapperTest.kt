@@ -1,5 +1,6 @@
 import org.junit.Assert
 import org.junit.Test
+import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.R
@@ -7,7 +8,6 @@ import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.ui.result.mapper.PaymentResultViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
-import org.mockito.Mockito.`when` as whenever
 
 class PaymentResultViewEntityMapperTest {
 
@@ -17,8 +17,8 @@ class PaymentResultViewEntityMapperTest {
     @Test
     fun `when calling mapTpResultState with successful result with for PAYMENT_CARD payment type should return successfulResult with correct fields`() {
         // arrange
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success))
-            .thenReturn("Successful Payment")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success))
+            .willReturn("Successful Payment")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Payment",
             imageId = 2131230882,
@@ -44,10 +44,10 @@ class PaymentResultViewEntityMapperTest {
     @Test
     fun `when calling mapTpResultState with successful result with for SETUP_INTENT payment type should return successfulResult with correct fields`() {
         // arrange
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_success))
-            .thenReturn("Successful Setup Intent")
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_success))
-            .thenReturn("Successful Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_success))
+            .willReturn("Successful Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_success))
+            .willReturn("Successful Setup Intent")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Setup Intent",
             imageId = 2131230882,
@@ -73,10 +73,10 @@ class PaymentResultViewEntityMapperTest {
     @Test
     fun `when calling mapTpResultState with FAILED result with for SETUP_INTENT payment type should return FailedResult with correct fields`() {
         // arrange
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail))
-            .thenReturn("Failed Setup Intent")
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_fail))
-            .thenReturn("Failed Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail))
+            .willReturn("Failed Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_fail))
+            .willReturn("Failed Setup Intent")
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
             imageId = 2131230865,
@@ -102,12 +102,12 @@ class PaymentResultViewEntityMapperTest {
     @Test
     fun `when calling mapTpResultState with FAILED result with for PAYMENT_CARD payment type should return FailedResult with correct fields`() {
         // arrange
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail))
-            .thenReturn("Failed Setup Intent")
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail))
-            .thenReturn("Failed Setup Intent")
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_failed_description))
-            .thenReturn("Failed Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail))
+            .willReturn("Failed Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail))
+            .willReturn("Failed Setup Intent")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_failed_description))
+            .willReturn("Failed Setup Intent")
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
             imageId = 2131230865,
@@ -131,10 +131,10 @@ class PaymentResultViewEntityMapperTest {
     }
 
     @Test
-    fun `when calling  mapToOrderIdField should return formatted order id field `() {
+    fun `when calling mapToOrderIdField should return formatted order id field `() {
         // arrange
-        whenever(mockStringProvider.getString(R.string.dojo_ui_sdk_order_info))
-            .thenReturn("Order ID:")
+        given(mockStringProvider.getString(R.string.dojo_ui_sdk_order_info))
+            .willReturn("Order ID:")
 
         val orderId = "123456"
         val expectedResult = "Order ID: 123456"

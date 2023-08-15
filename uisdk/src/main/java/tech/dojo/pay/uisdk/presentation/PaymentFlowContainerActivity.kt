@@ -210,25 +210,34 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
             navController = navController,
             startDestination = flowStartDestination.route,
         ) {
-            paymentMethodCheckoutScreen(windowSize, paymentFlowViewModel, showDojoBrand)
-            managePaymentMethodsScreen(
-                isDarkModeEnabled,
-                windowSize,
-                paymentFlowViewModel,
-                showDojoBrand,
+            paymentMethodCheckoutScreen(
+                windowSize = windowSize,
+                viewModel = paymentFlowViewModel,
+                showDojoBrand = showDojoBrand,
             )
-            paymentResultScreen(isDarkModeEnabled, windowSize, paymentFlowViewModel, showDojoBrand)
+            managePaymentMethodsScreen(
+                isDarkModeEnabled = isDarkModeEnabled,
+                windowSize = windowSize,
+                viewModel = paymentFlowViewModel,
+                showDojoBrand = showDojoBrand,
+            )
+            paymentResultScreen(
+                isDarkModeEnabled = isDarkModeEnabled,
+                windowSize = windowSize,
+                viewModel = paymentFlowViewModel,
+                showDojoBrand = showDojoBrand,
+            )
             cardDetailsCheckoutScreen(
-                isDarkModeEnabled,
-                windowSize,
-                paymentFlowViewModel,
-                showDojoBrand,
+                isDarkModeEnabled = isDarkModeEnabled,
+                windowSize = windowSize,
+                viewModel = paymentFlowViewModel,
+                showDojoBrand = showDojoBrand,
             )
             virtualTerminalCheckOutScreen(
-                isDarkModeEnabled,
-                windowSize,
-                paymentFlowViewModel,
-                showDojoBrand,
+                isDarkModeEnabled = isDarkModeEnabled,
+                windowSize = windowSize,
+                viewModel = paymentFlowViewModel,
+                showDojoBrand = showDojoBrand,
             )
         }
     }
@@ -243,9 +252,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         ) {
             val paymentMethodCheckoutViewModel: PaymentMethodCheckoutViewModel by viewModels {
                 PaymentMethodCheckoutViewModelFactory(
-                    savedCardPaymentHandler,
-                    gpayPaymentHandler,
-                    arguments,
+                    savedCardPaymentHandler = savedCardPaymentHandler,
+                    gpayPaymentHandler = gpayPaymentHandler,
+                    arguments = arguments,
                 )
             }
             // this is to  handle unregistered activity when screen orientation change
@@ -291,9 +300,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
                 val mangePaymentViewModel: MangePaymentViewModel by viewModels {
                     MangePaymentViewModelFactory(
-                        customerId,
-                        arguments,
-                        isDarkModeEnabled,
+                        customerId = customerId,
+                        arguments = arguments,
+                        isDarkModeEnabled = isDarkModeEnabled,
                     )
                 }
                 ManagePaymentMethods(
@@ -368,7 +377,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     isDarkModeEnabled,
                     virtualTerminalHandler,
                     this@PaymentFlowContainerActivity,
-                    arguments
+                    arguments,
                 ) { viewModel.navigateToPaymentResult(it) }
             }
             VirtualTerminalCheckOutScreen(
@@ -413,15 +422,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         DojoPaymentFlowParams
                     )?.paymentType ?: DojoPaymentType.PAYMENT_CARD
             val paymentResultViewEntityMapper = PaymentResultViewEntityMapper(
-                StringProvider(this@PaymentFlowContainerActivity),
-                paymentType,
-                isDarkModeEnabled,
-
+                stringProvider = StringProvider(this@PaymentFlowContainerActivity),
+                paymentType = paymentType,
+                isDarkModeEnabled = isDarkModeEnabled,
             )
             val paymentResultViewModel = PaymentResultViewModel(
-                result,
-                observePaymentIntent,
-                paymentResultViewEntityMapper,
+                result = result,
+                observePaymentIntent = observePaymentIntent,
+                paymentResultViewEntityMapper = paymentResultViewEntityMapper,
             )
             AnimatedVisibility(
                 visible = true,
@@ -429,11 +437,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 exit = shrinkVertically(),
             ) {
                 ShowResultSheetScreen(
-                    windowSize,
-                    viewModel::onCloseFlowClicked,
-                    viewModel::onBackClicked,
-                    paymentResultViewModel,
-                    showDojoBrand,
+                    windowSize = windowSize,
+                    onCloseFlowClicked = viewModel::onCloseFlowClicked,
+                    onTryAgainClicked = viewModel::onBackClicked,
+                    viewModel = paymentResultViewModel,
+                    showDojoBrand = showDojoBrand,
                 )
             }
         }

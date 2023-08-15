@@ -27,6 +27,7 @@ internal class PaymentResultViewEntityMapper(
             orderId,
         )
     }
+
     private fun buildSuccessfulResult() = PaymentResultState.SuccessfulResult(
         appBarTitle = getSuccessfulAppBarTitle(),
         imageId = R.drawable.ic_success_circle,
@@ -46,34 +47,44 @@ internal class PaymentResultViewEntityMapper(
     private fun getFailedDetails() =
         when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail)
-            else -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_failed_description)
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
+                R.string.dojo_ui_sdk_payment_result_failed_description,
+            )
         }
 
     private fun getSuccessfulStatusTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_success)
-            else -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success)
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
+                R.string.dojo_ui_sdk_payment_result_title_success,
+            )
         }
     }
 
     private fun getFailedStatusTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail)
-            else -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail)
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
+                R.string.dojo_ui_sdk_payment_result_title_fail,
+            )
         }
     }
 
     private fun getSuccessfulAppBarTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_success)
-            else -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success)
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
+                R.string.dojo_ui_sdk_payment_result_title_success,
+            )
         }
     }
 
     private fun getFailedAppBarTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_fail)
-            else -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail)
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
+                R.string.dojo_ui_sdk_payment_result_title_fail,
+            )
         }
     }
 

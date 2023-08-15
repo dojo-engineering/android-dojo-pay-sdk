@@ -1354,7 +1354,7 @@ class VirtualTerminalViewModelTest {
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
             given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
                 MutableStateFlow(
-                    RefreshPaymentIntentResult.Success(result = "token"),
+                    RefreshPaymentIntentResult.Success(token = "token"),
                 ),
             )
             given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
