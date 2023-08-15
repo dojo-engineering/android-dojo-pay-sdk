@@ -6,10 +6,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.data.mapper.PaymentIntentPayLoadMapper
@@ -33,10 +31,11 @@ class RefreshPaymentIntentRepositoryTest {
     fun `when refreshPaymentIntent fails refresh PaymentIntent stream should emit RefreshFailure`() = runTest {
         // arrange
         val paymentId = "paymentId"
-        doAnswer {
-            val onFailure: () -> Unit = it.arguments[2] as () -> Unit
-            onFailure.invoke()
-        }.whenever(dataSource).refreshPaymentIntent(any(), any(), any())
+        given(dataSource.refreshPaymentIntent(any(), any(), any()))
+            .willAnswer {
+                val onFailure: () -> Unit = it.arguments[2] as () -> Unit
+                onFailure.invoke()
+            }
 
         val expectedValue = RefreshPaymentIntentResult.RefreshFailure
 
@@ -64,10 +63,11 @@ class RefreshPaymentIntentRepositoryTest {
                 ),
                 supportedCardsSchemes = listOf(CardsSchemes.MASTERCARD),
             )
-            doAnswer { invocation ->
-                val successCallback = invocation.arguments[1] as (String) -> Unit
-                successCallback.invoke(paymentIntentJson)
-            }.whenever(dataSource).refreshPaymentIntent(any(), any(), any())
+            given(dataSource.refreshPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
@@ -87,10 +87,12 @@ class RefreshPaymentIntentRepositoryTest {
             // arrange
             val paymentId = "paymentId"
             val paymentIntentJson = "paymentIntentJson"
-            doAnswer { invocation ->
-                val successCallback = invocation.arguments[1] as (String) -> Unit
-                successCallback.invoke(paymentIntentJson)
-            }.whenever(dataSource).refreshPaymentIntent(any(), any(), any())
+
+            given(dataSource.refreshPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )

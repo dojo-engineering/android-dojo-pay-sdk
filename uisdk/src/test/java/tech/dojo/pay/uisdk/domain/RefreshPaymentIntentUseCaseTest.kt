@@ -1,3 +1,4 @@
+package tech.dojo.pay.uisdk.domain
 
 import org.junit.After
 import org.junit.Test
@@ -7,7 +8,6 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.uisdk.data.paymentintent.RefreshPaymentIntentRepository
-import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 
 class RefreshPaymentIntentUseCaseTest {
