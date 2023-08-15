@@ -75,14 +75,18 @@ internal class PaymentFlowViewModel(
             paymentType,
         )
         if (isInitCorrectly) {
-            currentCustomerId = paymentIntentResult.result.customerId
-            if (paymentType == DojoPaymentType.PAYMENT_CARD) {
-                fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
-                    paymentType,
-                    paymentIntentResult.result.customerId ?: "",
-                    customerSecret,
+            if (paymentIntentResult.result.isPaymentAlreadyCollected) {
+                navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
+            } else {
+                currentCustomerId = paymentIntentResult.result.customerId
+                if (paymentType == DojoPaymentType.PAYMENT_CARD) {
+                    fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
+                        paymentType,
+                        paymentIntentResult.result.customerId ?: "",
+                        customerSecret,
 
-                )
+                    )
+                }
             }
         } else {
             closeFlowWithInternalError()

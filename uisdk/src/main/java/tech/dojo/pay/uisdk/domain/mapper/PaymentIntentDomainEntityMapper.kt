@@ -6,6 +6,7 @@ import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
 
 internal class PaymentIntentDomainEntityMapper {
     fun apply(raw: PaymentIntentPayload): PaymentIntentDomainEntity {
@@ -38,6 +39,9 @@ internal class PaymentIntentDomainEntityMapper {
             orderId = raw.reference ?: "",
             isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
             merchantName = raw.config?.tradingName ?: "",
+            isPaymentAlreadyCollected =
+            PaymentIntentStatusDomainEntity.fromStatus(requireNotNull(raw.status)) == PaymentIntentStatusDomainEntity.CAPTURED ||
+                PaymentIntentStatusDomainEntity.fromStatus(requireNotNull(raw.status)) == PaymentIntentStatusDomainEntity.AUTHORIZED,
         )
     }
 
@@ -49,6 +53,7 @@ internal class PaymentIntentDomainEntityMapper {
         if (raw.merchantConfig == null) invalidParams.add("merchantConfig")
         if (raw.merchantConfig?.supportedPaymentMethods == null) invalidParams.add("supportedPaymentMethods")
         if (raw.merchantConfig?.supportedPaymentMethods?.cardSchemes == null) invalidParams.add("cardSchemes")
+        if (raw.status == null) invalidParams.add("status")
         if (invalidParams.isNotEmpty()) throw EssentialParamMissingException(invalidParams)
     }
 }
