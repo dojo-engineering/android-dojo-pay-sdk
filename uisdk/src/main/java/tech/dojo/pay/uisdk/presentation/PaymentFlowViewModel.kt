@@ -121,8 +121,7 @@ internal class PaymentFlowViewModel(
         if (dojoPaymentResult == DojoPaymentResult.SUCCESSFUL) {
             popBackStack = true
         }
-        navigationEvent.value =
-            PaymentFlowNavigationEvents.PaymentResult(dojoPaymentResult, popBackStack)
+        navigationEvent.postValue(PaymentFlowNavigationEvents.PaymentResult(dojoPaymentResult, popBackStack))
     }
 
     fun navigateToManagePaymentMethods() {

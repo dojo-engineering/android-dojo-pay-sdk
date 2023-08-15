@@ -195,7 +195,7 @@ internal fun CardDetailsCheckoutScreen(
                             .align(Alignment.BottomCenter)
                             .background(DojoTheme.colors.primarySurfaceBackgroundColor),
                     ) {
-                        PayButton(scrollState, state, viewModel)
+                        ActionButton(scrollState, state, viewModel)
                         ScreenFooter(showDojoBrand)
                     }
                 }
@@ -247,7 +247,7 @@ private fun SaveCardCheckBox(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun PayButton(
+private fun ActionButton(
     scrollState: ScrollState,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
