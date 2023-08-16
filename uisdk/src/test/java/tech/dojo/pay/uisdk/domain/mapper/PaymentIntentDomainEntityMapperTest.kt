@@ -42,6 +42,30 @@ internal class PaymentIntentDomainEntityMapperTest {
         }
 
     @Test
+    fun `when calling apply with valid PaymentIntentPayload with status as captured then should map to PaymentIntentDomainEntity with isPaymentAlreadyCollected as true `() =
+        runTest {
+            // arrange
+            val raw = createValidPaymentIntentPayload().copy(status = "Captured")
+            val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
+            // act
+            val actual = PaymentIntentDomainEntityMapper().apply(raw)
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `when calling apply with valid PaymentIntentPayload with status as authorized then should map to PaymentIntentDomainEntity with isPaymentAlreadyCollected as true `() =
+        runTest {
+            // arrange
+            val raw = createValidPaymentIntentPayload().copy(status = "Authorized")
+            val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
+            // act
+            val actual = PaymentIntentDomainEntityMapper().apply(raw)
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
     fun `when calling apply with invalid PaymentIntentPayload should Thrown EssentialParamMissingException that contains all the missing fields`() =
         runTest {
             // arrange
