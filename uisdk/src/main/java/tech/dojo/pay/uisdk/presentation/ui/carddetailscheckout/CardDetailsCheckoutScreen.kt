@@ -119,14 +119,6 @@ internal fun CardDetailsCheckoutScreen(
                         verticalArrangement = Arrangement.spacedBy(32.dp),
                     ) {
                         HeaderItem(state)
-                        EmailField(
-                            scrollState,
-                            coroutineScope,
-                            scrollToPosition,
-                            state,
-                            keyboardController,
-                            viewModel,
-                        )
                         BillingCountryField(
                             state,
                             viewModel,
@@ -186,7 +178,14 @@ internal fun CardDetailsCheckoutScreen(
                                 )
                             }
                         }
-
+                        EmailField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            state,
+                            keyboardController,
+                            viewModel,
+                        )
                         SaveCardCheckBox(state, viewModel)
                     }
                     Column(
@@ -277,9 +276,9 @@ private fun CvvField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
@@ -325,9 +324,9 @@ private fun CardExpireDateField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
@@ -380,9 +379,9 @@ private fun CardNumberField(
     isDarkModeEnabled: Boolean,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
@@ -440,9 +439,9 @@ private fun CardHolderNameField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             FIRST_FIELD_OFF_SET_DP.dp.toPx()
@@ -482,7 +481,11 @@ private fun EmailField(
 ) {
     if (state.isEmailInputFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            FIRST_FIELD_OFF_SET_DP.dp.toPx()
+            if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+                FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+            } else {
+                FORTH_FIELD_OFF_SET_DP.dp.toPx()
+            }
         }
 
         InputFieldWithErrorMessage(
@@ -540,11 +543,7 @@ private fun PostalCodeField(
 ) {
     if (state.isPostalCodeFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            if (state.isEmailInputFieldRequired) {
-                SECOND_FIELD_OFF_SET_DP.dp.toPx()
-            } else {
-                FIRST_FIELD_OFF_SET_DP.dp.toPx()
-            }
+            FIRST_FIELD_OFF_SET_DP.dp.toPx()
         }
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
@@ -579,6 +578,7 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
                 allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,
             )
         }
+
         CardCheckOutHeaderType.MERCHANT_HEADER -> {
             state.orderId?.let { orderId ->
                 state.merchantName?.let { merchantName ->
@@ -594,17 +594,22 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
 }
 
 @Composable
-private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit, toolbarTitle: String?) {
+private fun AppBarItem(
+    onBackClicked: () -> Unit,
+    onCloseClicked: () -> Unit,
+    toolbarTitle: String?,
+) {
     DojoAppBar(
-        title = toolbarTitle ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = toolbarTitle
+            ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
     )
 }
 
-private const val FIRST_FIELD_OFF_SET_DP = 30
-private const val SECOND_FIELD_OFF_SET_DP = 290
-private const val THIRD_FIELD_OFF_SET_DP = 360
-private const val FORTH_FIELD_OFF_SET_DP = 420
-private const val FIFTH_FIELD_OFF_SET_DP = 490
+private const val FIRST_FIELD_OFF_SET_DP = 220
+private const val SECOND_FIELD_OFF_SET_DP = 280
+private const val THIRD_FIELD_OFF_SET_DP = 350
+private const val FORTH_FIELD_OFF_SET_DP = 410
+private const val FIFTH_FIELD_OFF_SET_DP = 520
