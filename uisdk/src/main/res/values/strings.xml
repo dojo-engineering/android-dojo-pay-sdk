@@ -15,7 +15,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_button_pay">Pay</string>
     <string name = "dojo_ui_sdk_card_details_checkout_button_processing">Processing....</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_email">Email</string>
-    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Country</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Billing Country</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_postcode">Postcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_zipcode">Zipcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_expiry_date">Expiry date</string>
