@@ -482,9 +482,9 @@ private fun EmailField(
     if (state.isEmailInputFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
             if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
-                FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+                SIXTH_FIELD_OFF_SET_DP.dp.toPx()
             } else {
-                FORTH_FIELD_OFF_SET_DP.dp.toPx()
+                FIFTH_FIELD_OFF_SET_DP.dp.toPx()
             }
         }
 
@@ -543,7 +543,7 @@ private fun PostalCodeField(
 ) {
     if (state.isPostalCodeFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            FIRST_FIELD_OFF_SET_DP.dp.toPx()
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
@@ -608,8 +608,9 @@ private fun AppBarItem(
     )
 }
 
-private const val FIRST_FIELD_OFF_SET_DP = 220
-private const val SECOND_FIELD_OFF_SET_DP = 280
-private const val THIRD_FIELD_OFF_SET_DP = 350
-private const val FORTH_FIELD_OFF_SET_DP = 410
-private const val FIFTH_FIELD_OFF_SET_DP = 520
+private const val FIRST_FIELD_OFF_SET_DP = 30
+private const val SECOND_FIELD_OFF_SET_DP = 230
+private const val THIRD_FIELD_OFF_SET_DP = 330
+private const val FORTH_FIELD_OFF_SET_DP = 430
+private const val FIFTH_FIELD_OFF_SET_DP = 490
+private const val SIXTH_FIELD_OFF_SET_DP = 530
