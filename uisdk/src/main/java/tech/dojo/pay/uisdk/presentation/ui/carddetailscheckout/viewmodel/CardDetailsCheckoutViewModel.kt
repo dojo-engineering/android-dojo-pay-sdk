@@ -72,8 +72,20 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onCardHolderValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
+        currentState = currentState.copy(
+            cardHolderInputField = InputFieldState(value = newValue),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    cardHolderValue = newValue,
+                ),
+            ),
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun validateCardHolder(cardHolderValue: String) {
+        if (cardHolderValue.isBlank()) {
+            currentState = currentState.copy(
                 cardHolderInputField = InputFieldState(
                     value = "",
                     isError = true,
@@ -81,23 +93,25 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else {
-            currentState.copy(
-                cardHolderInputField = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(
-                    newValue = isPayButtonEnabled(
-                        cardHolderValue = newValue,
-                    ),
-                ),
-            )
+            pushStateToUi(currentState)
         }
-
-        pushStateToUi(currentState)
     }
 
     fun onPostalCodeValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
+        currentState = currentState.copy(
+            postalCodeField = InputFieldState(value = newValue),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    postalCodeValue = newValue,
+                ),
+            ),
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun validatePostalCode(postalCodeValue: String) {
+        if (postalCodeValue.isBlank()) {
+            currentState = currentState.copy(
                 postalCodeField = InputFieldState(
                     value = "",
                     errorMessages = stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_error_empty_billing_postcode),
@@ -105,17 +119,8 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else {
-            currentState.copy(
-                postalCodeField = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(
-                    newValue = isPayButtonEnabled(
-                        postalCodeValue = newValue,
-                    ),
-                ),
-            )
+            pushStateToUi(currentState)
         }
-        pushStateToUi(currentState)
     }
 
     fun onCardNumberValueChanged(newValue: String) {
@@ -154,7 +159,19 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onCvvValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
+        currentState = currentState.copy(
+            cvvInputFieldState = InputFieldState(value = newValue),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    cvvValue = newValue,
+                ),
+            ),
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun validateCvv(cvvValue: String) {
+        if (cvvValue.isBlank()) {
             currentState.copy(
                 cvvInputFieldState = InputFieldState(
                     value = "",
@@ -163,25 +180,7 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else {
-            currentState.copy(
-                cvvInputFieldState = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(
-                    newValue = isPayButtonEnabled(
-                        cvvValue = newValue,
-                    ),
-                ),
-            )
-        }
-
-        pushStateToUi(currentState)
-    }
-
-    fun validateCvv(cvvValue: String, focused: Boolean) {
-        if (!focused &&
-            cvvValue.isNotBlank() &&
-            !cardCheckoutScreenValidator.isCvvValid(cvvValue)
-        ) {
+        } else if (!cardCheckoutScreenValidator.isCvvValid(cvvValue)) {
             currentState = currentState.copy(
                 cvvInputFieldState = InputFieldState(
                     value = cvvValue,
@@ -217,11 +216,17 @@ internal class CardDetailsCheckoutViewModel(
         pushStateToUi(currentState)
     }
 
-    fun validateExpireDate(expireDateValue: String, focused: Boolean) {
-        if (!focused &&
-            expireDateValue.isNotBlank() &&
-            !cardCheckoutScreenValidator.isCardExpireDateValid(expireDateValue)
-        ) {
+    fun validateExpireDate(expireDateValue: String) {
+        if (expireDateValue.isBlank()) {
+            currentState = currentState.copy(
+                cardExpireDateInputField = InputFieldState(
+                    value = "",
+                    isError = true,
+                    errorMessages = stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_error_empty_expiry),
+                ),
+                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
+            )
+        } else if (!cardCheckoutScreenValidator.isCardExpireDateValid(expireDateValue)) {
             currentState = currentState.copy(
                 cardExpireDateInputField = InputFieldState(
                     value = expireDateValue,
@@ -450,6 +455,7 @@ internal class CardDetailsCheckoutViewModel(
                             showLoadingOnActionButton()
                             executeCardPayment(paymentToken = it.token)
                         }
+
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
 
@@ -468,9 +474,14 @@ internal class CardDetailsCheckoutViewModel(
             ),
         )
     }
+
     private fun showLoadingOnActionButton() {
         pushStateToUi(
-            currentState.copy(actionButtonState = currentState.actionButtonState.updateIsLoading(newValue = true)),
+            currentState.copy(
+                actionButtonState = currentState.actionButtonState.updateIsLoading(
+                    newValue = true,
+                ),
+            ),
         )
     }
 

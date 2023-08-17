@@ -284,23 +284,28 @@ private fun CvvField(
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-
+    var focusedTextKey by remember { mutableStateOf(false) }
     CvvInputField(
-        modifier = Modifier
-            .onFocusChanged {
-                if (it.hasFocus) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                        )
-                    }
+        modifier = Modifier.onFocusChanged {
+            if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
+                    )
                 }
-                viewModel.validateCvv(
-                    state.cvvInputFieldState.value,
-                    it.isFocused,
-                )
-            },
+            }
+            focusedTextKey = if (it.isFocused) {
+                true
+            } else {
+                if (focusedTextKey) {
+                    viewModel.validateCvv(
+                        state.cvvInputFieldState.value,
+                    )
+                }
+                false
+            }
+        },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
         cvvValue = state.cvvInputFieldState.value,
         isError = state.cvvInputFieldState.isError,
@@ -332,24 +337,28 @@ private fun CardExpireDateField(
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-
+    var focusedTextKey by remember { mutableStateOf(false) }
     CardExpireDateInputField(
-
-        modifier = Modifier
-            .onFocusChanged {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                        )
-                    }
+        modifier = Modifier.onFocusChanged {
+            if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
+                    )
                 }
-                viewModel.validateExpireDate(
-                    state.cardExpireDateInputField.value,
-                    it.isFocused,
-                )
-            },
+            }
+            focusedTextKey = if (it.isFocused) {
+                true
+            } else {
+                if (focusedTextKey) {
+                    viewModel.validateExpireDate(
+                        state.cardExpireDateInputField.value,
+                    )
+                }
+                false
+            }
+        },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
         keyboardOptions =
         KeyboardOptions(
@@ -447,16 +456,24 @@ private fun CardHolderNameField(
             FIRST_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-
+    var focusedTextKey by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
-            if (it.isFocused) {
+            focusedTextKey = if (it.isFocused) {
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
                         scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                     )
                 }
+                true
+            } else {
+                if (focusedTextKey) {
+                    viewModel.validateCardHolder(
+                        state.cardHolderInputField.value,
+                    )
+                }
+                false
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -545,15 +562,25 @@ private fun PostalCodeField(
         val scrollOffset = with(LocalDensity.current) {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
+        var focusedTextKey by remember { mutableStateOf(false) }
+
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
-                if (it.isFocused) {
+                focusedTextKey = if (it.isFocused) {
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
                             scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                         )
                     }
+                    true
+                } else {
+                    if (focusedTextKey) {
+                        viewModel.validatePostalCode(
+                            state.postalCodeField.value,
+                        )
+                    }
+                    false
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
