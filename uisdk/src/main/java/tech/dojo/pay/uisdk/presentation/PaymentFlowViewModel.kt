@@ -84,7 +84,6 @@ internal class PaymentFlowViewModel(
                         paymentType,
                         paymentIntentResult.result.customerId ?: "",
                         customerSecret,
-
                     )
                 }
             }

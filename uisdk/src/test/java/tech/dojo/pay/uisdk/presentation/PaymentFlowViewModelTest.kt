@@ -482,7 +482,7 @@ internal class PaymentFlowViewModelTest {
         }
 
     @Test
-    fun `when call isPaymentInSandBoxEnvironment with prod paymentID should return false `() =
+    fun `when call isPaymentInSandBoxEnvironment with prod paymentID should return false`() =
         runTest {
             // arrange
             val viewModel = PaymentFlowViewModel(
