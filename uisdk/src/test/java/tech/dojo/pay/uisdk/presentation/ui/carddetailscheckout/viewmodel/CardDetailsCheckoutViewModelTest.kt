@@ -918,7 +918,7 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun ` when any of cardCheckoutScreenValidator methods return false  pay button should be disabled if `() =
+    fun ` when any of cardCheckoutScreenValidator methods return false pay button should be disabled if `() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
@@ -979,10 +979,12 @@ class CardDetailsCheckoutViewModelTest {
                 getRefreshedPaymentTokenFlow,
                 navigateToCardResult,
             )
-            viewModel.validateCvv("new", false)
+            viewModel.validateCardHolder("new")
             viewModel.validateCardNumber("new")
-            viewModel.validateEmailValue("new", false)
-            viewModel.validateExpireDate("new", false)
+            viewModel.validateExpireDate("new")
+            viewModel.validateCvv("new")
+            viewModel.validateEmailValue("new")
+            viewModel.validatePostalCode("new")
             // assert
             Assert.assertEquals(false, viewModel.state.value?.actionButtonState?.isEnabled)
         }

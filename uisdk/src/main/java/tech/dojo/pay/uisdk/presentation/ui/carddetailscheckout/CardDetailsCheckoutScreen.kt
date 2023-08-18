@@ -287,15 +287,13 @@ private fun CvvField(
     var focusedTextKey by remember { mutableStateOf(false) }
     CvvInputField(
         modifier = Modifier.onFocusChanged {
-            if (it.isFocused) {
+            focusedTextKey = if (it.isFocused) {
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
                         scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
                     )
                 }
-            }
-            focusedTextKey = if (it.isFocused) {
                 true
             } else {
                 if (focusedTextKey) {
@@ -504,23 +502,26 @@ private fun EmailField(
                 FIFTH_FIELD_OFF_SET_DP.dp.toPx()
             }
         }
-
+        var focusedTextKey by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
-            modifier = Modifier
-                .onFocusChanged {
-                    if (it.isFocused) {
-                        coroutineScope.launch {
-                            delay(300)
-                            scrollState.animateScrollTo(
-                                scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                            )
-                        }
+            modifier = Modifier.onFocusChanged {
+                focusedTextKey = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
+                        )
                     }
-                    viewModel.validateEmailValue(
-                        state.emailInputField.value,
-                        it.isFocused,
-                    )
-                },
+                    true
+                } else {
+                    if (focusedTextKey) {
+                        viewModel.validateEmailValue(
+                            state.emailInputField.value,
+                        )
+                    }
+                    false
+                }
+            },
             isError = state.emailInputField.isError,
             assistiveText = state.emailInputField.errorMessages?.let {
                 AnnotatedString(it)
@@ -640,4 +641,4 @@ private const val SECOND_FIELD_OFF_SET_DP = 230
 private const val THIRD_FIELD_OFF_SET_DP = 330
 private const val FORTH_FIELD_OFF_SET_DP = 430
 private const val FIFTH_FIELD_OFF_SET_DP = 490
-private const val SIXTH_FIELD_OFF_SET_DP = 530
+private const val SIXTH_FIELD_OFF_SET_DP = 550

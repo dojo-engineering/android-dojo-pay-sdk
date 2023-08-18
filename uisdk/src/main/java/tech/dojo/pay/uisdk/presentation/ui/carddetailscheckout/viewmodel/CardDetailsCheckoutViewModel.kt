@@ -172,7 +172,7 @@ internal class CardDetailsCheckoutViewModel(
 
     fun validateCvv(cvvValue: String) {
         if (cvvValue.isBlank()) {
-            currentState.copy(
+            currentState = currentState.copy(
                 cvvInputFieldState = InputFieldState(
                     value = "",
                     isError = true,
@@ -194,25 +194,14 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onExpireDateValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
-                cardExpireDateInputField = InputFieldState(
-                    value = "",
-                    isError = true,
-                    errorMessages = stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_error_empty_expiry),
+        currentState = currentState.copy(
+            cardExpireDateInputField = InputFieldState(newValue),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    cardExpireDate = newValue,
                 ),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
-            )
-        } else {
-            currentState.copy(
-                cardExpireDateInputField = InputFieldState(newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(
-                    newValue = isPayButtonEnabled(
-                        cardExpireDate = newValue,
-                    ),
-                ),
-            )
-        }
+            ),
+        )
         pushStateToUi(currentState)
     }
 
@@ -240,33 +229,28 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onEmailValueChanged(newValue: String) {
-        currentState = if (newValue.isBlank()) {
-            currentState.copy(
+        currentState = currentState.copy(
+            emailInputField = InputFieldState(value = newValue),
+            actionButtonState = currentState.actionButtonState.updateIsEnabled(
+                newValue = isPayButtonEnabled(
+                    emailValue = newValue,
+                ),
+            ),
+        )
+        pushStateToUi(currentState)
+    }
+
+    fun validateEmailValue(emailValue: String) {
+        if (emailValue.isBlank()) {
+            currentState = currentState.copy(
                 emailInputField = InputFieldState(
-                    value = newValue,
+                    value = emailValue,
                     isError = true,
                     errorMessages = stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_error_empty_email),
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else {
-            currentState.copy(
-                emailInputField = InputFieldState(value = newValue),
-                actionButtonState = currentState.actionButtonState.updateIsEnabled(
-                    newValue = isPayButtonEnabled(
-                        emailValue = newValue,
-                    ),
-                ),
-            )
-        }
-        pushStateToUi(currentState)
-    }
-
-    fun validateEmailValue(emailValue: String, focused: Boolean) {
-        if (!focused &&
-            emailValue.isNotBlank() &&
-            !cardCheckoutScreenValidator.isEmailValid(emailValue)
-        ) {
+        } else if (!cardCheckoutScreenValidator.isEmailValid(emailValue)) {
             currentState = currentState.copy(
                 emailInputField = InputFieldState(
                     value = emailValue,
