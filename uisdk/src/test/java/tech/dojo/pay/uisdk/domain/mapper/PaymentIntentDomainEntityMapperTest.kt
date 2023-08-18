@@ -5,6 +5,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -29,6 +30,13 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 internal class PaymentIntentDomainEntityMapperTest {
+    private lateinit var mapper: PaymentIntentDomainEntityMapper
+
+    @Before
+    fun setUp() {
+        mapper = PaymentIntentDomainEntityMapper()
+    }
+
     @Test
     fun `when calling apply with valid PaymentIntentPayload then should map to PaymentIntentDomainEntity with all valid data`() =
         runTest {
@@ -36,7 +44,31 @@ internal class PaymentIntentDomainEntityMapperTest {
             val raw = createValidPaymentIntentPayload()
             val expected = getValidPaymentIntentDomainEntity()
             // act
-            val actual = PaymentIntentDomainEntityMapper().apply(raw)
+            val actual = mapper.apply(raw)
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `when calling apply with valid PaymentIntentPayload with status as captured then should map to PaymentIntentDomainEntity with isPaymentAlreadyCollected as true`() =
+        runTest {
+            // arrange
+            val raw = createValidPaymentIntentPayload().copy(status = "Captured")
+            val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
+            // act
+            val actual = mapper.apply(raw)
+            // assert
+            Assert.assertEquals(expected, actual)
+        }
+
+    @Test
+    fun `when calling apply with valid PaymentIntentPayload with status as authorized then should map to PaymentIntentDomainEntity with isPaymentAlreadyCollected as true`() =
+        runTest {
+            // arrange
+            val raw = createValidPaymentIntentPayload().copy(status = "Authorized")
+            val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
+            // act
+            val actual = mapper.apply(raw)
             // assert
             Assert.assertEquals(expected, actual)
         }
@@ -49,7 +81,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             // act
             val actual = assertThrows(
                 EssentialParamMissingException::class.java,
-            ) { PaymentIntentDomainEntityMapper().apply(raw) }
+            ) { mapper.apply(raw) }
             // assert
             assertTrue(actual.message?.contains("clientSessionSecret") ?: false)
             assertTrue(actual.message?.contains("amount") ?: false)
