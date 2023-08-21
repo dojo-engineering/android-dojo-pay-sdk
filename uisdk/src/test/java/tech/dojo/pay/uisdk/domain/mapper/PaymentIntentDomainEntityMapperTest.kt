@@ -3,8 +3,7 @@ package tech.dojo.pay.uisdk.domain.mapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
-import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,7 +22,6 @@ import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.data.entities.ShippingAddress
 import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
-import tech.dojo.pay.uisdk.domain.entities.EssentialParamMissingException
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 
@@ -74,21 +72,14 @@ internal class PaymentIntentDomainEntityMapperTest {
         }
 
     @Test
-    fun `when calling apply with invalid PaymentIntentPayload should Thrown EssentialParamMissingException that contains all the missing fields`() =
+    fun `when calling apply with invalid PaymentIntentPayload should return null `() =
         runTest {
             // arrange
             val raw = PaymentIntentPayload()
             // act
-            val actual = assertThrows(
-                EssentialParamMissingException::class.java,
-            ) { mapper.apply(raw) }
+            val actual = mapper.apply(raw)
             // assert
-            assertTrue(actual.message?.contains("clientSessionSecret") ?: false)
-            assertTrue(actual.message?.contains("amount") ?: false)
-            assertTrue(actual.message?.contains("id") ?: false)
-            assertTrue(actual.message?.contains("merchantConfig") ?: false)
-            assertTrue(actual.message?.contains("supportedPaymentMethods") ?: false)
-            assertTrue(actual.message?.contains("cardSchemes") ?: false)
+            assertNull(actual)
         }
 
     private fun createValidPaymentIntentPayload() = PaymentIntentPayload(

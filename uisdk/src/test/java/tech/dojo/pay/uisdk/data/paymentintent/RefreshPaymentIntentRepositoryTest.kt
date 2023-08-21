@@ -105,4 +105,29 @@ class RefreshPaymentIntentRepositoryTest {
             // assert
             assertEquals(expectedValue, actual)
         }
+
+    @Test
+    fun `when refreshPaymentIntent success PaymentIntent stream should emits RefreshFailure if mapping  returned null`() =
+        runTest {
+            // arrange
+            val paymentId = "paymentId"
+            val paymentIntentJson = "paymentIntentJson"
+
+            given(dataSource.refreshPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
+            given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
+                PaymentIntentPayload(),
+            )
+            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(null)
+            val expectedValue = RefreshPaymentIntentResult.RefreshFailure
+            // act
+            sut.refreshPaymentIntent(paymentId)
+            val actual = sut.getRefreshedPaymentTokenFlow().first()
+
+            // assert
+            assertEquals(expectedValue, actual)
+        }
 }

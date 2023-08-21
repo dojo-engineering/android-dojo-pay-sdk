@@ -161,4 +161,28 @@ internal class PaymentIntentRepositoryTest {
             // assert
             assertEquals(expectedValue, actual)
         }
+
+    @Test
+    fun `when fetchPaymentIntent success PaymentIntent stream should emits FetchFailure if mapping  returned null`() =
+        runTest {
+            // arrange
+            val paymentId = "paymentId"
+            val paymentIntentJson = "paymentIntentJson"
+            given(dataSource.fetchPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
+            given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
+                PaymentIntentPayload(),
+            )
+            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(null)
+            val expectedValue = PaymentIntentResult.FetchFailure
+            // act
+
+            sut.fetchPaymentIntent(paymentId)
+            val actual = sut.observePaymentIntent().first()
+            // assert
+            assertEquals(expectedValue, actual)
+        }
 }

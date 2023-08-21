@@ -37,7 +37,11 @@ internal class PaymentIntentRepository(
             val domainEntity = paymentIntentDomainEntityMapper.apply(
                 paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(it),
             )
-            paymentIntentResult.tryEmit(PaymentIntentResult.Success(domainEntity))
+            if (domainEntity != null) {
+                paymentIntentResult.tryEmit(PaymentIntentResult.Success(domainEntity))
+            } else {
+                paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure)
+            }
         } catch (e: Exception) {
             paymentIntentResult.tryEmit(PaymentIntentResult.FetchFailure)
         }
