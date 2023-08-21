@@ -428,7 +428,8 @@ internal class CardDetailsCheckoutViewModel(
     }
 
     fun onPayWithCardClicked() {
-        viewModelScope.launch() {
+        showLoadingOnActionButton()
+        viewModelScope.launch {
             updatePaymentStateUseCase.updatePaymentSate(isActive = true)
             refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
             getRefreshedPaymentTokenFlow
@@ -436,7 +437,6 @@ internal class CardDetailsCheckoutViewModel(
                 .collectLatest {
                     when (it) {
                         is RefreshPaymentIntentResult.Success -> {
-                            showLoadingOnActionButton()
                             executeCardPayment(paymentToken = it.token)
                         }
 

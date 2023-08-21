@@ -22,7 +22,7 @@ internal class PaymentResultViewEntityMapper(
     fun mapToOrderIdField(orderId: String): String {
         return String.format(
             Locale.getDefault(),
-            "%s %s",
+            "%s%s",
             stringProvider.getString(R.string.dojo_ui_sdk_order_info),
             orderId,
         )
