@@ -6,6 +6,7 @@ import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
+import java.util.Currency
 
 internal class PaymentIntentDomainEntityMapper {
     fun apply(raw: PaymentIntentPayload): PaymentIntentDomainEntity? {
@@ -58,10 +59,22 @@ internal class PaymentIntentDomainEntityMapper {
         if (raw.id == null) invalidParams.add("id")
         if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
         if (raw.amount == null && raw.intendedAmount == null) invalidParams.add("amount")
+        if (!isValidCurrencyCode(raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode)) invalidParams.add("currencyCode")
         if (raw.merchantConfig == null) invalidParams.add("merchantConfig")
         if (raw.merchantConfig?.supportedPaymentMethods == null) invalidParams.add("supportedPaymentMethods")
         if (raw.merchantConfig?.supportedPaymentMethods?.cardSchemes == null) invalidParams.add("cardSchemes")
         if (raw.status == null) invalidParams.add("status")
         return invalidParams.isNotEmpty()
+    }
+
+    private fun isValidCurrencyCode(currencyCode: String?): Boolean {
+        return currencyCode?.let {
+            try {
+                Currency.getInstance(it)
+                true
+            } catch (e: IllegalArgumentException) {
+                false
+            }
+        } ?: false
     }
 }

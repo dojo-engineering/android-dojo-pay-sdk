@@ -72,6 +72,22 @@ internal class PaymentIntentDomainEntityMapperTest {
         }
 
     @Test
+    fun `when calling apply with valid PaymentIntentPayload with invalid currencyCode should return null`() =
+        runTest {
+            // arrange
+            val raw = createValidPaymentIntentPayload().copy(
+                amount = Amount(
+                    10L,
+                    "123",
+                ),
+            )
+            // act
+            val actual = mapper.apply(raw)
+            // assert
+            assertNull(actual)
+        }
+
+    @Test
     fun `when calling apply with invalid PaymentIntentPayload should return null `() =
         runTest {
             // arrange
