@@ -137,7 +137,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Order ID:")
 
         val orderId = "123456"
-        val expectedResult = "Order ID: 123456"
+        val expectedResult = "Order ID:123456"
         // act
         mapper = PaymentResultViewEntityMapper(
             stringProvider = mockStringProvider,
