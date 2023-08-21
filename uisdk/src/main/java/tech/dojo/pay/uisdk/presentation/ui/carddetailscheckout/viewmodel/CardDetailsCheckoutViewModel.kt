@@ -376,7 +376,7 @@ internal class CardDetailsCheckoutViewModel(
 
     private fun getActionButtonTitle(paymentIntentResult: PaymentIntentResult.Success) =
         if (isStartDestination) {
-            stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title_setup_intent)
+            stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_pay_button_setup_intent)
         } else {
             String.format(
                 Locale.getDefault(),
