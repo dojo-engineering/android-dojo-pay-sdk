@@ -85,7 +85,6 @@ internal fun CardDetailsCheckoutScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    var scrollToPosition by remember { mutableStateOf(0F) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
@@ -109,10 +108,6 @@ internal fun CardDetailsCheckoutScreen(
                         Modifier
                             .verticalScroll(scrollState)
                             .wrapContentHeight()
-                            .onGloballyPositioned { layoutCoordinates ->
-                                scrollToPosition =
-                                    scrollState.value + layoutCoordinates.positionInRoot().y
-                            }
                             .imePadding()
                             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
                         verticalArrangement = Arrangement.spacedBy(32.dp),
