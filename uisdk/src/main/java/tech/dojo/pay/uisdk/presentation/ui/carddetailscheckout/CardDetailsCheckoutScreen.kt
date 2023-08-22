@@ -85,6 +85,7 @@ internal fun CardDetailsCheckoutScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    var scrollToPosition by remember { mutableStateOf(0F) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
@@ -108,6 +109,10 @@ internal fun CardDetailsCheckoutScreen(
                         Modifier
                             .verticalScroll(scrollState)
                             .wrapContentHeight()
+                            .onGloballyPositioned { layoutCoordinates ->
+                                scrollToPosition =
+                                    scrollState.value + layoutCoordinates.positionInRoot().y
+                            }
                             .imePadding()
                             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 150.dp),
                         verticalArrangement = Arrangement.spacedBy(32.dp),
@@ -120,6 +125,7 @@ internal fun CardDetailsCheckoutScreen(
                         PostalCodeField(
                             scrollState,
                             coroutineScope,
+                            scrollToPosition,
                             state,
                             keyboardController,
                             viewModel,
@@ -127,6 +133,7 @@ internal fun CardDetailsCheckoutScreen(
                         CardHolderNameField(
                             scrollState,
                             coroutineScope,
+                            scrollToPosition,
                             keyboardController,
                             state,
                             viewModel,
@@ -134,6 +141,7 @@ internal fun CardDetailsCheckoutScreen(
                         CardNumberField(
                             scrollState,
                             coroutineScope,
+                            scrollToPosition,
                             keyboardController,
                             state,
                             viewModel,
@@ -150,6 +158,7 @@ internal fun CardDetailsCheckoutScreen(
                                 CardExpireDateField(
                                     scrollState,
                                     coroutineScope,
+                                    scrollToPosition,
                                     keyboardController,
                                     state,
                                     viewModel,
@@ -161,6 +170,7 @@ internal fun CardDetailsCheckoutScreen(
                                 CvvField(
                                     scrollState,
                                     coroutineScope,
+                                    scrollToPosition,
                                     state,
                                     keyboardController,
                                     viewModel,
@@ -170,6 +180,7 @@ internal fun CardDetailsCheckoutScreen(
                         EmailField(
                             scrollState,
                             coroutineScope,
+                            scrollToPosition,
                             state,
                             keyboardController,
                             viewModel,
@@ -257,16 +268,28 @@ private fun ActionButton(
 private fun CvvField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+            FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        }
+    }
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CvvInputField(
         modifier = getModifierWithFocusChangedLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.validateCvv(state.cvvInputFieldState.value) },
         ),
@@ -287,16 +310,28 @@ private fun CvvField(
 private fun CardExpireDateField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+            FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        }
+    }
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardExpireDateInputField(
         modifier = getModifierWithFocusChangedLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.validateExpireDate(state.cardExpireDateInputField.value) },
         ),
@@ -322,17 +357,29 @@ private fun CardExpireDateField(
 private fun CardNumberField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
     isDarkModeEnabled: Boolean,
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+            FORTH_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        }
+    }
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
         modifier = getModifierWithFocusChangedLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.validateCardNumber(state.cardNumberInputField.value) },
         ),
@@ -359,16 +406,29 @@ private fun CardNumberField(
 private fun CardHolderNameField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
+    val scrollOffset = with(LocalDensity.current) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+            THIRD_FIELD_OFF_SET_DP.dp.toPx()
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        } else {
+            FIRST_FIELD_OFF_SET_DP.dp.toPx()
+        }
+    }
+
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
         modifier = getModifierWithFocusChangedLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.validateCardHolder(state.cardHolderInputField.value) },
         ),
@@ -387,17 +447,27 @@ private fun CardHolderNameField(
 private fun EmailField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isEmailInputFieldRequired) {
+        val scrollOffset = with(LocalDensity.current) {
+            if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+                SIXTH_FIELD_OFF_SET_DP.dp.toPx()
+            } else {
+                FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+            }
+        }
         val hasBeenFocused by remember { mutableStateOf(false) }
 
         InputFieldWithErrorMessage(
             modifier = getModifierWithFocusChangedLogic(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
+                scrollToPosition = scrollToPosition,
+                scrollOffset = scrollOffset,
                 initialHasBeenFocused = hasBeenFocused,
                 onValidate = { viewModel.validateEmailValue(state.emailInputField.value) },
             ),
@@ -433,16 +503,22 @@ private fun BillingCountryField(
 private fun PostalCodeField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isPostalCodeFieldRequired) {
+        val scrollOffset = with(LocalDensity.current) {
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
+        }
         val hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
             modifier = getModifierWithFocusChangedLogic(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
+                scrollToPosition = scrollToPosition,
+                scrollOffset = scrollOffset,
                 initialHasBeenFocused = hasBeenFocused,
                 onValidate = {
                     viewModel.validatePostalCode(state.postalCodeField.value)
@@ -504,24 +580,19 @@ private fun AppBarItem(
 fun getModifierWithFocusChangedLogic(
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
+    scrollToPosition: Float,
+    scrollOffset: Float,
     initialHasBeenFocused: Boolean,
     onValidate: () -> Unit,
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
-    val scrollOffsets = remember { mutableListOf<Float>() }
-    val inputFieldLabelHeightInPx = with(LocalDensity.current) {
-        INPUT_FIELD_LABEL_HEIGHT.dp.toPx()
-    }
     return Modifier.onFocusChanged { focusState ->
         if (focusState.isFocused) {
             coroutineScope.launch {
                 delay(300)
-                val totalOffset = scrollOffsets.firstOrNull() ?: 0F
-                if (totalOffset != 0F) {
-                    scrollState.animateScrollTo((totalOffset - inputFieldLabelHeightInPx).roundToInt())
-                } else {
-                    scrollState.animateScrollTo((totalOffset).roundToInt())
-                }
+                scrollState.animateScrollTo(
+                    (scrollToPosition + scrollOffset).roundToInt(),
+                )
             }
             hasBeenFocused = true
         } else {
@@ -529,10 +600,12 @@ fun getModifierWithFocusChangedLogic(
                 onValidate()
             }
         }
-    }.onGloballyPositioned { layoutCoordinates ->
-        val totalHeight = layoutCoordinates.positionInRoot().y
-        scrollOffsets.add(totalHeight)
     }
 }
 
-private const val INPUT_FIELD_LABEL_HEIGHT = 70
+private const val FIRST_FIELD_OFF_SET_DP = 30
+private const val SECOND_FIELD_OFF_SET_DP = 230
+private const val THIRD_FIELD_OFF_SET_DP = 330
+private const val FORTH_FIELD_OFF_SET_DP = 430
+private const val FIFTH_FIELD_OFF_SET_DP = 490
+private const val SIXTH_FIELD_OFF_SET_DP = 570
