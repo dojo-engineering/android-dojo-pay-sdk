@@ -244,7 +244,6 @@ private fun SaveCardCheckBox(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ActionButton(
     scrollState: ScrollState,
@@ -284,10 +283,10 @@ private fun CvvField(
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-    var focusedTextKey by remember { mutableStateOf(false) }
+    var hasBeenFocused by remember { mutableStateOf(false) }
     CvvInputField(
         modifier = Modifier.onFocusChanged {
-            focusedTextKey = if (it.isFocused) {
+            hasBeenFocused = if (it.isFocused) {
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
@@ -296,7 +295,7 @@ private fun CvvField(
                 }
                 true
             } else {
-                if (focusedTextKey) {
+                if (hasBeenFocused) {
                     viewModel.validateCvv(
                         state.cvvInputFieldState.value,
                     )
@@ -335,7 +334,7 @@ private fun CardExpireDateField(
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-    var focusedTextKey by remember { mutableStateOf(false) }
+    var hasBeenFocused by remember { mutableStateOf(false) }
     CardExpireDateInputField(
         modifier = Modifier.onFocusChanged {
             if (it.isFocused) {
@@ -346,10 +345,10 @@ private fun CardExpireDateField(
                     )
                 }
             }
-            focusedTextKey = if (it.isFocused) {
+            hasBeenFocused = if (it.isFocused) {
                 true
             } else {
-                if (focusedTextKey) {
+                if (hasBeenFocused) {
                     viewModel.validateExpireDate(
                         state.cardExpireDateInputField.value,
                     )
@@ -394,7 +393,7 @@ private fun CardNumberField(
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-    var focusedTextKey by remember { mutableStateOf(false) }
+    var hasBeenFocused by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
         modifier = Modifier.onFocusChanged {
@@ -406,10 +405,10 @@ private fun CardNumberField(
                     )
                 }
             }
-            focusedTextKey = if (it.isFocused) {
+            hasBeenFocused = if (it.isFocused) {
                 true
             } else {
-                if (focusedTextKey) {
+                if (hasBeenFocused) {
                     viewModel.validateCardNumber(
                         state.cardNumberInputField.value,
                     )
@@ -454,10 +453,10 @@ private fun CardHolderNameField(
             FIRST_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-    var focusedTextKey by remember { mutableStateOf(false) }
+    var hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
         modifier = Modifier.onFocusChanged {
-            focusedTextKey = if (it.isFocused) {
+            hasBeenFocused = if (it.isFocused) {
                 coroutineScope.launch {
                     delay(300)
                     scrollState.animateScrollTo(
@@ -466,7 +465,7 @@ private fun CardHolderNameField(
                 }
                 true
             } else {
-                if (focusedTextKey) {
+                if (hasBeenFocused) {
                     viewModel.validateCardHolder(
                         state.cardHolderInputField.value,
                     )
@@ -502,10 +501,10 @@ private fun EmailField(
                 FIFTH_FIELD_OFF_SET_DP.dp.toPx()
             }
         }
-        var focusedTextKey by remember { mutableStateOf(false) }
+        var hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
-                focusedTextKey = if (it.isFocused) {
+                hasBeenFocused = if (it.isFocused) {
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
@@ -514,7 +513,7 @@ private fun EmailField(
                     }
                     true
                 } else {
-                    if (focusedTextKey) {
+                    if (hasBeenFocused) {
                         viewModel.validateEmailValue(
                             state.emailInputField.value,
                         )
@@ -563,11 +562,10 @@ private fun PostalCodeField(
         val scrollOffset = with(LocalDensity.current) {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
-        var focusedTextKey by remember { mutableStateOf(false) }
-
+        var hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
             modifier = Modifier.onFocusChanged {
-                focusedTextKey = if (it.isFocused) {
+                hasBeenFocused = if (it.isFocused) {
                     coroutineScope.launch {
                         delay(300)
                         scrollState.animateScrollTo(
@@ -576,7 +574,7 @@ private fun PostalCodeField(
                     }
                     true
                 } else {
-                    if (focusedTextKey) {
+                    if (hasBeenFocused) {
                         viewModel.validatePostalCode(
                             state.postalCodeField.value,
                         )
