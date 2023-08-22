@@ -1,5 +1,4 @@
 import com.android.build.gradle.LibraryExtension
-import java.io.FileInputStream
 import java.util.*
 
 /**
@@ -50,10 +49,9 @@ tasks.dokkaJavadoc.configure {
     outputDirectory.set(buildDir.resolve("javadoc"))
 }
 
-
 /**Create credentials.properties in root project folder file with gpr.user=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
-//val credentialProperties = Properties()
-//credentialProperties.load(FileInputStream(rootProject.file("credentials.properties")))
+// val credentialProperties = Properties()
+// credentialProperties.load(FileInputStream(rootProject.file("credentials.properties")))
 
 afterEvaluate {
 
@@ -90,6 +88,5 @@ afterEvaluate {
         }
     }
 }
-
 
 val String.byProperty: String? get() = findProperty(this) as? String

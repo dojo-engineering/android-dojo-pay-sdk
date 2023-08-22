@@ -160,7 +160,7 @@ When payment process is terminated by user (e.x. closed 3ds screen), then `DECLI
 
 ### Add dependency
 
-`implementation 'tech.dojo.pay:sdk:1.2.0' `
+`implementation 'tech.dojo.pay:sdk:1.5.0' `
 
 ### Configure authentication
 
