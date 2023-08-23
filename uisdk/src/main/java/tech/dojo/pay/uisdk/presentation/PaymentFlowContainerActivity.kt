@@ -1,6 +1,8 @@
 package tech.dojo.pay.uisdk.presentation
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -78,10 +80,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        lockToPortrait()
         configureDojoSDKDebugConfig()
         configureDojoPayCore()
         setContent {
-            DojoTheme() {
+            DojoTheme {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
                 val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
                 val showDojoBrand = DojoSDKDropInUI.dojoThemeSettings?.showBranding ?: false
@@ -112,6 +115,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun lockToPortrait() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureDojoPayCore() {
