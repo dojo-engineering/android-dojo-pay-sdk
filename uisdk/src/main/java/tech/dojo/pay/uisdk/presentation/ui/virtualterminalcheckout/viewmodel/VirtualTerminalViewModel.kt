@@ -483,6 +483,7 @@ internal class VirtualTerminalViewModel(
     }
 
     fun onPayClicked() {
+        showLoadingOnActionButton()
         viewModelScope.launch() {
             refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
             updatePaymentStateUseCase.updatePaymentSate(isActive = true)
@@ -491,7 +492,6 @@ internal class VirtualTerminalViewModel(
                 .collectLatest {
                     when (it) {
                         is RefreshPaymentIntentResult.Success -> {
-                            showLoadingOnActionButton()
                             executePayment(paymentToken = it.token)
                         }
                         is RefreshPaymentIntentResult.RefreshFailure ->

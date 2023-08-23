@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -119,14 +118,6 @@ internal fun CardDetailsCheckoutScreen(
                         verticalArrangement = Arrangement.spacedBy(32.dp),
                     ) {
                         HeaderItem(state)
-                        EmailField(
-                            scrollState,
-                            coroutineScope,
-                            scrollToPosition,
-                            state,
-                            keyboardController,
-                            viewModel,
-                        )
                         BillingCountryField(
                             state,
                             viewModel,
@@ -186,7 +177,14 @@ internal fun CardDetailsCheckoutScreen(
                                 )
                             }
                         }
-
+                        EmailField(
+                            scrollState,
+                            coroutineScope,
+                            scrollToPosition,
+                            state,
+                            keyboardController,
+                            viewModel,
+                        )
                         SaveCardCheckBox(state, viewModel)
                     }
                     Column(
@@ -245,7 +243,6 @@ private fun SaveCardCheckBox(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ActionButton(
     scrollState: ScrollState,
@@ -277,31 +274,25 @@ private fun CvvField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
+    val hasBeenFocused by remember { mutableStateOf(false) }
 
     CvvInputField(
-        modifier = Modifier
-            .onFocusChanged {
-                if (it.hasFocus) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                        )
-                    }
-                }
-                viewModel.validateCvv(
-                    state.cvvInputFieldState.value,
-                    it.isFocused,
-                )
-            },
+        modifier = getModifierWithFocusChangedLogic(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
+            initialHasBeenFocused = hasBeenFocused,
+            onValidate = { viewModel.validateCvv(state.cvvInputFieldState.value) },
+        ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
         cvvValue = state.cvvInputFieldState.value,
         isError = state.cvvInputFieldState.isError,
@@ -325,32 +316,25 @@ private fun CardExpireDateField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FIFTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
+    val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardExpireDateInputField(
-
-        modifier = Modifier
-            .onFocusChanged {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                        )
-                    }
-                }
-                viewModel.validateExpireDate(
-                    state.cardExpireDateInputField.value,
-                    it.isFocused,
-                )
-            },
+        modifier = getModifierWithFocusChangedLogic(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
+            initialHasBeenFocused = hasBeenFocused,
+            onValidate = { viewModel.validateExpireDate(state.cardExpireDateInputField.value) },
+        ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
         keyboardOptions =
         KeyboardOptions(
@@ -380,37 +364,25 @@ private fun CardNumberField(
     isDarkModeEnabled: Boolean,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             FORTH_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
-    var focusedTextKey by remember { mutableStateOf(false) }
+    val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
-        modifier = Modifier.onFocusChanged {
-            if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                    )
-                }
-            }
-            focusedTextKey = if (it.isFocused) {
-                true
-            } else {
-                if (focusedTextKey) {
-                    viewModel.validateCardNumber(
-                        state.cardNumberInputField.value,
-                    )
-                }
-                false
-            }
-        },
+        modifier = getModifierWithFocusChangedLogic(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
+            initialHasBeenFocused = hasBeenFocused,
+            onValidate = { viewModel.validateCardNumber(state.cardNumberInputField.value) },
+        ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
@@ -440,26 +412,26 @@ private fun CardHolderNameField(
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
-        if (state.isEmailInputFieldRequired && state.isPostalCodeFieldRequired) {
+        if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
             THIRD_FIELD_OFF_SET_DP.dp.toPx()
-        } else if (state.isPostalCodeFieldRequired || state.isEmailInputFieldRequired) {
+        } else if (state.isBillingCountryFieldRequired || state.isPostalCodeFieldRequired) {
             SECOND_FIELD_OFF_SET_DP.dp.toPx()
         } else {
             FIRST_FIELD_OFF_SET_DP.dp.toPx()
         }
     }
 
+    val hasBeenFocused by remember { mutableStateOf(false) }
+
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                    )
-                }
-            }
-        },
+        modifier = getModifierWithFocusChangedLogic(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            scrollToPosition = scrollToPosition,
+            scrollOffset = scrollOffset,
+            initialHasBeenFocused = hasBeenFocused,
+            onValidate = { viewModel.validateCardHolder(state.cardHolderInputField.value) },
+        ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = state.cardHolderInputField.value,
@@ -470,7 +442,7 @@ private fun CardHolderNameField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun EmailField(
     scrollState: ScrollState,
@@ -482,25 +454,23 @@ private fun EmailField(
 ) {
     if (state.isEmailInputFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            FIRST_FIELD_OFF_SET_DP.dp.toPx()
+            if (state.isBillingCountryFieldRequired && state.isPostalCodeFieldRequired) {
+                SIXTH_FIELD_OFF_SET_DP.dp.toPx()
+            } else {
+                FIFTH_FIELD_OFF_SET_DP.dp.toPx()
+            }
         }
+        val hasBeenFocused by remember { mutableStateOf(false) }
 
         InputFieldWithErrorMessage(
-            modifier = Modifier
-                .onFocusChanged {
-                    if (it.isFocused) {
-                        coroutineScope.launch {
-                            delay(300)
-                            scrollState.animateScrollTo(
-                                scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                            )
-                        }
-                    }
-                    viewModel.validateEmailValue(
-                        state.emailInputField.value,
-                        it.isFocused,
-                    )
-                },
+            modifier = getModifierWithFocusChangedLogic(
+                coroutineScope = coroutineScope,
+                scrollState = scrollState,
+                scrollToPosition = scrollToPosition,
+                scrollOffset = scrollOffset,
+                initialHasBeenFocused = hasBeenFocused,
+                onValidate = { viewModel.validateEmailValue(state.emailInputField.value) },
+            ),
             isError = state.emailInputField.isError,
             assistiveText = state.emailInputField.errorMessages?.let {
                 AnnotatedString(it)
@@ -540,23 +510,20 @@ private fun PostalCodeField(
 ) {
     if (state.isPostalCodeFieldRequired) {
         val scrollOffset = with(LocalDensity.current) {
-            if (state.isEmailInputFieldRequired) {
-                SECOND_FIELD_OFF_SET_DP.dp.toPx()
-            } else {
-                FIRST_FIELD_OFF_SET_DP.dp.toPx()
-            }
+            SECOND_FIELD_OFF_SET_DP.dp.toPx()
         }
+        val hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
-            modifier = Modifier.onFocusChanged {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt(),
-                        )
-                    }
-                }
-            },
+            modifier = getModifierWithFocusChangedLogic(
+                coroutineScope = coroutineScope,
+                scrollState = scrollState,
+                scrollToPosition = scrollToPosition,
+                scrollOffset = scrollOffset,
+                initialHasBeenFocused = hasBeenFocused,
+                onValidate = {
+                    viewModel.validatePostalCode(state.postalCodeField.value)
+                },
+            ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
             value = state.postalCodeField.value,
@@ -579,6 +546,7 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
                 allowedPaymentMethodsIcons = state.allowedPaymentMethodsIcons,
             )
         }
+
         CardCheckOutHeaderType.MERCHANT_HEADER -> {
             state.orderId?.let { orderId ->
                 state.merchantName?.let { merchantName ->
@@ -594,17 +562,50 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
 }
 
 @Composable
-private fun AppBarItem(onBackClicked: () -> Unit, onCloseClicked: () -> Unit, toolbarTitle: String?) {
+private fun AppBarItem(
+    onBackClicked: () -> Unit,
+    onCloseClicked: () -> Unit,
+    toolbarTitle: String?,
+) {
     DojoAppBar(
-        title = toolbarTitle ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = toolbarTitle
+            ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
     )
 }
 
+@Composable
+fun getModifierWithFocusChangedLogic(
+    coroutineScope: CoroutineScope,
+    scrollState: ScrollState,
+    scrollToPosition: Float,
+    scrollOffset: Float,
+    initialHasBeenFocused: Boolean,
+    onValidate: () -> Unit,
+): Modifier {
+    var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
+    return Modifier.onFocusChanged { focusState ->
+        if (focusState.isFocused) {
+            coroutineScope.launch {
+                delay(300)
+                scrollState.animateScrollTo(
+                    (scrollToPosition + scrollOffset).roundToInt(),
+                )
+            }
+            hasBeenFocused = true
+        } else {
+            if (hasBeenFocused) {
+                onValidate()
+            }
+        }
+    }
+}
+
 private const val FIRST_FIELD_OFF_SET_DP = 30
-private const val SECOND_FIELD_OFF_SET_DP = 290
-private const val THIRD_FIELD_OFF_SET_DP = 360
-private const val FORTH_FIELD_OFF_SET_DP = 420
+private const val SECOND_FIELD_OFF_SET_DP = 230
+private const val THIRD_FIELD_OFF_SET_DP = 330
+private const val FORTH_FIELD_OFF_SET_DP = 430
 private const val FIFTH_FIELD_OFF_SET_DP = 490
+private const val SIXTH_FIELD_OFF_SET_DP = 570

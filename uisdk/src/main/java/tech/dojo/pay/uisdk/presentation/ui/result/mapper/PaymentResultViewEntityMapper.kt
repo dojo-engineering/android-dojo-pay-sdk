@@ -63,7 +63,7 @@ internal class PaymentResultViewEntityMapper(
 
     private fun getFailedStatusTitle(): String {
         return when (paymentType) {
-            DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail)
+            DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_message_setup_intent_fail)
             DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
                 R.string.dojo_ui_sdk_payment_result_title_fail,
             )

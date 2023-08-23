@@ -78,7 +78,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(paymentIntentDomainEntity)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(paymentIntentDomainEntity)
             val expectedValue = PaymentIntentResult.Success(paymentIntentDomainEntity)
             // act
             sut.fetchPaymentIntent(paymentId)
@@ -129,7 +129,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(paymentIntentDomainEntity)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(paymentIntentDomainEntity)
             val expectedValue = PaymentIntentResult.Success(paymentIntentDomainEntity)
             // act
             sut.fetchSetUpIntent(paymentId)
@@ -152,7 +152,31 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willThrow(RuntimeException("A mock exception occurred!"))
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willThrow(RuntimeException("A mock exception occurred!"))
+            val expectedValue = PaymentIntentResult.FetchFailure
+            // act
+
+            sut.fetchPaymentIntent(paymentId)
+            val actual = sut.observePaymentIntent().first()
+            // assert
+            assertEquals(expectedValue, actual)
+        }
+
+    @Test
+    fun `when fetchPaymentIntent success PaymentIntent stream should emits FetchFailure if mapping  returned null`() =
+        runTest {
+            // arrange
+            val paymentId = "paymentId"
+            val paymentIntentJson = "paymentIntentJson"
+            given(dataSource.fetchPaymentIntent(any(), any(), any()))
+                .willAnswer {
+                    val successCallback = it.arguments[1] as (String) -> Unit
+                    successCallback.invoke(paymentIntentJson)
+                }
+            given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
+                PaymentIntentPayload(),
+            )
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(null)
             val expectedValue = PaymentIntentResult.FetchFailure
             // act
 

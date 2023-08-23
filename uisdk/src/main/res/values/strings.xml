@@ -1,4 +1,4 @@
-<resources >
+<resources>
     <string name = "dojo_ui_sdk_payment_method_checkout_title">Payment method</string>
     <string name = "dojo_ui_sdk_footer_powered_by_title">Powered by</string>
     <string name = "dojo_ui_sdk_footer_powered_by_terms">Terms</string>
@@ -15,7 +15,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_button_pay">Pay</string>
     <string name = "dojo_ui_sdk_card_details_checkout_button_processing">Processing....</string>
     <string name = "dojo_ui_sdk_card_details_checkout_field_email">Email</string>
-    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Country</string>
+    <string name = "dojo_ui_sdk_card_details_checkout_billing_country">Billing Country</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_postcode">Postcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_billing_zipcode">Zipcode</string>
     <string name = "dojo_ui_sdk_card_details_checkout_expiry_date">Expiry date</string>
@@ -69,7 +69,7 @@
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_line_1">Please fill in address</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_city">Please fill in your city</string>
     <string name = "dojo_ui_sdk_card_details_checkout_error_empty_shipping_postal">Please fill in your postal code</string>
-    <string name = "dojo_ui_sdk_order_info">Order: &#160;</string>
+    <string name = "dojo_ui_sdk_order_info">Order</string>
     <string name = "dojo_ui_sdk_card_details_checkout_title_setup_intent">Save card details</string>
     <string name = "dojo_ui_sdk_card_details_checkout_consent_terms">requires your payment card information to secure this booking and you may be charged for no-shows or cancellations in accordance with their booking policy.</string>
     <string name = "dojo_ui_sdk_card_details_checkout_pay_button_setup_intent">Save Card</string>
@@ -77,4 +77,5 @@
     <string name = "dojo_ui_sdk_payment_result_title_setup_intent_fail">Card was not saved</string>
     <string name = "dojo_ui_sdk_payment_result_main_title_setup_intent_success">Card saved successfully</string>
     <string name = "dojo_ui_sdk_payment_result_main_title_setup_intent_fail">We could not save your card details</string>
+    <string name = "dojo_ui_sdk_payment_result_main_message_setup_intent_fail">Failed to save card details</string>
 </resources>

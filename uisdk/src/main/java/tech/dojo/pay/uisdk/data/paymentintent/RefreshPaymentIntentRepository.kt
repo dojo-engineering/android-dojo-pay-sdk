@@ -38,15 +38,16 @@ internal class RefreshPaymentIntentRepository(
 
     private fun handleRefreshSuccess(paymentIntentPayloadJson: String) {
         try {
-            paymentIntentResult.tryEmit(
-                RefreshPaymentIntentResult.Success(
-                    paymentIntentDomainEntityMapper.apply(
-                        paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(
-                            paymentIntentPayloadJson,
-                        ),
-                    ).paymentToken,
-                ),
+            val domainEntity = paymentIntentDomainEntityMapper.mapPayload(
+                paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(paymentIntentPayloadJson),
             )
+            if (domainEntity != null) {
+                paymentIntentResult.tryEmit(
+                    RefreshPaymentIntentResult.Success(domainEntity.paymentToken),
+                )
+            } else {
+                handleRefreshFailure()
+            }
         } catch (e: Exception) {
             handleRefreshFailure()
         }
