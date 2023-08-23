@@ -18,16 +18,35 @@ internal data class PaymentIntentDomainEntity(
     val isPreAuthPayment: Boolean = false,
     val orderId: String = "",
     val collectionShippingAddressRequired: Boolean = false,
-    val merchantName: String = ""
+    val isSetUpIntentPayment: Boolean = false,
+    val merchantName: String = "",
+    val isPaymentAlreadyCollected: Boolean = false,
 )
 
 data class AmountDomainEntity(
     val valueLong: Long,
     val valueString: String,
-    val currencyCode: String
+    val currencyCode: String,
 )
 
 internal data class ItemLinesDomainEntity(
     val caption: String,
-    val amount: Amount
+    val amount: Amount,
 )
+
+internal enum class PaymentIntentStatusDomainEntity(val status: String) {
+    CREATED("Created"),
+    AUTHORIZED("Authorized"),
+    CAPTURED("Captured"),
+    REVERSED("Reversed"),
+    REFUNDED("Refunded"),
+    CANCELED("Canceled"),
+    NOT_SUPPORTED(""),
+    ;
+
+    companion object {
+        fun fromStatus(status: String): PaymentIntentStatusDomainEntity =
+            PaymentIntentStatusDomainEntity.values()
+                .find { it.status == status } ?: NOT_SUPPORTED
+    }
+}

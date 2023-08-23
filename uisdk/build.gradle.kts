@@ -72,8 +72,6 @@ dependencies {
     implementation(AndroidX.Compose.runtime)
     implementation(AndroidX.Compose.material)
     implementation(AndroidX.Compose.iconsExtended)
-    implementation(AndroidX.Compose.animation)
-    implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.Compose.livedata)
     implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.Logging.TIMBER)

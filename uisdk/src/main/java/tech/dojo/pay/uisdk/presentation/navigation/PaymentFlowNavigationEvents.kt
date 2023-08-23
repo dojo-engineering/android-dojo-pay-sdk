@@ -21,3 +21,6 @@ internal sealed class PaymentFlowNavigationEvents {
 
     object CardDetailsCheckoutAsFirstScreen : PaymentFlowNavigationEvents()
 }
+
+internal const val CUSTOMER_ID_PARAMS_KEY = "customerId"
+internal const val DOJO_PAYMENT_RESULT_PARAMS_KEY = "dojoPaymentResult"

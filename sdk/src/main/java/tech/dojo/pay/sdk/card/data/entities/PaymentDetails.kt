@@ -5,7 +5,8 @@ import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
 
 internal data class PaymentDetails(
     val cV2: String?,
-    val savePaymentMethod: Boolean? = null,
+    val savePaymentMethod: Boolean? = null, // this is for the SetUp Intent payments it needs to be true
+    val mitConsentGiven: Boolean? = null,
     val cardName: String? = null,
     val cardNumber: String? = null,
     val expiryDate: String? = null,

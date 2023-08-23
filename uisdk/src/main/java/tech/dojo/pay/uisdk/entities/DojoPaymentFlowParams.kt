@@ -6,5 +6,5 @@ data class DojoPaymentFlowParams @JvmOverloads constructor(
     val paymentId: String,
     val clientSecret: String? = null,
     val GPayConfig: DojoGPayConfig? = null,
-    val isVirtualTerminalPayment: Boolean? = false
+    val paymentType: DojoPaymentType = DojoPaymentType.PAYMENT_CARD,
 ) : Serializable
