@@ -38,7 +38,7 @@ internal class RefreshPaymentIntentRepository(
 
     private fun handleRefreshSuccess(paymentIntentPayloadJson: String) {
         try {
-            val domainEntity = paymentIntentDomainEntityMapper.apply(
+            val domainEntity = paymentIntentDomainEntityMapper.mapPayload(
                 paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(paymentIntentPayloadJson),
             )
             if (domainEntity != null) {

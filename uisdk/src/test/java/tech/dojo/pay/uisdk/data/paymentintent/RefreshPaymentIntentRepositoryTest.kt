@@ -71,7 +71,7 @@ class RefreshPaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(paymentIntentDomainEntity)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(paymentIntentDomainEntity)
             val expectedValue = RefreshPaymentIntentResult.Success(paymentIntentDomainEntity.paymentToken)
             // act
             sut.refreshPaymentIntent(paymentId)
@@ -96,7 +96,7 @@ class RefreshPaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willThrow(RuntimeException("A mock exception occurred!"))
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willThrow(RuntimeException("A mock exception occurred!"))
             val expectedValue = RefreshPaymentIntentResult.RefreshFailure
             // act
             sut.refreshPaymentIntent(paymentId)
@@ -121,7 +121,7 @@ class RefreshPaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(null)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(null)
             val expectedValue = RefreshPaymentIntentResult.RefreshFailure
             // act
             sut.refreshPaymentIntent(paymentId)

@@ -34,7 +34,7 @@ internal class PaymentIntentRepository(
 
     private fun handleSuccessPaymentIntent(it: String) {
         try {
-            val domainEntity = paymentIntentDomainEntityMapper.apply(
+            val domainEntity = paymentIntentDomainEntityMapper.mapPayload(
                 paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(it),
             )
             if (domainEntity != null) {

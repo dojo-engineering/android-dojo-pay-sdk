@@ -9,7 +9,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
 import java.util.Currency
 
 internal class PaymentIntentDomainEntityMapper {
-    fun apply(raw: PaymentIntentPayload): PaymentIntentDomainEntity? {
+    fun mapPayload(raw: PaymentIntentPayload): PaymentIntentDomainEntity? {
         return if (containsInvalidParameters(raw)) {
             null
         } else {
@@ -18,16 +18,20 @@ internal class PaymentIntentDomainEntityMapper {
     }
 
     private fun containsInvalidParameters(raw: PaymentIntentPayload): Boolean {
-        val invalidParams: MutableList<String> = mutableListOf()
-        if (raw.id == null) invalidParams.add("id")
-        if (raw.clientSessionSecret == null) invalidParams.add("clientSessionSecret")
-        if (raw.amount == null && raw.intendedAmount == null) invalidParams.add("amount")
-        if (!isValidCurrencyCode(raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode)) invalidParams.add("currencyCode")
-        if (raw.merchantConfig == null) invalidParams.add("merchantConfig")
-        if (raw.merchantConfig?.supportedPaymentMethods == null) invalidParams.add("supportedPaymentMethods")
-        if (raw.merchantConfig?.supportedPaymentMethods?.cardSchemes == null) invalidParams.add("cardSchemes")
-        if (raw.status == null) invalidParams.add("status")
-        return invalidParams.isNotEmpty()
+        if (raw.id == null) return true
+        if (raw.clientSessionSecret == null) return true
+        if (raw.amount == null && raw.intendedAmount == null) return true
+        if (!isValidCurrencyCode(
+                raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode,
+            )
+        ) {
+            return true
+        }
+        if (raw.merchantConfig == null) return true
+        if (raw.merchantConfig.supportedPaymentMethods == null) return true
+        if (raw.merchantConfig.supportedPaymentMethods.cardSchemes == null) return true
+        if (raw.status == null) return true
+        return false
     }
 
     private fun isValidCurrencyCode(currencyCode: String?): Boolean {
@@ -42,22 +46,19 @@ internal class PaymentIntentDomainEntityMapper {
 
     private fun mapToPaymentIntentDomainEntityWithValidRaw(raw: PaymentIntentPayload) =
         PaymentIntentDomainEntity(
-            id = requireNotNull(raw.id),
+            id = raw.id.orEmpty(),
             customerId = raw.customer?.id,
-            paymentToken = requireNotNull(raw.clientSessionSecret),
+            paymentToken = raw.clientSessionSecret.orEmpty(),
             amount = AmountDomainEntity(
-                valueLong = requireNotNull(raw.amount?.value ?: raw.intendedAmount?.value),
-                valueString = requireNotNull(
-                    raw.amount?.value?.centsToString()
-                        ?: raw.intendedAmount?.value?.centsToString(),
-                ),
-                currencyCode = requireNotNull(
-                    raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode,
-                ),
+                valueLong = raw.amount?.value ?: raw.intendedAmount?.value ?: 0L,
+                valueString = (raw.amount?.value ?: raw.intendedAmount?.value)?.centsToString()
+                    .orEmpty(),
+                currencyCode = raw.amount?.currencyCode
+                    ?: raw.intendedAmount?.currencyCode.orEmpty(),
             ),
-            supportedCardsSchemes = requireNotNull(raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }),
-            supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets
+            supportedCardsSchemes = raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }
                 ?: emptyList(),
+            supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets.orEmpty(),
             itemLines = raw.itemLines?.map {
                 ItemLinesDomainEntity(
                     amount = it.amountTotal,
@@ -69,14 +70,13 @@ internal class PaymentIntentDomainEntityMapper {
                 ?: false,
             collectionShippingAddressRequired = raw.config?.shippingDetails?.collectionRequired
                 ?: false,
-            isVirtualTerminalPayment = raw.paymentSource?.let { it.lowercase() == "virtual-terminal" }
-                ?: false,
-            isPreAuthPayment = raw.captureMode?.let { it.lowercase() == "manual" } ?: false,
-            orderId = raw.reference ?: "",
+            isVirtualTerminalPayment = raw.paymentSource?.lowercase() == "virtual-terminal",
+            isPreAuthPayment = raw.captureMode?.lowercase() == "manual",
+            orderId = raw.reference.orEmpty(),
             isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
-            merchantName = raw.config?.tradingName ?: "",
+            merchantName = raw.config?.tradingName.orEmpty(),
             isPaymentAlreadyCollected =
-            PaymentIntentStatusDomainEntity.fromStatus(requireNotNull(raw.status)) == PaymentIntentStatusDomainEntity.CAPTURED ||
-                PaymentIntentStatusDomainEntity.fromStatus(requireNotNull(raw.status)) == PaymentIntentStatusDomainEntity.AUTHORIZED,
+            PaymentIntentStatusDomainEntity.fromStatus(raw.status.orEmpty())
+                .let { it == PaymentIntentStatusDomainEntity.CAPTURED || it == PaymentIntentStatusDomainEntity.AUTHORIZED },
         )
 }

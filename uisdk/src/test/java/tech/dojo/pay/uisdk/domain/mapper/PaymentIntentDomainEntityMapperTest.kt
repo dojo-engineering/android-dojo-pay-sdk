@@ -42,7 +42,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             val raw = createValidPaymentIntentPayload()
             val expected = getValidPaymentIntentDomainEntity()
             // act
-            val actual = mapper.apply(raw)
+            val actual = mapper.mapPayload(raw)
             // assert
             Assert.assertEquals(expected, actual)
         }
@@ -54,7 +54,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             val raw = createValidPaymentIntentPayload().copy(status = "Captured")
             val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
             // act
-            val actual = mapper.apply(raw)
+            val actual = mapper.mapPayload(raw)
             // assert
             Assert.assertEquals(expected, actual)
         }
@@ -66,7 +66,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             val raw = createValidPaymentIntentPayload().copy(status = "Authorized")
             val expected = getValidPaymentIntentDomainEntity().copy(isPaymentAlreadyCollected = true)
             // act
-            val actual = mapper.apply(raw)
+            val actual = mapper.mapPayload(raw)
             // assert
             Assert.assertEquals(expected, actual)
         }
@@ -82,7 +82,7 @@ internal class PaymentIntentDomainEntityMapperTest {
                 ),
             )
             // act
-            val actual = mapper.apply(raw)
+            val actual = mapper.mapPayload(raw)
             // assert
             assertNull(actual)
         }
@@ -93,7 +93,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             // arrange
             val raw = PaymentIntentPayload()
             // act
-            val actual = mapper.apply(raw)
+            val actual = mapper.mapPayload(raw)
             // assert
             assertNull(actual)
         }

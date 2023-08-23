@@ -78,7 +78,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(paymentIntentDomainEntity)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(paymentIntentDomainEntity)
             val expectedValue = PaymentIntentResult.Success(paymentIntentDomainEntity)
             // act
             sut.fetchPaymentIntent(paymentId)
@@ -129,7 +129,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(paymentIntentDomainEntity)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(paymentIntentDomainEntity)
             val expectedValue = PaymentIntentResult.Success(paymentIntentDomainEntity)
             // act
             sut.fetchSetUpIntent(paymentId)
@@ -152,7 +152,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willThrow(RuntimeException("A mock exception occurred!"))
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willThrow(RuntimeException("A mock exception occurred!"))
             val expectedValue = PaymentIntentResult.FetchFailure
             // act
 
@@ -176,7 +176,7 @@ internal class PaymentIntentRepositoryTest {
             given(paymentIntentPayLoadMapper.mapToPaymentIntentPayLoad(any())).willReturn(
                 PaymentIntentPayload(),
             )
-            given(paymentIntentDomainEntityMapper.apply(any())).willReturn(null)
+            given(paymentIntentDomainEntityMapper.mapPayload(any())).willReturn(null)
             val expectedValue = PaymentIntentResult.FetchFailure
             // act
 
