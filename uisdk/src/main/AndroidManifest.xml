@@ -5,7 +5,6 @@
     <application>
         <activity
             android:name=".presentation.PaymentFlowContainerActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.Transparent" />
     </application>
