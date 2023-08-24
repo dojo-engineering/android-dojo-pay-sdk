@@ -1,3 +1,5 @@
+package tech.dojo.pay.uisdk.presentation.ui.result.mapper
+
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.given
@@ -6,7 +8,6 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
-import tech.dojo.pay.uisdk.presentation.ui.result.mapper.PaymentResultViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 
 class PaymentResultViewEntityMapperTest {
