@@ -9,7 +9,7 @@ internal class CardCheckoutScreenValidator {
 
     fun isEmailFieldValidWithInputFieldVisibility(
         emailValue: String,
-        isInputFieldVisible: Boolean
+        isInputFieldVisible: Boolean,
     ): Boolean {
         return if (isInputFieldVisible) {
             isEmailValid(emailValue)
@@ -20,7 +20,7 @@ internal class CardCheckoutScreenValidator {
 
     fun isPostalCodeFieldWithInputFieldVisibility(
         postalCodeValue: String,
-        isInputFieldVisible: Boolean
+        isInputFieldVisible: Boolean,
     ): Boolean {
         return if (isInputFieldVisible) {
             postalCodeValue.isNotBlank()
@@ -61,4 +61,8 @@ internal class CardCheckoutScreenValidator {
     }
 
     fun isCvvValid(cvvValue: String): Boolean = cvvValue.length > 2
+
+    fun isCheckBoxValid(isStartDestination: Boolean, isCheckBoxChecked: Boolean): Boolean {
+        return if (isStartDestination) isCheckBoxChecked else true
+    }
 }

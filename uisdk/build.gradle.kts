@@ -1,4 +1,4 @@
-version = "1.2.2"
+version = "1.3.0"
 
 plugins {
     id("com.android.library")
@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -43,7 +43,7 @@ android {
         jvmTarget = "11"
         freeCompilerArgs = listOf(
             "-Xopt-in=kotlin.RequiresOptIn",
-            "-Xjvm-default=compatibility"
+            "-Xjvm-default=compatibility",
         )
     }
     testOptions {
@@ -72,8 +72,6 @@ dependencies {
     implementation(AndroidX.Compose.runtime)
     implementation(AndroidX.Compose.material)
     implementation(AndroidX.Compose.iconsExtended)
-    implementation(AndroidX.Compose.animation)
-    implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.Compose.livedata)
     implementation(AndroidX.Compose.tooling)
     implementation(AndroidX.Logging.TIMBER)

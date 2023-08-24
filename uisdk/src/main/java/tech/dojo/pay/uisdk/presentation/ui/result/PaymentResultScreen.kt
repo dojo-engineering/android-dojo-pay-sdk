@@ -44,9 +44,9 @@ import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
-import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
+
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -55,17 +55,17 @@ internal fun ShowResultSheetScreen(
     onCloseFlowClicked: () -> Unit,
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel,
-    showDojoBrand: Boolean
+    showDojoBrand: Boolean,
 ) {
     val paymentResultSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
             animationSpec = tween(
                 durationMillis = 500,
-                easing = FastOutSlowInEasing
+                easing = FastOutSlowInEasing,
             ),
             confirmValueChange = { false },
-            skipHalfExpanded = true
+            skipHalfExpanded = true,
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
@@ -89,9 +89,9 @@ internal fun ShowResultSheetScreen(
                 onTryAgainClicked,
                 viewModel,
                 windowSize,
-                showDojoBrand
+                showDojoBrand,
             )
-        }
+        },
     ) {}
 }
 
@@ -105,11 +105,11 @@ private fun BottomSheetItems(
     onTryAgainClicked: () -> Unit,
     viewModel: PaymentResultViewModel,
     windowSize: WindowSize,
-    showDojoBrand: Boolean
+    showDojoBrand: Boolean,
 ) {
     DojoAppBar(
         modifier = Modifier.height(120.dp),
-        title = stringResource(id = state.appBarTitleId),
+        title = state.appBarTitle,
         titleGravity = TitleGravity.LEFT,
         titleColor = DojoTheme.colors.headerTintColor,
         actionIcon = AppBarIcon.close(tintColor = DojoTheme.colors.headerButtonTintColor) {
@@ -117,7 +117,7 @@ private fun BottomSheetItems(
                 sheetState.hide()
             }
             onCloseFlowClicker()
-        }
+        },
     )
 
     Column(
@@ -125,12 +125,12 @@ private fun BottomSheetItems(
             .fillMaxWidth()
             .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(fraction = if (windowSize.widthWindowType == WindowSize.WindowType.COMPACT) 1f else .6f),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             when (state) {
                 is PaymentResultState.SuccessfulResult -> SuccessfulResult(
@@ -138,54 +138,20 @@ private fun BottomSheetItems(
                     coroutineScope,
                     sheetState,
                     onCloseFlowClicker,
-                    showDojoBrand
+                    showDojoBrand,
                 )
-                is PaymentResultState.FailedResult -> HandleFailedResult(
+
+                is PaymentResultState.FailedResult -> FailedResult(
                     state,
                     coroutineScope,
                     sheetState,
                     onCloseFlowClicker,
                     onTryAgainClicked,
                     viewModel,
-                    showDojoBrand
+                    showDojoBrand,
+
                 )
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun HandleFailedResult(
-    state: PaymentResultState.FailedResult,
-    coroutineScope: CoroutineScope,
-    sheetState: ModalBottomSheetState,
-    onCloseFlowClicker: () -> Unit,
-    onTryAgainClicked: () -> Unit,
-    viewModel: PaymentResultViewModel,
-    showDojoBrand: Boolean
-) {
-    when (state.showTryAgain) {
-        true -> {
-            FailedResult(
-                state,
-                coroutineScope,
-                sheetState,
-                onCloseFlowClicker,
-                onTryAgainClicked,
-                viewModel,
-                showDojoBrand
-
-            )
-        }
-        else -> {
-            FailedResultWithOutTryAgain(
-                state,
-                coroutineScope,
-                sheetState,
-                onCloseFlowClicker,
-                showDojoBrand
-            )
         }
     }
 }
@@ -204,7 +170,7 @@ private fun SuccessfulResult(
             .fillMaxWidth()
             .wrapContentHeight(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             modifier = Modifier.padding(bottom = 16.dp),
@@ -213,10 +179,18 @@ private fun SuccessfulResult(
             contentScale = ContentScale.Crop,
         )
         Text(
-            text = stringResource(id = state.status),
+            text = state.status,
             style = DojoTheme.typography.h5.bold,
-            color = DojoTheme.colors.primaryLabelTextColor
+            color = DojoTheme.colors.primaryLabelTextColor,
         )
+        Text(
+            text = state.orderInfo,
+            style = DojoTheme.typography.subtitle1,
+            textAlign = TextAlign.Center,
+            color = DojoTheme.colors.primaryLabelTextColor,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+
         DojoSpacer(height = 32.dp)
         DojoFullGroundButton(
             modifier = Modifier
@@ -229,12 +203,16 @@ private fun SuccessfulResult(
                     sheetState.hide()
                 }
                 onCloseFlowClicker()
-            }
+            },
         )
 
         DojoBrandFooter(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
+            mode = if (showDojoBrand) {
+                DojoBrandFooterModes.DOJO_BRAND_ONLY
+            } else {
+                DojoBrandFooterModes.NONE
+            },
         )
         DojoSpacer(height = 16.dp)
     }
@@ -257,37 +235,29 @@ private fun FailedResult(
             .fillMaxWidth()
             .heightIn(min = 40.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             modifier = Modifier.padding(bottom = 16.dp),
             painter = painterResource(id = state.imageId),
             contentDescription = "",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Text(
-            text = stringResource(id = state.status),
+            text = state.status,
             style = DojoTheme.typography.h5.bold,
             textAlign = TextAlign.Center,
             color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
         )
 
         Text(
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_order_info) + state.orderInfo,
-            style = DojoTheme.typography.subtitle1.medium,
-            textAlign = TextAlign.Center,
-            color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        Text(
-            text = stringResource(id = state.details),
+            text = state.details,
             style = DojoTheme.typography.subtitle1,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
         )
 
         DojoFullGroundButton(
@@ -295,13 +265,8 @@ private fun FailedResult(
                 .fillMaxWidth()
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
-            isLoading = state.isTryAgainLoading,
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
-            onClick = {
-                if (!state.isTryAgainLoading) {
-                    viewModel.onTryAgainClicked()
-                }
-            }
+            onClick = { viewModel.onTryAgainClicked() },
         )
 
         DojoOutlinedButton(
@@ -320,7 +285,11 @@ private fun FailedResult(
 
         DojoBrandFooter(
             modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
+            mode = if (showDojoBrand) {
+                DojoBrandFooterModes.DOJO_BRAND_ONLY
+            } else {
+                DojoBrandFooterModes.NONE
+            },
         )
         DojoSpacer(height = 16.dp)
     }
@@ -332,64 +301,5 @@ private fun FailedResult(
                 onTryAgainClicked()
             }
         }
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-private fun FailedResultWithOutTryAgain(
-    state: PaymentResultState.FailedResult,
-    coroutineScope: CoroutineScope,
-    sheetState: ModalBottomSheetState,
-    onCloseFlowClicker: () -> Unit,
-    showDojoBrand: Boolean
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 40.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            modifier = Modifier.padding(bottom = 16.dp),
-            painter = painterResource(id = state.imageId),
-            contentDescription = "",
-            contentScale = ContentScale.Crop
-        )
-
-        Text(
-            text = stringResource(id = state.status),
-            style = DojoTheme.typography.h5.bold,
-            color = DojoTheme.colors.primaryLabelTextColor,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        Text(
-            text = stringResource(id = state.details),
-            style = DojoTheme.typography.subtitle1,
-            color = DojoTheme.colors.secondaryLabelTextColor,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-
-        DojoFullGroundButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 40.dp),
-            text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
-            onClick = {
-                coroutineScope.launch {
-                    sheetState.hide()
-                }
-                onCloseFlowClicker()
-            },
-        )
-
-        DojoBrandFooter(
-            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-            mode = if (showDojoBrand) { DojoBrandFooterModes.DOJO_BRAND_ONLY } else { DojoBrandFooterModes.NONE }
-        )
-        DojoSpacer(height = 16.dp)
     }
 }

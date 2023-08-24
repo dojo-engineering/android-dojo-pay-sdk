@@ -48,7 +48,7 @@ internal fun lightColorPalette(lightColorPalette: LightColorPalette = LightColor
         inputFieldDefaultBorderColor = lightColorPalette.inputFieldDefaultBorderColor.color,
         inputFieldSelectedBorderColor = lightColorPalette.inputFieldSelectedBorderColor.color,
         inputElementActiveTintColor = lightColorPalette.inputElementActiveTintColor.color,
-        inputElementDefaultTintColor = lightColorPalette.inputElementDefaultTintColor.color
+        inputElementDefaultTintColor = lightColorPalette.inputElementDefaultTintColor.color,
     )
 
 internal fun darkColorPalette(darkColorPalette: DarkColorPalette = DarkColorPalette()) = DojoColors(
@@ -82,13 +82,13 @@ internal fun darkColorPalette(darkColorPalette: DarkColorPalette = DarkColorPale
     inputFieldDefaultBorderColor = darkColorPalette.inputFieldDefaultBorderColor.color,
     inputFieldSelectedBorderColor = darkColorPalette.inputFieldSelectedBorderColor.color,
     inputElementActiveTintColor = darkColorPalette.inputElementActiveTintColor.color,
-    inputElementDefaultTintColor = darkColorPalette.inputElementDefaultTintColor.color
+    inputElementDefaultTintColor = darkColorPalette.inputElementDefaultTintColor.color,
 )
 
 @Composable
 fun DojoTheme(
     darkTheme: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) darkColorPalette() else lightColorPalette()
 
@@ -96,7 +96,7 @@ fun DojoTheme(
         MaterialTheme(
             colors = materialColors(colors, darkTheme),
             typography = DojoTypography,
-            content = content
+            content = content,
         )
     }
 }
@@ -148,7 +148,7 @@ class DojoColors(
     inputFieldDefaultBorderColor: Color,
     inputFieldSelectedBorderColor: Color,
     inputElementActiveTintColor: Color,
-    inputElementDefaultTintColor: Color
+    inputElementDefaultTintColor: Color,
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -183,13 +183,13 @@ class DojoColors(
     var primarySurfaceBackgroundColor by mutableStateOf(primarySurfaceBackgroundColor)
         private set
     var primaryCTAButtonActiveBackgroundColor by mutableStateOf(
-        primaryCTAButtonActiveBackgroundColor
+        primaryCTAButtonActiveBackgroundColor,
     )
         private set
     var primaryCTAButtonActiveTextColor by mutableStateOf(primaryCTAButtonActiveTextColor)
         private set
     var primaryCTAButtonDisabledBackgroundColor by mutableStateOf(
-        primaryCTAButtonDisabledBackgroundColor
+        primaryCTAButtonDisabledBackgroundColor,
     )
         private set
 
@@ -228,7 +228,7 @@ internal val LocalDojoColors = staticCompositionLocalOf<DojoColors> {
 
 private fun materialColors(
     dojoColors: DojoColors,
-    darkTheme: Boolean
+    darkTheme: Boolean,
 ) = Colors(
     primary = dojoColors.primary,
     onPrimary = dojoColors.onPrimary,
@@ -242,5 +242,5 @@ private fun materialColors(
     onSurface = dojoColors.onSurface,
     error = dojoColors.error,
     onError = dojoColors.onError,
-    isLight = !darkTheme
+    isLight = !darkTheme,
 )

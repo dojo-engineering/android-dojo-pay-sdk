@@ -7,12 +7,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.given
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
@@ -20,6 +21,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandl
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -27,6 +29,7 @@ import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.FullCardPaymentPayloadMapper
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.VirtualTerminalViewEntityMapper
@@ -45,7 +48,6 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.Tes
 
 @Suppress("LargeClass")
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
 class VirtualTerminalViewModelTest {
 
     @get:Rule
@@ -54,61 +56,46 @@ class VirtualTerminalViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    // Mock dependencies
-    @Mock
-    private lateinit var observePaymentIntent: ObservePaymentIntent
-
-    @Mock
-    private lateinit var observePaymentStatus: ObservePaymentStatus
-
-    @Mock
-    private lateinit var updatePaymentStateUseCase: UpdatePaymentStateUseCase
-
-    @Mock
-    private lateinit var getSupportedCountriesUseCase: GetSupportedCountriesUseCase
-
-    @Mock
-    private lateinit var virtualTerminalValidator: VirtualTerminalValidator
-
-    @Mock
-    private lateinit var virtualTerminalHandler: DojoVirtualTerminalHandler
-
-    @Mock
-    private lateinit var fullCardPaymentPayloadMapper: FullCardPaymentPayloadMapper
-
-    @Mock
-    private lateinit var virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper
-
-    @Mock
-    private lateinit var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase
+    private var observePaymentIntent: ObservePaymentIntent = mock()
+    private var observePaymentStatus: ObservePaymentStatus = mock()
+    private var updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
+    private var getSupportedCountriesUseCase: GetSupportedCountriesUseCase = mock()
+    private var virtualTerminalValidator: VirtualTerminalValidator = mock()
+    private var virtualTerminalHandler: DojoVirtualTerminalHandler = mock()
+    private var fullCardPaymentPayloadMapper: FullCardPaymentPayloadMapper = mock()
+    private var virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper = mock()
+    private var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase = mock()
+    private var getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow = mock()
+    private var navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit = mock()
 
     @Test
-    fun `given initialize view model with Success payment intent with billing address only then content state should be emitted with billing address only`() =
+    fun `when initialize view model with Success payment intent with billing address only then content state should be emitted with billing address only`() =
         runTest {
             // arrange
             val expected = virtualTerminalViewState
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             paymentIntentFakeFlow.tryEmit(PaymentIntentResult.Success(paymentIntentDomainEntity))
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                virtualTerminalViewState
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                virtualTerminalViewState,
             )
 
             // act
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // assert
@@ -116,16 +103,16 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given initialize view model with Success payment intent with billing and shipping addresses only then content state should be emitted with shipping address only`() =
+    fun `when initialize view model with Success payment intent with billing and shipping addresses only then content state should be emitted with shipping address only`() =
         runTest {
             // arrange
             val expected = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(expected)
 
@@ -134,82 +121,86 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given initialize view model with Success payment intent then should start observe PaymentStatus`() =
+    fun `when initialize view model with Success payment intent then should start observe PaymentStatus`() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             paymentIntentFakeFlow.tryEmit(PaymentIntentResult.Success(paymentIntentDomainEntity))
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                virtualTerminalViewState
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                virtualTerminalViewState,
             )
 
             // act
             VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
             // assert
             verify(observePaymentStatus).observePaymentStates()
         }
 
     @Test
-    fun `given initialize view model with Success payment intent then getSupportedCountries from getSupportedCountriesUseCase should be called `() =
+    fun `when initialize view model with Success payment intent then getSupportedCountries from getSupportedCountriesUseCase should be called `() =
         runTest {
             // arrange
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             paymentIntentFakeFlow.tryEmit(PaymentIntentResult.Success(paymentIntentDomainEntity))
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                virtualTerminalViewState
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                virtualTerminalViewState,
             )
 
             // act
             VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
             // assert
             verify(getSupportedCountriesUseCase).getSupportedCountries()
         }
 
     @Test
-    fun `given onNameFieldChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onNameFieldChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateAddressName(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
 
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
@@ -222,53 +213,56 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateShippingNameField called then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateShippingNameField called then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateAddressName(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -276,27 +270,28 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.NAME
+                newValue,
+                InputFieldType.NAME,
             )
         }
 
     @Test
-    fun `given onAddress1FieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onAddress1FieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateAddressLine1(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -308,22 +303,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onAddress1FieldChanged called from Billing  then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onAddress1FieldChanged called from Billing  then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateAddressLine1(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -335,53 +330,56 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateAddress1Field called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateAddress1Field called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateAddressLine1(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -389,58 +387,62 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.ADDRESS1
+                newValue,
+                InputFieldType.ADDRESS1,
             )
         }
 
     @Test
-    fun `given onValidateAddress1Field called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateAddress1Field called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateAddressLine1(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -448,27 +450,28 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.ADDRESS1
+                newValue,
+                InputFieldType.ADDRESS1,
             )
         }
 
     @Test
-    fun `given onAddress2FieldChanged called from shipping then newValue should be emitted to the UI`() =
+    fun `when onAddress2FieldChanged called from shipping then newValue should be emitted to the UI`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateAddressLine2(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -479,22 +482,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onAddress2FieldChanged called from Billing then newValue should be emitted to the UI `() =
+    fun `when onAddress2FieldChanged called from Billing then newValue should be emitted to the UI `() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateAddressLine2(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -505,22 +508,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCityFieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCityFieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateCity(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -532,22 +535,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCityFieldChanged called from Billing then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCityFieldChanged called from Billing then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateCity(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -559,53 +562,56 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateCityField called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCityField called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateCity(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -613,58 +619,62 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.CITY
+                newValue,
+                InputFieldType.CITY,
             )
         }
 
     @Test
-    fun `given onValidateCityField called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCityField called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateCity(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -672,27 +682,28 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.CITY
+                newValue,
+                InputFieldType.CITY,
             )
         }
 
     @Test
-    fun `given onSPostalCodeFieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onSPostalCodeFieldChanged called from shipping then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updatePostalCode(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -704,22 +715,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onSPostalCodeFieldChanged called from Billing  then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onSPostalCodeFieldChanged called from Billing  then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updatePostalCode(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -731,53 +742,56 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidatePostalCodeField called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidatePostalCodeField called from shipping then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updatePostalCode(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -785,58 +799,62 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.POSTAL_CODE
+                newValue,
+                InputFieldType.POSTAL_CODE,
             )
         }
 
     @Test
-    fun `given onValidatePostalCodeField called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidatePostalCodeField called from Billing then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updatePostalCode(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
                 MutableStateFlow(null)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-            whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
                 PaymentIntentResult.Success(
                     paymentIntentDomainEntity.copy(
-                        collectionShippingAddressRequired = true
-                    )
-                )
+                        collectionShippingAddressRequired = true,
+                    ),
+                ),
             )
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
-            whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-                initPaymentIntent
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            given(virtualTerminalViewEntityMapper.apply(any(), any())).willReturn(
+                initPaymentIntent,
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = VirtualTerminalViewModel(
-                observePaymentIntent,
-                observePaymentStatus,
-                updatePaymentStateUseCase,
-                getSupportedCountriesUseCase,
-                virtualTerminalValidator,
-                virtualTerminalHandler,
-                fullCardPaymentPayloadMapper,
-                virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase
+                observePaymentIntent = observePaymentIntent,
+                observePaymentStatus = observePaymentStatus,
+                updatePaymentStateUseCase = updatePaymentStateUseCase,
+                getSupportedCountriesUseCase = getSupportedCountriesUseCase,
+                virtualTerminalValidator = virtualTerminalValidator,
+                virtualTerminalHandler = virtualTerminalHandler,
+                fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
+                virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
+                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                navigateToCardResult = navigateToCardResult,
             )
 
             // act
@@ -844,31 +862,32 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.POSTAL_CODE
+                newValue,
+                InputFieldType.POSTAL_CODE,
             )
         }
 
     @Test
-    fun `given onCountrySelected called from shipping then newValue should be emitted to the UI `() =
+    fun `when onCountrySelected called from shipping then newValue should be emitted to the UI `() =
         runTest {
             // arrange
             val newValue = SupportedCountriesViewEntity(
                 countryCode = "newValue",
                 countryName = "newValue",
-                isPostalCodeEnabled = true
+                isPostalCodeEnabled = true,
             )
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateCurrentSelectedCountry(
-                    newValue
-                )
+                    newValue,
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -879,26 +898,26 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCountrySelected called from Billing then newValue should be emitted to the UI `() =
+    fun `when onCountrySelected called from Billing then newValue should be emitted to the UI `() =
         runTest {
             // arrange
             val newValue = SupportedCountriesViewEntity(
                 countryCode = "newValue",
                 countryName = "newValue",
-                isPostalCodeEnabled = true
+                isPostalCodeEnabled = true,
             )
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 billingAddressSection = initPaymentIntent.billingAddressSection?.updateCurrentSelectedCountry(
-                    newValue
-                )
+                    newValue,
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -909,22 +928,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onDeliveryNotesFieldChanged from shipping called then newValue should be emitted to the UI `() =
+    fun `when onDeliveryNotesFieldChanged from shipping called then newValue should be emitted to the UI `() =
         runTest {
             // arrange
             val newValue = "newValue "
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    false
-                )
+                    false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateDeliveryNotes(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -935,32 +954,32 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onShippingSameAsBillingChecked from shipping called with true then billing should be hidden and update views offset `() =
+    fun `when onShippingSameAsBillingChecked from shipping called with true then billing should be hidden and update views offset `() =
         runTest {
             // arrange
             val newValue = true
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateIsShippingSameAsBillingCheckBox(
                     CheckBoxItem(
                         messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                         isChecked = newValue,
-                        isVisible = true
-                    )
+                        isVisible = true,
+                    ),
                 ),
                 billingAddressSection = initPaymentIntent.billingAddressSection
                     ?.updateIsVisible(false)
                     ?.updateItemPoissonOffset(0),
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
-                )
+                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -971,32 +990,32 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onShippingSameAsBillingChecked from shipping called with false then billing should be visible  and update views offset `() =
+    fun `when onShippingSameAsBillingChecked from shipping called with false then billing should be visible  and update views offset `() =
         runTest {
             // arrange
             val newValue = false
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 shippingAddressSection = initPaymentIntent.shippingAddressSection?.updateIsShippingSameAsBillingCheckBox(
                     CheckBoxItem(
                         messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                         isChecked = newValue,
-                        isVisible = true
-                    )
+                        isVisible = true,
+                    ),
                 ),
                 billingAddressSection = initPaymentIntent.billingAddressSection
                     ?.updateIsVisible(true)
                     ?.updateItemPoissonOffset(SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP),
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateItemPoissonOffset(
-                    THIRD_SECTION_OFF_SET_DP
-                )
+                    THIRD_SECTION_OFF_SET_DP,
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1007,22 +1026,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCardHolderChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCardHolderChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardHolderInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1034,28 +1053,29 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateCardHolder called then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCardHolder called then validateInputFieldIsNotEmpty should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardHolderInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
-            whenever(
+            given(
                 virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                    any(), any()
-                )
-            ).thenReturn(InputFieldState(newValue))
+                    any(),
+                    any(),
+                ),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
             // act
@@ -1063,27 +1083,28 @@ class VirtualTerminalViewModelTest {
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(virtualTerminalValidator).validateInputFieldIsNotEmpty(
-                newValue, InputFieldType.CARD_HOLDER_NAME
+                newValue,
+                InputFieldType.CARD_HOLDER_NAME,
             )
         }
 
     @Test
-    fun `given onCardNumberChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCardNumberChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardNumberInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1095,26 +1116,26 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateCardNumber called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCardNumber called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardNumberInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
-            whenever(
-                virtualTerminalValidator.validateCardNumberInputField(any())
-            ).thenReturn(InputFieldState(newValue))
+            given(
+                virtualTerminalValidator.validateCardNumberInputField(any()),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
             // act
@@ -1125,22 +1146,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCardCvvChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCardCvvChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCvvInputFieldState(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1152,26 +1173,26 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateCvv called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCvv called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCvvInputFieldState(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
-            whenever(
-                virtualTerminalValidator.validateCVVInputField(any())
-            ).thenReturn(InputFieldState(newValue))
+            given(
+                virtualTerminalValidator.validateCVVInputField(any()),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
             // act
@@ -1182,22 +1203,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onCardDateChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onCardDateChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardExpireDateInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1209,26 +1230,26 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateCardDate called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
+    fun `when onValidateCardDate called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateCardExpireDateInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
-            whenever(
-                virtualTerminalValidator.validateExpireDateInputField(any())
-            ).thenReturn(InputFieldState(newValue))
+            given(
+                virtualTerminalValidator.validateExpireDateInputField(any()),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
             // act
@@ -1239,22 +1260,22 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onEmailChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
+    fun `when onEmailChanged called then newValue should be emitted to the UI and isAllDataValid should be called with the new state`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateEmailInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1266,26 +1287,26 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onValidateEmail called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
+    fun `when onValidateEmail called then validateCardNumberInputField should be called and state should be updated with the result from validation`() =
         runTest {
             // arrange
             val newValue = "newValue"
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
-                )
+                    true,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateEmailInputField(
-                    InputFieldState(newValue)
-                )
+                    InputFieldState(newValue),
+                ),
             )
-            whenever(
-                virtualTerminalValidator.validateEmailInputField(any())
-            ).thenReturn(InputFieldState(newValue))
+            given(
+                virtualTerminalValidator.validateEmailInputField(any()),
+            ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
             // act
@@ -1296,48 +1317,101 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `given onPayClicked called then loading state should be emitted and ,  refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
+    fun `when onPayClicked called with updated Token then loading state should be emitted and ,refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
         runTest {
             // arrange
             val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
                 DojoCardDetails(
-                    cardNumber = "cardNumber"
-                )
+                    cardNumber = "cardNumber",
+                ),
             )
             val initPaymentIntent = virtualTerminalViewState.copy(
                 shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true
+                    true,
                 ),
                 payButtonSection = PayButtonViewState(
                     isEnabled = true,
-                    isLoading = false
-                )
+                    isLoading = false,
+                ),
             )
             val expected = initPaymentIntent.copy(
                 payButtonSection = PayButtonViewState(
                     isEnabled = true,
-                    isLoading = true
-                )
+                    isLoading = true,
+                ),
             )
-            whenever(
-                virtualTerminalValidator.isAllDataValid(any())
-            ).thenReturn(true)
+            given(
+                virtualTerminalValidator.isAllDataValid(any()),
+            ).willReturn(true)
 
-            whenever(
-                fullCardPaymentPayloadMapper.apply(any())
-            ).thenReturn(address)
+            given(
+                fullCardPaymentPayloadMapper.apply(any()),
+            ).willReturn(address)
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-            whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
+            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+                MutableStateFlow(
+                    RefreshPaymentIntentResult.Success(token = "token"),
+                ),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             // act
             viewModel.onPayClicked()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
             verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
-            verify(virtualTerminalHandler).executeVirtualTerminalPayment(paymentIntentDomainEntity.paymentToken, address)
+            verify(virtualTerminalHandler).executeVirtualTerminalPayment(
+                paymentIntentDomainEntity.paymentToken,
+                address,
+            )
+        }
+
+    @Test
+    fun `when onPayClicked called failure from  updated Token then , viewModel  should call navigateToCardResult`() =
+        runTest {
+            // arrange
+            val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
+                DojoCardDetails(
+                    cardNumber = "cardNumber",
+                ),
+            )
+            val initPaymentIntent = virtualTerminalViewState.copy(
+                shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
+                    true,
+                ),
+                billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
+                    true,
+                ),
+                payButtonSection = PayButtonViewState(
+                    isEnabled = true,
+                    isLoading = false,
+                ),
+            )
+            given(
+                virtualTerminalValidator.isAllDataValid(any()),
+            ).willReturn(true)
+
+            given(
+                fullCardPaymentPayloadMapper.apply(any()),
+            ).willReturn(address)
+            val captor = argumentCaptor<DojoPaymentResult>()
+            val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+                MutableStateFlow(
+                    RefreshPaymentIntentResult.RefreshFailure,
+                ),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            // act
+            viewModel.onPayClicked()
+            // assert
+            verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
+            verify(navigateToCardResult).invoke(captor.capture())
+            Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
         }
 
     private fun initViewModelWithPaymentIntent(initPaymentIntent: VirtualTerminalViewState): VirtualTerminalViewModel {
@@ -1348,15 +1422,15 @@ class VirtualTerminalViewModelTest {
         paymentIntentFakeFlow.tryEmit(
             PaymentIntentResult.Success(
                 paymentIntentDomainEntity.copy(
-                    collectionShippingAddressRequired = true
-                )
-            )
+                    collectionShippingAddressRequired = true,
+                ),
+            ),
         )
         whenever(observePaymentStatus.observePaymentStates()).thenReturn(paymentStateFakeFlow)
         whenever(virtualTerminalViewEntityMapper.apply(any(), any())).thenReturn(
-            initPaymentIntent
+            initPaymentIntent,
         )
-        val viewModel = VirtualTerminalViewModel(
+        return VirtualTerminalViewModel(
             observePaymentIntent,
             observePaymentStatus,
             updatePaymentStateUseCase,
@@ -1365,9 +1439,8 @@ class VirtualTerminalViewModelTest {
             virtualTerminalHandler,
             fullCardPaymentPayloadMapper,
             virtualTerminalViewEntityMapper,
-            refreshPaymentIntentUseCase
+            refreshPaymentIntentUseCase, getRefreshedPaymentTokenFlow, navigateToCardResult,
         )
-        return viewModel
     }
 }
 
@@ -1376,103 +1449,168 @@ private object TestData {
         id = "id",
         paymentToken = "token",
         amount = AmountDomainEntity(
-            10L, "100", "GBP"
+            10L,
+            "100",
+            "GBP",
         ),
         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
         collectionBillingAddressRequired = true,
         collectionShippingAddressRequired = false,
         customerId = "customerId",
-        orderId = "orderId"
+        orderId = "orderId",
     )
     val virtualTerminalViewState = VirtualTerminalViewState(
         isLoading = false,
         paymentDetailsSection = PaymentDetailsViewState(
-            merchantName = "", totalAmount = "100", amountCurrency = "£", orderId = "orderId"
+            merchantName = "",
+            totalAmount = "100",
+            amountCurrency = "£",
+            orderId = "orderId",
         ),
         shippingAddressSection = ShippingAddressViewState(
             isVisible = false, itemPoissonOffset = 0,
             name = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             addressLine1 = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             addressLine2 = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             city = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             postalCode = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             supportedCountriesList = listOf(
                 SupportedCountriesViewEntity(
-                    countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
-                    countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
-                )
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
-                countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
+                countryName = "EGP",
+                countryCode = "EG",
+                isPostalCodeEnabled = true,
             ),
             deliveryNotes = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             isShippingSameAsBillingCheckBox = CheckBoxItem(
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                 isChecked = true,
-                isVisible = true
-            )
+                isVisible = true,
+            ),
         ),
         billingAddressSection = BillingAddressViewState(
-            isVisible = true, itemPoissonOffset = 50,
+            isVisible = true,
+            itemPoissonOffset = 50,
             addressLine1 = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             addressLine2 = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             city = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             postalCode = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             supportedCountriesList = listOf(
                 SupportedCountriesViewEntity(
-                    countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
-                    countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
-                )
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
-                countryName = "EGP", countryCode = "EG", isPostalCodeEnabled = true
-            )
+                countryName = "EGP",
+                countryCode = "EG",
+                isPostalCodeEnabled = true,
+            ),
         ),
         cardDetailsSection = CardDetailsViewState(
-            isVisible = true, itemPoissonOffset = 700,
+            isVisible = true,
+            itemPoissonOffset = 700,
             emailInputField = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = false
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = false,
             ),
             cardHolderInputField = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             cardNumberInputField = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             cardExpireDateInputField = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
             cvvInputFieldState = InputFieldState(
-                value = "", errorMessages = null, isError = false, isVisible = true
+                value = "",
+                errorMessages = null,
+                isError = false,
+                isVisible = true,
             ),
-            allowedPaymentMethodsIcons = emptyList()
+            allowedPaymentMethodsIcons = emptyList(),
         ),
         payButtonSection = PayButtonViewState(
-            isEnabled = false, isLoading = false
-        )
+            isEnabled = false,
+            isLoading = false,
+        ),
     )
 }

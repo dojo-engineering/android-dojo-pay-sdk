@@ -9,9 +9,11 @@ import tech.dojo.pay.uisdk.data.paymentintent.PaymentIntentRepository
 import tech.dojo.pay.uisdk.data.paymentmethods.PaymentMethodsRepository
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 
 internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
@@ -25,25 +27,26 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val customerSecret =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.clientSecret
                 ?: ""
-        val isVirtualTerminalPayment =
+        val paymentType =
             (
                 arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
                     DojoPaymentFlowParams
-                )?.isVirtualTerminalPayment
-                ?: false
+                )?.paymentType ?: DojoPaymentType.PAYMENT_CARD
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
         val updatePaymentStateUseCase = UpdatePaymentStateUseCase(paymentStatusRepository)
         val fetchPaymentMethodsUseCase =
             FetchPaymentMethodsUseCase(paymentMethodsRepository)
+        val isSDKInitializedCorrectlyUseCase = IsSDKInitializedCorrectlyUseCase()
         return PaymentFlowViewModel(
             paymentId,
             customerSecret,
-            isVirtualTerminalPayment,
+            paymentType,
             fetchPaymentIntentUseCase,
             observePaymentIntent,
             fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase
+            updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase,
         ) as T
     }
 

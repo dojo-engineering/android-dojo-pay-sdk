@@ -20,10 +20,11 @@ internal class CardPaymentRequestMapper {
             expiryDate = formatExpiryDate(cardDetails.expiryMonth, cardDetails.expiryYear),
             userEmailAddress = userEmailAddress,
             savePaymentMethod = savePaymentMethod,
+            mitConsentGiven = cardDetails.mitConsentGiven,
             userPhoneNumber = userPhoneNumber,
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,
-            metaData = metaData
+            metaData = metaData,
         )
 
     private fun DojoCardPaymentPayLoad.SavedCardPaymentPayLoad.toPaymentDetails(): PaymentDetails =
@@ -33,7 +34,7 @@ internal class CardPaymentRequestMapper {
             userEmailAddress = userEmailAddress,
             userPhoneNumber = userPhoneNumber,
             shippingDetails = shippingDetails,
-            metaData = metaData
+            metaData = metaData,
         )
 
     /**

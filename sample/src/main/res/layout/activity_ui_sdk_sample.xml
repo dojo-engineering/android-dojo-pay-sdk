@@ -2,13 +2,11 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <Button
-        android:id="@+id/startPaymentFlowWithTheme"
+        android:id="@+id/startPaymentFlowWithVT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -17,6 +15,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/startPaymentFlow"
+        app:layout_constraintVertical_bias="0.192" />
+
+    <Button
+        android:id="@+id/startPaymentFlowCOF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="start Set UP Intent  Payment With force lightTheme"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startPaymentFlowWithVT"
         app:layout_constraintVertical_bias="0.192" />
 
     <FrameLayout
@@ -34,6 +44,7 @@
             android:layout_gravity="center" />
 
     </FrameLayout>
+
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/checkboxSandbox"
         android:layout_width="wrap_content"
