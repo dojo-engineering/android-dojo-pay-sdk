@@ -8,6 +8,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
 import java.util.Currency
 
+@Suppress("SwallowedException")
 internal class PaymentIntentDomainEntityMapper {
     fun mapPayload(raw: PaymentIntentPayload): PaymentIntentDomainEntity? {
         return if (containsInvalidParameters(raw)) {
