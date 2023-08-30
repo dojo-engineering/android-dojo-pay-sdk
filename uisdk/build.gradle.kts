@@ -49,6 +49,7 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+    namespace = "tech.dojo.pay.uisdk"
 }
 dependencies {
     implementation(AndroidX.CORE_KTX)

@@ -40,6 +40,7 @@ android {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+    namespace = "tech.dojo.pay.sdk"
 }
 
 dependencies {
