@@ -436,13 +436,10 @@ internal class CardDetailsCheckoutViewModel(
                 .getUpdatedPaymentTokenFlow()
                 .collectLatest {
                     when (it) {
-                        is RefreshPaymentIntentResult.Success -> {
+                        is RefreshPaymentIntentResult.Success ->
                             executeCardPayment(paymentToken = it.token)
-                        }
-
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-
                         null -> Unit
                     }
                 }

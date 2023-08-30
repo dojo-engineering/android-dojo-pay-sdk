@@ -2,7 +2,6 @@ package tech.dojo.pay.uisdk.domain.entities
 
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
-import tech.dojo.pay.uisdk.data.entities.Amount
 
 internal data class PaymentIntentDomainEntity(
     val id: String,
@@ -31,7 +30,12 @@ data class AmountDomainEntity(
 
 internal data class ItemLinesDomainEntity(
     val caption: String,
-    val amount: Amount,
+    val amount: ItemLinesAmountDomainEntity,
+)
+
+internal data class ItemLinesAmountDomainEntity(
+    val value: Long,
+    val currencyCode: String,
 )
 
 internal enum class PaymentIntentStatusDomainEntity(val status: String) {
