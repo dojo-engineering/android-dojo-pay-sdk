@@ -43,7 +43,7 @@ internal class DojoCardPaymentViewModelTest {
     lateinit var deviceDataRepository: DeviceDataRepository
 
     @Mock
-    lateinit var dojoCardPaymentPayLoad: DojoCardPaymentPayLoad
+    lateinit var dojoCardPaymentPayLoad: DojoCardPaymentPayLoad.FullCardPaymentPayload
 
     @Mock
     lateinit var configuredCardinalInstance: Cardinal
@@ -64,7 +64,7 @@ internal class DojoCardPaymentViewModelTest {
             dojo3DSRepository,
             deviceDataRepository,
             dojoCardPaymentPayLoad,
-            configuredCardinalInstance
+            configuredCardinalInstance,
         )
         // assert
         assertEquals(expected, viewModel.paymentResult.value)
@@ -81,7 +81,7 @@ internal class DojoCardPaymentViewModelTest {
             dojo3DSRepository,
             deviceDataRepository,
             dojoCardPaymentPayLoad,
-            configuredCardinalInstance
+            configuredCardinalInstance,
         )
         // assert
         assertEquals(deviceData, viewModel.deviceData.value)
@@ -98,7 +98,7 @@ internal class DojoCardPaymentViewModelTest {
                 dojo3DSRepository,
                 deviceDataRepository,
                 dojoCardPaymentPayLoad,
-                configuredCardinalInstance
+                configuredCardinalInstance,
             )
             // act
             viewModel.initCardinal()
@@ -116,7 +116,7 @@ internal class DojoCardPaymentViewModelTest {
             dojo3DSRepository,
             deviceDataRepository,
             dojoCardPaymentPayLoad,
-            configuredCardinalInstance
+            configuredCardinalInstance,
         )
         // act
         viewModel.onSetupCompleted("")
@@ -134,7 +134,7 @@ internal class DojoCardPaymentViewModelTest {
             dojo3DSRepository,
             deviceDataRepository,
             dojoCardPaymentPayLoad,
-            configuredCardinalInstance
+            configuredCardinalInstance,
         )
         // act
         viewModel.onValidated(null, null)
@@ -155,7 +155,7 @@ internal class DojoCardPaymentViewModelTest {
                 dojo3DSRepository,
                 deviceDataRepository,
                 dojoCardPaymentPayLoad,
-                configuredCardinalInstance
+                configuredCardinalInstance,
             )
             // act
             viewModel.onSetupCompleted("")
@@ -177,7 +177,7 @@ internal class DojoCardPaymentViewModelTest {
                 dojo3DSRepository,
                 deviceDataRepository,
                 dojoCardPaymentPayLoad,
-                configuredCardinalInstance
+                configuredCardinalInstance,
             )
             // act
             viewModel.onSetupCompleted("")
@@ -193,7 +193,7 @@ internal class DojoCardPaymentViewModelTest {
             dojo3DSRepository,
             deviceDataRepository,
             dojoCardPaymentPayLoad,
-            configuredCardinalInstance
+            configuredCardinalInstance,
         )
         // act
         viewModel.on3dsCompleted()
@@ -214,7 +214,7 @@ internal class DojoCardPaymentViewModelTest {
                 dojo3DSRepository,
                 deviceDataRepository,
                 dojoCardPaymentPayLoad,
-                configuredCardinalInstance
+                configuredCardinalInstance,
             )
             // act
             viewModel.on3dsCompleted("JWT", "id")
@@ -236,7 +236,7 @@ internal class DojoCardPaymentViewModelTest {
                 dojo3DSRepository,
                 deviceDataRepository,
                 dojoCardPaymentPayLoad,
-                configuredCardinalInstance
+                configuredCardinalInstance,
             )
             // act
             viewModel.on3dsCompleted("JWT", "id")
