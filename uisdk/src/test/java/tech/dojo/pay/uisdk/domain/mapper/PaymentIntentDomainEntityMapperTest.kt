@@ -22,9 +22,11 @@ import tech.dojo.pay.uisdk.data.entities.MerchantConfig
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.BillingAddressDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesAmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.ShippingDetailsDomainEntity
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -159,7 +161,9 @@ internal class PaymentIntentDomainEntityMapperTest {
         val collectionShippingAddressRequired = true
         val isSetUpIntentPayment = true
         val merchantName = "tradingName"
-
+        val customerEmailAddress = "emailAddress"
+        val billingAddress = BillingAddressDomainEntity(postcode = null, countryCode = null, city = null)
+        val shippingDetails = ShippingDetailsDomainEntity(name = null, deliveryNotes = null)
         return PaymentIntentDomainEntity(
             id = id,
             paymentToken = clientSessionSecret,
@@ -176,6 +180,9 @@ internal class PaymentIntentDomainEntityMapperTest {
             collectionShippingAddressRequired = collectionShippingAddressRequired,
             isSetUpIntentPayment = isSetUpIntentPayment,
             merchantName = merchantName,
+            customerEmailAddress = customerEmailAddress,
+            billingAddress = billingAddress,
+            shippingDetails = shippingDetails,
         )
     }
 }
