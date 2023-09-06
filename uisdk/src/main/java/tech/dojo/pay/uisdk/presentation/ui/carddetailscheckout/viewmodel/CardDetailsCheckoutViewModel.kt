@@ -345,7 +345,7 @@ internal class CardDetailsCheckoutViewModel(
         isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
         supportedCountriesList = countryList,
         currentSelectedCountry = currentSelectedCountry,
-        isPostalCodeFieldRequired = currentSelectedCountry.isPostalCodeEnabled,
+        isPostalCodeFieldRequired = applyIsPostalCodeFieldRequiredLogic(currentSelectedCountry, paymentIntentResult.result.collectionBillingAddressRequired),
         actionButtonState = currentState.actionButtonState.updateText(
             newValue = getActionButtonTitle(
                 paymentIntentResult,

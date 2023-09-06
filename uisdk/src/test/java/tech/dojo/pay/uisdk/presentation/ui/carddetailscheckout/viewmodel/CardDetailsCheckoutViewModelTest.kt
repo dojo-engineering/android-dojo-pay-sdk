@@ -249,7 +249,7 @@ class CardDetailsCheckoutViewModelTest {
                 cardNumberInputField = InputFieldState(value = ""),
                 cardExpireDateInputField = InputFieldState(value = ""),
                 cvvInputFieldState = InputFieldState(value = ""),
-                isPostalCodeFieldRequired = true,
+                isPostalCodeFieldRequired = false,
                 checkBoxItem = CheckBoxItem(
                     isVisible = false,
                     isChecked = true,
