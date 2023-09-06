@@ -304,9 +304,12 @@ internal class CardDetailsCheckoutViewModel(
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
             val countryList =
-                getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)
+                getSupportedCountriesList(
+                    paymentIntentResult.result.collectionBillingAddressRequired,
+                    paymentIntentResult.result.billingAddress?.countryCode,
+                )
             val currentSelectedCountry = if (countryList.isNotEmpty()) {
-                getSupportedCountriesList(paymentIntentResult.result.collectionBillingAddressRequired)[0]
+                countryList[0]
             } else {
                 SupportedCountriesViewEntity("", "", true)
             }
@@ -342,12 +345,14 @@ internal class CardDetailsCheckoutViewModel(
         isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
         supportedCountriesList = countryList,
         currentSelectedCountry = currentSelectedCountry,
-        isPostalCodeFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
+        isPostalCodeFieldRequired = applyIsPostalCodeFieldRequiredLogic(currentSelectedCountry, paymentIntentResult.result.collectionBillingAddressRequired),
         actionButtonState = currentState.actionButtonState.updateText(
             newValue = getActionButtonTitle(
                 paymentIntentResult,
             ),
         ),
+        emailInputField = InputFieldState(value = paymentIntentResult.result.customerEmailAddress ?: ""),
+        postalCodeField = InputFieldState(value = paymentIntentResult.result.billingAddress?.postcode ?: ""),
     )
 
     private fun getHeaderType() = if (isStartDestination) {
@@ -387,11 +392,16 @@ internal class CardDetailsCheckoutViewModel(
             )
         }
 
-    private fun getSupportedCountriesList(collectionBillingAddressRequired: Boolean): List<SupportedCountriesViewEntity> {
+    private fun getSupportedCountriesList(
+        collectionBillingAddressRequired: Boolean,
+        selectedCountryCode: String?,
+    ): List<SupportedCountriesViewEntity> {
         return if (collectionBillingAddressRequired) {
-            getSupportedCountriesUseCase
-                .getSupportedCountries()
-                .map { supportedCountriesViewEntityMapper.apply(it) }
+            supportedCountriesViewEntityMapper
+                .mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    getSupportedCountriesUseCase.getSupportedCountries(),
+                    selectedCountryCode,
+                )
         } else {
             emptyList()
         }
@@ -436,13 +446,10 @@ internal class CardDetailsCheckoutViewModel(
                 .getUpdatedPaymentTokenFlow()
                 .collectLatest {
                     when (it) {
-                        is RefreshPaymentIntentResult.Success -> {
+                        is RefreshPaymentIntentResult.Success ->
                             executeCardPayment(paymentToken = it.token)
-                        }
-
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-
                         null -> Unit
                     }
                 }
