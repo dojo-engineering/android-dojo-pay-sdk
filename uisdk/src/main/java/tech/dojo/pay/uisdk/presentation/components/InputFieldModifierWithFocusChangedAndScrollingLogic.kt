@@ -52,4 +52,4 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
     }
 }
 
-private const val INPUT_FIELD_LABEL_HEIGHT = 72
+private const val INPUT_FIELD_LABEL_HEIGHT = 70
