@@ -18,10 +18,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -57,8 +54,6 @@ internal fun VirtualTerminalCheckOutScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val scrollToPosition by remember { mutableStateOf(0F) }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
@@ -105,7 +100,6 @@ internal fun VirtualTerminalCheckOutScreen(
                             viewModel = viewModel,
                             isDarkModeEnabled = isDarkModeEnabled,
                             coroutineScope = coroutineScope,
-                            scrollToPosition = scrollToPosition,
                             scrollState = scrollState,
                             keyboardController = keyboardController,
                             showDojoBrand = showDojoBrand,
