@@ -26,14 +26,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -44,8 +39,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
@@ -58,6 +51,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.HeaderItem
+import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetworksHeader
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
@@ -67,7 +61,6 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
-import kotlin.math.roundToInt
 
 @Suppress("LongMethod")
 @OptIn(ExperimentalComposeUiApi::class)
@@ -263,7 +256,7 @@ private fun CvvField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CvvInputField(
-        modifier = getModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -293,7 +286,7 @@ private fun CardExpireDateField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardExpireDateInputField(
-        modifier = getModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -329,7 +322,7 @@ private fun CardNumberField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
-        modifier = getModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -365,7 +358,7 @@ private fun CardHolderNameField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = getModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -394,7 +387,7 @@ private fun EmailField(
         val hasBeenFocused by remember { mutableStateOf(false) }
 
         InputFieldWithErrorMessage(
-            modifier = getModifierWithFocusChangedLogic(
+            modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,
@@ -439,7 +432,7 @@ private fun PostalCodeField(
     if (state.isPostalCodeFieldRequired) {
         val hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
-            modifier = getModifierWithFocusChangedLogic(
+            modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,
@@ -498,40 +491,3 @@ private fun AppBarItem(
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
     )
 }
-
-@Composable
-fun getModifierWithFocusChangedLogic(
-    coroutineScope: CoroutineScope,
-    scrollState: ScrollState,
-    initialHasBeenFocused: Boolean,
-    onValidate: () -> Unit,
-): Modifier {
-    var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
-    val scrollOffsets = remember { mutableListOf<Float>() }
-    val inputFieldLabelHeightInPx = with(LocalDensity.current) {
-        INPUT_FIELD_LABEL_HEIGHT.dp.toPx()
-    }
-    return Modifier.onFocusChanged { focusState ->
-        if (focusState.isFocused) {
-            coroutineScope.launch {
-                delay(300)
-                val totalOffset = scrollOffsets.firstOrNull() ?: 0F
-                if (totalOffset != 0F) {
-                    scrollState.animateScrollTo((totalOffset - inputFieldLabelHeightInPx).roundToInt())
-                } else {
-                    scrollState.animateScrollTo((totalOffset).roundToInt())
-                }
-            }
-            hasBeenFocused = true
-        } else {
-            if (hasBeenFocused) {
-                onValidate()
-            }
-        }
-    }.onGloballyPositioned { layoutCoordinates ->
-        val totalHeight = layoutCoordinates.positionInRoot().y
-        scrollOffsets.add(totalHeight)
-    }
-}
-
-private const val INPUT_FIELD_LABEL_HEIGHT = 70
