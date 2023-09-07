@@ -33,7 +33,7 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
         if (focusState.isFocused) {
             coroutineScope.launch {
                 delay(300)
-                val totalOffset = scrollOffsets.firstOrNull() ?: 0F
+                val totalOffset = scrollOffsets.maxOrNull() ?: 0F
                 if (totalOffset != 0F) {
                     scrollState.animateScrollTo((totalOffset - inputFieldLabelHeightInPx).roundToInt())
                 } else {
