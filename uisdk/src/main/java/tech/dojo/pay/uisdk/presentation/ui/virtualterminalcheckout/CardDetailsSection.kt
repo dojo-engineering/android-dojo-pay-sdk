@@ -17,9 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -29,6 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
@@ -36,13 +41,13 @@ import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -50,28 +55,30 @@ internal fun CardDetailsSection(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
-    showDojoBrand: Boolean,
+    showDojoBrand: Boolean
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor),
+            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
         ) {
             HeaderTitle()
             SupportedPaymentMethods(
                 Modifier.padding(top = 0.dp),
                 state.cardDetailsSection.allowedPaymentMethodsIcons,
-                stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_transactions_are_secure),
+                stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_transactions_are_secure)
             )
             CardHolderInputField(
                 state.cardDetailsSection,
                 viewModel,
                 coroutineScope,
+                scrollToPosition,
                 scrollState,
-                keyboardController,
+                keyboardController
             )
             DojoSpacer(height = 4.dp)
             CardNumberInputField(
@@ -79,25 +86,27 @@ internal fun CardDetailsSection(
                 viewModel,
                 isDarkModeEnabled,
                 coroutineScope,
+                scrollToPosition,
                 scrollState,
-                keyboardController,
+                keyboardController
             )
 
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
             ) {
                 Box(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f)
                 ) {
                     CardExpireDateField(
                         state.cardDetailsSection,
                         viewModel,
                         coroutineScope,
+                        scrollToPosition,
                         scrollState,
-                        keyboardController,
+                        keyboardController
                     )
                 }
 
@@ -107,8 +116,9 @@ internal fun CardDetailsSection(
                         state.cardDetailsSection,
                         viewModel,
                         coroutineScope,
+                        scrollToPosition,
                         scrollState,
-                        keyboardController,
+                        keyboardController
                     )
                 }
             }
@@ -117,8 +127,9 @@ internal fun CardDetailsSection(
                 state.cardDetailsSection,
                 viewModel,
                 coroutineScope,
+                scrollToPosition,
                 scrollState,
-                keyboardController,
+                keyboardController
             )
         }
         ScreenFooter(showDojoBrand)
@@ -132,7 +143,7 @@ private fun HeaderTitle() {
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
         style = DojoTheme.typography.h6.medium,
-        color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
+        color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
     )
 }
 
@@ -142,19 +153,31 @@ private fun CardHolderInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    val hasBeenFocused by remember { mutableStateOf(false) }
+    var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
+    }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
-            coroutineScope = coroutineScope,
-            scrollState = scrollState,
-            initialHasBeenFocused = hasBeenFocused,
-            onValidate = {
-                viewModel.onValidateCardHolder(cardDetailsViewState.cardHolderInputField.value)
-            },
-        ),
+        modifier = Modifier.onFocusChanged {
+            isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
+                true
+            } else {
+                if (isTextNotFocused) {
+                    viewModel.onValidateCardHolder(cardDetailsViewState.cardHolderInputField.value)
+                }
+                false
+            }
+        },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = cardDetailsViewState.cardHolderInputField.value,
@@ -163,7 +186,7 @@ private fun CardHolderInputField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onCardHolderChanged(it) },
-        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) }
     )
 }
 
@@ -174,37 +197,50 @@ private fun CardNumberInputField(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    val hasBeenFocused by remember { mutableStateOf(false) }
-
+    var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CardNumberInPutField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
-            coroutineScope = coroutineScope,
-            scrollState = scrollState,
-            initialHasBeenFocused = hasBeenFocused,
-            onValidate = {
-                viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
+                    }
+                    false
+                }
             },
-        ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = cardDetailsViewState.cardNumberInputField.isError,
         assistiveText = cardDetailsViewState.cardNumberInputField.errorMessages?.let {
             AnnotatedString(
-                stringResource(id = it),
+                stringResource(id = it)
             )
         },
         cardNumberValue = cardDetailsViewState.cardNumberInputField.value,
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
         onCardNumberValueChanged = { viewModel.onCardNumberChanged(it) },
-        isDarkModeEnabled = isDarkModeEnabled,
+        isDarkModeEnabled = isDarkModeEnabled
     )
 }
 
@@ -214,24 +250,37 @@ private fun CardExpireDateField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    val hasBeenFocused by remember { mutableStateOf(false) }
+    var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CardExpireDateInputField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
-            coroutineScope = coroutineScope,
-            scrollState = scrollState,
-            initialHasBeenFocused = hasBeenFocused,
-            onValidate = {
-                viewModel.onValidateCardDate(cardDetailsViewState.cardExpireDateInputField.value)
-            },
-        ),
+        modifier = Modifier.onFocusChanged {
+            isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
+                true
+            } else {
+                if (isTextNotFocused) {
+                    viewModel.onValidateCardDate(cardDetailsViewState.cardExpireDateInputField.value)
+                }
+                false
+            }
+        },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         isError = cardDetailsViewState.cardExpireDateInputField.isError,
@@ -240,7 +289,7 @@ private fun CardExpireDateField(
         },
         expireDateValue = cardDetailsViewState.cardExpireDateInputField.value,
         expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
-        onExpireDateValueChanged = { viewModel.onCardDateChanged(it) },
+        onExpireDateValueChanged = { viewModel.onCardDateChanged(it) }
     )
 }
 
@@ -250,19 +299,32 @@ private fun CvvField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    val hasBeenFocused by remember { mutableStateOf(false) }
+    var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     CvvInputField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
-            coroutineScope = coroutineScope,
-            scrollState = scrollState,
-            initialHasBeenFocused = hasBeenFocused,
-            onValidate = {
-                viewModel.onValidateCvv(cardDetailsViewState.cvvInputFieldState.value)
-            },
-        ),
+        modifier = Modifier.onFocusChanged {
+            isTextNotFocused = if (it.isFocused) {
+                coroutineScope.launch {
+                    delay(300)
+                    scrollState.animateScrollTo(
+                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                    )
+                }
+                true
+            } else {
+                if (isTextNotFocused) {
+                    viewModel.onValidateCvv(cardDetailsViewState.cvvInputFieldState.value)
+                }
+                false
+            }
+        },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
         cvvValue = cardDetailsViewState.cvvInputFieldState.value,
         isError = cardDetailsViewState.cvvInputFieldState.isError,
@@ -272,11 +334,11 @@ private fun CvvField(
         keyboardOptions =
         KeyboardOptions(
             keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
-        onCvvValueChanged = { viewModel.onCardCvvChanged(it) },
+        onCvvValueChanged = { viewModel.onCardCvvChanged(it) }
     )
 }
 
@@ -286,37 +348,54 @@ private fun EmailInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
+    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    val hasBeenFocused by remember { mutableStateOf(false) }
+    var isTextNotFocused by remember { mutableStateOf(false) }
+    val scrollOffset = with(LocalDensity.current) {
+        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
+            (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
+    }
     val assistiveText = when (cardDetailsViewState.emailInputField.isError) {
         true -> { cardDetailsViewState.emailInputField.errorMessages?.let { AnnotatedString(stringResource(id = it)) } }
         else -> AnnotatedString(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_subtitle_email_vt))
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
-            coroutineScope = coroutineScope,
-            scrollState = scrollState,
-            initialHasBeenFocused = hasBeenFocused,
-            onValidate = {
-                viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)
-            },
-        ).padding(top = 16.dp),
+        modifier = Modifier
+            .onFocusChanged {
+                isTextNotFocused = if (it.isFocused) {
+                    coroutineScope.launch {
+                        delay(300)
+                        scrollState.animateScrollTo(
+                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
+                        )
+                    }
+                    true
+                } else {
+                    if (isTextNotFocused) {
+                        viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)
+                    }
+                    false
+                }
+            }
+            .padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = cardDetailsViewState.emailInputField.value,
         isError = cardDetailsViewState.emailInputField.isError,
         assistiveText = assistiveText,
         onValueChange = { viewModel.onEmailChanged(it) },
-        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) },
+        label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) }
     )
 }
 
 @Composable
 private fun ScreenFooter(showDojoBrand: Boolean) {
     DojoBrandFooter(
-        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY,
+        mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY
     )
 }
+
+private const val NORMAL_FILED_SIZE_DP = 140
