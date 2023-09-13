@@ -37,7 +37,7 @@ import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedLogic
+import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -158,11 +158,9 @@ private fun CardHolderInputField(
         cardDetailsViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateCardHolder(cardDetailsViewState.cardHolderInputField.value)
@@ -197,11 +195,9 @@ private fun CardNumberInputField(
             (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     CardNumberInPutField(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
@@ -243,11 +239,9 @@ private fun CardExpireDateField(
             (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     CardExpireDateInputField(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateCardDate(cardDetailsViewState.cardExpireDateInputField.value)
@@ -286,11 +280,9 @@ private fun CvvField(
             (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     CvvInputField(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateCvv(cardDetailsViewState.cvvInputFieldState.value)
@@ -334,11 +326,9 @@ private fun EmailInputField(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)

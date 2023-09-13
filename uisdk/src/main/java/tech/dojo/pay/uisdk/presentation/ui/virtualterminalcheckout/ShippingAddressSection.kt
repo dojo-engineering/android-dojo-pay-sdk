@@ -31,7 +31,7 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.DescriptionField
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedLogic
+import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
@@ -139,11 +139,9 @@ private fun NameField(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.onValidateShippingNameField(shippingAddressSection.name.value) },
         ),
@@ -175,11 +173,9 @@ private fun Address1Field(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateAddress1Field(
@@ -225,11 +221,9 @@ private fun Address2Field(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {},
         ),
@@ -260,11 +254,9 @@ private fun CityField(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateCityField(shippingAddressSection.city.value, true)
@@ -297,11 +289,9 @@ private fun PostalCodeField(
         shippingAddressSection.itemPoissonOffset.dp.toPx() + (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidatePostalCodeField(
@@ -363,11 +353,9 @@ private fun DeliveryNotesField(
         onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
         maxCharacters = 120,
         label = label,
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {},
         ),

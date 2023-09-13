@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedLogic
+import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
@@ -118,11 +118,9 @@ private fun Address1Field(
         billingAddressViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
     }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidateAddress1Field(
@@ -165,11 +163,9 @@ private fun Address2Field(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { },
         ),
@@ -201,11 +197,9 @@ private fun CityField(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = { viewModel.onValidateCityField(billingAddressViewState.city.value, false) },
         ).padding(top = 16.dp),
@@ -237,11 +231,9 @@ private fun PostalCodeField(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedLogic(
+        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
-            scrollToPosition = scrollToPosition,
-            scrollOffset = scrollOffset,
             initialHasBeenFocused = hasBeenFocused,
             onValidate = {
                 viewModel.onValidatePostalCodeField(

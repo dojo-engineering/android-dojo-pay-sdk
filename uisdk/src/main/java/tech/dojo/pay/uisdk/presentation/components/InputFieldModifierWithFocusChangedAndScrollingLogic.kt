@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -26,9 +24,7 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
     val scrollOffsets = remember { mutableListOf<Float>() }
-    val inputFieldLabelHeightInPx = with(LocalDensity.current) {
-        INPUT_FIELD_LABEL_HEIGHT.dp.toPx()
-    }
+    var inputFieldLabelHeightInPx by remember { mutableStateOf(0) }
     return Modifier.onFocusChanged { focusState ->
         if (focusState.isFocused) {
             coroutineScope.launch {
@@ -47,9 +43,8 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
             }
         }
     }.onGloballyPositioned { layoutCoordinates ->
+        inputFieldLabelHeightInPx = layoutCoordinates.size.height
         val totalHeight = layoutCoordinates.positionInRoot().y
         scrollOffsets.add(totalHeight)
     }
 }
-
-private const val INPUT_FIELD_LABEL_HEIGHT = 70
