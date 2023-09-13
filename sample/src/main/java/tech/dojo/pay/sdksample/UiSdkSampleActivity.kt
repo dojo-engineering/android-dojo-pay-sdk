@@ -34,6 +34,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = false)
+            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig()
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()),
             )
@@ -56,6 +57,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         uiSdkSampleBinding.startPaymentFlowCOF.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
+            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig()
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),

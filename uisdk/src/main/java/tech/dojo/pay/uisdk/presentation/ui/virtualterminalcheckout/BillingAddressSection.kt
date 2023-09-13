@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.inputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
@@ -118,7 +118,7 @@ private fun Address1Field(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -156,11 +156,15 @@ private fun Address2Field(
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
-        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) {
+            append(
+                stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional),
+            )
+        }
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -192,12 +196,17 @@ private fun CityField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
             parentPosition = parentPosition,
-            onValidate = { viewModel.onValidateCityField(billingAddressViewState.city.value, false) },
+            onValidate = {
+                viewModel.onValidateCityField(
+                    billingAddressViewState.city.value,
+                    false,
+                )
+            },
         ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
@@ -224,7 +233,7 @@ private fun PostalCodeField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,

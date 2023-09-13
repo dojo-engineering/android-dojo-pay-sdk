@@ -39,9 +39,9 @@ import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
-import tech.dojo.pay.uisdk.presentation.components.InputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
+import tech.dojo.pay.uisdk.presentation.components.inputFieldModifierWithFocusChangedAndScrollingLogic
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
@@ -160,7 +160,7 @@ private fun CardHolderInputField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -194,7 +194,7 @@ private fun CardNumberInputField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     CardNumberInPutField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -235,7 +235,7 @@ private fun CardExpireDateField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     CardExpireDateInputField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -274,7 +274,7 @@ private fun CvvField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CvvInputField(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -317,7 +317,7 @@ private fun EmailInputField(
     }
 
     InputFieldWithErrorMessage(
-        modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,

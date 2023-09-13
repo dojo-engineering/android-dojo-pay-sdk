@@ -16,17 +16,17 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-fun InputFieldModifierWithFocusChangedAndScrollingLogic(
+inline fun Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
     initialHasBeenFocused: Boolean,
     parentPosition: Float,
-    onValidate: () -> Unit,
+    crossinline onValidate: () -> Unit,
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
     val scrollOffsets = remember { mutableListOf<Float>() }
     var inputFieldLabelHeightInPx by remember { mutableStateOf(0) }
-    return Modifier.onFocusChanged { focusState ->
+    return this.onFocusChanged { focusState ->
         if (focusState.isFocused) {
             coroutineScope.launch {
                 delay(300)
