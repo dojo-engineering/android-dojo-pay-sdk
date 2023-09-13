@@ -59,7 +59,7 @@ import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetw
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
-import tech.dojo.pay.uisdk.presentation.components.inputFieldModifierWithFocusChangedAndScrollingLogic
+import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndVlidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -266,7 +266,7 @@ private fun CvvField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CvvInputField(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -298,7 +298,7 @@ private fun CardExpireDateField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardExpireDateInputField(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -335,7 +335,7 @@ private fun CardNumberField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     CardNumberInPutField(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -372,7 +372,7 @@ private fun CardHolderNameField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -402,7 +402,7 @@ private fun EmailField(
         val hasBeenFocused by remember { mutableStateOf(false) }
 
         InputFieldWithErrorMessage(
-            modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+            modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,
@@ -448,7 +448,7 @@ private fun PostalCodeField(
     if (state.isPostalCodeFieldRequired) {
         val hasBeenFocused by remember { mutableStateOf(false) }
         InputFieldWithErrorMessage(
-            modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+            modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,

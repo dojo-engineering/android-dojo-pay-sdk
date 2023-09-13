@@ -32,7 +32,7 @@ import kotlinx.coroutines.CoroutineScope
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
-import tech.dojo.pay.uisdk.presentation.components.inputFieldModifierWithFocusChangedAndScrollingLogic
+import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndVlidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
@@ -118,7 +118,7 @@ private fun Address1Field(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -164,7 +164,7 @@ private fun Address2Field(
     }
 
     InputFieldWithErrorMessage(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -196,7 +196,7 @@ private fun CityField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -233,7 +233,7 @@ private fun PostalCodeField(
     val hasBeenFocused by remember { mutableStateOf(false) }
 
     InputFieldWithErrorMessage(
-        modifier = Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,

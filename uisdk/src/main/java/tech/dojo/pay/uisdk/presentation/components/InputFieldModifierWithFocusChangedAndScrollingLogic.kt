@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-inline fun Modifier.inputFieldModifierWithFocusChangedAndScrollingLogic(
+inline fun Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
     initialHasBeenFocused: Boolean,
