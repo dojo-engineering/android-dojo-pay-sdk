@@ -61,10 +61,14 @@ internal class VirtualTerminalViewModel(
         if (paymentIntentResult is PaymentIntentResult.Success) {
             viewModelScope.launch { observePaymentStatus() }
             paymentIntentId = paymentIntentResult.result.id
-            currentState = virtualTerminalViewEntityMapper.apply(paymentIntentResult, getSupportedCountriesDomainEntity())
+            currentState = virtualTerminalViewEntityMapper.apply(
+                paymentIntentResult,
+                getSupportedCountriesDomainEntity(),
+            )
             pushStateToUi(currentState)
         }
     }
+
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
             if (!it) {
@@ -99,11 +103,11 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 shippingAddressSection = currentState
                     .shippingAddressSection?.updateAddressName(
-                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                            finalValue,
-                            InputFieldType.NAME,
-                        ),
+                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                        finalValue,
+                        InputFieldType.NAME,
                     ),
+                ),
             )
             pushStateToUi(currentState)
         }
@@ -318,6 +322,7 @@ internal class VirtualTerminalViewModel(
             pushStateToUi(currentState)
         }
     }
+
     fun onShippingSameAsBillingChecked(isChecked: Boolean) {
         currentState.shippingAddressSection?.let {
             currentState = currentState.copy(
@@ -330,30 +335,7 @@ internal class VirtualTerminalViewModel(
                 ),
                 billingAddressSection = currentState.billingAddressSection?.updateIsVisible(!isChecked),
             )
-            updateSectionsOffsets(isChecked)
             pushStateToUi(currentState)
-        }
-    }
-
-    private fun updateSectionsOffsets(isChecked: Boolean) {
-        currentState = if (isChecked) {
-            currentState.copy(
-                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
-                    0,
-                ),
-                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
-                ),
-            )
-        } else {
-            currentState.copy(
-                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
-                ),
-                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
-                    THIRD_SECTION_OFF_SET_DP,
-                ),
-            )
         }
     }
 
@@ -373,11 +355,11 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardHolderInputField(
-                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                            finalValue,
-                            InputFieldType.CARD_HOLDER_NAME,
-                        ),
+                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                        finalValue,
+                        InputFieldType.CARD_HOLDER_NAME,
                     ),
+                ),
             )
             pushStateToUi(currentState)
         }
@@ -399,8 +381,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardNumberInputField(
-                        virtualTerminalValidator.validateCardNumberInputField(finalValue),
-                    ),
+                    virtualTerminalValidator.validateCardNumberInputField(finalValue),
+                ),
             )
             pushStateToUi(currentState)
         }
@@ -422,8 +404,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCvvInputFieldState(
-                        virtualTerminalValidator.validateCVVInputField(finalValue),
-                    ),
+                    virtualTerminalValidator.validateCVVInputField(finalValue),
+                ),
             )
             pushStateToUi(currentState)
         }
@@ -445,12 +427,13 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardExpireDateInputField(
-                        virtualTerminalValidator.validateExpireDateInputField(finalValue),
-                    ),
+                    virtualTerminalValidator.validateExpireDateInputField(finalValue),
+                ),
             )
             pushStateToUi(currentState)
         }
     }
+
     fun onEmailChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
             currentState = currentState.copy(
@@ -467,8 +450,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateEmailInputField(
-                        virtualTerminalValidator.validateEmailInputField(finalValue),
-                    ),
+                    virtualTerminalValidator.validateEmailInputField(finalValue),
+                ),
             )
             pushStateToUi(currentState)
         }
@@ -494,6 +477,7 @@ internal class VirtualTerminalViewModel(
                         is RefreshPaymentIntentResult.Success -> {
                             executePayment(paymentToken = it.token)
                         }
+
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
 
@@ -519,11 +503,8 @@ internal class VirtualTerminalViewModel(
         )
         pushStateToUi(currentState)
     }
+
     private fun pushStateToUi(state: VirtualTerminalViewState) {
         mutableState.postValue(state)
     }
 }
-internal const val FIRST_SECTION_OFF_SET_DP = 30
-internal const val SECOND_SECTION_WITH_BILLING_OFF_SET_DP = 670
-internal const val SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP = 920
-internal const val THIRD_SECTION_OFF_SET_DP = 1420

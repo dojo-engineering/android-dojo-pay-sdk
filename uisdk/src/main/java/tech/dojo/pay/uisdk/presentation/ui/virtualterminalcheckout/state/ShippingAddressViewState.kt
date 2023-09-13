@@ -5,8 +5,6 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 
 internal data class ShippingAddressViewState(
     val isVisible: Boolean,
-    // this will be the start point to scroll to the input field when it got focus
-    var itemPoissonOffset: Int,
     var name: InputFieldState = InputFieldState(value = ""),
     var addressLine1: InputFieldState = InputFieldState(value = ""),
     var addressLine2: InputFieldState = InputFieldState(value = ""),
@@ -16,13 +14,13 @@ internal data class ShippingAddressViewState(
     var currentSelectedCountry: SupportedCountriesViewEntity,
     var deliveryNotes: InputFieldState = InputFieldState(value = ""),
     var isShippingSameAsBillingCheckBox: CheckBoxItem = CheckBoxItem(
-        R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping, isChecked = true, isVisible = true
-    )
+        R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
+        isChecked = true,
+        isVisible = true,
+        ),
 ) {
     fun updateIsVisible(newValue: Boolean) =
         copy(isVisible = newValue)
-    fun updateItemPoissonOffset(newValue: Int) =
-        copy(itemPoissonOffset = newValue)
     fun updateAddressName(newValue: InputFieldState) =
         copy(name = newValue)
     fun updateAddressLine1(newValue: InputFieldState) =
