@@ -14,8 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -46,11 +50,13 @@ internal fun BillingAddressSection(
     keyboardController: SoftwareKeyboardController?,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    if (state.billingAddressSection?.isVisible == true) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor),
-        ) {
+    var parentPosition by remember { mutableStateOf(0f) }
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
+            .onGloballyPositioned { parentPosition = it.positionInParent().y },
+    ) {
+        if (state.billingAddressSection?.isVisible == true) {
             HeaderTitle()
             Address1Field(
                 state.billingAddressSection,
@@ -59,6 +65,7 @@ internal fun BillingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             Address2Field(
                 state.billingAddressSection,
@@ -67,6 +74,7 @@ internal fun BillingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             CityField(
                 state.billingAddressSection,
@@ -75,6 +83,7 @@ internal fun BillingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             PostalCodeField(
                 state.billingAddressSection,
@@ -83,6 +92,7 @@ internal fun BillingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             CountryField(
                 state.billingAddressSection,
@@ -112,6 +122,7 @@ private fun Address1Field(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -122,6 +133,7 @@ private fun Address1Field(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateAddress1Field(
                     billingAddressViewState.addressLine1.value,
@@ -150,6 +162,7 @@ private fun Address2Field(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
 
@@ -167,6 +180,7 @@ private fun Address2Field(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = { },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -190,6 +204,7 @@ private fun CityField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -201,6 +216,7 @@ private fun CityField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = { viewModel.onValidateCityField(billingAddressViewState.city.value, false) },
         ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -224,6 +240,7 @@ private fun PostalCodeField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -235,6 +252,7 @@ private fun PostalCodeField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidatePostalCodeField(
                     billingAddressViewState.postalCode.value,
@@ -267,4 +285,5 @@ private fun CountryField(
         onCountrySelected = { viewModel.onCountrySelected(it, false) },
     )
 }
+
 private const val NORMAL_FILED_SIZE_DP = 100

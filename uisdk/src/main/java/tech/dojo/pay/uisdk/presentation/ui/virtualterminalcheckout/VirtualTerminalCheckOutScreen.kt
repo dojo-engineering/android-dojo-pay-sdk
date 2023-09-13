@@ -83,12 +83,6 @@ internal fun VirtualTerminalCheckOutScreen(
                     Column(
                         Modifier
                             .verticalScroll(scrollState)
-                            .wrapContentHeight()
-                            .onGloballyPositioned { layoutCoordinates ->
-                                scrollToPosition =
-                                    scrollState.value + layoutCoordinates.positionInRoot().y
-                            }
-                            .imePadding()
                             .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 80.dp),
                         verticalArrangement = Arrangement.spacedBy(32.dp),
                     ) {

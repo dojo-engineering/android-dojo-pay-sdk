@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.layout.positionInParent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
     initialHasBeenFocused: Boolean,
+    parentPosition: Float,
     onValidate: () -> Unit,
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
@@ -31,7 +33,7 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
                 delay(300)
                 val totalOffset = scrollOffsets.maxOrNull() ?: 0F
                 if (totalOffset != 0F) {
-                    scrollState.animateScrollTo((totalOffset - inputFieldLabelHeightInPx).roundToInt())
+                    scrollState.animateScrollTo((parentPosition + totalOffset - inputFieldLabelHeightInPx).roundToInt())
                 } else {
                     scrollState.animateScrollTo((totalOffset).roundToInt())
                 }
@@ -40,11 +42,12 @@ fun InputFieldModifierWithFocusChangedAndScrollingLogic(
         } else {
             if (hasBeenFocused) {
                 onValidate()
+                scrollOffsets.clear()
             }
         }
     }.onGloballyPositioned { layoutCoordinates ->
         inputFieldLabelHeightInPx = layoutCoordinates.size.height
-        val totalHeight = layoutCoordinates.positionInRoot().y
+        val totalHeight = layoutCoordinates.positionInParent().y
         scrollOffsets.add(totalHeight)
     }
 }

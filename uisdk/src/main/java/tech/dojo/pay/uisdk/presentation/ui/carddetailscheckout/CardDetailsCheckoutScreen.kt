@@ -26,9 +26,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -130,10 +133,12 @@ internal fun CardDetailsCheckoutScreen(
                             viewModel,
                             isDarkModeEnabled,
                         )
+                        var cardHorizontalLayoutPosition by remember { mutableStateOf(0f) }
                         Row(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .heightIn(48.dp),
+                                .heightIn(48.dp)
+                                .onGloballyPositioned { cardHorizontalLayoutPosition = it.positionInParent().y },
                         ) {
                             Box(
                                 modifier = Modifier.weight(1f),
@@ -144,6 +149,7 @@ internal fun CardDetailsCheckoutScreen(
                                     keyboardController,
                                     state,
                                     viewModel,
+                                    cardHorizontalLayoutPosition,
                                 )
                             }
 
@@ -155,6 +161,7 @@ internal fun CardDetailsCheckoutScreen(
                                     state,
                                     keyboardController,
                                     viewModel,
+                                    cardHorizontalLayoutPosition,
                                 )
                             }
                         }
@@ -252,6 +259,7 @@ private fun CvvField(
     state: CardDetailsCheckoutState,
     keyboardController: SoftwareKeyboardController?,
     viewModel: CardDetailsCheckoutViewModel,
+    cardHorizontalLayoutPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
 
@@ -260,6 +268,7 @@ private fun CvvField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = cardHorizontalLayoutPosition,
             onValidate = { viewModel.validateCvv(state.cvvInputFieldState.value) },
         ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv)) },
@@ -282,6 +291,7 @@ private fun CardExpireDateField(
     keyboardController: SoftwareKeyboardController?,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
+    cardHorizontalLayoutPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
 
@@ -290,6 +300,7 @@ private fun CardExpireDateField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = cardHorizontalLayoutPosition,
             onValidate = { viewModel.validateExpireDate(state.cardExpireDateInputField.value) },
         ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_expiry_date)) },
@@ -326,6 +337,7 @@ private fun CardNumberField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = 0f,
             onValidate = { viewModel.validateCardNumber(state.cardNumberInputField.value) },
         ),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_pan)) },
@@ -362,6 +374,7 @@ private fun CardHolderNameField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = 0f,
             onValidate = { viewModel.validateCardHolder(state.cardHolderInputField.value) },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -391,6 +404,7 @@ private fun EmailField(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,
+                parentPosition = 0f,
                 onValidate = { viewModel.validateEmailValue(state.emailInputField.value) },
             ),
             isError = state.emailInputField.isError,
@@ -436,6 +450,7 @@ private fun PostalCodeField(
                 coroutineScope = coroutineScope,
                 scrollState = scrollState,
                 initialHasBeenFocused = hasBeenFocused,
+                parentPosition = 0f,
                 onValidate = {
                     viewModel.validatePostalCode(state.postalCodeField.value)
                 },

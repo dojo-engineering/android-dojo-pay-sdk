@@ -14,8 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -49,9 +52,11 @@ internal fun ShippingAddressSection(
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.shippingAddressSection?.isVisible == true) {
+        var parentPosition by remember { mutableStateOf(0f) }
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor),
+            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                .onGloballyPositioned { parentPosition = it.positionInParent().y },
         ) {
             HeaderTitle()
             NameField(
@@ -61,6 +66,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             Address1Field(
                 state.shippingAddressSection,
@@ -69,6 +75,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             Address2Field(
                 state.shippingAddressSection,
@@ -77,6 +84,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             CityField(
                 state.shippingAddressSection,
@@ -85,6 +93,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             PostalCodeField(
                 state.shippingAddressSection,
@@ -93,6 +102,7 @@ internal fun ShippingAddressSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             CountryField(
                 state.shippingAddressSection,
@@ -104,6 +114,7 @@ internal fun ShippingAddressSection(
                 coroutineScope,
                 scrollToPosition,
                 scrollState,
+                parentPosition,
             )
             AddressesAreTheSameCheckBox(
                 state.shippingAddressSection,
@@ -133,6 +144,7 @@ private fun NameField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -143,6 +155,7 @@ private fun NameField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = { viewModel.onValidateShippingNameField(shippingAddressSection.name.value) },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -166,6 +179,7 @@ private fun Address1Field(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -177,6 +191,7 @@ private fun Address1Field(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateAddress1Field(
                     shippingAddressSection.addressLine1.value,
@@ -205,6 +220,7 @@ private fun Address2Field(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -225,6 +241,7 @@ private fun Address2Field(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {},
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -248,6 +265,7 @@ private fun CityField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -258,6 +276,7 @@ private fun CityField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateCityField(shippingAddressSection.city.value, true)
             },
@@ -283,6 +302,7 @@ private fun PostalCodeField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -293,6 +313,7 @@ private fun PostalCodeField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidatePostalCodeField(
                     shippingAddressSection.postalCode.value,
@@ -333,6 +354,7 @@ private fun DeliveryNotesField(
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
     scrollState: ScrollState,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -357,6 +379,7 @@ private fun DeliveryNotesField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {},
         ),
     )

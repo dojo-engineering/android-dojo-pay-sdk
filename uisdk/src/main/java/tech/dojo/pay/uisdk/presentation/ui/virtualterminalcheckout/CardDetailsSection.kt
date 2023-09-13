@@ -17,9 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -58,9 +61,11 @@ internal fun CardDetailsSection(
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.cardDetailsSection?.isVisible == true) {
+        var parentPosition by remember { mutableStateOf(0f) }
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor),
+            modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                .onGloballyPositioned { parentPosition = it.positionInParent().y },
         ) {
             HeaderTitle()
             SupportedPaymentMethods(
@@ -75,6 +80,7 @@ internal fun CardDetailsSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
             DojoSpacer(height = 4.dp)
             CardNumberInputField(
@@ -85,13 +91,16 @@ internal fun CardDetailsSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
 
+            var rowtPosition by remember { mutableStateOf(0f) }
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
-                    .padding(top = 16.dp),
+                    .padding(top = 16.dp)
+                    .onGloballyPositioned { rowtPosition = it.positionInParent().y },
             ) {
                 Box(
                     modifier = Modifier.weight(1f),
@@ -103,6 +112,7 @@ internal fun CardDetailsSection(
                         scrollToPosition,
                         scrollState,
                         keyboardController,
+                        parentPosition + rowtPosition,
                     )
                 }
 
@@ -115,6 +125,7 @@ internal fun CardDetailsSection(
                         scrollToPosition,
                         scrollState,
                         keyboardController,
+                        parentPosition + rowtPosition,
                     )
                 }
             }
@@ -126,6 +137,7 @@ internal fun CardDetailsSection(
                 scrollToPosition,
                 scrollState,
                 keyboardController,
+                parentPosition,
             )
         }
         ScreenFooter(showDojoBrand)
@@ -152,6 +164,7 @@ private fun CardHolderInputField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -162,6 +175,7 @@ private fun CardHolderInputField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateCardHolder(cardDetailsViewState.cardHolderInputField.value)
             },
@@ -188,6 +202,7 @@ private fun CardNumberInputField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -199,6 +214,7 @@ private fun CardNumberInputField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateCardNumber(cardDetailsViewState.cardNumberInputField.value)
             },
@@ -232,6 +248,7 @@ private fun CardExpireDateField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -243,6 +260,7 @@ private fun CardExpireDateField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateCardDate(cardDetailsViewState.cardExpireDateInputField.value)
             },
@@ -273,6 +291,7 @@ private fun CvvField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -284,6 +303,7 @@ private fun CvvField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateCvv(cardDetailsViewState.cvvInputFieldState.value)
             },
@@ -314,6 +334,7 @@ private fun EmailInputField(
     scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val scrollOffset = with(LocalDensity.current) {
@@ -330,6 +351,7 @@ private fun EmailInputField(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
             onValidate = {
                 viewModel.onValidateEmail(cardDetailsViewState.emailInputField.value)
             },
