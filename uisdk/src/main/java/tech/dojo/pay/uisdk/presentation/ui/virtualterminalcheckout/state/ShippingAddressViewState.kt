@@ -17,7 +17,7 @@ internal data class ShippingAddressViewState(
         R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
         isChecked = true,
         isVisible = true,
-        ),
+    ),
 ) {
     fun updateIsVisible(newValue: Boolean) =
         copy(isVisible = newValue)
