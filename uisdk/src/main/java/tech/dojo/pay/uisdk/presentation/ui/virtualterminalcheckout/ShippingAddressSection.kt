@@ -34,7 +34,7 @@ import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.DescriptionField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
-import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndVlidator
+import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndValidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.ShippingAddressViewState
@@ -139,7 +139,7 @@ private fun NameField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -170,7 +170,7 @@ private fun Address1Field(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -216,7 +216,7 @@ private fun Address2Field(
     }
 
     InputFieldWithErrorMessage(
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -247,7 +247,7 @@ private fun CityField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -280,7 +280,7 @@ private fun PostalCodeField(
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,
@@ -342,7 +342,7 @@ private fun DeliveryNotesField(
         onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
         maxCharacters = 120,
         label = label,
-        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
             coroutineScope = coroutineScope,
             scrollState = scrollState,
             initialHasBeenFocused = hasBeenFocused,

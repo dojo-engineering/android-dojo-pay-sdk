@@ -16,12 +16,12 @@ import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
-inline fun Modifier.autoScrollableInputFieldOnFocusChangeAndVlidator(
+internal fun Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
     initialHasBeenFocused: Boolean,
     parentPosition: Float,
-    crossinline onValidate: () -> Unit,
+    onValidate: () -> Unit,
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
     val scrollOffsets = remember { mutableListOf<Float>() }
