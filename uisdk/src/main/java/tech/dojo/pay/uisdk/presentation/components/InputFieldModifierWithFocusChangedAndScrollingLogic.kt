@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.components
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

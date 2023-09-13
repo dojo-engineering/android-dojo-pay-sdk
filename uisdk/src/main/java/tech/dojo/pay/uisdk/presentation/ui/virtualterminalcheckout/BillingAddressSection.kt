@@ -19,8 +19,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -45,7 +43,6 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.Vir
 internal fun BillingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
 ) {
@@ -62,7 +59,6 @@ internal fun BillingAddressSection(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -71,7 +67,6 @@ internal fun BillingAddressSection(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -80,7 +75,6 @@ internal fun BillingAddressSection(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -89,7 +83,6 @@ internal fun BillingAddressSection(
                 state.billingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -119,15 +112,11 @@ private fun Address1Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        billingAddressViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
-    }
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -159,16 +148,11 @@ private fun Address2Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-
-    val scrollOffset = with(LocalDensity.current) {
-        billingAddressViewState.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP.dp.toPx())
-    }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
@@ -201,15 +185,11 @@ private fun CityField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        billingAddressViewState.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP.dp.toPx())
-    }
 
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
@@ -237,15 +217,11 @@ private fun PostalCodeField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        billingAddressViewState.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP.dp.toPx())
-    }
 
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
@@ -285,5 +261,3 @@ private fun CountryField(
         onCountrySelected = { viewModel.onCountrySelected(it, false) },
     )
 }
-
-private const val NORMAL_FILED_SIZE_DP = 100

@@ -19,7 +19,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -46,7 +45,6 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.Vir
 internal fun ShippingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
 ) {
@@ -63,7 +61,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -72,7 +69,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -81,7 +77,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -90,7 +85,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -99,7 +93,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -112,7 +105,6 @@ internal fun ShippingAddressSection(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 parentPosition,
             )
@@ -141,15 +133,11 @@ private fun NameField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
-    }
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -176,16 +164,11 @@ private fun Address1Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
-
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -217,15 +200,11 @@ private fun Address2Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
@@ -262,15 +241,11 @@ private fun CityField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -299,15 +274,11 @@ private fun PostalCodeField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -352,14 +323,10 @@ private fun DeliveryNotesField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (7 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes))
         append(" ")
@@ -397,5 +364,3 @@ private fun AddressesAreTheSameCheckBox(
         },
     )
 }
-
-private const val NORMAL_FILED_SIZE_DP = 100

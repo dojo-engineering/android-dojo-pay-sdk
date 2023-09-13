@@ -23,7 +23,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -54,7 +53,6 @@ internal fun CardDetailsSection(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     showDojoBrand: Boolean,
@@ -77,7 +75,6 @@ internal fun CardDetailsSection(
                 state.cardDetailsSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -88,7 +85,6 @@ internal fun CardDetailsSection(
                 viewModel,
                 isDarkModeEnabled,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -109,7 +105,6 @@ internal fun CardDetailsSection(
                         state.cardDetailsSection,
                         viewModel,
                         coroutineScope,
-                        scrollToPosition,
                         scrollState,
                         keyboardController,
                         parentPosition + rowtPosition,
@@ -122,7 +117,6 @@ internal fun CardDetailsSection(
                         state.cardDetailsSection,
                         viewModel,
                         coroutineScope,
-                        scrollToPosition,
                         scrollState,
                         keyboardController,
                         parentPosition + rowtPosition,
@@ -134,7 +128,6 @@ internal fun CardDetailsSection(
                 state.cardDetailsSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
                 keyboardController,
                 parentPosition,
@@ -161,15 +154,11 @@ private fun CardHolderInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        cardDetailsViewState.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
-    }
     InputFieldWithErrorMessage(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -199,16 +188,11 @@ private fun CardNumberInputField(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
-            (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     CardNumberInPutField(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -245,16 +229,11 @@ private fun CardExpireDateField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
-            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     CardExpireDateInputField(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -288,16 +267,12 @@ private fun CvvField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
-            (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+
     CvvInputField(
         modifier = InputFieldModifierWithFocusChangedAndScrollingLogic(
             coroutineScope = coroutineScope,
@@ -331,16 +306,11 @@ private fun EmailInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
     keyboardController: SoftwareKeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        cardDetailsViewState.itemPoissonOffset.dp.toPx() +
-            (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
     val assistiveText = when (cardDetailsViewState.emailInputField.isError) {
         true -> { cardDetailsViewState.emailInputField.errorMessages?.let { AnnotatedString(stringResource(id = it)) } }
         else -> AnnotatedString(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_subtitle_email_vt))
@@ -372,5 +342,3 @@ private fun ScreenFooter(showDojoBrand: Boolean) {
         mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY,
     )
 }
-
-private const val NORMAL_FILED_SIZE_DP = 160
