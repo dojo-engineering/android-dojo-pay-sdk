@@ -90,13 +90,13 @@ internal fun CardDetailsSection(
                 parentPosition,
             )
 
-            var rowtPosition by remember { mutableStateOf(0f) }
+            var rowPosition by remember { mutableStateOf(0f) }
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .heightIn(48.dp)
                     .padding(top = 16.dp)
-                    .onGloballyPositioned { rowtPosition = it.positionInParent().y },
+                    .onGloballyPositioned { rowPosition = it.positionInParent().y },
             ) {
                 Box(
                     modifier = Modifier.weight(1f),
@@ -107,7 +107,7 @@ internal fun CardDetailsSection(
                         coroutineScope,
                         scrollState,
                         keyboardController,
-                        parentPosition + rowtPosition,
+                        parentPosition + rowPosition,
                     )
                 }
 
@@ -119,7 +119,7 @@ internal fun CardDetailsSection(
                         coroutineScope,
                         scrollState,
                         keyboardController,
-                        parentPosition + rowtPosition,
+                        parentPosition + rowPosition,
                     )
                 }
             }
