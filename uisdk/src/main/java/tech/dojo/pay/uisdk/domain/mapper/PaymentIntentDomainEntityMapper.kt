@@ -3,9 +3,12 @@ package tech.dojo.pay.uisdk.domain.mapper
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.BillingAddressDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.ItemLinesAmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.ShippingDetailsDomainEntity
 import java.util.Currency
 
 @Suppress("SwallowedException")
@@ -62,8 +65,11 @@ internal class PaymentIntentDomainEntityMapper {
             supportedWalletSchemes = raw.merchantConfig?.supportedPaymentMethods?.wallets.orEmpty(),
             itemLines = raw.itemLines?.map {
                 ItemLinesDomainEntity(
-                    amount = it.amountTotal,
-                    caption = it.caption,
+                    amount = ItemLinesAmountDomainEntity(
+                        value = it.amountTotal?.value ?: 0L,
+                        currencyCode = it.amountTotal?.currencyCode.orEmpty(),
+                    ),
+                    caption = it.caption.orEmpty(),
                 )
             },
             collectionEmailRequired = raw.config?.customerEmail?.collectionRequired ?: false,
@@ -79,5 +85,15 @@ internal class PaymentIntentDomainEntityMapper {
             isPaymentAlreadyCollected =
             PaymentIntentStatusDomainEntity.fromStatus(raw.status.orEmpty())
                 .let { it == PaymentIntentStatusDomainEntity.CAPTURED || it == PaymentIntentStatusDomainEntity.AUTHORIZED },
+            customerEmailAddress = raw.customer?.emailAddress,
+            billingAddress = BillingAddressDomainEntity(
+                postcode = raw.billingAddress?.postcode,
+                countryCode = raw.billingAddress?.countryCode,
+                city = raw.billingAddress?.city,
+            ),
+            shippingDetails = ShippingDetailsDomainEntity(
+                name = raw.shippingDetails?.name,
+                deliveryNotes = raw.shippingDetails?.deliveryNotes,
+            ),
         )
 }
