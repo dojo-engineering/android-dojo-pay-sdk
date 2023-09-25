@@ -5,7 +5,7 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 
-internal class DojoPaymentFlowHandlerWIthFragmentImp(
+internal class DojoPaymentFlowHandlerWithFragmentImpl(
     fragment: Fragment,
     onResult: (DojoPaymentResult) -> Unit,
 

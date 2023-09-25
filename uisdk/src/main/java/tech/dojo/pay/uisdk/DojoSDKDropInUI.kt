@@ -11,7 +11,7 @@ import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandler
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerImp
-import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerWIthFragmentImp
+import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerWithFragmentImpl
 
 object DojoSDKDropInUI {
     private val REQUEST_CODE_DROP_IN_UI = "DOJO_PAY_UI".hashCode()
@@ -33,7 +33,7 @@ object DojoSDKDropInUI {
     fun createUIPaymentHandler(
         fragment: Fragment,
         onResult: (DojoPaymentResult) -> Unit,
-    ): DojoPaymentFlowHandler = DojoPaymentFlowHandlerWIthFragmentImp(fragment, onResult)
+    ): DojoPaymentFlowHandler = DojoPaymentFlowHandlerWithFragmentImpl(fragment, onResult)
 
     /**
      * Starts payment UI FLOW.
