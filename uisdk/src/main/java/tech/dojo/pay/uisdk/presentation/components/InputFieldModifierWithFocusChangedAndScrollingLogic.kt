@@ -30,7 +30,11 @@ internal fun Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
         if (focusState.isFocused) {
             coroutineScope.launch {
                 delay(300)
-                val totalOffset = scrollOffsets.maxOrNull() ?: 0F
+                val totalOffset = if (parentPosition != 0F) {
+                    scrollOffsets.maxOrNull() ?: 0F
+                } else {
+                    scrollOffsets.firstOrNull() ?: 0F
+                }
                 if (totalOffset != 0F) {
                     scrollState.animateScrollTo((parentPosition + totalOffset - inputFieldLabelHeightInPx).roundToInt())
                 } else {
