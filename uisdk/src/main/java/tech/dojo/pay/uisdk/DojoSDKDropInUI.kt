@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.entities.DojoThemeSettings
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandler
 import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerImp
+import tech.dojo.pay.uisdk.presentation.handler.DojoPaymentFlowHandlerWithFragmentImpl
 
 object DojoSDKDropInUI {
     private val REQUEST_CODE_DROP_IN_UI = "DOJO_PAY_UI".hashCode()
@@ -19,12 +20,20 @@ object DojoSDKDropInUI {
     var dojoSDKDebugConfig: DojoSDKDebugConfig? = null
 
     /**
-     * Returns handler which handle payment process with UI .
+     * Returns handler which handle payment process with activity  .
      */
     fun createUIPaymentHandler(
         activity: ComponentActivity,
-        onResult: (DojoPaymentResult) -> Unit
+        onResult: (DojoPaymentResult) -> Unit,
     ): DojoPaymentFlowHandler = DojoPaymentFlowHandlerImp(activity, onResult)
+
+    /**
+     * Returns handler which handle payment process with fragment .
+     */
+    fun createUIPaymentHandler(
+        fragment: Fragment,
+        onResult: (DojoPaymentResult) -> Unit,
+    ): DojoPaymentFlowHandler = DojoPaymentFlowHandlerWithFragmentImpl(fragment, onResult)
 
     /**
      * Starts payment UI FLOW.
@@ -33,11 +42,11 @@ object DojoSDKDropInUI {
      */
     fun startUIPaymentFlowForResult(
         activity: Activity,
-        dojoPaymentFlowParams: DojoPaymentFlowParams
+        dojoPaymentFlowParams: DojoPaymentFlowParams,
     ) {
         val intent = DojoPaymentFlowHandlerResultContract().createIntent(
             activity,
-            dojoPaymentFlowParams
+            dojoPaymentFlowParams,
         )
         activity.startActivityForResult(intent, REQUEST_CODE_DROP_IN_UI)
     }
@@ -49,11 +58,11 @@ object DojoSDKDropInUI {
      */
     fun startUIPaymentFlowForResult(
         fragment: Fragment,
-        dojoPaymentFlowParams: DojoPaymentFlowParams
+        dojoPaymentFlowParams: DojoPaymentFlowParams,
     ) {
         val intent = DojoPaymentFlowHandlerResultContract().createIntent(
             fragment.requireContext(),
-            dojoPaymentFlowParams
+            dojoPaymentFlowParams,
         )
         fragment.startActivityForResult(intent, REQUEST_CODE_DROP_IN_UI)
     }
@@ -65,7 +74,7 @@ object DojoSDKDropInUI {
     fun parseUIPaymentFlowResult(
         requestCode: Int,
         resultCode: Int,
-        intent: Intent?
+        intent: Intent?,
     ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE_DROP_IN_UI) return null
         return DojoPaymentFlowHandlerResultContract().parseResult(resultCode, intent)
