@@ -128,7 +128,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             billingAddress = CollectBillingAddress(true),
             shippingDetails = CollectShippingAddress(true),
         ),
-        merchantInitiatedType = "merchantInitiatedType",
+        merchantInitiatedTransactionType = "merchantInitiatedType",
         itemLines = listOf(
             ItemLines(
                 caption = "caption",

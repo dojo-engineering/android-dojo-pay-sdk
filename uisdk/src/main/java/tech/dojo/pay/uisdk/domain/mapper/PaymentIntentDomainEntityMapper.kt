@@ -80,7 +80,7 @@ internal class PaymentIntentDomainEntityMapper {
             isVirtualTerminalPayment = raw.paymentSource?.lowercase() == "virtual-terminal",
             isPreAuthPayment = raw.captureMode?.lowercase() == "manual",
             orderId = raw.reference.orEmpty(),
-            isSetUpIntentPayment = !raw.merchantInitiatedType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
+            isSetUpIntentPayment = !raw.merchantInitiatedTransactionType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
             merchantName = raw.config?.tradingName.orEmpty(),
             isPaymentAlreadyCollected =
             PaymentIntentStatusDomainEntity.fromStatus(raw.status.orEmpty())
