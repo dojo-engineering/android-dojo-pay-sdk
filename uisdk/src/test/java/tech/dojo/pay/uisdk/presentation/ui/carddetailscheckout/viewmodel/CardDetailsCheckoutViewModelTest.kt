@@ -92,830 +92,878 @@ class CardDetailsCheckoutViewModelTest {
     }
 
     @Test
-    fun `when init viewModel with isStartDestination as false should emit correct state`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+    fun `when init viewModel with isStartDestination as false should emit correct state`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
 
-        val expected = CardDetailsCheckoutState(
-            isLoading = false,
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "",
-            amountCurrency = "",
-            allowedPaymentMethodsIcons = emptyList(),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isBillingCountryFieldRequired = false,
-            supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
-            isPostalCodeFieldRequired = false,
-            postalCodeField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "",
-            ),
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
-
-    @Test
-    fun `when init viewModel with isStartDestination as true should emit correct state with full loading as true  and correct toolBar title `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        isStartDestination = true
-
-        val expected = CardDetailsCheckoutState(
-            isLoading = true,
-            toolbarTitle = "saveCardToolBar",
-            totalAmount = "",
-            amountCurrency = "",
-            allowedPaymentMethodsIcons = emptyList(),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isBillingCountryFieldRequired = false,
-            supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
-            isPostalCodeFieldRequired = false,
-            postalCodeField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = false,
-                messageText = "",
-            ),
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
-
-    @Test
-    fun `when payment intent flow collect with collect billing address false viewModel should emit state without billing country `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+            val expected = CardDetailsCheckoutState(
+                isLoading = false,
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "",
+                amountCurrency = "",
+                allowedPaymentMethodsIcons = emptyList(),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isBillingCountryFieldRequired = false,
+                supportedCountriesList = emptyList(),
+                currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+                isPostalCodeFieldRequired = false,
+                postalCodeField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "",
                 ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val payText = "pay £ 100"
-
-        val expected = CardDetailsCheckoutState(
-            orderId = "", merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = false,
-            supportedCountriesList = emptyList(),
-            currentSelectedCountry = SupportedCountriesViewEntity(
-                countryName = "",
-                countryCode = "",
-                isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            isPostalCodeFieldRequired = false,
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when payment intent flow collect with collect billing address true viewModel should emit state with  billing country `() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
+    fun `when init viewModel with isStartDestination as true should emit correct state with full loading as true  and correct toolBar title `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            isStartDestination = true
 
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val payText = "pay £ 100"
-        val expected = CardDetailsCheckoutState(
-            toolbarTitle = "toolBarTitle",
-            orderId = "",
-            merchantName = "",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+            val expected = CardDetailsCheckoutState(
+                isLoading = true,
+                toolbarTitle = "saveCardToolBar",
+                totalAmount = "",
+                amountCurrency = "",
+                allowedPaymentMethodsIcons = emptyList(),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isBillingCountryFieldRequired = false,
+                supportedCountriesList = emptyList(),
+                currentSelectedCountry = SupportedCountriesViewEntity("", "", false),
+                isPostalCodeFieldRequired = false,
+                postalCodeField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = false,
+                    messageText = "",
+                ),
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
+
+    @Test
+    fun `when payment intent flow collect with collect billing address false viewModel should emit state without billing country `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedIcons = listOf(1, 2, 3)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val payText = "pay £ 100"
+
+            val expected = CardDetailsCheckoutState(
+                orderId = "", merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = false,
+                supportedCountriesList = emptyList(),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "",
+                    countryCode = "",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                isPostalCodeFieldRequired = false,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
+
+    @Test
+    fun `when payment intent flow collect with collect billing address true viewModel should emit state with  billing country `() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            isPostalCodeFieldRequired = true,
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            val supportedCountriesDomainEntityList = listOf(
+                SupportedCountriesDomainEntity("", "", false),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val payText = "pay £ 100"
+            val expected = CardDetailsCheckoutState(
+                toolbarTitle = "toolBarTitle",
+                orderId = "",
+                merchantName = "",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                isPostalCodeFieldRequired = true,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when payment intent flow collect with collect userId viewModel should emit state with save card checkBox and default as true`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    customerId = "customerId",
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        val payText = "pay £ 100"
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+    fun `when payment intent flow collect with collect userId viewModel should emit state with save card checkBox and default as true`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            isPostalCodeFieldRequired = true,
-            checkBoxItem = CheckBoxItem(
-                isVisible = true,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            val supportedCountriesDomainEntityList = listOf(
+                SupportedCountriesDomainEntity("", "", false),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        customerId = "customerId",
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+            val payText = "pay £ 100"
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val expected = CardDetailsCheckoutState(
+                orderId = "",
+                merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                isPostalCodeFieldRequired = true,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = true,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when onPayWithCardClicked called with success from  getRefreshedPaymentTokenFlow ,executeCardPayment from dojoCardPaymentHandler should be called and viewModel state should emits Loading on action button`() = runTest {
-        // arrange
-        val fullCardPaymentPayload: DojoCardPaymentPayLoad.FullCardPaymentPayload = mockk()
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
-            MutableStateFlow(
-                RefreshPaymentIntentResult.Success(token = "token"),
-            ),
-        )
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
+    fun `when onPayWithCardClicked called with success from  getRefreshedPaymentTokenFlow ,executeCardPayment from dojoCardPaymentHandler should be called and viewModel state should emits Loading on action button`() =
+        runTest {
+            // arrange
+            val fullCardPaymentPayload: DojoCardPaymentPayLoad.FullCardPaymentPayload = mockk()
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            val supportedCountriesDomainEntityList = listOf(
                 SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        given(
-            cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(
-                any(),
-                any(),
-            ),
-        ).willReturn(
-            fullCardPaymentPayload,
-        )
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val payText = "pay £ 100"
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+            )
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+                MutableStateFlow(
+                    RefreshPaymentIntentResult.Success(token = "token"),
+                ),
+            )
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            isPostalCodeFieldRequired = true,
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(isLoading = true, text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        viewModel.onPayWithCardClicked()
-        // assert
-        verify(updatePaymentStateUseCase).updatePaymentSate(any())
-        verify(dojoCardPaymentHandler).executeCardPayment(any(), any())
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+            given(
+                cardCheckOutFullCardPaymentPayloadMapper.getPaymentPayLoad(
+                    any(),
+                    any(),
+                ),
+            ).willReturn(
+                fullCardPaymentPayload,
+            )
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val payText = "pay £ 100"
+            val expected = CardDetailsCheckoutState(
+                orderId = "",
+                merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                isPostalCodeFieldRequired = true,
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(isLoading = true, text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            viewModel.onPayWithCardClicked()
+            // assert
+            verify(updatePaymentStateUseCase).updatePaymentSate(any())
+            verify(dojoCardPaymentHandler).executeCardPayment(any(), any())
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when onPayWithCardClicked called with failure from  getRefreshedPaymentTokenFlow , viewModel  should call navigateToCardResult`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
-            MutableStateFlow(
-                RefreshPaymentIntentResult.RefreshFailure,
-            ),
-        )
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
+    fun `when onPayWithCardClicked called with failure from  getRefreshedPaymentTokenFlow , viewModel  should call navigateToCardResult`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
+                MutableStateFlow(
+                    RefreshPaymentIntentResult.RefreshFailure,
                 ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val captor = argumentCaptor<DojoPaymentResult>()
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        viewModel.onPayWithCardClicked()
-        // assert
-        verify(updatePaymentStateUseCase).updatePaymentSate(any())
-        verify(navigateToCardResult).invoke(captor.capture())
-        Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
-    }
+            )
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedIcons = listOf(1, 2, 3)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                listOf(
+                    SupportedCountriesDomainEntity("", "", false),
+                ),
+            )
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val captor = argumentCaptor<DojoPaymentResult>()
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            viewModel.onPayWithCardClicked()
+            // assert
+            verify(updatePaymentStateUseCase).updatePaymentSate(any())
+            verify(navigateToCardResult).invoke(captor.capture())
+            Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
+        }
 
     @Test
-    fun `when  onCardHolderValueChanged called state should have the new value and should be emitted`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(true)
-        given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(true)
-        given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(true)
-        given(
-            cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
-                any(),
-                any(),
-            ),
-        ).willReturn(true)
-        given(
-            cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
-                any(),
-                any(),
-            ),
-        ).willReturn(true)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
+    fun `when  onCardHolderValueChanged called state should have the new value and should be emitted`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            val supportedCountriesDomainEntityList = listOf(
                 SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        val payText = "pay £ 100"
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+            )
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(true)
+            given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(true)
+            given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(true)
+            given(
+                cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
+                    any(),
+                    any(),
+                ),
+            ).willReturn(true)
+            given(
+                cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
+                    any(),
+                    any(),
+                ),
+            ).willReturn(true)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = "new"),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            isPostalCodeFieldRequired = true,
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(isEnabled = false, text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+            val payText = "pay £ 100"
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val expected = CardDetailsCheckoutState(
+                orderId = "",
+                merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = "new"),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                isPostalCodeFieldRequired = true,
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(isEnabled = false, text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
 
-        viewModel.onCardHolderValueChanged("new")
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            viewModel.onCardHolderValueChanged("new")
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when all card related fields is edited state should have the new values and should be emitted`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        val payText = "pay £ 100"
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+    fun `when all card related fields is edited state should have the new values and should be emitted`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = ""),
-            isEmailInputFieldRequired = false,
-            cardNumberInputField = InputFieldState(value = "new"),
-            cardExpireDateInputField = InputFieldState(value = "new"),
-            cvvInputFieldState = InputFieldState(value = "new"),
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            isPostalCodeFieldRequired = true,
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        viewModel.onCardNumberValueChanged("new")
-        viewModel.onCvvValueChanged("new")
-        viewModel.onExpireDateValueChanged("new")
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            val supportedCountriesDomainEntityList = listOf(
+                SupportedCountriesDomainEntity("", "", false),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+            val payText = "pay £ 100"
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val expected = CardDetailsCheckoutState(
+                orderId = "",
+                merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = ""),
+                isEmailInputFieldRequired = false,
+                cardNumberInputField = InputFieldState(value = "new"),
+                cardExpireDateInputField = InputFieldState(value = "new"),
+                cvvInputFieldState = InputFieldState(value = "new"),
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                isPostalCodeFieldRequired = true,
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(text = payText),
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            viewModel.onCardNumberValueChanged("new")
+            viewModel.onCvvValueChanged("new")
+            viewModel.onExpireDateValueChanged("new")
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
-    fun `when onEmailValueChanged called  state should have the new value and should be emitted`() = runTest {
-        // arrange
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> = MutableStateFlow(null)
-        given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-        val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-        val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-            countryName = "EGP",
-            countryCode = "EG",
-            isPostalCodeEnabled = true,
-        )
-        val supportedIcons = listOf(1, 2, 3)
-        given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-        paymentIntentFakeFlow.tryEmit(
-            PaymentIntentResult.Success(
-                result = PaymentIntentDomainEntity(
-                    "id",
-                    "token",
-                    AmountDomainEntity(
-                        10L,
-                        "100",
-                        "GBP",
-                    ),
-                    supportedCardsSchemes = listOf(CardsSchemes.AMEX),
-                    collectionBillingAddressRequired = true,
-                    collectionEmailRequired = true,
-                ),
-            ),
-        )
-        paymentStateFakeFlow.tryEmit(true)
-        given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
-            listOf(
-                SupportedCountriesDomainEntity("", "", false),
-            ),
-        )
-        given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-            supportedCountriesViewEntity,
-        )
-        val payText = "pay £ 100"
-        given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
-        val expected = CardDetailsCheckoutState(
-            orderId = "",
-            merchantName = "",
-            toolbarTitle = "toolBarTitle",
-            totalAmount = "100",
-            amountCurrency = "£",
-            isBillingCountryFieldRequired = true,
-            supportedCountriesList = listOf(supportedCountriesViewEntity),
-            currentSelectedCountry = SupportedCountriesViewEntity(
+    fun `when onEmailValueChanged called  state should have the new value and should be emitted`() =
+        runTest {
+            // arrange
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
+                MutableStateFlow(null)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
+            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
                 isPostalCodeEnabled = true,
-            ),
-            allowedPaymentMethodsIcons = listOf(1, 2, 3),
-            cardHolderInputField = InputFieldState(value = ""),
-            emailInputField = InputFieldState(value = "new"),
-            isEmailInputFieldRequired = true,
-            checkBoxItem = CheckBoxItem(
-                isVisible = false,
-                isChecked = true,
-                messageText = "checkBoxMessage",
-            ),
-            cardNumberInputField = InputFieldState(value = ""),
-            cardExpireDateInputField = InputFieldState(value = ""),
-            cvvInputFieldState = InputFieldState(value = ""),
-            isPostalCodeFieldRequired = true,
-            postalCodeField = InputFieldState(value = ""),
-            actionButtonState = ActionButtonState(text = payText),
+            )
+            val supportedIcons = listOf(1, 2, 3)
+            val supportedCountriesDomainEntityList = listOf(
+                SupportedCountriesDomainEntity("", "", false),
+            )
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+            paymentIntentFakeFlow.tryEmit(
+                PaymentIntentResult.Success(
+                    result = PaymentIntentDomainEntity(
+                        "id",
+                        "token",
+                        AmountDomainEntity(
+                            10L,
+                            "100",
+                            "GBP",
+                        ),
+                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        collectionBillingAddressRequired = true,
+                        collectionEmailRequired = true,
+                    ),
+                ),
+            )
+            paymentStateFakeFlow.tryEmit(true)
+            given(getSupportedCountriesUseCase.getSupportedCountries()).willReturn(
+                supportedCountriesDomainEntityList,
+            )
+            given(
+                supportedCountriesViewEntityMapper.mapToSupportedCountriesViewEntityWithPreSelectedCountry(
+                    supportedCountriesDomainEntityList,
+                    null,
+                ),
+            ).willReturn(
+                listOf(supportedCountriesViewEntity),
+            )
+            val payText = "pay £ 100"
+            given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
+            val expected = CardDetailsCheckoutState(
+                orderId = "",
+                merchantName = "",
+                toolbarTitle = "toolBarTitle",
+                totalAmount = "100",
+                amountCurrency = "£",
+                isBillingCountryFieldRequired = true,
+                supportedCountriesList = listOf(supportedCountriesViewEntity),
+                currentSelectedCountry = SupportedCountriesViewEntity(
+                    countryName = "EGP",
+                    countryCode = "EG",
+                    isPostalCodeEnabled = true,
+                ),
+                allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                cardHolderInputField = InputFieldState(value = ""),
+                emailInputField = InputFieldState(value = "new"),
+                isEmailInputFieldRequired = true,
+                checkBoxItem = CheckBoxItem(
+                    isVisible = false,
+                    isChecked = true,
+                    messageText = "checkBoxMessage",
+                ),
+                cardNumberInputField = InputFieldState(value = ""),
+                cardExpireDateInputField = InputFieldState(value = ""),
+                cvvInputFieldState = InputFieldState(value = ""),
+                isPostalCodeFieldRequired = true,
+                postalCodeField = InputFieldState(value = ""),
+                actionButtonState = ActionButtonState(text = payText),
 
-        )
-        // act
-        val viewModel = CardDetailsCheckoutViewModel(
-            observePaymentIntent,
-            dojoCardPaymentHandler,
-            observePaymentStatus,
-            updatePaymentStateUseCase,
-            getSupportedCountriesUseCase,
-            supportedCountriesViewEntityMapper,
-            allowedPaymentMethodsViewEntityMapper,
-            cardCheckoutScreenValidator,
-            cardCheckOutFullCardPaymentPayloadMapper,
-            stringProvider,
-            isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
-            navigateToCardResult,
-        )
-        viewModel.onEmailValueChanged("new")
-        // assert
-        Assert.assertEquals(expected, viewModel.state.value)
-    }
+            )
+            // act
+            val viewModel = CardDetailsCheckoutViewModel(
+                observePaymentIntent,
+                dojoCardPaymentHandler,
+                observePaymentStatus,
+                updatePaymentStateUseCase,
+                getSupportedCountriesUseCase,
+                supportedCountriesViewEntityMapper,
+                allowedPaymentMethodsViewEntityMapper,
+                cardCheckoutScreenValidator,
+                cardCheckOutFullCardPaymentPayloadMapper,
+                stringProvider,
+                isStartDestination,
+                refreshPaymentIntentUseCase,
+                getRefreshedPaymentTokenFlow,
+                navigateToCardResult,
+            )
+            viewModel.onEmailValueChanged("new")
+            // assert
+            Assert.assertEquals(expected, viewModel.state.value)
+        }
 
     @Test
     fun `when any of cardCheckoutScreenValidator methods return false action button should be disabled`() =
@@ -929,11 +977,6 @@ class CardDetailsCheckoutViewModelTest {
             given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isEmailValid(any())).willReturn(false)
-            val supportedCountriesViewEntity = SupportedCountriesViewEntity(
-                countryName = "EGP",
-                countryCode = "EG",
-                isPostalCodeEnabled = true,
-            )
             val supportedIcons = listOf(1, 2, 3)
             given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -957,9 +1000,6 @@ class CardDetailsCheckoutViewModelTest {
                 listOf(
                     SupportedCountriesDomainEntity("", "", false),
                 ),
-            )
-            given(supportedCountriesViewEntityMapper.apply(any())).willReturn(
-                supportedCountriesViewEntity,
             )
             given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
             // act

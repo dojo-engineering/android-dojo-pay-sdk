@@ -11,19 +11,22 @@ import org.mockito.junit.MockitoJUnitRunner
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.uisdk.data.entities.Amount
-import tech.dojo.pay.uisdk.data.entities.BillingAddress
 import tech.dojo.pay.uisdk.data.entities.Branding
+import tech.dojo.pay.uisdk.data.entities.CollectBillingAddress
+import tech.dojo.pay.uisdk.data.entities.CollectCustomerEmail
+import tech.dojo.pay.uisdk.data.entities.CollectShippingAddress
 import tech.dojo.pay.uisdk.data.entities.Config
 import tech.dojo.pay.uisdk.data.entities.Customer
-import tech.dojo.pay.uisdk.data.entities.CustomerEmail
 import tech.dojo.pay.uisdk.data.entities.ItemLines
 import tech.dojo.pay.uisdk.data.entities.MerchantConfig
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
-import tech.dojo.pay.uisdk.data.entities.ShippingAddress
 import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.BillingAddressDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.ItemLinesAmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.ShippingDetailsDomainEntity
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
@@ -110,7 +113,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             10L,
             "GBP",
         ),
-        customer = Customer(id = "id"),
+        customer = Customer(id = "id", emailAddress = "emailAddress"),
         reference = "reference",
         merchantConfig = MerchantConfig(
             supportedPaymentMethods = SupportedPaymentMethods(
@@ -121,11 +124,11 @@ internal class PaymentIntentDomainEntityMapperTest {
         config = Config(
             tradingName = "tradingName",
             branding = Branding(logoURL = "logoURL", faviconURL = "faviconURL"),
-            customerEmail = CustomerEmail(true),
-            billingAddress = BillingAddress(true),
-            shippingDetails = ShippingAddress(true),
+            customerEmail = CollectCustomerEmail(true),
+            billingAddress = CollectBillingAddress(true),
+            shippingDetails = CollectShippingAddress(true),
         ),
-        merchantInitiatedType = "merchantInitiatedType",
+        merchantInitiatedTransactionType = "merchantInitiatedType",
         itemLines = listOf(
             ItemLines(
                 caption = "caption",
@@ -139,7 +142,7 @@ internal class PaymentIntentDomainEntityMapperTest {
     )
 
     private fun getValidPaymentIntentDomainEntity(): PaymentIntentDomainEntity {
-        val amountItem = Amount(
+        val amountItem = ItemLinesAmountDomainEntity(
             10L,
             "GBP",
         )
@@ -158,7 +161,9 @@ internal class PaymentIntentDomainEntityMapperTest {
         val collectionShippingAddressRequired = true
         val isSetUpIntentPayment = true
         val merchantName = "tradingName"
-
+        val customerEmailAddress = "emailAddress"
+        val billingAddress = BillingAddressDomainEntity(postcode = null, countryCode = null, city = null)
+        val shippingDetails = ShippingDetailsDomainEntity(name = null, deliveryNotes = null)
         return PaymentIntentDomainEntity(
             id = id,
             paymentToken = clientSessionSecret,
@@ -175,6 +180,9 @@ internal class PaymentIntentDomainEntityMapperTest {
             collectionShippingAddressRequired = collectionShippingAddressRequired,
             isSetUpIntentPayment = isSetUpIntentPayment,
             merchantName = merchantName,
+            customerEmailAddress = customerEmailAddress,
+            billingAddress = billingAddress,
+            shippingDetails = shippingDetails,
         )
     }
 }
