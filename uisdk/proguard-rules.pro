@@ -26,7 +26,5 @@
 -keepclassmembers class **.R$raw {
     public static int *;
 }
--keep class  tech.dojo.pay.uisdk.data.** { *; }
+-keep class  tech.dojo.pay.uisdk.data.entities.** { *; }
 -keep class  tech.dojo.pay.uisdk.entities.** { *; }
--keepclassmembers class tech.dojo.pay.uisdk.data.** { *; }
-
