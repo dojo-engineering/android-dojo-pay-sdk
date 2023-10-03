@@ -298,7 +298,7 @@ internal class CardDetailsCheckoutViewModel(
             cardCheckoutScreenValidator.isCheckBoxValid(isStartDestination, isCheckBoxChecked)
 
     private suspend fun observePaymentIntent() {
-        observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
+        observePaymentIntent.observePaymentIntent().collect { handlePaymentIntent(it) }
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {

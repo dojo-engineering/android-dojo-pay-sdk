@@ -41,12 +41,10 @@ internal class PaymentFlowViewModel(
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
-                    it?.let { paymentIntentResult ->
-                        handlePaymentIntentResult(
-                            paymentIntentResult,
-                            customerSecret,
-                        )
-                    }
+                    handlePaymentIntentResult(
+                        it,
+                        customerSecret,
+                    )
                 }
             } catch (error: Throwable) {
                 closeFlowWithInternalError()

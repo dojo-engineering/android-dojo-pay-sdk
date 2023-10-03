@@ -39,7 +39,7 @@ internal class PaymentMethodCheckoutViewModel(
     private var gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
     val state: LiveData<PaymentMethodCheckoutState>
@@ -69,9 +69,9 @@ internal class PaymentMethodCheckoutViewModel(
             payWithCarButtonState = PayWithCarButtonState(
                 isVisible = false,
                 isPrimary = false,
-                navigateToCardCheckout = false
+                navigateToCardCheckout = false,
             ),
-            payAmountButtonState = null
+            payAmountButtonState = null,
         )
         postStateToUI()
         observePaymentIntent()
@@ -80,12 +80,10 @@ internal class PaymentMethodCheckoutViewModel(
     fun observePaymentIntent() {
         viewModelScope.launch {
             observePaymentIntent.observePaymentIntent().collect {
-                it?.let {
-                    if (it is PaymentIntentResult.Success) {
-                        paymentIntent = it.result
-                        if (currentState.isBottomSheetLoading) {
-                            applyInitialFlowRules(it, gPayConfig)
-                        }
+                if (it is PaymentIntentResult.Success) {
+                    paymentIntent = it.result
+                    if (currentState.isBottomSheetLoading) {
+                        applyInitialFlowRules(it, gPayConfig)
                     }
                 }
             }
@@ -94,7 +92,7 @@ internal class PaymentMethodCheckoutViewModel(
 
     private fun applyInitialFlowRules(
         paymentIntentResult: PaymentIntentResult.Success,
-        gPayConfig: DojoGPayConfig?
+        gPayConfig: DojoGPayConfig?,
     ) {
         if (paymentIntentResult.result.supportedWalletSchemes.contains(WalletSchemes.GOOGLE_PAY) && gPayConfig != null) {
             val gPayConfigWithSupportedCardsSchemes =
@@ -117,22 +115,20 @@ internal class PaymentMethodCheckoutViewModel(
 
     private suspend fun observePaymentIntentWithGooglePayState(isGooglePayEnabledFromSdk: Boolean) {
         observePaymentIntent.observePaymentIntent().collect {
-            it?.let {
-                if (it is PaymentIntentResult.Success) {
-                    handleSuccessPaymentIntent(
-                        it,
-                        isGooglePayEnabledFromSdk && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
-                            WalletSchemes.GOOGLE_PAY
-                        )
-                    )
-                }
+            if (it is PaymentIntentResult.Success) {
+                handleSuccessPaymentIntent(
+                    it,
+                    isGooglePayEnabledFromSdk && gPayConfig != null && paymentIntent.supportedWalletSchemes.contains(
+                        WalletSchemes.GOOGLE_PAY,
+                    ),
+                )
             }
         }
     }
 
     private fun handleSuccessPaymentIntent(
         paymentIntentResult: PaymentIntentResult.Success,
-        isGooglePayEnabled: Boolean
+        isGooglePayEnabled: Boolean,
     ) {
         updateWalletState(isGooglePayEnabled)
         paymentIntent = paymentIntentResult.result
@@ -141,7 +137,7 @@ internal class PaymentMethodCheckoutViewModel(
             isBottomSheetVisible = true,
             isBottomSheetLoading = false,
             amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
-            totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol + paymentIntent.amount.valueString
+            totalAmount = Currency.getInstance(paymentIntent.amount.currencyCode).symbol + paymentIntent.amount.valueString,
         )
         viewModelScope.launch {
             observePaymentMethods.observe().collect {
@@ -160,7 +156,7 @@ internal class PaymentMethodCheckoutViewModel(
 
     private fun postStateToUiWIthPaymentMethods(
         isGooglePayEnabled: Boolean,
-        isSavedCardsEmpty: Boolean
+        isSavedCardsEmpty: Boolean,
     ) {
         if (paymentIntent.customerId.isNullOrBlank() || isSavedCardsEmpty) {
             buildStateForUnavailableSavedCard(isGooglePayEnabled)
@@ -177,8 +173,8 @@ internal class PaymentMethodCheckoutViewModel(
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisible = true,
                     isPrimary = false,
-                    navigateToCardCheckout = true
-                )
+                    navigateToCardCheckout = true,
+                ),
             )
         } else {
             currentState = currentState.copy(
@@ -186,8 +182,8 @@ internal class PaymentMethodCheckoutViewModel(
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisible = true,
                     isPrimary = true,
-                    navigateToCardCheckout = true
-                )
+                    navigateToCardCheckout = true,
+                ),
             )
         }
     }
@@ -200,8 +196,8 @@ internal class PaymentMethodCheckoutViewModel(
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisible = false,
                     isPrimary = false,
-                    navigateToCardCheckout = true
-                )
+                    navigateToCardCheckout = true,
+                ),
             )
         } else {
             currentState = currentState.copy(
@@ -209,8 +205,8 @@ internal class PaymentMethodCheckoutViewModel(
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisible = true,
                     isPrimary = true,
-                    navigateToCardCheckout = false
-                )
+                    navigateToCardCheckout = false,
+                ),
             )
         }
     }
@@ -224,7 +220,7 @@ internal class PaymentMethodCheckoutViewModel(
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                    it.amount.value.centsToString()
+                    it.amount.value.centsToString(),
             )
         }
     }
@@ -236,7 +232,7 @@ internal class PaymentMethodCheckoutViewModel(
                 gPayConfig.copy(
                     allowedCardNetworks = paymentIntent.supportedCardsSchemes,
                     collectEmailAddress = paymentIntent.collectionEmailRequired,
-                    collectBilling = paymentIntent.collectionEmailRequired
+                    collectBilling = paymentIntent.collectionEmailRequired,
                 )
             gpayPaymentHandler.executeGPay(
                 GPayPayload = DojoGPayPayload(dojoGPayConfig = gPayConfigWithSupportedCardsSchemes),
@@ -244,9 +240,9 @@ internal class PaymentMethodCheckoutViewModel(
                     token = paymentIntent.paymentToken,
                     totalAmount = DojoTotalAmount(
                         paymentIntent.amount.valueLong,
-                        paymentIntent.amount.currencyCode
-                    )
-                )
+                        paymentIntent.amount.currencyCode,
+                    ),
+                ),
             )
             currentState = currentState.copy(isBottomSheetLoading = true)
             viewModelScope.launch {
@@ -269,7 +265,7 @@ internal class PaymentMethodCheckoutViewModel(
     fun onSavedPaymentMethodChanged(newValue: PaymentMethodItemViewEntityItem?) {
         observePaymentStatus()
         currentState = currentState.copy(
-            cvvFieldState = InputFieldState(value = "")
+            cvvFieldState = InputFieldState(value = ""),
         )
         if (newValue is PaymentMethodItemViewEntityItem.NoItem) {
             currentState = currentState.copy(
@@ -277,9 +273,9 @@ internal class PaymentMethodCheckoutViewModel(
                 payWithCarButtonState = PayWithCarButtonState(
                     isVisible = true,
                     isPrimary = !currentState.isGooglePayButtonVisible,
-                    navigateToCardCheckout = true
+                    navigateToCardCheckout = true,
                 ),
-                payAmountButtonState = null
+                payAmountButtonState = null,
             )
         } else {
             if (newValue != currentState.paymentMethodItem) {
@@ -289,9 +285,9 @@ internal class PaymentMethodCheckoutViewModel(
                     payWithCarButtonState = PayWithCarButtonState(
                         isVisible = false,
                         isPrimary = false,
-                        navigateToCardCheckout = false
+                        navigateToCardCheckout = false,
                     ),
-                    isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem
+                    isGooglePayButtonVisible = newValue is PaymentMethodItemViewEntityItem.WalletItemItem,
                 )
             }
         }
@@ -302,7 +298,7 @@ internal class PaymentMethodCheckoutViewModel(
         viewModelScope.launch {
             observePaymentStatus.observePaymentStates().collect {
                 currentState = currentState.copy(
-                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it)
+                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it),
                 )
                 postStateToUI()
             }
@@ -320,7 +316,7 @@ internal class PaymentMethodCheckoutViewModel(
     fun onCvvValueChanged(newValue: String) {
         currentState = currentState.copy(
             cvvFieldState = InputFieldState(value = newValue),
-            payAmountButtonState = PayAmountButtonVState(newValue.length > 2)
+            payAmountButtonState = PayAmountButtonVState(newValue.length > 2),
         )
         currentCvvValue = newValue
         postStateToUI()
@@ -331,8 +327,8 @@ internal class PaymentMethodCheckoutViewModel(
         currentState = currentState.copy(
             payAmountButtonState = PayAmountButtonVState(
                 isEnabled = true,
-                isLoading = true
-            )
+                isLoading = true,
+            ),
         )
         postStateToUI()
         savedCardPaymentHandler.executeSavedCardPayment(
@@ -340,8 +336,8 @@ internal class PaymentMethodCheckoutViewModel(
             DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(
                 cv2 = currentCvvValue,
                 paymentMethodId = (currentState.paymentMethodItem as? PaymentMethodItemViewEntityItem.CardItemItem)?.id
-                    ?: ""
-            )
+                    ?: "",
+            ),
         )
     }
 

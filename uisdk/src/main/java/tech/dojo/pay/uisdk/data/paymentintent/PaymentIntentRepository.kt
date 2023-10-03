@@ -1,6 +1,8 @@
 package tech.dojo.pay.uisdk.data.paymentintent
 
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.data.mapper.PaymentIntentPayLoadMapper
 import tech.dojo.pay.uisdk.domain.mapper.PaymentIntentDomainEntityMapper
@@ -12,10 +14,11 @@ internal class PaymentIntentRepository(
     private val paymentIntentDomainEntityMapper: PaymentIntentDomainEntityMapper = PaymentIntentDomainEntityMapper(),
     private val paymentIntentPayLoadMapper: PaymentIntentPayLoadMapper = PaymentIntentPayLoadMapper(),
 ) {
-    private lateinit var paymentIntentResult: MutableStateFlow<PaymentIntentResult?>
+    private val paymentIntentResult: MutableStateFlow<PaymentIntentResult> =
+        MutableStateFlow(PaymentIntentResult.None)
 
     fun fetchPaymentIntent(paymentId: String) {
-        paymentIntentResult = MutableStateFlow(null)
+        paymentIntentResult.tryEmit(PaymentIntentResult.Fetching)
         dataSource.fetchPaymentIntent(
             paymentId,
             { handleSuccessPaymentIntent(it) },
@@ -24,7 +27,7 @@ internal class PaymentIntentRepository(
     }
 
     fun fetchSetUpIntent(paymentId: String) {
-        paymentIntentResult = MutableStateFlow(null)
+        paymentIntentResult.tryEmit(PaymentIntentResult.Fetching)
         dataSource.fetchSetUpIntent(
             paymentId,
             { handleSuccessPaymentIntent(it) },
@@ -47,5 +50,5 @@ internal class PaymentIntentRepository(
         }
     }
 
-    fun observePaymentIntent() = paymentIntentResult
+    fun observePaymentIntent(): StateFlow<PaymentIntentResult> = paymentIntentResult.asStateFlow()
 }
