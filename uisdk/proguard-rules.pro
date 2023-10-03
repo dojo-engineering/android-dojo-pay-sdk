@@ -19,8 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
--keep class com.cardinalcommerce.dependencies.internal.bouncycastle.**
--keep class com.cardinalcommerce.dependencies.internal.nimbusds.**
--keep class tech.dojo.pay.sdk.card.data.entities.**
--keep class tech.dojo.pay.sdk.card.entities.**
+-keep class **.R$raw**
+-keep class **.R$raw$* {
+    <fields>;
+}
+-keepclassmembers class **.R$raw {
+    public static int *;
+}
+-keep class  tech.dojo.pay.uisdk.data.entities.** { *; }
+-keep class  tech.dojo.pay.uisdk.entities.** { *; }

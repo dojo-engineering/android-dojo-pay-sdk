@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.paymentMethouds.data
+package tech.dojo.pay.sdk.paymentmethods.data
 
 import com.google.gson.JsonObject
 import retrofit2.Response
@@ -13,7 +13,7 @@ interface PaymentMethodsApi {
         @Path("customerId") customerId: String,
         @Header("Authorization") authorization: String,
         @Header("Version") version: String = API_VERSION,
-        @Header("IS-MOBILE") isMobile: Boolean = true
+        @Header("IS-MOBILE") isMobile: Boolean = true,
     ): Response<JsonObject>
 
     @DELETE("customers/public/{customerId}/payment-methods/{paymentMethodId}")
@@ -22,7 +22,7 @@ interface PaymentMethodsApi {
         @Path("paymentMethodId") paymentMethodId: String,
         @Header("Authorization") authorization: String,
         @Header("Version") version: String = API_VERSION,
-        @Header("IS-MOBILE") isMobile: Boolean = true
+        @Header("IS-MOBILE") isMobile: Boolean = true,
     ): Response<JsonObject>
 }
 

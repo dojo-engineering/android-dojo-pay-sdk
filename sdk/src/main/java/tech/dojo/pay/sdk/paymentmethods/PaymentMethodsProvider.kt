@@ -1,23 +1,23 @@
-package tech.dojo.pay.sdk.paymentMethouds
+package tech.dojo.pay.sdk.paymentmethods
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoDeletePaymentMethodsResult
 import tech.dojo.pay.sdk.DojoFetchPaymentMethodsResult
-import tech.dojo.pay.sdk.paymentMethouds.data.PaymentMethodsApiBuilder
-import tech.dojo.pay.sdk.paymentMethouds.data.PaymentMethodsRepository
+import tech.dojo.pay.sdk.paymentmethods.data.PaymentMethodsApiBuilder
+import tech.dojo.pay.sdk.paymentmethods.data.PaymentMethodsRepository
 @Suppress("SwallowedException")
 internal class PaymentMethodsProvider(
     private val paymentMethodsRepository: PaymentMethodsRepository = PaymentMethodsRepository(
-        api = PaymentMethodsApiBuilder().create()
-    )
+        api = PaymentMethodsApiBuilder().create(),
+        ),
 ) {
     fun fetchPaymentMethods(
         customerId: String,
         customerSecret: String,
         onFetchPaymentMethodsSuccess: (paymentMethodsJson: String) -> Unit,
-        onFetchPaymentMethodsFailed: () -> Unit
+        onFetchPaymentMethodsFailed: () -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -39,7 +39,7 @@ internal class PaymentMethodsProvider(
         customerSecret: String,
         paymentMethodId: String,
         onDeletePaymentMethodsSuccess: () -> Unit,
-        onDeletePaymentMethodsFailed: () -> Unit
+        onDeletePaymentMethodsFailed: () -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -47,7 +47,7 @@ internal class PaymentMethodsProvider(
                     paymentMethodsRepository.deletePaymentMethods(
                         customerId,
                         customerSecret,
-                        paymentMethodId
+                        paymentMethodId,
                     )
                 ) {
                     is DojoDeletePaymentMethodsResult.Success -> onDeletePaymentMethodsSuccess()

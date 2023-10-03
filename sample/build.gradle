@@ -21,7 +21,8 @@ android {
     signingConfigs {}
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,7 +39,6 @@ android {
 }
 
 dependencies {
-
     implementation project(':sdk')
     implementation project(':uisdk')
     implementation 'androidx.core:core-ktx:1.8.0'
