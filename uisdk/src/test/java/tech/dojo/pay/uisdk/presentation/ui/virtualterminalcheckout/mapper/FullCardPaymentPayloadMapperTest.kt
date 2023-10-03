@@ -46,7 +46,7 @@ class FullCardPaymentPayloadMapperTest {
             cardName = "CardHolder",
             expiryMonth = "MM",
             expiryYear = "YY",
-            cv2 = "CVV"
+            cv2 = "CVV",
         )
 
         val expectedShippingDetails = DojoShippingDetails(
@@ -56,8 +56,8 @@ class FullCardPaymentPayloadMapperTest {
                 address2 = "ShippingAddressLine2",
                 city = "ShippingCity",
                 postcode = "ShippingPostalCode",
-                countryCode = "ShippingCountryCode"
-            )
+                countryCode = "ShippingCountryCode",
+            ),
         )
 
         val expectedBillingAddress = DojoAddressDetails(
@@ -65,7 +65,7 @@ class FullCardPaymentPayloadMapperTest {
             address2 = "BillingAddressLine2",
             city = "BillingCity",
             postcode = "BillingPostalCode",
-            countryCode = "BillingCountryCode"
+            countryCode = "BillingCountryCode",
         )
 
         val expectedMetaData = mapOf("DeliveryNotes" to "DeliveryNotes")
@@ -75,7 +75,7 @@ class FullCardPaymentPayloadMapperTest {
             shippingDetails = expectedShippingDetails,
             userEmailAddress = "email",
             billingAddress = expectedBillingAddress,
-            metaData = expectedMetaData
+            metaData = expectedMetaData,
         )
 
         // Call the method under test
@@ -93,9 +93,11 @@ class FullCardPaymentPayloadMapperTest {
         whenever(currentState.shippingAddressSection).thenReturn(
             shippingAddress.updateIsShippingSameAsBillingCheckBox(
                 CheckBoxItem(
-                    R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping, isChecked = true, isVisible = true
-                )
-            )
+                    R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
+                    isChecked = true,
+                    isVisible = true,
+                ),
+            ),
         )
         whenever(currentState.billingAddressSection).thenReturn(billingAddress)
 
@@ -105,7 +107,7 @@ class FullCardPaymentPayloadMapperTest {
             cardName = "CardHolder",
             expiryMonth = "MM",
             expiryYear = "YY",
-            cv2 = "CVV"
+            cv2 = "CVV",
         )
 
         val expectedShippingDetails = DojoShippingDetails(
@@ -115,8 +117,8 @@ class FullCardPaymentPayloadMapperTest {
                 address2 = "ShippingAddressLine2",
                 city = "ShippingCity",
                 postcode = "ShippingPostalCode",
-                countryCode = "ShippingCountryCode"
-            )
+                countryCode = "ShippingCountryCode",
+            ),
         )
 
         val expectedBillingAddress = DojoAddressDetails(
@@ -124,7 +126,7 @@ class FullCardPaymentPayloadMapperTest {
             address2 = "ShippingAddressLine2",
             city = "ShippingCity",
             postcode = "ShippingPostalCode",
-            countryCode = "ShippingCountryCode"
+            countryCode = "ShippingCountryCode",
         )
 
         val expectedMetaData = mapOf("DeliveryNotes" to "DeliveryNotes")
@@ -134,7 +136,7 @@ class FullCardPaymentPayloadMapperTest {
             shippingDetails = expectedShippingDetails,
             userEmailAddress = "email",
             billingAddress = expectedBillingAddress,
-            metaData = expectedMetaData
+            metaData = expectedMetaData,
         )
 
         // Call the method under test
@@ -158,7 +160,7 @@ class FullCardPaymentPayloadMapperTest {
             cardName = "CardHolder",
             expiryMonth = "MM",
             expiryYear = "YY",
-            cv2 = "CVV"
+            cv2 = "CVV",
         )
 
         val expectedShippingDetails = null
@@ -168,7 +170,7 @@ class FullCardPaymentPayloadMapperTest {
             address2 = "BillingAddressLine2",
             city = "BillingCity",
             postcode = "BillingPostalCode",
-            countryCode = "BillingCountryCode"
+            countryCode = "BillingCountryCode",
         )
 
         val expectedMetaData = mapOf("DeliveryNotes" to "DeliveryNotes")
@@ -178,7 +180,7 @@ class FullCardPaymentPayloadMapperTest {
             shippingDetails = expectedShippingDetails,
             userEmailAddress = "email",
             billingAddress = expectedBillingAddress,
-            metaData = expectedMetaData
+            metaData = expectedMetaData,
         )
 
         // Call the method under test
@@ -192,17 +194,15 @@ class FullCardPaymentPayloadMapperTest {
 private object TestData {
     val cardDetails = CardDetailsViewState(
         isVisible = true,
-        itemPoissonOffset = 0,
         emailInputField = InputFieldState("email"),
         cardHolderInputField = InputFieldState("CardHolder"),
         cardNumberInputField = InputFieldState("CardNumber"),
         cardExpireDateInputField = InputFieldState("MMYY"),
         cvvInputFieldState = InputFieldState("CVV"),
-        allowedPaymentMethodsIcons = emptyList()
+        allowedPaymentMethodsIcons = emptyList(),
     )
     val shippingAddress = ShippingAddressViewState(
         isVisible = true,
-        itemPoissonOffset = 0,
         currentSelectedCountry = SupportedCountriesViewEntity("", "ShippingCountryCode", true),
         supportedCountriesList = emptyList(),
         name = InputFieldState("ShippingName"),
@@ -212,13 +212,14 @@ private object TestData {
         postalCode = InputFieldState("ShippingPostalCode"),
         deliveryNotes = InputFieldState("DeliveryNotes"),
         isShippingSameAsBillingCheckBox = CheckBoxItem(
-            R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping, isChecked = false, isVisible = true
-        )
+            R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
+            isChecked = false,
+            isVisible = true,
+        ),
     )
 
     val billingAddress = BillingAddressViewState(
         isVisible = true,
-        itemPoissonOffset = 0,
         currentSelectedCountry = SupportedCountriesViewEntity("", "BillingCountryCode", true),
         supportedCountriesList = emptyList(),
         addressLine1 = InputFieldState("BillingAddressLine1"),

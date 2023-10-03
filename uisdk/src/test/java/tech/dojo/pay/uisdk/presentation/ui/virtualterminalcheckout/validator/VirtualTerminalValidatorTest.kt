@@ -55,7 +55,7 @@ class VirtualTerminalValidatorTest {
         val expected = InputFieldState(
             value = emailFieldNewValue,
             isError = true,
-            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_email
+            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_email,
         )
 
         assertEquals(expected, result)
@@ -85,7 +85,7 @@ class VirtualTerminalValidatorTest {
         val expected = InputFieldState(
             value = cardNumberFieldNewValue,
             isError = true,
-            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_card_number
+            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_card_number,
         )
 
         assertEquals(expected, result)
@@ -115,7 +115,7 @@ class VirtualTerminalValidatorTest {
         val expected = InputFieldState(
             value = dateFieldNewValue,
             isError = true,
-            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_expiry
+            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_expiry,
         )
 
         assertEquals(expected, result)
@@ -145,7 +145,7 @@ class VirtualTerminalValidatorTest {
         val expected = InputFieldState(
             value = cvvFieldNewValue,
             isError = true,
-            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_cvv
+            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_invalid_cvv,
         )
 
         assertEquals(expected, result)
@@ -173,7 +173,7 @@ class VirtualTerminalValidatorTest {
         val expected = InputFieldState(
             value = inputFieldValue,
             isError = true,
-            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_name
+            errorMessages = R.string.dojo_ui_sdk_card_details_checkout_error_empty_shipping_name,
         )
 
         assertEquals(expected, result)
@@ -221,12 +221,10 @@ private object TestData {
         emailInputField = InputFieldState(value = "test@example.com", isError = false),
         cardExpireDateInputField = InputFieldState(value = "1223", isError = false),
         cvvInputFieldState = InputFieldState(value = "123", isError = false),
-        itemPoissonOffset = 0,
-        allowedPaymentMethodsIcons = emptyList()
+        allowedPaymentMethodsIcons = emptyList(),
     )
     val shippingAddress = ShippingAddressViewState(
         isVisible = true,
-        itemPoissonOffset = 0,
         addressLine1 = InputFieldState(value = "Address Line 1", isError = false),
         city = InputFieldState(value = "City", isError = false),
         postalCode = InputFieldState(value = "12345", isError = false),
@@ -236,13 +234,14 @@ private object TestData {
         addressLine2 = InputFieldState("ShippingAddressLine2"),
         deliveryNotes = InputFieldState("DeliveryNotes"),
         isShippingSameAsBillingCheckBox = CheckBoxItem(
-            R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping, isChecked = false, isVisible = true
-        )
+            R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
+            isChecked = false,
+            isVisible = true,
+        ),
     )
 
     val billingAddress = BillingAddressViewState(
         isVisible = true,
-        itemPoissonOffset = 0,
         currentSelectedCountry = SupportedCountriesViewEntity("", "BillingCountryCode", true),
         supportedCountriesList = emptyList(),
         addressLine2 = InputFieldState("BillingAddressLine2"),

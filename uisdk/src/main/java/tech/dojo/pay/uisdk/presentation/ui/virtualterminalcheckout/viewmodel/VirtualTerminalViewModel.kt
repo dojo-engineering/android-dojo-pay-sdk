@@ -61,10 +61,14 @@ internal class VirtualTerminalViewModel(
         if (paymentIntentResult is PaymentIntentResult.Success) {
             viewModelScope.launch { observePaymentStatus() }
             paymentIntentId = paymentIntentResult.result.id
-            currentState = virtualTerminalViewEntityMapper.apply(paymentIntentResult, getSupportedCountriesDomainEntity())
+            currentState = virtualTerminalViewEntityMapper.apply(
+                paymentIntentResult,
+                getSupportedCountriesDomainEntity(),
+            )
             pushStateToUi(currentState)
         }
     }
+
     private suspend fun observePaymentStatus() {
         observePaymentStatus.observePaymentStates().collect {
             if (!it) {
@@ -318,6 +322,7 @@ internal class VirtualTerminalViewModel(
             pushStateToUi(currentState)
         }
     }
+
     fun onShippingSameAsBillingChecked(isChecked: Boolean) {
         currentState.shippingAddressSection?.let {
             currentState = currentState.copy(
@@ -330,30 +335,7 @@ internal class VirtualTerminalViewModel(
                 ),
                 billingAddressSection = currentState.billingAddressSection?.updateIsVisible(!isChecked),
             )
-            updateSectionsOffsets(isChecked)
             pushStateToUi(currentState)
-        }
-    }
-
-    private fun updateSectionsOffsets(isChecked: Boolean) {
-        currentState = if (isChecked) {
-            currentState.copy(
-                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
-                    0,
-                ),
-                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
-                ),
-            )
-        } else {
-            currentState.copy(
-                billingAddressSection = currentState.billingAddressSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
-                ),
-                cardDetailsSection = currentState.cardDetailsSection?.updateItemPoissonOffset(
-                    THIRD_SECTION_OFF_SET_DP,
-                ),
-            )
         }
     }
 
@@ -451,6 +433,7 @@ internal class VirtualTerminalViewModel(
             pushStateToUi(currentState)
         }
     }
+
     fun onEmailChanged(newValue: String) {
         currentState.cardDetailsSection?.let {
             currentState = currentState.copy(
@@ -494,6 +477,7 @@ internal class VirtualTerminalViewModel(
                         is RefreshPaymentIntentResult.Success -> {
                             executePayment(paymentToken = it.token)
                         }
+
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
 
@@ -519,11 +503,8 @@ internal class VirtualTerminalViewModel(
         )
         pushStateToUi(currentState)
     }
+
     private fun pushStateToUi(state: VirtualTerminalViewState) {
         mutableState.postValue(state)
     }
 }
-internal const val FIRST_SECTION_OFF_SET_DP = 30
-internal const val SECOND_SECTION_WITH_BILLING_OFF_SET_DP = 670
-internal const val SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP = 920
-internal const val THIRD_SECTION_OFF_SET_DP = 1420

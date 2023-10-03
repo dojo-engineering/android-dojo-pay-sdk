@@ -13,14 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,6 +56,7 @@ import tech.dojo.pay.uisdk.presentation.components.CvvInputField
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
+import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.HeaderItem
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
 import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetworksHeader
@@ -165,7 +164,8 @@ internal fun CardDetailsCheckoutScreen(
                                 )
                             }
 
-                            Divider(modifier = Modifier.width(32.dp))
+                            DojoSpacer(width = 32.dp)
+
                             Box(modifier = Modifier.weight(1f)) {
                                 CvvField(
                                     scrollState,
@@ -607,5 +607,5 @@ private const val FIRST_FIELD_OFF_SET_DP = 30
 private const val SECOND_FIELD_OFF_SET_DP = 230
 private const val THIRD_FIELD_OFF_SET_DP = 330
 private const val FORTH_FIELD_OFF_SET_DP = 430
-private const val FIFTH_FIELD_OFF_SET_DP = 490
-private const val SIXTH_FIELD_OFF_SET_DP = 570
+private const val FIFTH_FIELD_OFF_SET_DP = 500
+private const val SIXTH_FIELD_OFF_SET_DP = 600
