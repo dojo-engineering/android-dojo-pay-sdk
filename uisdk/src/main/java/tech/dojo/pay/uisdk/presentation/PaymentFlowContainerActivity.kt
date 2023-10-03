@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +81,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        disableScreenRecord()
         lockToPortrait()
         configureDojoSDKDebugConfig()
         configureDojoPayCore()
@@ -120,6 +122,15 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     private fun lockToPortrait() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    private fun disableScreenRecord() {
+        if (!paymentFlowViewModel.isPaymentInSandBoxEnvironment()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE,
+            )
+        }
     }
 
     private fun configureDojoPayCore() {
