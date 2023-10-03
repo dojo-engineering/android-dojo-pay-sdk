@@ -24,5 +24,3 @@
 -keep class com.cardinalcommerce.dependencies.internal.nimbusds.**
 -keep class tech.dojo.pay.sdk.card.data.entities.**
 -keep class tech.dojo.pay.sdk.card.entities.**
--keep class tech.dojo.pay.sdk.payemntintent.data.entities.**
--keep class tech.dojo.pay.sdk.paymentmethods.data.entitiesx.**
