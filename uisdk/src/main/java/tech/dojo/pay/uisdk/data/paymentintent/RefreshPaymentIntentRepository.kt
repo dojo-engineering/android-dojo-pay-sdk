@@ -12,11 +12,10 @@ internal class RefreshPaymentIntentRepository(
     private val paymentIntentDomainEntityMapper: PaymentIntentDomainEntityMapper = PaymentIntentDomainEntityMapper(),
     private val paymentIntentPayLoadMapper: PaymentIntentPayLoadMapper = PaymentIntentPayLoadMapper(),
 ) {
-    private var paymentIntentResult: MutableStateFlow<RefreshPaymentIntentResult?> =
-        MutableStateFlow(null)
+    private var paymentIntentResult: MutableStateFlow<RefreshPaymentIntentResult> = MutableStateFlow(RefreshPaymentIntentResult.None)
 
     fun refreshPaymentIntent(paymentId: String) {
-        paymentIntentResult = MutableStateFlow(null)
+        paymentIntentResult.tryEmit(RefreshPaymentIntentResult.Fetching)
         dataSource
             .refreshPaymentIntent(
                 paymentId,
@@ -28,7 +27,7 @@ internal class RefreshPaymentIntentRepository(
     fun refreshSetupIntent(
         paymentId: String,
     ) {
-        paymentIntentResult = MutableStateFlow(null)
+        paymentIntentResult.tryEmit(RefreshPaymentIntentResult.Fetching)
         dataSource
             .refreshSetupIntent(
                 paymentId,

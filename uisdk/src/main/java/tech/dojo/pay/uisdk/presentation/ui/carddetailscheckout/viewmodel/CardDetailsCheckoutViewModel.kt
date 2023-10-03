@@ -448,9 +448,10 @@ internal class CardDetailsCheckoutViewModel(
                     when (it) {
                         is RefreshPaymentIntentResult.Success ->
                             executeCardPayment(paymentToken = it.token)
+
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-                        null -> Unit
+                        else -> Unit
                     }
                 }
         }
