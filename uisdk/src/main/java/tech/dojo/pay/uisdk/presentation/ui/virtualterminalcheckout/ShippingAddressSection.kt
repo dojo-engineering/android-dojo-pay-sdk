@@ -209,9 +209,11 @@ private fun Address2Field(
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
         withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) {
+            append("(")
             append(
                 stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional),
             )
+            append(")")
         }
     }
 
@@ -331,9 +333,11 @@ private fun DeliveryNotesField(
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes))
         append(" ")
         withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) {
+            append("(")
             append(
                 stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional),
             )
+            append(")")
         }
     }
 

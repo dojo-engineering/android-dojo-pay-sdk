@@ -607,5 +607,5 @@ private const val FIRST_FIELD_OFF_SET_DP = 30
 private const val SECOND_FIELD_OFF_SET_DP = 230
 private const val THIRD_FIELD_OFF_SET_DP = 330
 private const val FORTH_FIELD_OFF_SET_DP = 430
-private const val FIFTH_FIELD_OFF_SET_DP = 490
-private const val SIXTH_FIELD_OFF_SET_DP = 580
+private const val FIFTH_FIELD_OFF_SET_DP = 500
+private const val SIXTH_FIELD_OFF_SET_DP = 600
