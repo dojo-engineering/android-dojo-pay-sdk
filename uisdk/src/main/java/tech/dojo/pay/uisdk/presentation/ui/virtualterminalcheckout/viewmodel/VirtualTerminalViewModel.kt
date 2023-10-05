@@ -496,7 +496,7 @@ internal class VirtualTerminalViewModel(
                         }
                         is RefreshPaymentIntentResult.RefreshFailure ->
                             navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-                        else -> Unit
+                        RefreshPaymentIntentResult.None, RefreshPaymentIntentResult.Fetching, null -> Unit
                     }
                 }
         }
