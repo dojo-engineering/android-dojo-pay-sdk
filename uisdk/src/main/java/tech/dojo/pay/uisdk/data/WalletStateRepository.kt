@@ -1,14 +1,14 @@
 package tech.dojo.pay.uisdk.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 internal class WalletStateRepository {
-    private lateinit var isWalletEnabled: MutableStateFlow<Boolean?>
+    private val isWalletEnabled: MutableStateFlow<Boolean?> = MutableStateFlow(null)
 
     fun updatePayment(isActive: Boolean) {
-        isWalletEnabled = MutableStateFlow(null)
         isWalletEnabled.tryEmit(isActive)
     }
 
-    fun observeWalletState() = isWalletEnabled
+    fun observeWalletState() = isWalletEnabled.asStateFlow()
 }
