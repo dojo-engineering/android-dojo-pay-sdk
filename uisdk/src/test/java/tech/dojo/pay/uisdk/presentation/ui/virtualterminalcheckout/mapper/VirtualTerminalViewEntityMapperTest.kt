@@ -8,9 +8,9 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
@@ -73,12 +73,12 @@ private object TestDataVirtualTerminalViewEntityMapper {
         amount = AmountDomainEntity(
             10L,
             "100",
-            "GBP"
+            "GBP",
         ),
         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
         collectionBillingAddressRequired = true,
         customerId = "customerId",
-        orderId = "orderId"
+        orderId = "orderId",
     )
 
     val countryDomainList = listOf(
@@ -93,7 +93,7 @@ private object TestDataVirtualTerminalViewEntityMapper {
             merchantName = "",
             totalAmount = "100",
             amountCurrency = "£",
-            orderId = "orderId"
+            orderId = "orderId",
         ),
         shippingAddressSection = ShippingAddressViewState(
             isVisible = false,
@@ -107,25 +107,25 @@ private object TestDataVirtualTerminalViewEntityMapper {
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
-                )
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
-                isPostalCodeEnabled = true
+                isPostalCodeEnabled = true,
             ),
             deliveryNotes = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             isShippingSameAsBillingCheckBox = CheckBoxItem(
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                 isChecked = true,
-                isVisible = true
-            )
+                isVisible = true,
+            ),
         ),
         billingAddressSection = BillingAddressViewState(
             isVisible = true,
@@ -138,19 +138,19 @@ private object TestDataVirtualTerminalViewEntityMapper {
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
-                )
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
-                isPostalCodeEnabled = true
-            )
+                isPostalCodeEnabled = true,
+            ),
         ),
         cardDetailsSection = CardDetailsViewState(
             isVisible = true,
@@ -160,11 +160,11 @@ private object TestDataVirtualTerminalViewEntityMapper {
             cardNumberInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cardExpireDateInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cvvInputFieldState = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
-            allowedPaymentMethodsIcons = emptyList()
+            allowedPaymentMethodsIcons = emptyList(),
         ),
         payButtonSection = PayButtonViewState(
             isEnabled = false,
-            isLoading = false
-        )
+            isLoading = false,
+        ),
     )
 }

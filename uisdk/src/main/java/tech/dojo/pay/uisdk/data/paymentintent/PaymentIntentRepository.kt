@@ -3,8 +3,8 @@ package tech.dojo.pay.uisdk.data.paymentintent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.data.mapper.PaymentIntentPayLoadMapper
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.mapper.PaymentIntentDomainEntityMapper
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")

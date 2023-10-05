@@ -1,6 +1,4 @@
-package tech.dojo.pay.uisdk.data.entities
-
-import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+package tech.dojo.pay.uisdk.domain.entities
 
 internal sealed class PaymentIntentResult {
     data class Success(val result: PaymentIntentDomainEntity) : PaymentIntentResult()
