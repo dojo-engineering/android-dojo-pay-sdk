@@ -8,8 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
-import tech.dojo.pay.sdk.card.entities.DojoSDKURLConfig
 import tech.dojo.pay.sdksample.customer.CustomerGenerator
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
@@ -34,14 +32,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
 
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = false)
-            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig()
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()),
             )
         }
         uiSdkSampleBinding.startPaymentFlowWithVT.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
-            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig(urlConfig = DojoSDKURLConfig(remote = "https://staging-api.dojo.dev/integration-test/"))
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
@@ -57,7 +53,6 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         uiSdkSampleBinding.startPaymentFlowCOF.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
-            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig()
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
