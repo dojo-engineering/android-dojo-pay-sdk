@@ -33,7 +33,7 @@ class UiSdkSampleActivity : AppCompatActivity() {
         uiSdkSampleBinding.startPaymentFlow.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(
                 forceLightMode = false,
-                analyticsExcludedFieldsIdentifier = "lr-show",
+                analyticsExcludedFieldsIdentifier = "lr-hide"
             )
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(uiSdkSampleBinding.token.text.toString()),

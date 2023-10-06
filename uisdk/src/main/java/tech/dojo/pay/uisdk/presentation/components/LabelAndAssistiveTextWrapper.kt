@@ -22,15 +22,17 @@ import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
 internal fun LabelAndAssistiveTextWrapper(
-    modifier: Modifier = Modifier
-        .testTag(DojoSDKDropInUI.dojoThemeSettings?.analyticsExcludedFieldsIdentifier?: ""),
+    modifier: Modifier = Modifier,
     label: AnnotatedString? = null,
     assistiveText: AnnotatedString? = null,
     isError: Boolean = false,
     enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier
+        .then(Modifier.testTag(
+            DojoSDKDropInUI.dojoThemeSettings?.analyticsExcludedFieldsIdentifier?: ""))
+    ) {
         if (!label.isNullOrEmpty()) {
             Label(text = label, enabled = enabled)
             DojoSpacer(height = 6.dp)
