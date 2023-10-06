@@ -20,7 +20,6 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
@@ -29,6 +28,7 @@ import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.FullCardPaymentPayloadMapper
@@ -73,8 +73,8 @@ class VirtualTerminalViewModelTest {
         runTest {
             // arrange
             val expected = virtualTerminalViewState
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
@@ -124,8 +124,8 @@ class VirtualTerminalViewModelTest {
     fun `when initialize view model with Success payment intent then should start observe PaymentStatus`() =
         runTest {
             // arrange
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
@@ -156,8 +156,8 @@ class VirtualTerminalViewModelTest {
     fun `when initialize view model with Success payment intent then getSupportedCountries from getSupportedCountriesUseCase should be called `() =
         runTest {
             // arrange
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
@@ -230,8 +230,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -347,8 +347,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -410,8 +410,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -579,8 +579,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -642,8 +642,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -759,8 +759,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -822,8 +822,8 @@ class VirtualTerminalViewModelTest {
                     InputFieldState(newValue),
                 ),
             )
-            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-                MutableStateFlow(null)
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+                MutableStateFlow(PaymentIntentResult.None)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             paymentIntentFakeFlow.tryEmit(
@@ -1407,8 +1407,8 @@ class VirtualTerminalViewModelTest {
         }
 
     private fun initViewModelWithPaymentIntent(initPaymentIntent: VirtualTerminalViewState): VirtualTerminalViewModel {
-        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult?> =
-            MutableStateFlow(null)
+        val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> =
+            MutableStateFlow(PaymentIntentResult.None)
         val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
         whenever(observePaymentIntent.observePaymentIntent()).thenReturn(paymentIntentFakeFlow)
         paymentIntentFakeFlow.tryEmit(

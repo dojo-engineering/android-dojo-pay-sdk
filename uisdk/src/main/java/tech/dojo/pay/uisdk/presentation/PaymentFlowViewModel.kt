@@ -6,12 +6,12 @@ import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.SingleLiveData
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.entities.LightColorPalette
@@ -41,12 +41,10 @@ internal class PaymentFlowViewModel(
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
                 observePaymentIntent.observePaymentIntent().collect {
-                    it?.let { paymentIntentResult ->
-                        handlePaymentIntentResult(
-                            paymentIntentResult,
-                            customerSecret,
-                        )
-                    }
+                    handlePaymentIntentResult(
+                        it,
+                        customerSecret,
+                    )
                 }
             } catch (error: Throwable) {
                 closeFlowWithInternalError()
