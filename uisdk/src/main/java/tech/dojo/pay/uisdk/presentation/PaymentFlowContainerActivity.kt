@@ -119,11 +119,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun lockToPortrait() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-    }
-
     private fun disableScreenRecord() {
         if (!paymentFlowViewModel.isPaymentInSandBoxEnvironment()) {
             window.setFlags(
@@ -131,6 +126,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE,
             )
         }
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun lockToPortrait() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureDojoPayCore() {

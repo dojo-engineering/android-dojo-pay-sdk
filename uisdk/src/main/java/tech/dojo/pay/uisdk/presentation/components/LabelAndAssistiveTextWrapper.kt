@@ -11,21 +11,24 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 
 @Composable
 internal fun LabelAndAssistiveTextWrapper(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
+        .testTag(DojoSDKDropInUI.dojoThemeSettings?.analyticsExcludedFieldsIdentifier?: ""),
     label: AnnotatedString? = null,
     assistiveText: AnnotatedString? = null,
     isError: Boolean = false,
     enabled: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Column(modifier = modifier) {
         if (!label.isNullOrEmpty()) {
@@ -40,7 +43,7 @@ internal fun LabelAndAssistiveTextWrapper(
             AssistiveText(
                 text = assistiveText,
                 enabled = enabled,
-                isError = isError
+                isError = isError,
             )
         }
     }
@@ -49,14 +52,14 @@ internal fun LabelAndAssistiveTextWrapper(
 @Composable
 internal fun Label(
     text: AnnotatedString,
-    enabled: Boolean
+    enabled: Boolean,
 ) {
     Text(
         text = text,
         style = DojoTheme.typography.subtitle1,
         color = DojoTheme.colors.primaryLabelTextColor.copy(
-            alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled
-        )
+            alpha = if (enabled) ContentAlpha.high else ContentAlpha.disabled,
+        ),
     )
 }
 
@@ -64,7 +67,7 @@ internal fun Label(
 internal fun AssistiveText(
     text: AnnotatedString,
     enabled: Boolean,
-    isError: Boolean
+    isError: Boolean,
 ) {
     Row() {
         if (isError) {
@@ -72,7 +75,7 @@ internal fun AssistiveText(
                 modifier = Modifier.padding(end = 8.dp),
                 painter = painterResource(id = R.drawable.ic_error_18),
                 tint = DojoTheme.colors.errorTextColor,
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Text(
@@ -81,9 +84,9 @@ internal fun AssistiveText(
             color = when {
                 isError -> DojoTheme.colors.errorTextColor
                 else -> LocalContentColor.current.copy(
-                    alpha = if (enabled) ContentAlpha.medium else ContentAlpha.disabled
+                    alpha = if (enabled) ContentAlpha.medium else ContentAlpha.disabled,
                 )
-            }
+            },
         )
     }
 }
@@ -95,11 +98,11 @@ fun AssistiveTextPreview() {
         LabelAndAssistiveTextWrapper(
             label = AnnotatedString("Label"),
             assistiveText = AnnotatedString("Assistive text"),
-            isError = true
+            isError = true,
         ) {
             Text(
                 modifier = Modifier.background(Color.Magenta),
-                text = "Lorem ipsum dolor sit amet"
+                text = "Lorem ipsum dolor sit amet",
             )
         }
     }
