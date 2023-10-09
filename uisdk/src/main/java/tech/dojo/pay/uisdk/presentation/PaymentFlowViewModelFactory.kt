@@ -12,6 +12,7 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
@@ -38,6 +39,8 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val fetchPaymentMethodsUseCase =
             FetchPaymentMethodsUseCase(paymentMethodsRepository)
         val isSDKInitializedCorrectlyUseCase = IsSDKInitializedCorrectlyUseCase()
+        val updateWalletState = UpdateWalletState(walletStateRepository)
+
         return PaymentFlowViewModel(
             paymentId,
             customerSecret,
@@ -47,6 +50,7 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
             isSDKInitializedCorrectlyUseCase,
+            updateWalletState,
         ) as T
     }
 

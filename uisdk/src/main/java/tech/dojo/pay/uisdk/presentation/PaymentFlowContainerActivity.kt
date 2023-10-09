@@ -29,6 +29,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
@@ -73,9 +75,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private lateinit var virtualTerminalHandler: DojoVirtualTerminalHandler
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val paymentFlowViewModel: PaymentFlowViewModel by viewModels {
-        PaymentFlowViewModelFactory(
-            arguments,
-        )
+        PaymentFlowViewModelFactory(arguments)
     }
     private val flowStartDestination: PaymentFlowScreens by lazy { paymentFlowViewModel.getFlowStartDestination() }
 
@@ -102,9 +102,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         // Listen for navigation event
                         val viewLifecycleOwner = LocalLifecycleOwner.current
                         LaunchedEffect(Unit) {
-                            paymentFlowViewModel.navigationEvent.observe(viewLifecycleOwner) {
-                                onNavigationEvent(it, navController)
-                            }
+                            paymentFlowViewModel.navigationEvent.observe(viewLifecycleOwner) { onNavigationEvent(it, navController) }
+                            paymentFlowViewModel.allowedCardsSchemes.observe(viewLifecycleOwner) { checkDeviceWalletState(it) }
                         }
                         PaymentFlowNavHost(
                             navController,
@@ -162,6 +161,25 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 isSandboxIntent = paymentFlowViewModel.isPaymentInSandBoxEnvironment(),
             )
             DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
+        }
+    }
+
+    private fun checkDeviceWalletState(cardsSchemes: List<CardsSchemes>) {
+        val gPayConfig = (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
+        if (gPayConfig != null) {
+            DojoSdk.isGpayAvailable(
+                activity = this,
+                dojoGPayConfig = DojoGPayConfig(
+                    merchantName = gPayConfig.merchantName,
+                    merchantId = gPayConfig.merchantId,
+                    gatewayMerchantId = gPayConfig.gatewayMerchantId,
+                    allowedCardNetworks = cardsSchemes,
+                ),
+                { paymentFlowViewModel.updateDeviceWalletState(isAvailable = true) },
+                { paymentFlowViewModel.updateDeviceWalletState(isAvailable = false) },
+            )
+        } else {
+            paymentFlowViewModel.updateDeviceWalletState(isAvailable = false)
         }
     }
 

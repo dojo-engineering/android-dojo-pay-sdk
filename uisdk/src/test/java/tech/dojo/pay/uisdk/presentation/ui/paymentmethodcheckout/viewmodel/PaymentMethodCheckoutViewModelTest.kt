@@ -85,6 +85,7 @@ class PaymentMethodCheckoutViewModelTest {
             null,
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         )
         val actual = viewModel.state.value
         // assert
@@ -149,6 +150,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         ).state.value
         // assert
         Assert.assertEquals(expected, actual)
@@ -217,6 +219,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         )
         val actual = viewModel.state.value
         // assert
@@ -286,6 +289,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -356,6 +360,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -426,6 +431,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -501,6 +507,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -576,6 +583,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -660,6 +668,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             val actual = viewModel.state.value
@@ -744,6 +753,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayUnAvailable()
             val actual = viewModel.state.value
@@ -827,6 +837,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         )
         val newValue: PaymentMethodItemViewEntityItem =
             PaymentMethodItemViewEntityItem.NoItem
@@ -918,6 +929,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         )
         val newValue: PaymentMethodItemViewEntityItem =
             PaymentMethodItemViewEntityItem.CardItemItem(
@@ -1013,6 +1025,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             observePaymentStatus,
             updatePaymentStateUseCase,
+            observeWalletState,
         )
         val newValue: PaymentMethodItemViewEntityItem =
             PaymentMethodItemViewEntityItem.CardItemItem(
@@ -1085,6 +1098,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             val newValue: PaymentMethodItemViewEntityItem =
                 PaymentMethodItemViewEntityItem.CardItemItem(
@@ -1162,6 +1176,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             // act
@@ -1223,6 +1238,7 @@ class PaymentMethodCheckoutViewModelTest {
                 ),
                 observePaymentStatus,
                 updatePaymentStateUseCase,
+                observeWalletState,
             )
             viewModel.handleGooglePayAvailable()
             // act

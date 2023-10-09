@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
@@ -11,6 +12,7 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
@@ -31,8 +33,10 @@ internal class PaymentFlowViewModel(
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase,
+    private val updateWalletState: UpdateWalletState,
 ) : ViewModel() {
 
+    val allowedCardsSchemes = SingleLiveData<List<CardsSchemes>>()
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
     private var currentCustomerId: String? = null
 
@@ -78,6 +82,7 @@ internal class PaymentFlowViewModel(
             } else {
                 currentCustomerId = paymentIntentResult.result.customerId
                 if (paymentType == DojoPaymentType.PAYMENT_CARD) {
+                    allowedCardsSchemes.postValue(paymentIntentResult.result.supportedCardsSchemes)
                     fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
                         paymentType,
                         paymentIntentResult.result.customerId ?: "",
@@ -98,6 +103,9 @@ internal class PaymentFlowViewModel(
         updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
     }
 
+    fun updateDeviceWalletState(isAvailable: Boolean) {
+        updateWalletState.updateWalletState(isAvailable)
+    }
     private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }

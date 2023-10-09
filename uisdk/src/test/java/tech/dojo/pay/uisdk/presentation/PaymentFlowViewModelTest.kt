@@ -74,6 +74,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             // assert
             verify(fetchPaymentMethodsUseCase).fetchPaymentMethodsWithPaymentType(
@@ -114,6 +115,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             val actual = viewModel.navigationEvent.value
             // assert
@@ -139,6 +141,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             val actual = viewModel.navigationEvent.value
             // assert
@@ -170,6 +173,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             val actual = viewModel.navigationEvent.value
             // assert
@@ -199,6 +203,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.updatePaymentState(isActivity = false)
             // assert
@@ -228,6 +233,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.updateGpayPaymentState(isActivity = false)
             // assert
@@ -254,6 +260,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
             isSDKInitializedCorrectlyUseCase,
+            updateWalletState,
         )
         viewModel.onBackClicked()
         val actual = viewModel.navigationEvent.value
@@ -286,6 +293,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.onBackClickedWithSavedPaymentMethod()
             val actual = viewModel.navigationEvent.value
@@ -313,6 +321,7 @@ internal class PaymentFlowViewModelTest {
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
             isSDKInitializedCorrectlyUseCase,
+            updateWalletState,
         )
         viewModel.onCloseFlowClicked()
         val actual = viewModel.navigationEvent.value
@@ -345,6 +354,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.SUCCESSFUL)
             val actual = viewModel.navigationEvent.value
@@ -379,6 +389,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
             val actual = viewModel.navigationEvent.value
@@ -411,6 +422,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.navigateToPaymentResult(DojoPaymentResult.FAILED)
             val actual = viewModel.navigationEvent.value
@@ -442,6 +454,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
 
             viewModel.navigateToCardDetailsCheckoutScreen()
@@ -474,6 +487,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             viewModel.navigateToManagePaymentMethods()
             val actual = viewModel.navigationEvent.value
@@ -494,6 +508,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             // act
             val actual = viewModel.isPaymentInSandBoxEnvironment()
@@ -514,6 +529,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             // act
             val actual = viewModel.isPaymentInSandBoxEnvironment()
@@ -535,6 +551,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             // act
             val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = true)
@@ -559,6 +576,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
             // act
             val actual = viewModel.getCustomColorPalette(isDarkModeEnabled = false)
@@ -584,6 +602,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
 
             // act
@@ -607,6 +626,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
 
             // act
@@ -630,6 +650,7 @@ internal class PaymentFlowViewModelTest {
                 fetchPaymentMethodsUseCase,
                 updatePaymentStateUseCase,
                 isSDKInitializedCorrectlyUseCase,
+                updateWalletState,
             )
 
             // act
