@@ -58,7 +58,6 @@ internal fun PaymentMethodsCheckOutScreen(
     onPayByCard: () -> Unit,
     showDojoBrand: Boolean,
 ) {
-//    val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -66,9 +65,6 @@ internal fun PaymentMethodsCheckOutScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
-//    if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true) {
-//        CheckGPayAvailability(state.gPayConfig, activity, viewModel)
-//    }
     if (currentSelectedMethod != null) {
         viewModel.onSavedPaymentMethodChanged(currentSelectedMethod)
     }
@@ -86,7 +82,6 @@ internal fun PaymentMethodsCheckOutScreen(
                 onManagePaymentClicked,
                 onPayByCard,
                 viewModel::onPayAmountClicked,
-                {},
                 viewModel::onCvvValueChanged,
                 windowSize,
                 showDojoBrand,
@@ -99,31 +94,6 @@ internal fun PaymentMethodsCheckOutScreen(
     }
 }
 
-// @Composable
-// private fun CheckGPayAvailability(
-//    gPayConfig: DojoGPayConfig?,
-//    activity: PaymentFlowContainerActivity?,
-//    viewModel: PaymentMethodCheckoutViewModel,
-// ) {
-//    if (gPayConfig != null) {
-//        LaunchedEffect(Unit) {
-//            DojoSdk.isGpayAvailable(
-//                activity = activity as Activity,
-//                dojoGPayConfig = DojoGPayConfig(
-//                    merchantName = gPayConfig.merchantName,
-//                    merchantId = gPayConfig.merchantId,
-//                    gatewayMerchantId = gPayConfig.gatewayMerchantId,
-//                    allowedCardNetworks = gPayConfig.allowedCardNetworks,
-//                ),
-//                { viewModel.handleGooglePayAvailable() },
-//                { viewModel.handleGooglePayUnAvailable() },
-//            )
-//        }
-//    } else {
-//        LaunchedEffect(Unit) { viewModel.handleGooglePayUnAvailable() }
-//    }
-// }
-
 @ExperimentalMaterialApi
 @Composable
 private fun BottomSheetItems(
@@ -135,7 +105,6 @@ private fun BottomSheetItems(
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit,
     onPayAmount: () -> Unit,
-    observePaymentIntent: () -> Unit,
     onCvvChanged: (String) -> Unit,
     windowSize: WindowSize,
     showDojoBrand: Boolean,
@@ -162,7 +131,6 @@ private fun BottomSheetItems(
                     contentState,
                     coroutineScope,
                     onGpayClicked,
-                    observePaymentIntent,
                 )
                 PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
                 PayAmountButton(contentState, onPayAmount)
@@ -271,7 +239,6 @@ private fun GooglePayButton(
     googlePayVisibility: PaymentMethodCheckoutState,
     coroutineScope: CoroutineScope,
     onGpayClicked: () -> Unit,
-    observePaymentIntent: () -> Unit,
 ) {
     if (googlePayVisibility.isGooglePayButtonVisible) {
         GooglePayButton(
@@ -280,7 +247,6 @@ private fun GooglePayButton(
                 .padding(16.dp, 16.dp, 16.dp, 8.dp),
         ) {
             coroutineScope.launch {
-//                observePaymentIntent()
                 onGpayClicked()
             }
         }
