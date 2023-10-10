@@ -1,5 +1,8 @@
 package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -61,7 +64,12 @@ internal fun PaymentMethodsCheckOutScreen(
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
-            confirmStateChange = { false },
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing,
+            ),
+            confirmValueChange = { false },
+            skipHalfExpanded = true,
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
@@ -69,7 +77,7 @@ internal fun PaymentMethodsCheckOutScreen(
         viewModel.onSavedPaymentMethodChanged(currentSelectedMethod)
     }
     DojoBottomSheet(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().animateContentSize(),
         sheetState = paymentMethodsSheetState,
         sheetBackgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         sheetContent = {
