@@ -13,30 +13,24 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
 import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
-import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
-import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
-import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
-import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
+import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper.PaymentMethodCheckoutViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayAmountButtonVState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
-import java.util.Currency
 
 internal class PaymentMethodCheckoutViewModel(
     private var savedCardPaymentHandler: DojoSavedCardPaymentHandler,
-    private val updateWalletState: UpdateWalletState,
     private val observePaymentIntent: ObservePaymentIntent,
     private val observePaymentMethods: ObservePaymentMethods,
     private var gpayPaymentHandler: DojoGPayHandler,
@@ -44,12 +38,27 @@ internal class PaymentMethodCheckoutViewModel(
     private val observePaymentStatus: ObservePaymentStatus,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val observeWalletState: ObserveWalletState,
+    private val viewEntityMapper: PaymentMethodCheckoutViewEntityMapper,
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
     val state: LiveData<PaymentMethodCheckoutState>
         get() = mutableState
     private lateinit var paymentIntent: PaymentIntentDomainEntity
-    private var currentState: PaymentMethodCheckoutState
+    private var currentState = PaymentMethodCheckoutState(
+        isGooglePayButtonVisible = false,
+        isBottomSheetVisible = true,
+        isBottomSheetLoading = true,
+        paymentMethodItem = null,
+        amountBreakDownList = listOf(),
+        totalAmount = "",
+        cvvFieldState = InputFieldState(value = ""),
+        payWithCarButtonState = PayWithCarButtonState(
+            isVisible = false,
+            isPrimary = false,
+            navigateToCardCheckout = false,
+        ),
+        payAmountButtonState = null,
+    )
     private var currentCvvValue: String = ""
 
     fun updateSavedCardPaymentHandler(newSavedCardPaymentHandler: DojoSavedCardPaymentHandler) {
@@ -61,27 +70,13 @@ internal class PaymentMethodCheckoutViewModel(
     }
 
     init {
-        currentState = PaymentMethodCheckoutState(
-            gPayConfig = gPayConfig,
-            isGooglePayButtonVisible = false,
-            isBottomSheetVisible = true,
-            isBottomSheetLoading = true,
-            paymentMethodItem = null,
-            amountBreakDownList = listOf(),
-            totalAmount = "",
-            cvvFieldState = InputFieldState(value = ""),
-            payWithCarButtonState = PayWithCarButtonState(
-                isVisible = false,
-                isPrimary = false,
-                navigateToCardCheckout = false,
-            ),
-            payAmountButtonState = null,
-        )
-        postStateToUI()
-        buildInitState()
+        emitLoadingToView()
+        buildViewStateWithDateFlows()
     }
 
-    private fun buildInitState() {
+    private fun emitLoadingToView() { postStateToUI() }
+
+    private fun buildViewStateWithDateFlows() {
         viewModelScope.launch {
             val observePaymentIntentFlow = observePaymentIntent.observePaymentIntent()
             val observePaymentMethodsFlow = observePaymentMethods.observe()
@@ -93,86 +88,13 @@ internal class PaymentMethodCheckoutViewModel(
             ) { paymentIntentResult, paymentMethods, walletState ->
                 if (paymentIntentResult is PaymentIntentResult.Success && walletState != null) {
                     paymentIntent = paymentIntentResult.result
-                    val isSavedPaymentMethodsNotEmpty =
-                        if (paymentMethods is FetchPaymentMethodsResult.Success) paymentMethods.result.items.isNotEmpty() else false
-                    val isWalletAvailable =
-                        walletState == true && paymentIntentResult.result.supportedWalletSchemes.contains(
-                            WalletSchemes.GOOGLE_PAY,
-                        )
-                    currentState = currentState.copy(
-                        gPayConfig = gPayConfig,
-                        amountBreakDownList = getAmountBreakDownList() ?: emptyList(),
-                        totalAmount = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol + paymentIntentResult.result.amount.valueString,
-                        isBottomSheetVisible = true,
-                        isBottomSheetLoading = false,
-                        payAmountButtonState = null,
+                    currentState = viewEntityMapper.mapToViewState(
+                        paymentMethods,
+                        walletState,
+                        paymentIntentResult,
                     )
-                    when (isSavedPaymentMethodsNotEmpty) {
-                        true -> {
-                            buildStateForAvailableSavedCard(isWalletAvailable)
-                        }
-
-                        false -> {
-                            buildStateForUnavailableSavedCard(isWalletAvailable)
-                        }
-                    }
                 }
             }.collectLatest { postStateToUI() }
-        }
-    }
-
-    private fun buildStateForAvailableSavedCard(isGooglePayEnabled: Boolean) {
-        if (isGooglePayEnabled) {
-            currentState = currentState.copy(
-                isGooglePayButtonVisible = true,
-                paymentMethodItem = PaymentMethodItemViewEntityItem.WalletItemItem,
-                payWithCarButtonState = PayWithCarButtonState(
-                    isVisible = false,
-                    isPrimary = false,
-                    navigateToCardCheckout = true,
-                ),
-            )
-        } else {
-            currentState = currentState.copy(
-                isGooglePayButtonVisible = false,
-                payWithCarButtonState = PayWithCarButtonState(
-                    isVisible = true,
-                    isPrimary = true,
-                    navigateToCardCheckout = false,
-                ),
-            )
-        }
-    }
-
-    private fun buildStateForUnavailableSavedCard(isGooglePayEnabled: Boolean) {
-        if (isGooglePayEnabled) {
-            currentState = currentState.copy(
-                isGooglePayButtonVisible = true,
-                payWithCarButtonState = PayWithCarButtonState(
-                    isVisible = true,
-                    isPrimary = false,
-                    navigateToCardCheckout = true,
-                ),
-            )
-        } else {
-            currentState = currentState.copy(
-                isGooglePayButtonVisible = false,
-                payWithCarButtonState = PayWithCarButtonState(
-                    isVisible = true,
-                    isPrimary = true,
-                    navigateToCardCheckout = true,
-                ),
-            )
-        }
-    }
-
-    private fun getAmountBreakDownList(): List<AmountBreakDownItem>? {
-        return paymentIntent.itemLines?.map {
-            AmountBreakDownItem(
-                caption = it.caption,
-                amount = Currency.getInstance(it.amount.currencyCode).symbol +
-                    it.amount.value.centsToString(),
-            )
         }
     }
 

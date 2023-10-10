@@ -23,15 +23,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.core.getActivity
-import tech.dojo.pay.uisdk.presentation.PaymentFlowContainerActivity
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDown
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardItemWithCvv
@@ -61,7 +58,7 @@ internal fun PaymentMethodsCheckOutScreen(
     onPayByCard: () -> Unit,
     showDojoBrand: Boolean,
 ) {
-    val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
+//    val activity = LocalContext.current.getActivity<PaymentFlowContainerActivity>()
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
             initialValue = ModalBottomSheetValue.Hidden,
@@ -69,9 +66,9 @@ internal fun PaymentMethodsCheckOutScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
-    if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true) {
+//    if (state.gPayConfig?.allowedCardNetworks?.isNotEmpty() == true) {
 //        CheckGPayAvailability(state.gPayConfig, activity, viewModel)
-    }
+//    }
     if (currentSelectedMethod != null) {
         viewModel.onSavedPaymentMethodChanged(currentSelectedMethod)
     }

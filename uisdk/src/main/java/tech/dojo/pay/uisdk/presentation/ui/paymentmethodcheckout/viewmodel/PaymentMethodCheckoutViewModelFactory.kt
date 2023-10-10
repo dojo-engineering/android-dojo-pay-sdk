@@ -10,12 +10,12 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.paymentMethodsRepository
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.walletStateRepository
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
+import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper.PaymentMethodCheckoutViewEntityMapper
 
 class PaymentMethodCheckoutViewModelFactory(
     private val savedCardPaymentHandler: DojoSavedCardPaymentHandler,
@@ -26,7 +26,6 @@ class PaymentMethodCheckoutViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val observePaymentIntent =
             ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
-        val updateWalletState = UpdateWalletState(walletStateRepository)
         val observePaymentMethods = ObservePaymentMethods(paymentMethodsRepository)
         val observePaymentStatus =
             ObservePaymentStatus(PaymentFlowViewModelFactory.paymentStatusRepository)
@@ -36,9 +35,10 @@ class PaymentMethodCheckoutViewModelFactory(
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
 
         val observeWalletState = ObserveWalletState(walletStateRepository)
+
+        val paymentMethodCheckoutViewEntityMapper = PaymentMethodCheckoutViewEntityMapper()
         return PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -46,6 +46,7 @@ class PaymentMethodCheckoutViewModelFactory(
             observePaymentStatus,
             updatePaymentStateUseCase,
             observeWalletState,
+            paymentMethodCheckoutViewEntityMapper,
         ) as T
     }
 }
