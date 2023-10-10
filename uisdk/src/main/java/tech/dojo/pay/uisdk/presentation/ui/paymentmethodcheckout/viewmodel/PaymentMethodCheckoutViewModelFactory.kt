@@ -9,6 +9,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.data.paymentintent.RefreshPaymentIntentRepository
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.MakeGpayPaymentUseCase
+import tech.dojo.pay.uisdk.domain.MakeSavedCardPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -62,6 +63,11 @@ class PaymentMethodCheckoutViewModelFactory(
             getRefreshedPaymentTokenFlow,
             refreshPaymentIntentUseCase,
         )
+        val makeSavedCardPaymentUseCase = MakeSavedCardPaymentUseCase(
+            updatePaymentStateUseCase,
+            getRefreshedPaymentTokenFlow,
+            refreshPaymentIntentUseCase,
+        )
         return PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
             observePaymentIntent,
@@ -69,10 +75,10 @@ class PaymentMethodCheckoutViewModelFactory(
             gpayPaymentHandler,
             gPayConfig,
             observePaymentStatus,
-            updatePaymentStateUseCase,
             observeWalletState,
             paymentMethodCheckoutViewEntityMapper,
             makeGpayPaymentUseCase,
+            makeSavedCardPaymentUseCase,
             navigateToCardResult,
         ) as T
     }
