@@ -292,6 +292,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     savedCardPaymentHandler = savedCardPaymentHandler,
                     gpayPaymentHandler = gpayPaymentHandler,
                     arguments = arguments,
+                    navigateToCardResult = { viewModel.navigateToPaymentResult(it) },
                 )
             }
             // this is to  handle unregistered activity when screen orientation change

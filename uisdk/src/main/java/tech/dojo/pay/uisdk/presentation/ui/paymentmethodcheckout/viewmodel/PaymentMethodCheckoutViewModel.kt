@@ -7,18 +7,19 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoGPayPayload
-import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
+import tech.dojo.pay.uisdk.domain.MakeGpayPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
+import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
@@ -38,6 +39,8 @@ internal class PaymentMethodCheckoutViewModel(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val observeWalletState: ObserveWalletState,
     private val viewEntityMapper: PaymentMethodCheckoutViewEntityMapper,
+    private val makeGpayPaymentUseCase: MakeGpayPaymentUseCase,
+    private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
     val state: LiveData<PaymentMethodCheckoutState>
@@ -73,7 +76,9 @@ internal class PaymentMethodCheckoutViewModel(
         buildViewStateWithDateFlows()
     }
 
-    private fun emitLoadingToView() { postStateToUI() }
+    private fun emitLoadingToView() {
+        postStateToUI()
+    }
 
     private fun buildViewStateWithDateFlows() {
         viewModelScope.launch {
@@ -99,24 +104,25 @@ internal class PaymentMethodCheckoutViewModel(
 
     fun onGpayCLicked() {
         gPayConfig?.let {
-            updatePaymentStateUseCase.updateGpayPaymentSate(true)
-            val gPayConfigWithSupportedCardsSchemes =
-                gPayConfig.copy(
-                    allowedCardNetworks = paymentIntent.supportedCardsSchemes,
-                    collectEmailAddress = paymentIntent.collectionEmailRequired,
-                    collectBilling = paymentIntent.collectionEmailRequired,
-                )
-            gpayPaymentHandler.executeGPay(
-                GPayPayload = DojoGPayPayload(dojoGPayConfig = gPayConfigWithSupportedCardsSchemes),
-                paymentIntent = DojoPaymentIntent(
-                    token = paymentIntent.paymentToken,
-                    totalAmount = DojoTotalAmount(
-                        paymentIntent.amount.valueLong,
-                        paymentIntent.amount.currencyCode,
+            viewModelScope.launch {
+                observeGooglePayPaymentState()
+                makeGpayPaymentUseCase.makePaymentWithUpdatedToken(
+                    params = MakeGpayPaymentParams(
+                        dojoGPayConfig = gPayConfig.copy(
+                            allowedCardNetworks = paymentIntent.supportedCardsSchemes,
+                            collectEmailAddress = paymentIntent.collectionEmailRequired,
+                            collectBilling = paymentIntent.collectionEmailRequired,
+                        ),
+                        dojoTotalAmount = DojoTotalAmount(
+                            paymentIntent.amount.valueLong,
+                            paymentIntent.amount.currencyCode,
+                        ),
+                        gpayPaymentHandler = gpayPaymentHandler,
+                        paymentId = paymentIntent.id,
                     ),
-                ),
-            )
-            observeGooglePayPaymentState()
+                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                )
+            }
         }
     }
 

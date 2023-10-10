@@ -137,7 +137,6 @@ private fun BottomSheetItems(
                 AmountBreakDownItem(contentState)
                 GooglePayButton(
                     contentState,
-                    coroutineScope,
                     onGpayClicked,
                 )
                 PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
@@ -245,7 +244,6 @@ private fun Loading() {
 @Composable
 private fun GooglePayButton(
     googlePayVisibility: PaymentMethodCheckoutState,
-    coroutineScope: CoroutineScope,
     onGpayClicked: () -> Unit,
 ) {
     if (googlePayVisibility.isGooglePayButtonVisible) {
@@ -253,11 +251,7 @@ private fun GooglePayButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp, 16.dp, 16.dp, 8.dp),
-        ) {
-            coroutineScope.launch {
-                onGpayClicked()
-            }
-        }
+        ) { onGpayClicked() }
     }
 }
 
