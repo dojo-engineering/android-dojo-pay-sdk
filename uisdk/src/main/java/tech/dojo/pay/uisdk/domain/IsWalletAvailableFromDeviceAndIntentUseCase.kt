@@ -1,7 +1,6 @@
 package tech.dojo.pay.uisdk.domain
 
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
@@ -11,11 +10,11 @@ internal class IsWalletAvailableFromDeviceAndIntentUseCase(
     private val observeDeviceWalletState: ObserveDeviceWalletState,
 ) {
     suspend fun isAvailable(): Boolean {
-        val supportedWalletSchemes =
+        val paymentIntentResult =
             observePaymentIntent
                 .observePaymentIntent()
-                .filterIsInstance<PaymentIntentResult.Success>()
-                .firstOrNull()?.result?.supportedWalletSchemes
+                .filter { it is PaymentIntentResult.Success || it is PaymentIntentResult.FetchFailure }
+                .firstOrNull()
 
         val deviceWalletState =
             observeDeviceWalletState
@@ -23,6 +22,9 @@ internal class IsWalletAvailableFromDeviceAndIntentUseCase(
                 .filter { it != null }
                 .firstOrNull()
 
-        return deviceWalletState == true && supportedWalletSchemes?.contains(WalletSchemes.GOOGLE_PAY) == true
+        return deviceWalletState == true &&
+            paymentIntentResult is PaymentIntentResult.Success && paymentIntentResult.result.supportedWalletSchemes.contains(
+            WalletSchemes.GOOGLE_PAY,
+        )
     }
 }
