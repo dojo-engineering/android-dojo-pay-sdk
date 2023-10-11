@@ -11,8 +11,8 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateDeviceWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
@@ -33,7 +33,7 @@ internal class PaymentFlowViewModel(
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase,
-    private val updateWalletState: UpdateWalletState,
+    private val updateDeviceWalletState: UpdateDeviceWalletState,
 ) : ViewModel() {
 
     val allowedCardsSchemes = SingleLiveData<List<CardsSchemes>>()
@@ -104,7 +104,7 @@ internal class PaymentFlowViewModel(
     }
 
     fun updateDeviceWalletState(isAvailable: Boolean) {
-        updateWalletState.updateWalletState(isAvailable)
+        updateDeviceWalletState.updateDeviceWalletState(isAvailable)
     }
     private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError

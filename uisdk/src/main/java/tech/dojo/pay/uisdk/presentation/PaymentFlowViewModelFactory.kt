@@ -3,16 +3,16 @@ package tech.dojo.pay.uisdk.presentation
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import tech.dojo.pay.uisdk.data.DeviceWalletStateRepository
 import tech.dojo.pay.uisdk.data.PaymentStateRepository
-import tech.dojo.pay.uisdk.data.WalletStateRepository
 import tech.dojo.pay.uisdk.data.paymentintent.PaymentIntentRepository
 import tech.dojo.pay.uisdk.data.paymentmethods.PaymentMethodsRepository
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateDeviceWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
@@ -39,7 +39,7 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val fetchPaymentMethodsUseCase =
             FetchPaymentMethodsUseCase(paymentMethodsRepository)
         val isSDKInitializedCorrectlyUseCase = IsSDKInitializedCorrectlyUseCase()
-        val updateWalletState = UpdateWalletState(walletStateRepository)
+        val updateDeviceWalletState = UpdateDeviceWalletState(deviceWalletStateRepository)
 
         return PaymentFlowViewModel(
             paymentId,
@@ -50,7 +50,7 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
             fetchPaymentMethodsUseCase,
             updatePaymentStateUseCase,
             isSDKInitializedCorrectlyUseCase,
-            updateWalletState,
+            updateDeviceWalletState,
         ) as T
     }
 
@@ -58,6 +58,6 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val paymentIntentRepository by lazy { PaymentIntentRepository() }
         val paymentStatusRepository by lazy { PaymentStateRepository() }
         val paymentMethodsRepository by lazy { PaymentMethodsRepository() }
-        val walletStateRepository by lazy { WalletStateRepository() }
+        val deviceWalletStateRepository by lazy { DeviceWalletStateRepository() }
     }
 }

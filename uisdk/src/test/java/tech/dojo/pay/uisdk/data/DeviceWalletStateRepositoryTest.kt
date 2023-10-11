@@ -12,13 +12,13 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
-class WalletStateRepositoryTest {
+class DeviceWalletStateRepositoryTest {
 
-    private lateinit var repository: WalletStateRepository
+    private lateinit var repository: DeviceWalletStateRepository
 
     @Before
     fun setup() {
-        repository = WalletStateRepository()
+        repository = DeviceWalletStateRepository()
     }
 
     @Test
@@ -26,8 +26,8 @@ class WalletStateRepositoryTest {
         val isActive = true
         val expectedValue = isActive
 
-        repository.updatePayment(isActive)
-        val stream = repository.observeWalletState()
+        repository.updateDeviceWalletState(isActive)
+        val stream = repository.observeDeviceWalletState()
 
         // assert
         val job = launch { stream.collectLatest { Assert.assertEquals(expectedValue, it) } }

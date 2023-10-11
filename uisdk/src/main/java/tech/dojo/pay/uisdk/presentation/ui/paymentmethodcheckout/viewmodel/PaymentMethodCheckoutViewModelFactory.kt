@@ -10,17 +10,17 @@ import tech.dojo.pay.uisdk.data.paymentintent.RefreshPaymentIntentRepository
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.MakeGpayPaymentUseCase
 import tech.dojo.pay.uisdk.domain.MakeSavedCardPaymentUseCase
+import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
-import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
+import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.deviceWalletStateRepository
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.paymentMethodsRepository
-import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.walletStateRepository
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper.PaymentMethodCheckoutViewEntityMapper
 
@@ -55,7 +55,7 @@ class PaymentMethodCheckoutViewModelFactory(
                 refreshPaymentIntentRepository,
                 paymentType,
             )
-        val observeWalletState = ObserveWalletState(walletStateRepository)
+        val observeDeviceWalletState = ObserveDeviceWalletState(deviceWalletStateRepository)
 
         val paymentMethodCheckoutViewEntityMapper = PaymentMethodCheckoutViewEntityMapper()
         val makeGpayPaymentUseCase = MakeGpayPaymentUseCase(
@@ -75,7 +75,7 @@ class PaymentMethodCheckoutViewModelFactory(
             gpayPaymentHandler,
             gPayConfig,
             observePaymentStatus,
-            observeWalletState,
+            observeDeviceWalletState,
             paymentMethodCheckoutViewEntityMapper,
             makeGpayPaymentUseCase,
             makeSavedCardPaymentUseCase,

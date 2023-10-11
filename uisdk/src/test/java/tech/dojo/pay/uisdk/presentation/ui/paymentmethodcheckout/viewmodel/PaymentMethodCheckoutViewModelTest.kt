@@ -24,8 +24,8 @@ import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.UpdateDeviceWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.UpdateWalletState
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -50,7 +50,7 @@ class PaymentMethodCheckoutViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val observePaymentIntent: ObservePaymentIntent = mock()
     private val gpayPaymentHandler: DojoGPayHandler = mock()
-    private val updateWalletState: UpdateWalletState = mock()
+    private val updateDeviceWalletState: UpdateDeviceWalletState = mock()
     private val observePaymentMethods: ObservePaymentMethods = mock()
     private val savedCardPaymentHandler: DojoSavedCardPaymentHandler = mock()
     private val observePaymentStatus: ObservePaymentStatus = mock()
@@ -78,7 +78,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -139,7 +139,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
         val actual = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -208,7 +208,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -278,7 +278,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -349,7 +349,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -420,7 +420,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -496,7 +496,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -572,7 +572,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -657,7 +657,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -742,7 +742,7 @@ class PaymentMethodCheckoutViewModelTest {
             // act
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -826,7 +826,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -918,7 +918,7 @@ class PaymentMethodCheckoutViewModelTest {
         // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -1014,7 +1014,7 @@ class PaymentMethodCheckoutViewModelTest {
 
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
-            updateWalletState,
+            updateDeviceWalletState,
             observePaymentIntent,
             observePaymentMethods,
             gpayPaymentHandler,
@@ -1087,7 +1087,7 @@ class PaymentMethodCheckoutViewModelTest {
 
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -1165,7 +1165,7 @@ class PaymentMethodCheckoutViewModelTest {
             )
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,
@@ -1227,7 +1227,7 @@ class PaymentMethodCheckoutViewModelTest {
             )
             val viewModel = PaymentMethodCheckoutViewModel(
                 savedCardPaymentHandler,
-                updateWalletState,
+                updateDeviceWalletState,
                 observePaymentIntent,
                 observePaymentMethods,
                 gpayPaymentHandler,

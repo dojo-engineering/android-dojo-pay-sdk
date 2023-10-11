@@ -14,10 +14,10 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHand
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.domain.MakeGpayPaymentUseCase
 import tech.dojo.pay.uisdk.domain.MakeSavedCardPaymentUseCase
+import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
-import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.MakeSavedCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -36,7 +36,7 @@ internal class PaymentMethodCheckoutViewModel(
     private var gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val observeWalletState: ObserveWalletState,
+    private val observeDeviceWalletState: ObserveDeviceWalletState,
     private val viewEntityMapper: PaymentMethodCheckoutViewEntityMapper,
     private val makeGpayPaymentUseCase: MakeGpayPaymentUseCase,
     private val makeSavedCardPaymentUseCase: MakeSavedCardPaymentUseCase,
@@ -105,7 +105,7 @@ internal class PaymentMethodCheckoutViewModel(
             combine(
                 observePaymentIntent.observePaymentIntent(),
                 observePaymentMethods.observe(),
-                observeWalletState.observe(),
+                observeDeviceWalletState.observe(),
             ) { paymentIntentResult, paymentMethods, walletState ->
                 if (paymentIntentResult is PaymentIntentResult.Success && walletState != null) {
                     paymentIntent = paymentIntentResult.result
