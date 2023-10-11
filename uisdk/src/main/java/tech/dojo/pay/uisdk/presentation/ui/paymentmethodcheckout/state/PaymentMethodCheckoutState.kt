@@ -7,7 +7,7 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 internal data class PaymentMethodCheckoutState(
     val paymentMethodItem: PaymentMethodItemViewEntityItem?,
     val amountBreakDownList: List<AmountBreakDownItem>,
-    val payWithCarButtonState: PayWithCarButtonState,
+    val payWithCardButtonState: PayWithCardButtonState,
     val totalAmount: String,
     val cvvFieldState: InputFieldState,
     val isGooglePayButtonVisible: Boolean,
@@ -16,7 +16,7 @@ internal data class PaymentMethodCheckoutState(
     val payAmountButtonState: PayAmountButtonVState?,
 )
 
-internal data class PayWithCarButtonState(
+internal data class PayWithCardButtonState(
     val isVisible: Boolean,
     val isPrimary: Boolean,
     val navigateToCardCheckout: Boolean,

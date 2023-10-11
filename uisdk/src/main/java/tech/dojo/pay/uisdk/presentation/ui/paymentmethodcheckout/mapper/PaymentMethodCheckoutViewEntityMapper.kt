@@ -7,7 +7,7 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.components.AmountBreakDownItem
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
-import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
+import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCardButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 import java.util.Currency
 
@@ -20,7 +20,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         amountBreakDownList = listOf(),
         totalAmount = "",
         cvvFieldState = InputFieldState(value = ""),
-        payWithCarButtonState = PayWithCarButtonState(
+        payWithCardButtonState = PayWithCardButtonState(
             isVisible = false,
             isPrimary = false,
             navigateToCardCheckout = false,
@@ -60,7 +60,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
             currentState = currentState.copy(
                 isGooglePayButtonVisible = true,
                 paymentMethodItem = PaymentMethodItemViewEntityItem.WalletItemItem,
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = true,
@@ -69,7 +69,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         } else {
             currentState = currentState.copy(
                 isGooglePayButtonVisible = false,
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = false,
@@ -82,7 +82,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         if (isGooglePayEnabled) {
             currentState = currentState.copy(
                 isGooglePayButtonVisible = true,
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = false,
                     navigateToCardCheckout = true,
@@ -91,7 +91,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         } else {
             currentState = currentState.copy(
                 isGooglePayButtonVisible = false,
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true,

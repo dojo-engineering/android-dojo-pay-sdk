@@ -26,7 +26,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldS
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper.PaymentMethodCheckoutViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayAmountButtonVState
-import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
+import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCardButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 
 internal class PaymentMethodCheckoutViewModel(
@@ -54,7 +54,7 @@ internal class PaymentMethodCheckoutViewModel(
         amountBreakDownList = listOf(),
         totalAmount = "",
         cvvFieldState = InputFieldState(value = ""),
-        payWithCarButtonState = PayWithCarButtonState(
+        payWithCardButtonState = PayWithCardButtonState(
             isVisible = false,
             isPrimary = false,
             navigateToCardCheckout = false,
@@ -148,7 +148,7 @@ internal class PaymentMethodCheckoutViewModel(
         if (newValue is PaymentMethodItemViewEntityItem.NoItem) {
             currentState = currentState.copy(
                 paymentMethodItem = null,
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = !currentState.isGooglePayButtonVisible,
                     navigateToCardCheckout = true,
@@ -160,7 +160,7 @@ internal class PaymentMethodCheckoutViewModel(
                 currentState = currentState.copy(
                     paymentMethodItem = newValue,
                     payAmountButtonState = getPayAmountButtonState(newValue),
-                    payWithCarButtonState = PayWithCarButtonState(
+                    payWithCardButtonState = PayWithCardButtonState(
                         isVisible = false,
                         isPrimary = false,
                         navigateToCardCheckout = false,

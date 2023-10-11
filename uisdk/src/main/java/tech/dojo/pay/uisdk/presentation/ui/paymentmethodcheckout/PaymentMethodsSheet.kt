@@ -261,15 +261,15 @@ private fun PaymentMethodsButton(
     onPayByCard: () -> Unit,
     onManagePaymentClicked: () -> Unit,
 ) {
-    if (contentState.payWithCarButtonState.isVisible) {
-        if (contentState.payWithCarButtonState.isPrimary) {
+    if (contentState.payWithCardButtonState.isVisible) {
+        if (contentState.payWithCardButtonState.isPrimary) {
             DojoFullGroundButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string),
             ) {
-                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                if (contentState.payWithCardButtonState.navigateToCardCheckout) {
                     onPayByCard()
                 } else {
                     onManagePaymentClicked()
@@ -282,7 +282,7 @@ private fun PaymentMethodsButton(
                     .padding(16.dp, 8.dp, 16.dp, 8.dp),
                 text = stringResource(id = R.string.dojo_ui_sdk_pay_with_card_string),
             ) {
-                if (contentState.payWithCarButtonState.navigateToCardCheckout) {
+                if (contentState.payWithCardButtonState.navigateToCardCheckout) {
                     onPayByCard()
                 } else {
                     onManagePaymentClicked()

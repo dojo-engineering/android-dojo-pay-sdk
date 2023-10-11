@@ -16,7 +16,6 @@ import org.mockito.kotlin.verify
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
@@ -28,7 +27,6 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
-import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntity
@@ -36,7 +34,7 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.InputFieldS
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMethodItemViewEntityItem
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper.PaymentMethodCheckoutViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayAmountButtonVState
-import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCarButtonState
+import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PayWithCardButtonState
 import tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.state.PaymentMethodCheckoutState
 
 @Suppress("LongMethod", "LargeClass")
@@ -73,7 +71,7 @@ class PaymentMethodCheckoutViewModelTest {
             amountBreakDownList = listOf(),
             totalAmount = "",
             cvvFieldState = InputFieldState(value = ""),
-            payWithCarButtonState = PayWithCarButtonState(
+            payWithCardButtonState = PayWithCardButtonState(
                 isVisible = false,
                 isPrimary = false,
                 navigateToCardCheckout = false,
@@ -111,7 +109,7 @@ class PaymentMethodCheckoutViewModelTest {
                 amountBreakDownList = listOf(),
                 totalAmount = "100",
                 cvvFieldState = InputFieldState(value = ""),
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true,
@@ -166,7 +164,7 @@ class PaymentMethodCheckoutViewModelTest {
                 amountBreakDownList = listOf(),
                 totalAmount = "",
                 cvvFieldState = InputFieldState(value = ""),
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = false,
@@ -205,7 +203,7 @@ class PaymentMethodCheckoutViewModelTest {
                 amountBreakDownList = listOf(),
                 totalAmount = "",
                 cvvFieldState = InputFieldState(value = "123"),
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = false,
                     isPrimary = false,
                     navigateToCardCheckout = false,
@@ -236,22 +234,6 @@ class PaymentMethodCheckoutViewModelTest {
     fun `when calling onGpayCLicked then makePaymentWithUpdatedToken from makeGpayPaymentUseCase`() =
         runTest {
             // arrange
-            val makeGpayPaymentParams = MakeGpayPaymentParams(
-                dojoGPayConfig = DojoGPayConfig(
-                    collectShipping = false,
-                    allowedCountryCodesForShipping = null,
-                    collectBilling = false,
-                    collectEmailAddress = false,
-                    collectPhoneNumber = false,
-                    merchantName = "",
-                    merchantId = "",
-                    gatewayMerchantId = "",
-                    allowedCardNetworks = listOf(CardsSchemes.MASTERCARD),
-                ),
-                dojoTotalAmount = DojoTotalAmount(amount = 10, currencyCode = "GBP"),
-                gpayPaymentHandler = gpayPaymentHandler,
-                paymentId = "id",
-            )
             val currentState = PaymentMethodCheckoutState(
                 isGooglePayButtonVisible = true,
                 isBottomSheetVisible = true,
@@ -260,7 +242,7 @@ class PaymentMethodCheckoutViewModelTest {
                 amountBreakDownList = listOf(),
                 totalAmount = "100",
                 cvvFieldState = InputFieldState(value = ""),
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true,
@@ -273,7 +255,7 @@ class PaymentMethodCheckoutViewModelTest {
                 gatewayMerchantId = "",
                 allowedCardNetworks = listOf(CardsSchemes.MASTERCARD),
             )
-            val intentResult: PaymentIntentDomainEntity = PaymentIntentDomainEntity(
+            val intentResult = PaymentIntentDomainEntity(
                 "id",
                 "token",
                 AmountDomainEntity(
@@ -325,22 +307,6 @@ class PaymentMethodCheckoutViewModelTest {
     fun `when calling onPayAmountClicked the makePaymentWithUpdatedToken from makeSavedCardPaymentUseCase`() =
         runTest {
             // arrange
-            val makeGpayPaymentParams = MakeGpayPaymentParams(
-                dojoGPayConfig = DojoGPayConfig(
-                    collectShipping = false,
-                    allowedCountryCodesForShipping = null,
-                    collectBilling = false,
-                    collectEmailAddress = false,
-                    collectPhoneNumber = false,
-                    merchantName = "",
-                    merchantId = "",
-                    gatewayMerchantId = "",
-                    allowedCardNetworks = listOf(CardsSchemes.MASTERCARD),
-                ),
-                dojoTotalAmount = DojoTotalAmount(amount = 10, currencyCode = "GBP"),
-                gpayPaymentHandler = gpayPaymentHandler,
-                paymentId = "id",
-            )
             val currentState = PaymentMethodCheckoutState(
                 isGooglePayButtonVisible = true,
                 isBottomSheetVisible = true,
@@ -349,7 +315,7 @@ class PaymentMethodCheckoutViewModelTest {
                 amountBreakDownList = listOf(),
                 totalAmount = "100",
                 cvvFieldState = InputFieldState(value = ""),
-                payWithCarButtonState = PayWithCarButtonState(
+                payWithCardButtonState = PayWithCardButtonState(
                     isVisible = true,
                     isPrimary = true,
                     navigateToCardCheckout = true,
@@ -362,7 +328,7 @@ class PaymentMethodCheckoutViewModelTest {
                 gatewayMerchantId = "",
                 allowedCardNetworks = listOf(CardsSchemes.MASTERCARD),
             )
-            val intentResult: PaymentIntentDomainEntity = PaymentIntentDomainEntity(
+            val intentResult = PaymentIntentDomainEntity(
                 "id",
                 "token",
                 AmountDomainEntity(
