@@ -73,22 +73,39 @@ internal class PaymentMethodCheckoutViewModel(
 
     init {
         emitLoadingToView()
+        observePaymentStatus()
+        observeGooglePayPaymentState()
         buildViewStateWithDateFlows()
     }
 
     private fun emitLoadingToView() {
         postStateToUI()
     }
+    private fun observePaymentStatus() {
+        viewModelScope.launch {
+            observePaymentStatus.observePaymentStates().collect {
+                currentState = currentState.copy(
+                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it),
+                )
+                postStateToUI()
+            }
+        }
+    }
+    private fun observeGooglePayPaymentState() {
+        viewModelScope.launch {
+            observePaymentStatus.observeGpayPaymentStates().collect {
+                currentState = currentState.copy(isBottomSheetLoading = it)
+                postStateToUI()
+            }
+        }
+    }
 
     private fun buildViewStateWithDateFlows() {
         viewModelScope.launch {
-            val observePaymentIntentFlow = observePaymentIntent.observePaymentIntent()
-            val observePaymentMethodsFlow = observePaymentMethods.observe()
-            val observeWalletStateFlow = observeWalletState.observe()
             combine(
-                observePaymentIntentFlow,
-                observePaymentMethodsFlow,
-                observeWalletStateFlow,
+                observePaymentIntent.observePaymentIntent(),
+                observePaymentMethods.observe(),
+                observeWalletState.observe(),
             ) { paymentIntentResult, paymentMethods, walletState ->
                 if (paymentIntentResult is PaymentIntentResult.Success && walletState != null) {
                     paymentIntent = paymentIntentResult.result
@@ -105,7 +122,6 @@ internal class PaymentMethodCheckoutViewModel(
     fun onGpayCLicked() {
         gPayConfig?.let {
             viewModelScope.launch {
-                observeGooglePayPaymentState()
                 makeGpayPaymentUseCase.makePaymentWithUpdatedToken(
                     params = MakeGpayPaymentParams(
                         dojoGPayConfig = gPayConfig.copy(
@@ -122,15 +138,6 @@ internal class PaymentMethodCheckoutViewModel(
                     ),
                     onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
                 )
-            }
-        }
-    }
-
-    private fun observeGooglePayPaymentState() {
-        viewModelScope.launch {
-            observePaymentStatus.observeGpayPaymentStates().collect {
-                currentState = currentState.copy(isBottomSheetLoading = it)
-                postStateToUI()
             }
         }
     }
@@ -185,7 +192,6 @@ internal class PaymentMethodCheckoutViewModel(
 
     fun onPayAmountClicked() {
         viewModelScope.launch {
-            observePaymentStatus()
             makeSavedCardPaymentUseCase
                 .makePaymentWithUpdatedToken(
                     params = MakeSavedCardPaymentParams(
@@ -199,17 +205,6 @@ internal class PaymentMethodCheckoutViewModel(
                 )
         }
     }
-    private fun observePaymentStatus() {
-        viewModelScope.launch {
-            observePaymentStatus.observePaymentStates().collect {
-                currentState = currentState.copy(
-                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it),
-                )
-                postStateToUI()
-            }
-        }
-    }
-
     private fun postStateToUI() {
         mutableState.postValue(currentState)
     }
