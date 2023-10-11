@@ -12,9 +12,9 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
 import tech.dojo.pay.uisdk.domain.MakeGpayPaymentUseCase
 import tech.dojo.pay.uisdk.domain.MakeSavedCardPaymentUseCase
-import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
@@ -36,10 +36,10 @@ internal class PaymentMethodCheckoutViewModel(
     private var gpayPaymentHandler: DojoGPayHandler,
     private val gPayConfig: DojoGPayConfig?,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val observeDeviceWalletState: ObserveDeviceWalletState,
     private val viewEntityMapper: PaymentMethodCheckoutViewEntityMapper,
     private val makeGpayPaymentUseCase: MakeGpayPaymentUseCase,
     private val makeSavedCardPaymentUseCase: MakeSavedCardPaymentUseCase,
+    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase,
     private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
 ) : ViewModel() {
     private val mutableState = MutableLiveData<PaymentMethodCheckoutState>()
@@ -105,13 +105,12 @@ internal class PaymentMethodCheckoutViewModel(
             combine(
                 observePaymentIntent.observePaymentIntent(),
                 observePaymentMethods.observe(),
-                observeDeviceWalletState.observe(),
-            ) { paymentIntentResult, paymentMethods, walletState ->
-                if (paymentIntentResult is PaymentIntentResult.Success && walletState != null) {
+            ) { paymentIntentResult, paymentMethods ->
+                if (paymentIntentResult is PaymentIntentResult.Success) {
                     paymentIntent = paymentIntentResult.result
                     currentState = viewEntityMapper.mapToViewState(
                         paymentMethods,
-                        walletState,
+                        isWalletAvailableFromDeviceAndIntentUseCase.isAvailable(),
                         paymentIntentResult,
                     )
                 }

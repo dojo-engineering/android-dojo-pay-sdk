@@ -1,6 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.paymentmethodcheckout.mapper
 
-import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
@@ -31,15 +30,11 @@ internal class PaymentMethodCheckoutViewEntityMapper {
 
     fun mapToViewState(
         paymentMethods: FetchPaymentMethodsResult?,
-        walletState: Boolean?,
+        isWalletAvailable: Boolean,
         paymentIntentResult: PaymentIntentResult.Success,
     ): PaymentMethodCheckoutState {
         val isSavedPaymentMethodsNotEmpty =
             if (paymentMethods is FetchPaymentMethodsResult.Success) paymentMethods.result.items.isNotEmpty() else false
-        val isWalletAvailable =
-            walletState == true && paymentIntentResult.result.supportedWalletSchemes.contains(
-                WalletSchemes.GOOGLE_PAY,
-            )
         currentState = currentState.copy(
             amountBreakDownList = getAmountBreakDownList(paymentIntentResult.result.itemLines)
                 ?: emptyList(),

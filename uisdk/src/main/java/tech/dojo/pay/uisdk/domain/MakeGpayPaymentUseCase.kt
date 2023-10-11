@@ -24,29 +24,29 @@ internal class MakeGpayPaymentUseCase(
             .firstOrNull()
             ?.let { result ->
                 if (result is RefreshPaymentIntentResult.Success) {
-                    onSuccessReult(params, result)
+                    onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
                     onUpdateTokenError()
                 }
             }
     }
 
-    private fun onSuccessReult(
+    private fun onSuccessResult(
         params: MakeGpayPaymentParams,
-        successReult: RefreshPaymentIntentResult.Success,
+        successResult: RefreshPaymentIntentResult.Success,
     ) {
         updatePaymentStateUseCase.updateGpayPaymentSate(isActive = true)
-        startGpayPayment(params, successReult)
+        startGpayPayment(params, successResult)
     }
 
     private fun startGpayPayment(
         params: MakeGpayPaymentParams,
-        successReult: RefreshPaymentIntentResult.Success,
+        successResult: RefreshPaymentIntentResult.Success,
     ) {
         params.gpayPaymentHandler.executeGPay(
             GPayPayload = DojoGPayPayload(dojoGPayConfig = params.dojoGPayConfig),
             paymentIntent = DojoPaymentIntent(
-                token = successReult.token,
+                token = successResult.token,
                 totalAmount = params.dojoTotalAmount,
             ),
         )
