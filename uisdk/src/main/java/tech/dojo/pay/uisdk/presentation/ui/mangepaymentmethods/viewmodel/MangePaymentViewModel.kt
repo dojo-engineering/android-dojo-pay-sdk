@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
-import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
@@ -16,9 +16,9 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 
 internal class MangePaymentViewModel(
     private val deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
-    private val observeDeviceWalletState: ObserveDeviceWalletState,
     private val observePaymentMethods: ObservePaymentMethods,
     private val mapper: PaymentMethodItemViewEntityMapper,
+    isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase,
 ) : ViewModel() {
 
     private val mutableState = MutableLiveData<MangePaymentMethodsState>()
@@ -40,14 +40,12 @@ internal class MangePaymentViewModel(
             isDeleteItemInProgress = false,
         )
         viewModelScope.launch {
-            observeDeviceWalletState.observe().collect {
-                isWalletEnabled = it ?: false
-                observePaymentMethods.observe().collect { result ->
-                    currentState = currentState.copy(
-                        paymentMethodItems = mapper.apply(result, isWalletEnabled),
-                        isUsePaymentMethodButtonEnabled = isWalletEnabled,
-                    )
-                }
+            isWalletEnabled = isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()
+            observePaymentMethods.observe().collect { result ->
+                currentState = currentState.copy(
+                    paymentMethodItems = mapper.apply(result, isWalletEnabled),
+                    isUsePaymentMethodButtonEnabled = isWalletEnabled,
+                )
             }
         }
         postStateToUI()

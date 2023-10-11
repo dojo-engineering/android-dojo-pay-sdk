@@ -4,9 +4,12 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
+import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.deviceWalletStateRepository
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.paymentMethodsRepository
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
@@ -31,11 +34,17 @@ class MangePaymentViewModelFactory(
             customerSecret,
             paymentMethodsRepository,
         )
+        val observePaymentIntent =
+            ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
+        val isWalletAvailableFromDeviceAndIntentUseCase = IsWalletAvailableFromDeviceAndIntentUseCase(
+            observePaymentIntent,
+            observeDeviceWalletState,
+        )
         return MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         ) as T
     }
 }

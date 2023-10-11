@@ -67,6 +67,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         val actual = viewMode.state.value
         // assert
@@ -121,6 +122,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         val actual = viewMode.state.value
         // assert
@@ -174,6 +176,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         val actual = viewMode.state.value
         // assert
@@ -211,6 +214,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         val actual = viewMode.state.value
         // assert
@@ -246,6 +250,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         val actual = viewMode.state.value
         // assert
@@ -306,6 +311,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         viewMode.onPaymentMethodChanged(selectedPaymentMethods)
         val actual = viewMode.state.value
@@ -367,6 +373,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         viewMode.onPaymentMethodLongCLick(selectedPaymentMethods)
         val actual = viewMode.state.value
@@ -428,6 +435,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         viewMode.onPaymentMethodLongCLick(selectedPaymentMethods)
         viewMode.onDeleteClicked()
@@ -490,6 +498,7 @@ internal class MangePaymentViewModelTest {
             observeDeviceWalletState,
             observePaymentMethods,
             mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         )
         viewMode.onPaymentMethodLongCLick(selectedPaymentMethods)
         viewMode.onDeleteClicked()
