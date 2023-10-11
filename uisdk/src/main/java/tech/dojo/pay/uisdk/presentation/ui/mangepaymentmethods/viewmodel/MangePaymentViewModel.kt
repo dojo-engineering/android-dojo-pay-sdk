@@ -18,7 +18,7 @@ internal class MangePaymentViewModel(
     private val deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
     private val observePaymentMethods: ObservePaymentMethods,
     private val mapper: PaymentMethodItemViewEntityMapper,
-    isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase,
+    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase,
 ) : ViewModel() {
 
     private val mutableState = MutableLiveData<MangePaymentMethodsState>()

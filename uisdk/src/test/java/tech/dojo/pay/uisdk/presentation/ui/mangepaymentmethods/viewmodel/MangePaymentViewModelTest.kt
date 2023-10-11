@@ -15,7 +15,7 @@ import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
-import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentMethodsDomainEntity
@@ -38,20 +38,19 @@ internal class MangePaymentViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase = mock()
-    private val observeDeviceWalletState: ObserveDeviceWalletState = mock()
     private val observePaymentMethods: ObservePaymentMethods = mock()
     private val mapper: PaymentMethodItemViewEntityMapper = mock()
+    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase =
+        mock()
 
     @Test
     fun `test init state`() = runTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         fetchPaymentMethodsStream.tryEmit(FetchPaymentMethodsResult.Failure)
-        isWalletEnabledStream.tryEmit(true)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = PaymentMethodItemViewEntity(emptyList()),
@@ -64,7 +63,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -79,9 +77,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -106,7 +103,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = paymentMethodViewEntity,
@@ -119,7 +115,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -134,9 +129,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(false)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -160,7 +154,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, false)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(false)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = paymentMethodViewEntity,
@@ -173,7 +166,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -188,9 +180,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(items = listOf())
         val result = FetchPaymentMethodsResult.Success(result = paymentMethodsDomainEntity)
         val paymentMethodViewEntity = PaymentMethodItemViewEntity(
@@ -198,7 +189,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = paymentMethodViewEntity,
@@ -211,7 +201,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -226,15 +215,13 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(false)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(items = listOf())
         val result = FetchPaymentMethodsResult.Success(result = paymentMethodsDomainEntity)
         val paymentMethodViewEntity = PaymentMethodItemViewEntity(items = listOf())
         whenever(mapper.apply(result, false)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(false)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
             paymentMethodItems = paymentMethodViewEntity,
@@ -247,7 +234,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -262,9 +248,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -289,7 +274,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val selectedPaymentMethods = PaymentMethodItemViewEntityItem.CardItemItem(
             id = "",
             icon = R.drawable.ic_visa,
@@ -308,7 +292,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -324,9 +307,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -351,7 +333,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val selectedPaymentMethods = PaymentMethodItemViewEntityItem.CardItemItem(
             id = "",
             icon = R.drawable.ic_visa,
@@ -370,7 +351,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -386,9 +366,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -413,7 +392,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val selectedPaymentMethods = PaymentMethodItemViewEntityItem.CardItemItem(
             id = "",
             icon = R.drawable.ic_visa,
@@ -432,7 +410,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,
@@ -449,9 +426,8 @@ internal class MangePaymentViewModelTest {
         // arrange
         val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
             MutableStateFlow(null)
-        val isWalletEnabledStream: MutableStateFlow<Boolean?> = MutableStateFlow(null)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
-        whenever(observeDeviceWalletState.observe()).thenReturn(isWalletEnabledStream)
+        whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
             items = listOf(
                 PaymentMethodsDomainEntityItem(
@@ -476,7 +452,6 @@ internal class MangePaymentViewModelTest {
         )
         whenever(mapper.apply(result, true)).thenReturn(paymentMethodViewEntity)
         fetchPaymentMethodsStream.tryEmit(result)
-        isWalletEnabledStream.tryEmit(true)
         val selectedPaymentMethods = PaymentMethodItemViewEntityItem.CardItemItem(
             id = "id",
             icon = R.drawable.ic_visa,
@@ -495,7 +470,6 @@ internal class MangePaymentViewModelTest {
         // act
         val viewMode = MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeDeviceWalletState,
             observePaymentMethods,
             mapper,
             isWalletAvailableFromDeviceAndIntentUseCase,

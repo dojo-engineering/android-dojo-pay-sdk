@@ -20,6 +20,7 @@ import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateDeviceWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -50,6 +51,7 @@ internal class PaymentFlowViewModelTest {
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase = mock()
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
     private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase = mock()
+    private val updateWalletState: UpdateDeviceWalletState = mock()
 
     @Test
     fun `when initialize view model with Success state from payment intent and isPaymentAlreadyCollected is false and  isSDKInitializedCorrectlyUseCase return true  then should call fetch payment methods `() =
