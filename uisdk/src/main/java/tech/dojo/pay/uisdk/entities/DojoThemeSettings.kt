@@ -10,7 +10,7 @@ data class DojoThemeSettings @JvmOverloads constructor(
     val darkColorPalette: DarkColorPalette = DarkColorPalette(),
     val forceLightMode: Boolean = false,
     val showBranding: Boolean = true,
-    val analyticsExcludedFieldsIdentifier:String = ""
+    val analyticsExcludedFieldsIdentifier: String = ""
 ) : Serializable
 
 @Keep

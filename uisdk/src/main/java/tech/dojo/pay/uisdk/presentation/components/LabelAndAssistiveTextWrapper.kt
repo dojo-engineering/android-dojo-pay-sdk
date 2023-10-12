@@ -29,9 +29,13 @@ internal fun LabelAndAssistiveTextWrapper(
     enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    Column(modifier = modifier
-        .then(Modifier.testTag(
-            DojoSDKDropInUI.dojoThemeSettings?.analyticsExcludedFieldsIdentifier?: ""))
+    Column(
+        modifier = modifier
+            .then(
+                Modifier.testTag(
+                    DojoSDKDropInUI.dojoThemeSettings?.analyticsExcludedFieldsIdentifier ?: "",
+                ),
+            ),
     ) {
         if (!label.isNullOrEmpty()) {
             Label(text = label, enabled = enabled)
