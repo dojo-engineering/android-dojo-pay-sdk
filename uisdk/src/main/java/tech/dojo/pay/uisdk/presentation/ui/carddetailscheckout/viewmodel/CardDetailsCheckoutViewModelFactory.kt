@@ -12,6 +12,7 @@ import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
+import tech.dojo.pay.uisdk.domain.MakeCardPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
@@ -70,12 +71,16 @@ class CardDetailsCheckoutViewModelFactory(
             )
 
         val getRefreshedPaymentTokenFlow = GetRefreshedPaymentTokenFlow(repo = refreshPaymentIntentRepository)
+        val makeCardPaymentUseCase = MakeCardPaymentUseCase(
+            updatePaymentStateUseCase,
+            getRefreshedPaymentTokenFlow,
+            refreshPaymentIntentUseCase,
+        )
 
         return CardDetailsCheckoutViewModel(
             observePaymentIntent,
             dojoCardPaymentHandler,
             observePaymentStatus,
-            updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             supportedCountriesViewEntityMapper,
             allowedPaymentMethodsViewEntityMapper,
@@ -83,8 +88,7 @@ class CardDetailsCheckoutViewModelFactory(
             fullCardPaymentPayloadMapper,
             stringProvider,
             isStartDestination,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
+            makeCardPaymentUseCase,
             navigateToCardResult,
         ) as T
     }
