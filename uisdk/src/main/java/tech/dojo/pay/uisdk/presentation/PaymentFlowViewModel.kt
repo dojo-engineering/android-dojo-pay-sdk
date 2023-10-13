@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
@@ -41,6 +43,7 @@ internal class PaymentFlowViewModel(
     private var currentCustomerId: String? = null
 
     init {
+        configureDojoSDKDebugConfig()
         viewModelScope.launch {
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
@@ -53,6 +56,18 @@ internal class PaymentFlowViewModel(
             } catch (error: Throwable) {
                 closeFlowWithInternalError()
             }
+        }
+    }
+
+    private fun configureDojoSDKDebugConfig() {
+        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
+            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
+        } else {
+            val dojoSDKDebugConfig = DojoSDKDebugConfig(
+                isSandboxWallet = isPaymentInSandBoxEnvironment(),
+                isSandboxIntent = isPaymentInSandBoxEnvironment(),
+            )
+            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 

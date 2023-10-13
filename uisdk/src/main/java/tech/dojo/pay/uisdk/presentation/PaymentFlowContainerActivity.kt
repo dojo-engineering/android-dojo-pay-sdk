@@ -31,7 +31,6 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
-import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
@@ -74,16 +73,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private lateinit var savedCardPaymentHandler: DojoSavedCardPaymentHandler
     private lateinit var virtualTerminalHandler: DojoVirtualTerminalHandler
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
-    private val paymentFlowViewModel: PaymentFlowViewModel by viewModels {
-        PaymentFlowViewModelFactory(arguments)
-    }
+    private val paymentFlowViewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
     private val flowStartDestination: PaymentFlowScreens by lazy { paymentFlowViewModel.getFlowStartDestination() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         disableScreenRecord()
         lockToPortrait()
-        configureDojoSDKDebugConfig()
         configureDojoPayCore()
         setContent {
             DojoTheme {
@@ -133,7 +129,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun configureDojoPayCore() {
-        configureDojoSDKDebugConfig()
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             paymentFlowViewModel.updateGpayPaymentState(false)
             paymentFlowViewModel.navigateToPaymentResult(it)
@@ -149,18 +144,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         virtualTerminalHandler = DojoSdk.createVirtualTerminalPaymentHandler(this) {
             paymentFlowViewModel.updatePaymentState(false)
             paymentFlowViewModel.navigateToPaymentResult(it)
-        }
-    }
-
-    private fun configureDojoSDKDebugConfig() {
-        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
-            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
-        } else {
-            val dojoSDKDebugConfig = DojoSDKDebugConfig(
-                isSandboxWallet = paymentFlowViewModel.isPaymentInSandBoxEnvironment(),
-                isSandboxIntent = paymentFlowViewModel.isPaymentInSandBoxEnvironment(),
-            )
-            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 
