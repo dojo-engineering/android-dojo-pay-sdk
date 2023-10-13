@@ -11,7 +11,7 @@ import tech.dojo.pay.sdk.paymentmethods.data.PaymentMethodsRepository
 internal class PaymentMethodsProvider(
     private val paymentMethodsRepository: PaymentMethodsRepository = PaymentMethodsRepository(
         api = PaymentMethodsApiBuilder().create(),
-        ),
+    ),
 ) {
     fun fetchPaymentMethods(
         customerId: String,
