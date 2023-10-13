@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
@@ -73,9 +74,9 @@ internal class PaymentMethodCheckoutViewModel(
 
     init {
         emitLoadingToView()
+        buildViewStateWithDateFlows()
         observePaymentStatus()
         observeGooglePayPaymentState()
-        buildViewStateWithDateFlows()
     }
 
     private fun emitLoadingToView() {
@@ -83,20 +84,26 @@ internal class PaymentMethodCheckoutViewModel(
     }
     private fun observePaymentStatus() {
         viewModelScope.launch {
-            observePaymentStatus.observePaymentStates().collect {
-                currentState = currentState.copy(
-                    payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it),
-                )
-                postStateToUI()
-            }
+            observePaymentStatus
+                .observePaymentStates()
+                .drop(1)
+                .collect {
+                    currentState = currentState.copy(
+                        payAmountButtonState = currentState.payAmountButtonState?.copy(isLoading = it),
+                    )
+                    postStateToUI()
+                }
         }
     }
     private fun observeGooglePayPaymentState() {
         viewModelScope.launch {
-            observePaymentStatus.observeGpayPaymentStates().collect {
-                currentState = currentState.copy(isBottomSheetLoading = it)
-                postStateToUI()
-            }
+            observePaymentStatus
+                .observeGpayPaymentStates()
+                .drop(1)
+                .collect {
+                    currentState = currentState.copy(isBottomSheetLoading = it)
+                    postStateToUI()
+                }
         }
     }
 
