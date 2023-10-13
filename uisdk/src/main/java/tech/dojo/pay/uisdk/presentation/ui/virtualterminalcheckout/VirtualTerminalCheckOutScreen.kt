@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
@@ -49,7 +49,7 @@ internal fun VirtualTerminalCheckOutScreen(
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     Scaffold(
@@ -85,20 +85,20 @@ internal fun VirtualTerminalCheckOutScreen(
                             viewModel = viewModel,
                             coroutineScope = coroutineScope,
                             scrollState = scrollState,
-                            keyboardController = keyboardController,
+                            view = view,
                         )
                         BillingAddressSection(
                             viewModel = viewModel,
                             coroutineScope = coroutineScope,
                             scrollState = scrollState,
-                            keyboardController = keyboardController,
+                            view = view,
                         )
                         CardDetailsSection(
                             viewModel = viewModel,
                             isDarkModeEnabled = isDarkModeEnabled,
                             coroutineScope = coroutineScope,
                             scrollState = scrollState,
-                            keyboardController = keyboardController,
+                            view = view,
                             showDojoBrand = showDojoBrand,
                         )
                     }

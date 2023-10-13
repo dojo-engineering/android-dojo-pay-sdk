@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
+import android.view.View
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -44,7 +44,7 @@ internal fun BillingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     var parentPosition by remember { mutableStateOf(0f) }
@@ -60,7 +60,7 @@ internal fun BillingAddressSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
             Address2Field(
@@ -68,7 +68,7 @@ internal fun BillingAddressSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
             CityField(
@@ -76,7 +76,7 @@ internal fun BillingAddressSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
             PostalCodeField(
@@ -84,7 +84,7 @@ internal fun BillingAddressSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
             CountryField(
@@ -113,7 +113,7 @@ private fun Address1Field(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -131,7 +131,7 @@ private fun Address1Field(
             },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         value = billingAddressViewState.addressLine1.value,
         isError = billingAddressViewState.addressLine1.isError,
         assistiveText = billingAddressViewState.addressLine1.errorMessages?.let {
@@ -149,7 +149,7 @@ private fun Address2Field(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -174,7 +174,7 @@ private fun Address2Field(
             onValidate = { },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         value = billingAddressViewState.addressLine2.value,
         isError = billingAddressViewState.addressLine2.isError,
         assistiveText = billingAddressViewState.addressLine2.errorMessages?.let {
@@ -192,7 +192,7 @@ private fun CityField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -211,7 +211,7 @@ private fun CityField(
             },
         ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         value = billingAddressViewState.city.value,
         isError = billingAddressViewState.city.isError,
         assistiveText = billingAddressViewState.city.errorMessages?.let {
@@ -229,7 +229,7 @@ private fun PostalCodeField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -248,7 +248,7 @@ private fun PostalCodeField(
             },
         ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         value = billingAddressViewState.postalCode.value,
         isError = billingAddressViewState.postalCode.isError,
         assistiveText = billingAddressViewState.postalCode.errorMessages?.let {

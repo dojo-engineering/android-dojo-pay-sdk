@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
+import android.view.View
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +24,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -54,7 +54,7 @@ internal fun CardDetailsSection(
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
@@ -76,7 +76,7 @@ internal fun CardDetailsSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
             DojoSpacer(height = 4.dp)
@@ -86,7 +86,7 @@ internal fun CardDetailsSection(
                 isDarkModeEnabled,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
 
@@ -106,7 +106,7 @@ internal fun CardDetailsSection(
                         viewModel,
                         coroutineScope,
                         scrollState,
-                        keyboardController,
+                        view,
                         parentPosition + rowPosition,
                     )
                 }
@@ -118,7 +118,7 @@ internal fun CardDetailsSection(
                         viewModel,
                         coroutineScope,
                         scrollState,
-                        keyboardController,
+                        view,
                         parentPosition + rowPosition,
                     )
                 }
@@ -129,7 +129,7 @@ internal fun CardDetailsSection(
                 viewModel,
                 coroutineScope,
                 scrollState,
-                keyboardController,
+                view,
                 parentPosition,
             )
         }
@@ -155,7 +155,7 @@ private fun CardHolderInputField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -170,7 +170,7 @@ private fun CardHolderInputField(
             },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         value = cardDetailsViewState.cardHolderInputField.value,
         isError = cardDetailsViewState.cardHolderInputField.isError,
         assistiveText = cardDetailsViewState.cardHolderInputField.errorMessages?.let {
@@ -189,7 +189,7 @@ private fun CardNumberInputField(
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -209,7 +209,7 @@ private fun CardNumberInputField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
         isError = cardDetailsViewState.cardNumberInputField.isError,
         assistiveText = cardDetailsViewState.cardNumberInputField.errorMessages?.let {
             AnnotatedString(
@@ -230,7 +230,7 @@ private fun CardExpireDateField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -250,7 +250,8 @@ private fun CardExpireDateField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
+
         isError = cardDetailsViewState.cardExpireDateInputField.isError,
         assistiveText = cardDetailsViewState.cardExpireDateInputField.errorMessages?.let {
             AnnotatedString(stringResource(id = it))
@@ -268,7 +269,7 @@ private fun CvvField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -294,7 +295,8 @@ private fun CvvField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
+
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCardCvvChanged(it) },
     )
@@ -307,12 +309,21 @@ private fun EmailInputField(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    view: View,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
     val assistiveText = when (cardDetailsViewState.emailInputField.isError) {
-        true -> { cardDetailsViewState.emailInputField.errorMessages?.let { AnnotatedString(stringResource(id = it)) } }
+        true -> {
+            cardDetailsViewState.emailInputField.errorMessages?.let {
+                AnnotatedString(
+                    stringResource(
+                        id = it,
+                    ),
+                )
+            }
+        }
+
         else -> AnnotatedString(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_subtitle_email_vt))
     }
 
@@ -327,7 +338,8 @@ private fun EmailInputField(
             },
         ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { view?.clearFocus() }),
+
         value = cardDetailsViewState.emailInputField.value,
         isError = cardDetailsViewState.emailInputField.isError,
         assistiveText = assistiveText,
