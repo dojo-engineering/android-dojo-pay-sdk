@@ -16,6 +16,7 @@ internal class MakeVTPaymentUseCase(
         onUpdateTokenError: () -> Unit,
     ) {
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         getRefreshedPaymentTokenFlow
             .getUpdatedPaymentTokenFlow()
             .filter { it is RefreshPaymentIntentResult.Success || it is RefreshPaymentIntentResult.RefreshFailure }
@@ -24,6 +25,7 @@ internal class MakeVTPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
+                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
                     onUpdateTokenError()
                 }
             }
@@ -33,7 +35,6 @@ internal class MakeVTPaymentUseCase(
         params: MakeVTPaymentParams,
         result: RefreshPaymentIntentResult.Success,
     ) {
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         params.virtualTerminalHandler.executeVirtualTerminalPayment(
             token = result.token,
             payload = params.fullCardPaymentPayload,
