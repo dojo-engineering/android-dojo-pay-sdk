@@ -12,6 +12,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
+import tech.dojo.pay.uisdk.domain.entities.DeviceWalletStateResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 
@@ -43,7 +44,7 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
                 ),
             )
             given(observeDeviceWalletState.observe()).willReturn(
-                MutableStateFlow(true),
+                MutableStateFlow(DeviceWalletStateResult.Enabled),
             )
 
             // act
@@ -69,7 +70,7 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
                 ),
             )
             given(observeDeviceWalletState.observe()).willReturn(
-                MutableStateFlow(false),
+                MutableStateFlow(DeviceWalletStateResult.Disabled),
             )
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
@@ -93,7 +94,7 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
                 ),
             )
             given(observeDeviceWalletState.observe()).willReturn(
-                MutableStateFlow(true),
+                MutableStateFlow(DeviceWalletStateResult.Enabled),
             )
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
@@ -113,7 +114,7 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
                 ),
             )
             given(observeDeviceWalletState.observe()).willReturn(
-                MutableStateFlow(true),
+                MutableStateFlow(DeviceWalletStateResult.Enabled),
             )
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()

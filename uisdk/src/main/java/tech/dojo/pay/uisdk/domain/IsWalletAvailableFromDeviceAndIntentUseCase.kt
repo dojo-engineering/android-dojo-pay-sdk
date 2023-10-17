@@ -3,6 +3,7 @@ package tech.dojo.pay.uisdk.domain
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
+import tech.dojo.pay.uisdk.domain.entities.DeviceWalletStateResult
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 
 internal class IsWalletAvailableFromDeviceAndIntentUseCase(
@@ -16,10 +17,10 @@ internal class IsWalletAvailableFromDeviceAndIntentUseCase(
                 .filter { it is PaymentIntentResult.Success || it is PaymentIntentResult.FetchFailure }
                 .firstOrNull()
 
-        val deviceWalletState =
+        val deviceWalletState: DeviceWalletStateResult? =
             observeDeviceWalletState
                 .observe()
-                .filter { it != null }
+                .filter { it is DeviceWalletStateResult.Enabled || it is DeviceWalletStateResult.Disabled }
                 .firstOrNull()
 
         val isPaymentResultSuccess = paymentIntentResult is PaymentIntentResult.Success
@@ -31,7 +32,9 @@ internal class IsWalletAvailableFromDeviceAndIntentUseCase(
         } else {
             false
         }
+        val isDeviceWalletEnabled =
+            deviceWalletState != null && deviceWalletState is DeviceWalletStateResult.Enabled
 
-        return deviceWalletState == true && isPaymentResultSuccess && doesPaymentContainsGooglePlay
+        return isDeviceWalletEnabled && isPaymentResultSuccess && doesPaymentContainsGooglePlay
     }
 }
