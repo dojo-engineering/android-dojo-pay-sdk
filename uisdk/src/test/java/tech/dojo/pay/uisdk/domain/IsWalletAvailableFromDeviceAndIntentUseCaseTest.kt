@@ -1,24 +1,28 @@
 package tech.dojo.pay.uisdk.domain
 
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.sdk.card.entities.WalletSchemes
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
-    private lateinit var observePaymentIntent: ObservePaymentIntent
-    private lateinit var observeDeviceWalletState: ObserveDeviceWalletState
+    private val observePaymentIntent: ObservePaymentIntent = mock()
+    private val observeDeviceWalletState: ObserveDeviceWalletState = mock()
     private lateinit var isWalletAvailableUseCase: IsWalletAvailableFromDeviceAndIntentUseCase
 
     @Before
     fun setup() {
-        observePaymentIntent = mock()
-        observeDeviceWalletState = mock()
         isWalletAvailableUseCase = IsWalletAvailableFromDeviceAndIntentUseCase(
             observePaymentIntent,
             observeDeviceWalletState,
@@ -26,7 +30,7 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
     }
 
     @Test
-    fun `when calling isAvailable from isWalletAvailableUseCase with with wallet  available from device and API should return true`() =
+    fun `when calling isAvailable from isWalletAvailableUseCase with wallet available from device and API should return true`() =
         runTest {
             // arrange
             val mockPaymentIntentDomainEntity: PaymentIntentDomainEntity = mock()
@@ -41,14 +45,18 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
             given(observeDeviceWalletState.observe()).willReturn(
                 MutableStateFlow(true),
             )
+
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
+
             // assert
-            assert(isAvailable)
+            Assert.assertTrue(isAvailable)
+            verify(observePaymentIntent).observePaymentIntent()
+            verify(observeDeviceWalletState).observe()
         }
 
     @Test
-    fun `when calling isAvailable from isWalletAvailableUseCase with with wallet not available from device and but available from API should return false`() =
+    fun `when calling isAvailable from isWalletAvailableUseCase with wallet not available from device and but available from API should return false`() =
         runTest {
             // arrange
             val mockPaymentIntentDomainEntity: PaymentIntentDomainEntity = mock()
@@ -66,11 +74,13 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
             // assert
-            assert(!isAvailable)
+            Assert.assertTrue(!isAvailable)
+            verify(observePaymentIntent).observePaymentIntent()
+            verify(observeDeviceWalletState).observe()
         }
 
     @Test
-    fun `when calling isAvailable from isWalletAvailableUseCase with with wallet  available from device and supported wallet schemes do not contain Google Pay should return false`() =
+    fun `when calling isAvailable from isWalletAvailableUseCase with wallet available from device and supported wallet schemes do not contain Google Pay should return false`() =
         runTest {
             // arrange
             val mockPaymentIntentDomainEntity: PaymentIntentDomainEntity = mock()
@@ -88,7 +98,9 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
             // assert
-            assert(!isAvailable)
+            Assert.assertTrue(!isAvailable)
+            verify(observePaymentIntent).observePaymentIntent()
+            verify(observeDeviceWalletState).observe()
         }
 
     @Test
@@ -106,6 +118,14 @@ class IsWalletAvailableFromDeviceAndIntentUseCaseTest {
             // act
             val isAvailable = isWalletAvailableUseCase.isAvailable()
             // assert
-            assert(!isAvailable)
+            Assert.assertTrue(!isAvailable)
+            verify(observePaymentIntent).observePaymentIntent()
+            verify(observeDeviceWalletState).observe()
         }
+
+    @After
+    fun tearDown() {
+        verifyNoMoreInteractions(observePaymentIntent)
+        verifyNoMoreInteractions(observeDeviceWalletState)
+    }
 }

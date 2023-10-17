@@ -17,6 +17,7 @@ internal class MakeSavedCardPaymentUseCase(
         onUpdateTokenError: () -> Unit,
     ) {
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
+        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         getRefreshedPaymentTokenFlow
             .getUpdatedPaymentTokenFlow()
             .filter { it is RefreshPaymentIntentResult.Success || it is RefreshPaymentIntentResult.RefreshFailure }
@@ -25,6 +26,7 @@ internal class MakeSavedCardPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
+                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
                     onUpdateTokenError()
                 }
             }
@@ -34,7 +36,6 @@ internal class MakeSavedCardPaymentUseCase(
         params: MakeSavedCardPaymentParams,
         successResult: RefreshPaymentIntentResult.Success,
     ) {
-        updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         params.savedCardPaymentHandler.executeSavedCardPayment(
             token = successResult.token,
             DojoCardPaymentPayLoad.SavedCardPaymentPayLoad(

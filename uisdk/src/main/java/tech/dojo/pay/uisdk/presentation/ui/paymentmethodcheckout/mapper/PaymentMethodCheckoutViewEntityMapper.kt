@@ -44,13 +44,8 @@ internal class PaymentMethodCheckoutViewEntityMapper {
             payAmountButtonState = null,
         )
         when (isSavedPaymentMethodsNotEmpty) {
-            true -> {
-                buildStateForAvailableSavedCard(isWalletAvailable)
-            }
-
-            false -> {
-                buildStateForUnavailableSavedCard(isWalletAvailable)
-            }
+            true -> buildStateForAvailableSavedCard(isWalletAvailable)
+            false -> buildStateForUnavailableSavedCard(isWalletAvailable)
         }
         return currentState
     }
@@ -100,13 +95,13 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         }
     }
 
-    private fun getAmountBreakDownList(itemLines: List<ItemLinesDomainEntity>?): List<AmountBreakDownItem>? {
+    private fun getAmountBreakDownList(itemLines: List<ItemLinesDomainEntity>?): List<AmountBreakDownItem> {
         return itemLines?.map {
             AmountBreakDownItem(
                 caption = it.caption,
                 amount = Currency.getInstance(it.amount.currencyCode).symbol +
                     it.amount.value.centsToString(),
             )
-        }
+        } ?: emptyList()
     }
 }

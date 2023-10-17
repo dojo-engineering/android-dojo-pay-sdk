@@ -22,9 +22,16 @@ internal class IsWalletAvailableFromDeviceAndIntentUseCase(
                 .filter { it != null }
                 .firstOrNull()
 
-        return deviceWalletState == true &&
-            paymentIntentResult is PaymentIntentResult.Success && paymentIntentResult.result.supportedWalletSchemes.contains(
-            WalletSchemes.GOOGLE_PAY,
-        )
+        val isPaymentResultSuccess = paymentIntentResult is PaymentIntentResult.Success
+        val doesPaymentContainsGooglePlay = if (isPaymentResultSuccess) {
+            (paymentIntentResult as PaymentIntentResult.Success)
+                .result
+                .supportedWalletSchemes
+                .contains(WalletSchemes.GOOGLE_PAY)
+        } else {
+            false
+        }
+
+        return deviceWalletState == true && isPaymentResultSuccess && doesPaymentContainsGooglePlay
     }
 }

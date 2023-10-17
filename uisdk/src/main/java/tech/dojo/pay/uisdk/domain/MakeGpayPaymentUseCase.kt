@@ -17,6 +17,7 @@ internal class MakeGpayPaymentUseCase(
         params: MakeGpayPaymentParams,
         onUpdateTokenError: () -> Unit,
     ) {
+        updatePaymentStateUseCase.updateGpayPaymentSate(isActive = true)
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
         getRefreshedPaymentTokenFlow
             .getUpdatedPaymentTokenFlow()
@@ -26,6 +27,7 @@ internal class MakeGpayPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
+                    updatePaymentStateUseCase.updateGpayPaymentSate(isActive = false)
                     onUpdateTokenError()
                 }
             }
@@ -35,7 +37,6 @@ internal class MakeGpayPaymentUseCase(
         params: MakeGpayPaymentParams,
         successResult: RefreshPaymentIntentResult.Success,
     ) {
-        updatePaymentStateUseCase.updateGpayPaymentSate(isActive = true)
         startGpayPayment(params, successResult)
     }
 

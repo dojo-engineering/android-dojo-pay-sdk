@@ -1,40 +1,38 @@
 package tech.dojo.pay.uisdk.domain
 
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito.verify
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import tech.dojo.pay.uisdk.data.DeviceWalletStateRepository
 
 class UpdateDeviceWalletStateTest {
 
-    private lateinit var deviceWalletStateRepository: DeviceWalletStateRepository
+    private var deviceWalletStateRepository: DeviceWalletStateRepository = mock()
     private lateinit var updateDeviceWalletState: UpdateDeviceWalletState
 
     @Before
     fun setUp() {
-        deviceWalletStateRepository = mockk()
         updateDeviceWalletState = UpdateDeviceWalletState(deviceWalletStateRepository)
     }
 
     @Test
-    fun `updateWalletState with isAvailable = true`() {
-        every { deviceWalletStateRepository.updateDeviceWalletState(any()) } just Runs
+    fun `when calling updateDeviceWalletState with isAvailable = true should call updateDeviceWalletState from deviceWalletStateRepository`() {
+        doNothing().whenever(deviceWalletStateRepository).updateDeviceWalletState(true)
 
         updateDeviceWalletState.updateDeviceWalletState(true)
 
-        verify(exactly = 1) { deviceWalletStateRepository.updateDeviceWalletState(true) }
+        verify(deviceWalletStateRepository).updateDeviceWalletState(true)
     }
 
     @Test
-    fun `updateWalletState with isAvailable = false`() {
-        every { deviceWalletStateRepository.updateDeviceWalletState(any()) } just Runs
+    fun `when calling updateDeviceWalletState with isAvailable = false should call updateDeviceWalletState from deviceWalletStateRepository`() {
+        doNothing().whenever(deviceWalletStateRepository).updateDeviceWalletState(false)
 
         updateDeviceWalletState.updateDeviceWalletState(false)
 
-        verify(exactly = 1) { deviceWalletStateRepository.updateDeviceWalletState(false) }
+        verify(deviceWalletStateRepository).updateDeviceWalletState(false)
     }
 }
