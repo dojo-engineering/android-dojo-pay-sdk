@@ -4,12 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
+import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.SingleLiveData
 import tech.dojo.pay.uisdk.domain.FetchPaymentIntentUseCase
 import tech.dojo.pay.uisdk.domain.FetchPaymentMethodsUseCase
 import tech.dojo.pay.uisdk.domain.IsSDKInitializedCorrectlyUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.UpdateDeviceWalletState
 import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.entities.DarkColorPalette
@@ -31,12 +35,15 @@ internal class PaymentFlowViewModel(
     private val fetchPaymentMethodsUseCase: FetchPaymentMethodsUseCase,
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val isSDKInitializedCorrectlyUseCase: IsSDKInitializedCorrectlyUseCase,
+    private val updateDeviceWalletState: UpdateDeviceWalletState,
 ) : ViewModel() {
 
+    val allowedCardsSchemes = SingleLiveData<List<CardsSchemes>>()
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
     private var currentCustomerId: String? = null
 
     init {
+        configureDojoSDKDebugConfig()
         viewModelScope.launch {
             try {
                 fetchPaymentIntentUseCase.fetchPaymentIntentWithPaymentType(paymentType, paymentId)
@@ -49,6 +56,18 @@ internal class PaymentFlowViewModel(
             } catch (error: Throwable) {
                 closeFlowWithInternalError()
             }
+        }
+    }
+
+    private fun configureDojoSDKDebugConfig() {
+        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
+            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
+        } else {
+            val dojoSDKDebugConfig = DojoSDKDebugConfig(
+                isSandboxWallet = isPaymentInSandBoxEnvironment(),
+                isSandboxIntent = isPaymentInSandBoxEnvironment(),
+            )
+            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 
@@ -78,6 +97,7 @@ internal class PaymentFlowViewModel(
             } else {
                 currentCustomerId = paymentIntentResult.result.customerId
                 if (paymentType == DojoPaymentType.PAYMENT_CARD) {
+                    allowedCardsSchemes.postValue(paymentIntentResult.result.supportedCardsSchemes)
                     fetchPaymentMethodsUseCase.fetchPaymentMethodsWithPaymentType(
                         paymentType,
                         paymentIntentResult.result.customerId ?: "",
@@ -98,6 +118,9 @@ internal class PaymentFlowViewModel(
         updatePaymentStateUseCase.updateGpayPaymentSate(isActivity)
     }
 
+    fun updateDeviceWalletState(isAvailable: Boolean) {
+        updateDeviceWalletState.updateDeviceWalletState(isAvailable)
+    }
     private fun closeFlowWithInternalError() {
         navigationEvent.value = PaymentFlowNavigationEvents.CLoseFlowWithInternalError
     }
