@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
-import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.AppBarIconType
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.MangePaymentMethodsState
@@ -16,9 +16,9 @@ import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.state.PaymentMeth
 
 internal class MangePaymentViewModel(
     private val deletePaymentMethodsUseCase: DeletePaymentMethodsUseCase,
-    private val observeWalletState: ObserveWalletState,
     private val observePaymentMethods: ObservePaymentMethods,
-    private val mapper: PaymentMethodItemViewEntityMapper
+    private val mapper: PaymentMethodItemViewEntityMapper,
+    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase,
 ) : ViewModel() {
 
     private val mutableState = MutableLiveData<MangePaymentMethodsState>()
@@ -37,17 +37,15 @@ internal class MangePaymentViewModel(
             currentSelectedMethod = currentSelectedMethod,
             showDialog = false,
             isInEditMode = false,
-            isDeleteItemInProgress = false
+            isDeleteItemInProgress = false,
         )
         viewModelScope.launch {
-            observeWalletState.observe().collect {
-                isWalletEnabled = it ?: false
-                observePaymentMethods.observe().collect { result ->
-                    currentState = currentState.copy(
-                        paymentMethodItems = mapper.apply(result, isWalletEnabled),
-                        isUsePaymentMethodButtonEnabled = isWalletEnabled
-                    )
-                }
+            isWalletEnabled = isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()
+            observePaymentMethods.observe().collect { result ->
+                currentState = currentState.copy(
+                    paymentMethodItems = mapper.apply(result, isWalletEnabled),
+                    isUsePaymentMethodButtonEnabled = isWalletEnabled,
+                )
             }
         }
         postStateToUI()
@@ -58,7 +56,7 @@ internal class MangePaymentViewModel(
         currentState = currentState
             .copy(
                 isUsePaymentMethodButtonEnabled = isWalletEnabled || currentSelectedMethod is PaymentMethodItemViewEntityItem.CardItemItem,
-                currentSelectedMethod = currentSelectedMethod
+                currentSelectedMethod = currentSelectedMethod,
             )
         postStateToUI()
     }
@@ -69,7 +67,7 @@ internal class MangePaymentViewModel(
         currentState = currentState.copy(
             appBarIconType = AppBarIconType.DELETE,
             isInEditMode = true,
-            currentSelectedMethod = currentSelectedMethod
+            currentSelectedMethod = currentSelectedMethod,
         )
         postStateToUI()
     }
@@ -83,7 +81,7 @@ internal class MangePaymentViewModel(
         currentState = currentState.copy(
             showDialog = false,
             appBarIconType = AppBarIconType.CLOSE,
-            isInEditMode = false
+            isInEditMode = false,
         )
         postStateToUI()
     }
@@ -94,7 +92,7 @@ internal class MangePaymentViewModel(
         deletePaymentMethodsUseCase.deletePaymentMethods(
             paymentMethodId = currentDeletedMethod?.id ?: "",
             onDeletePaymentMethodsSuccess = { deleteItemFromUi() },
-            onDeletePaymentMethodsFailed = { deleteItemFromUi() }
+            onDeletePaymentMethodsFailed = { deleteItemFromUi() },
         )
     }
 
@@ -106,11 +104,11 @@ internal class MangePaymentViewModel(
             appBarIconType = AppBarIconType.CLOSE,
             isInEditMode = false,
             isUsePaymentMethodButtonEnabled = false,
-            isDeleteItemInProgress = false
+            isDeleteItemInProgress = false,
         )
         if (newList.isEmpty()) {
             currentState = currentState.copy(
-                currentSelectedMethod = PaymentMethodItemViewEntityItem.NoItem
+                currentSelectedMethod = PaymentMethodItemViewEntityItem.NoItem,
             )
         }
         postStateToUI()
