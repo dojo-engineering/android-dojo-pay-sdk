@@ -9,7 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
@@ -22,10 +21,9 @@ import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
+import tech.dojo.pay.uisdk.domain.MakeVTPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
-import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
-import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
@@ -58,15 +56,14 @@ class VirtualTerminalViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private var observePaymentIntent: ObservePaymentIntent = mock()
     private var observePaymentStatus: ObservePaymentStatus = mock()
-    private var updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
     private var getSupportedCountriesUseCase: GetSupportedCountriesUseCase = mock()
     private var virtualTerminalValidator: VirtualTerminalValidator = mock()
     private var virtualTerminalHandler: DojoVirtualTerminalHandler = mock()
     private var fullCardPaymentPayloadMapper: FullCardPaymentPayloadMapper = mock()
     private var virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper = mock()
-    private var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase = mock()
     private var getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow = mock()
     private var navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit = mock()
+    private val makeVTPaymentUseCase: MakeVTPaymentUseCase = mock()
 
     @Test
     fun `when initialize view model with Success payment intent with billing address only then content state should be emitted with billing address only`() =
@@ -87,14 +84,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -138,14 +133,12 @@ class VirtualTerminalViewModelTest {
             VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
             // assert
@@ -170,14 +163,12 @@ class VirtualTerminalViewModelTest {
             VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
             // assert
@@ -254,14 +245,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -371,14 +360,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -434,14 +421,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -603,14 +588,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -666,14 +649,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -783,14 +764,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -846,14 +825,12 @@ class VirtualTerminalViewModelTest {
             val viewModel = VirtualTerminalViewModel(
                 observePaymentIntent = observePaymentIntent,
                 observePaymentStatus = observePaymentStatus,
-                updatePaymentStateUseCase = updatePaymentStateUseCase,
                 getSupportedCountriesUseCase = getSupportedCountriesUseCase,
                 virtualTerminalValidator = virtualTerminalValidator,
                 virtualTerminalHandler = virtualTerminalHandler,
                 fullCardPaymentPayloadMapper = fullCardPaymentPayloadMapper,
                 virtualTerminalViewEntityMapper = virtualTerminalViewEntityMapper,
-                refreshPaymentIntentUseCase = refreshPaymentIntentUseCase,
-                getRefreshedPaymentTokenFlow = getRefreshedPaymentTokenFlow,
+                makeVTPaymentUseCase = makeVTPaymentUseCase,
                 navigateToCardResult = navigateToCardResult,
             )
 
@@ -1309,7 +1286,7 @@ class VirtualTerminalViewModelTest {
         }
 
     @Test
-    fun `when onPayClicked called with updated Token then loading state should be emitted and ,refreshPaymentIntent from refreshPaymentIntentUseCase and executeVirtualTerminalPayment from handler should be called `() =
+    fun `when onPayClicked called should call makeVTPayment from makeVTPaymentUseCase`() =
         runTest {
             // arrange
             val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
@@ -1327,12 +1304,6 @@ class VirtualTerminalViewModelTest {
                 payButtonSection = PayButtonViewState(
                     isEnabled = true,
                     isLoading = false,
-                ),
-            )
-            val expected = initPaymentIntent.copy(
-                payButtonSection = PayButtonViewState(
-                    isEnabled = true,
-                    isLoading = true,
                 ),
             )
             given(
@@ -1353,57 +1324,7 @@ class VirtualTerminalViewModelTest {
             // act
             viewModel.onPayClicked()
             // assert
-            Assert.assertEquals(expected, viewModel.state.value)
-            verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
-            verify(virtualTerminalHandler).executeVirtualTerminalPayment(
-                paymentIntentDomainEntity.paymentToken,
-                address,
-            )
-        }
-
-    @Test
-    fun `when onPayClicked called failure from  updated Token then , viewModel  should call navigateToCardResult`() =
-        runTest {
-            // arrange
-            val address = DojoCardPaymentPayLoad.FullCardPaymentPayload(
-                DojoCardDetails(
-                    cardNumber = "cardNumber",
-                ),
-            )
-            val initPaymentIntent = virtualTerminalViewState.copy(
-                shippingAddressSection = virtualTerminalViewState.shippingAddressSection?.updateIsVisible(
-                    true,
-                ),
-                billingAddressSection = virtualTerminalViewState.billingAddressSection?.updateIsVisible(
-                    true,
-                ),
-                payButtonSection = PayButtonViewState(
-                    isEnabled = true,
-                    isLoading = false,
-                ),
-            )
-            given(
-                virtualTerminalValidator.isAllDataValid(any()),
-            ).willReturn(true)
-
-            given(
-                fullCardPaymentPayloadMapper.apply(any()),
-            ).willReturn(address)
-            val captor = argumentCaptor<DojoPaymentResult>()
-            val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
-            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-            given(getRefreshedPaymentTokenFlow.getUpdatedPaymentTokenFlow()).willReturn(
-                MutableStateFlow(
-                    RefreshPaymentIntentResult.RefreshFailure,
-                ),
-            )
-            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
-            // act
-            viewModel.onPayClicked()
-            // assert
-            verify(refreshPaymentIntentUseCase).refreshPaymentIntent(paymentIntentDomainEntity.id)
-            verify(navigateToCardResult).invoke(captor.capture())
-            Assert.assertEquals(DojoPaymentResult.SDK_INTERNAL_ERROR, captor.firstValue)
+            verify(makeVTPaymentUseCase).makeVTPayment(any(), any())
         }
 
     private fun initViewModelWithPaymentIntent(initPaymentIntent: VirtualTerminalViewState): VirtualTerminalViewModel {
@@ -1425,13 +1346,13 @@ class VirtualTerminalViewModelTest {
         return VirtualTerminalViewModel(
             observePaymentIntent,
             observePaymentStatus,
-            updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             virtualTerminalValidator,
             virtualTerminalHandler,
             fullCardPaymentPayloadMapper,
             virtualTerminalViewEntityMapper,
-            refreshPaymentIntentUseCase, getRefreshedPaymentTokenFlow, navigateToCardResult,
+            makeVTPaymentUseCase,
+            navigateToCardResult,
         )
     }
 }

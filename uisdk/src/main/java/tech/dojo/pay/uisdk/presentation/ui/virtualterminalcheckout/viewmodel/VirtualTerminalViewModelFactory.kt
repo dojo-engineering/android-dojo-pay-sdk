@@ -11,6 +11,7 @@ import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesDataSource
 import tech.dojo.pay.uisdk.data.supportedcountries.SupportedCountriesRepository
 import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
+import tech.dojo.pay.uisdk.domain.MakeVTPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
@@ -69,18 +70,20 @@ internal class VirtualTerminalViewModelFactory(
                 paymentType,
             )
         val getRefreshedPaymentTokenFlow = GetRefreshedPaymentTokenFlow(repo = refreshPaymentIntentRepository)
-
+        val makeVTPaymentUseCase = MakeVTPaymentUseCase(
+            updatePaymentStateUseCase,
+            getRefreshedPaymentTokenFlow,
+            refreshPaymentIntentUseCase,
+        )
         return VirtualTerminalViewModel(
             observePaymentIntent,
             observePaymentStatus,
-            updatePaymentStateUseCase,
             getSupportedCountriesUseCase,
             virtualTerminalValidator,
             virtualTerminalHandler,
             fullCardPaymentPayloadMapper,
             virtualTerminalViewEntityMapper,
-            refreshPaymentIntentUseCase,
-            getRefreshedPaymentTokenFlow,
+            makeVTPaymentUseCase,
             navigateToCardResult,
         ) as T
     }
