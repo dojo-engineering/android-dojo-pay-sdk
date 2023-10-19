@@ -8,20 +8,18 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.uisdk.domain.entities.MakeCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
 class MakeCardPaymentUseCaseTest {
-    private lateinit var updatePaymentStateUseCase: UpdatePaymentStateUseCase
-    private lateinit var getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow
-    private lateinit var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
+    private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow = mock()
+    private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase = mock()
     private lateinit var makeCardPaymentUseCase: MakeCardPaymentUseCase
 
     @Before
     fun setup() {
-        updatePaymentStateUseCase = mock()
-        getRefreshedPaymentTokenFlow = mock()
-        refreshPaymentIntentUseCase = mock()
         makeCardPaymentUseCase = MakeCardPaymentUseCase(
             updatePaymentStateUseCase,
             getRefreshedPaymentTokenFlow,
@@ -30,7 +28,7 @@ class MakeCardPaymentUseCaseTest {
     }
 
     @Test
-    fun `calling makeCardPayment with successful refresh token should start payment process and updatePaymentSate`() =
+    fun `when calling makeCardPayment with successful refresh token should start payment process and updatePaymentSate`() =
         runTest {
             // arrange
             val params = MakeCardPaymentParams(
@@ -46,12 +44,15 @@ class MakeCardPaymentUseCaseTest {
             // act
             makeCardPaymentUseCase.makeCardPayment(params, {})
             // assert
+            verify(getRefreshedPaymentTokenFlow).getUpdatedPaymentTokenFlow()
             verify(updatePaymentStateUseCase).updatePaymentSate(true)
             verify(params.dojoCardPaymentHandler).executeCardPayment(any(), any())
+            verifyNoMoreInteractions(updatePaymentStateUseCase)
+            verifyNoMoreInteractions(getRefreshedPaymentTokenFlow)
         }
 
     @Test
-    fun `calling makeCardPayment with RefreshFailure for  token should not start payment  and run onUpdateTokenError`() =
+    fun `when calling makeCardPayment with RefreshFailure for  token should not start payment  and run onUpdateTokenError`() =
         runTest {
             // arrange
             val params = MakeCardPaymentParams(

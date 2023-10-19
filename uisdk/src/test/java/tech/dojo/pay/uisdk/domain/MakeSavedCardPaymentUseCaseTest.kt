@@ -8,6 +8,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import tech.dojo.pay.uisdk.domain.entities.MakeSavedCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
@@ -50,6 +51,9 @@ class MakeSavedCardPaymentUseCaseTest {
             // assert
             verify(updatePaymentStateUseCase).updatePaymentSate(true)
             verify(params.savedCardPaymentHandler).executeSavedCardPayment(any(), any())
+            verify(getRefreshedPaymentTokenFlow).getUpdatedPaymentTokenFlow()
+            verifyNoMoreInteractions(updatePaymentStateUseCase)
+            verifyNoMoreInteractions(getRefreshedPaymentTokenFlow)
         }
 
     @Test

@@ -12,16 +12,13 @@ import tech.dojo.pay.uisdk.domain.entities.MakeVTPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
 class MakeVTPaymentUseCaseTest {
-    private lateinit var updatePaymentStateUseCase: UpdatePaymentStateUseCase
-    private lateinit var getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow
-    private lateinit var refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase
+    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase = mock()
+    private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow = mock()
+    private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase = mock()
     private lateinit var makeVTPaymentUseCase: MakeVTPaymentUseCase
 
     @Before
     fun setup() {
-        updatePaymentStateUseCase = mock()
-        getRefreshedPaymentTokenFlow = mock()
-        refreshPaymentIntentUseCase = mock()
         makeVTPaymentUseCase = MakeVTPaymentUseCase(
             updatePaymentStateUseCase,
             getRefreshedPaymentTokenFlow,
@@ -30,7 +27,7 @@ class MakeVTPaymentUseCaseTest {
     }
 
     @Test
-    fun `calling makeVTPayment with successful refresh token should start payment process and updatePaymentSate`() =
+    fun `when calling makeVTPayment with successful refresh token should start payment process and updatePaymentSate`() =
         runTest {
             // arrange
             val params = MakeVTPaymentParams(
@@ -51,7 +48,7 @@ class MakeVTPaymentUseCaseTest {
         }
 
     @Test
-    fun `calling makePaymentWithUpdatedToken with RefreshFailure for  token should not start payment  and run onUpdateTokenError`() =
+    fun `when calling makePaymentWithUpdatedToken with RefreshFailure for  token should not start payment  and run onUpdateTokenError`() =
         runTest {
             // arrange
             val params = MakeVTPaymentParams(

@@ -57,7 +57,7 @@ class MakeGpayPaymentUseCaseTest {
         }
 
     @Test
-    fun `calling makePaymentWithUpdatedToken with RefreshFailure for token should not start payment and run onUpdateTokenError`() =
+    fun `when calling makePaymentWithUpdatedToken with RefreshFailure for token should not start payment and run onUpdateTokenError`() =
         runTest {
             // arrange
             val params = MakeGpayPaymentParams(
