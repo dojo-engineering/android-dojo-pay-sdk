@@ -19,6 +19,7 @@ import tech.dojo.pay.uisdk.domain.MakeSavedCardPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
+import tech.dojo.pay.uisdk.domain.entities.FetchPaymentMethodsResult
 import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.MakeSavedCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -113,7 +114,7 @@ internal class PaymentMethodCheckoutViewModel(
                 observePaymentIntent.observePaymentIntent(),
                 observePaymentMethods.observe(),
             ) { paymentIntentResult, paymentMethods ->
-                if (paymentIntentResult is PaymentIntentResult.Success) {
+                if (paymentIntentResult is PaymentIntentResult.Success && paymentMethods !is FetchPaymentMethodsResult.Fetching) {
                     paymentIntent = paymentIntentResult.result
                     currentState = viewEntityMapper.mapToViewState(
                         paymentMethods,
