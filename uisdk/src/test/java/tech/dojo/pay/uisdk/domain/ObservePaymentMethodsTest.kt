@@ -12,7 +12,7 @@ class ObservePaymentMethodsTest {
     @Test
     fun `observe should return payment methods steam`() {
         // given
-        val expectedPaymentMethods: MutableStateFlow<FetchPaymentMethodsResult?> = MutableStateFlow(null)
+        val expectedPaymentMethods: MutableStateFlow<FetchPaymentMethodsResult> = MutableStateFlow(FetchPaymentMethodsResult.Fetching)
         val repository = mockk<PaymentMethodsRepository>()
         every { repository.observePaymentMethods() } returns (expectedPaymentMethods)
         val useCase = ObservePaymentMethods(repository)

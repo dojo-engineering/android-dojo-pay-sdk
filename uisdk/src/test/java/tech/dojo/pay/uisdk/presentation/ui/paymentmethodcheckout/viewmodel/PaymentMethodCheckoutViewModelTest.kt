@@ -121,7 +121,7 @@ class PaymentMethodCheckoutViewModelTest {
                 PaymentIntentResult.Success(result = intentResult),
             )
             val paymentMethodsResul: PaymentMethodsDomainEntity = mock()
-            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult?> =
+            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult> =
                 MutableStateFlow(
                     FetchPaymentMethodsResult.Success(paymentMethodsResul),
                 )
@@ -270,7 +270,7 @@ class PaymentMethodCheckoutViewModelTest {
                 PaymentIntentResult.Success(result = intentResult),
             )
             val paymentMethodsResul: PaymentMethodsDomainEntity = mock()
-            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult?> =
+            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult> =
                 MutableStateFlow(
                     FetchPaymentMethodsResult.Success(paymentMethodsResul),
                 )
@@ -343,7 +343,7 @@ class PaymentMethodCheckoutViewModelTest {
                 PaymentIntentResult.Success(result = intentResult),
             )
             val paymentMethodsResul: PaymentMethodsDomainEntity = mock()
-            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult?> =
+            val paymentMethodFakeFlow: MutableStateFlow<FetchPaymentMethodsResult> =
                 MutableStateFlow(
                     FetchPaymentMethodsResult.Success(paymentMethodsResul),
                 )

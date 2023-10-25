@@ -46,8 +46,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test init state`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         fetchPaymentMethodsStream.tryEmit(FetchPaymentMethodsResult.Failure)
@@ -75,8 +75,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when wallet is enabled and saved payment methods exists`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
@@ -127,8 +127,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when wallet is disabled and saved payment methods exists`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(false)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
@@ -178,8 +178,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when wallet is enabled and saved payment methods is empty`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(items = listOf())
@@ -213,8 +213,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when wallet is disabled and saved payment methods is empty`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(false)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(items = listOf())
@@ -246,8 +246,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when user select new payment method`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
@@ -305,8 +305,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when user enter user long click on item `() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
@@ -364,8 +364,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when user click on delete icon`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
@@ -424,8 +424,8 @@ internal class MangePaymentViewModelTest {
     @Test
     fun `test state when user click yes on the delete dialog`() = runTest {
         // arrange
-        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult?> =
-            MutableStateFlow(null)
+        val fetchPaymentMethodsStream: MutableStateFlow<FetchPaymentMethodsResult> =
+            MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
         val paymentMethodsDomainEntity = PaymentMethodsDomainEntity(
