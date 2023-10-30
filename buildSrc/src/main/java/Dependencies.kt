@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.com.google.gson.Gson
+
 
 object Sdk {
     const val MIN_SDK_VERSION = 21
@@ -22,7 +22,7 @@ object Versions {
     const val ESPRESSO_CORE = "3.4.0"
     const val JUNIT = "4.13.2"
     const val KTLINT = "0.43.2"
-    const val COMPOSE_VERSION = "1.4.2"
+    const val COMPOSE_VERSION = "1.5.0"
     const val COMPOSE_ANIMATION_VERSION = "1.5.0-alpha01"
     const val KOTLIN = "1.8.1"
     const val ACCOMPANIST = "0.23.0"
@@ -36,13 +36,13 @@ object Versions {
     const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
     const val TIMBER = "5.0.1"
     const val GSON = "2.8.7"
-    const val csvReader= "1.6.0"
-    const val ANDROIDX_WINDOW= "1.0.0"
-    const val RETROFIT= "2.9.0"
-    const val GPAY= "19.1.0"
-    const val JSON_TEST= "20180813"
-    const val CARDINAL= "2.2.7-3"
-    const val MOCKK="1.13.4"
+    const val csvReader = "1.6.0"
+    const val ANDROIDX_WINDOW = "1.0.0"
+    const val RETROFIT = "2.9.0"
+    const val GPAY = "19.1.0"
+    const val JSON_TEST = "20180813"
+    const val CARDINAL = "2.2.7-3"
+    const val MOCKK = "1.13.4"
 }
 
 object BuildPluginsVersion {
@@ -61,7 +61,6 @@ object Accompanist {
 object MOCKITO {
     const val MOCKITO_KOTLIN = "org.mockito.kotlin:mockito-kotlin:${Versions.MOCKITO}"
     const val MOCKITO_INLINE = "org.mockito:mockito-inline:${Versions.MOCKITO_IN_LINE}"
-
 }
 
 object Coroutines {
@@ -69,7 +68,6 @@ object Coroutines {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.COROUTINES}"
     const val COROUTINES_Test =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.COROUTINES}"
-
 }
 
 object DojoPayCore {
@@ -96,9 +94,8 @@ object Navigation {
         "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
     const val NavigationAnimationCompose =
         "com.google.accompanist:accompanist-navigation-animation:${Versions.COMPOSE_NAVIGATION_ANIMATION}"
-
 }
-object CsvReader{
+object CsvReader {
     const val csvReader = "com.github.doyaaaaaken:kotlin-csv-jvm:${Versions.csvReader}"
 }
 object AndroidX {
@@ -108,7 +105,6 @@ object AndroidX {
     const val VIEWBINDING = "androidx.databinding:viewbinding:${Versions.VIEWBINDING}"
     const val CORE_TESTING_ARCH = "androidx.arch.core:core-testing:2.1.0"
     const val WINDOW = "androidx.window:window:${Versions.ANDROIDX_WINDOW}"
-
 
     object Activity {
 
@@ -124,7 +120,6 @@ object AndroidX {
 
         // Compose Integration with activities
         const val FRAGMENT = "androidx.fragment:fragment-ktx:${Versions.FRAGMENT}"
-
     }
 
     object Lifecycle {
@@ -134,7 +129,6 @@ object AndroidX {
             "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.VIEWMODEL_COMPOSE}"
 
         const val VIEWMODEL = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.VIEWMODEL}"
-
     }
 
     object Compose {
@@ -183,26 +177,22 @@ object AndroidX {
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }
 
-
-
     object Logging {
         const val TIMBER = "com.jakewharton.timber:timber:${Versions.TIMBER}"
     }
-
-
 }
 object Networking {
-    const val RETROFIT_CORE= "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
-    const val CONVERTER_GSON= "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT}"
-    const val CONVERTER_SCALARS="com.squareup.retrofit2:converter-scalars:${Versions.RETROFIT}"
+    const val RETROFIT_CORE = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
+    const val CONVERTER_GSON = "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT}"
+    const val CONVERTER_SCALARS = "com.squareup.retrofit2:converter-scalars:${Versions.RETROFIT}"
 }
 
-object Wallet{
-    const val GPAY="com.google.android.gms:play-services-wallet:${Versions.GPAY}"
+object Wallet {
+    const val GPAY = "com.google.android.gms:play-services-wallet:${Versions.GPAY}"
 }
 
-object Threeds{
-    const val Cardinal="org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:${Versions.CARDINAL}"
+object Threeds {
+    const val Cardinal = "org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:${Versions.CARDINAL}"
 }
 object TestingLib {
 
@@ -210,6 +200,5 @@ object TestingLib {
 
     const val JSON_TEST = "org.json:json:${Versions.JSON_TEST}"
 
-    const val MOCKK="io.mockk:mockk:${Versions.MOCKK}"
-
+    const val MOCKK = "io.mockk:mockk:${Versions.MOCKK}"
 }

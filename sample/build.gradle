@@ -6,7 +6,7 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "tech.dojo.pay.sdksample"
