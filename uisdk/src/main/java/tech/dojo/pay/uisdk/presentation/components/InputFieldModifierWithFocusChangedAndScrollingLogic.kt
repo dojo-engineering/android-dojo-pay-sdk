@@ -24,7 +24,7 @@ internal fun Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
     onValidate: () -> Unit,
 ): Modifier {
     var hasBeenFocused by remember { mutableStateOf(initialHasBeenFocused) }
-    val scrollOffsets = remember { mutableListOf<Float>() }
+    val scrollOffsets by remember { mutableStateOf(mutableListOf<Float>()) }
     var inputFieldLabelHeightInPx by remember { mutableStateOf(0) }
     return this.onFocusChanged { focusState ->
         if (focusState.isFocused) {

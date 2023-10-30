@@ -24,7 +24,7 @@ object Versions {
     const val KTLINT = "0.43.2"
     const val COMPOSE_VERSION = "1.5.0"
     const val COMPOSE_ANIMATION_VERSION = "1.5.0-alpha01"
-    const val KOTLIN = "1.8.1"
+    const val KOTLIN = "1.9.0"
     const val ACCOMPANIST = "0.23.0"
     const val COROUTINES = "1.6.1"
     const val MATERIAL = "1.5.0"
@@ -75,7 +75,6 @@ object DojoPayCore {
 }
 
 object Kotlin {
-
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}"
     const val reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.KOTLIN}"
     const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.KOTLIN}"
