@@ -41,7 +41,7 @@ object Versions {
     const val RETROFIT = "2.9.0"
     const val GPAY = "19.1.0"
     const val JSON_TEST = "20180813"
-    const val CARDINAL = "2.2.7-3"
+    const val CARDINAL = "2.2.7-5"
     const val MOCKK = "1.13.4"
 }
 
