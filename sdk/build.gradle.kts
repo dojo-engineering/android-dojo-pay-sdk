@@ -1,4 +1,4 @@
-version = "1.6.0"
+version = "1.6.1"
 
 plugins {
     id("com.android.library")
@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -34,7 +34,7 @@ android {
     kotlinOptions {
         jvmTarget = "11"
         freeCompilerArgs = listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlin.RequiresOptIn",
         )
     }
     testOptions {
@@ -53,8 +53,7 @@ dependencies {
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
-//    implementation(Threeds.Cardinal)
-    implementation(project(":threeds"))
+    implementation(Threeds.Cardinal)
     implementation(Coroutines.COROUTINES_CORE)
     testImplementation(TestingLib.JUNIT)
     testImplementation(MOCKITO.MOCKITO_KOTLIN)

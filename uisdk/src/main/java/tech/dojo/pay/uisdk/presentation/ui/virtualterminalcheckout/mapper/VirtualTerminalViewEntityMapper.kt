@@ -12,32 +12,31 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.PayButt
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.PaymentDetailsViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.ShippingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.VirtualTerminalViewState
-import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.FIRST_SECTION_OFF_SET_DP
-import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.SECOND_SECTION_WITH_BILLING_OFF_SET_DP
-import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
 import java.util.Currency
 
 internal class VirtualTerminalViewEntityMapper(
     private val supportedCountriesViewEntityMapper: SupportedCountriesViewEntityMapper,
-    private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper
+    private val allowedPaymentMethodsViewEntityMapper: AllowedPaymentMethodsViewEntityMapper,
 ) {
 
     fun apply(
         paymentIntentResult: PaymentIntentResult.Success,
-        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>
+        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>,
     ) = VirtualTerminalViewState(
         isLoading = false,
         paymentDetailsSection = getPaymentDetailsSectionWithPaymentIntent(
-            paymentIntentResult
+            paymentIntentResult,
         ),
         shippingAddressSection = getShippingAddressSectionWithPaymentIntent(
-            paymentIntentResult, supportedCountriesDomainEntity
+            paymentIntentResult,
+            supportedCountriesDomainEntity,
         ),
         billingAddressSection = getBillingAddressSectionWithPaymentIntent(
-            paymentIntentResult, supportedCountriesDomainEntity
+            paymentIntentResult,
+            supportedCountriesDomainEntity,
         ),
         cardDetailsSection = getCardDetailsSectionWithPaymentIntent(paymentIntentResult),
-        payButtonSection = PayButtonViewState()
+        payButtonSection = PayButtonViewState(),
     )
 
     private fun getPaymentDetailsSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
@@ -45,12 +44,12 @@ internal class VirtualTerminalViewEntityMapper(
             totalAmount = paymentIntentResult.result.amount.valueString,
             amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
             merchantName = paymentIntentResult.result.merchantName,
-            orderId = paymentIntentResult.result.orderId
+            orderId = paymentIntentResult.result.orderId,
         )
 
     private fun getShippingAddressSectionWithPaymentIntent(
         paymentIntentResult: PaymentIntentResult.Success,
-        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>
+        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>,
     ): ShippingAddressViewState {
         val countryList = getSupportedCountriesList(supportedCountriesDomainEntity)
         val currentSelectedCountry = if (countryList.isNotEmpty()) {
@@ -60,24 +59,21 @@ internal class VirtualTerminalViewEntityMapper(
         }
         return ShippingAddressViewState(
             isVisible = paymentIntentResult.result.collectionShippingAddressRequired,
-            itemPoissonOffset = if (paymentIntentResult.result.collectionShippingAddressRequired) {
-                FIRST_SECTION_OFF_SET_DP
-            } else {
-                0
-            },
             supportedCountriesList = countryList,
-            currentSelectedCountry = currentSelectedCountry
+            currentSelectedCountry = currentSelectedCountry,
         )
     }
 
     private fun getBillingAddressSectionWithPaymentIntent(
         paymentIntentResult: PaymentIntentResult.Success,
-        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>
+        supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>,
     ): BillingAddressViewState {
         val isSectionVisible =
             if (paymentIntentResult.result.collectionShippingAddressRequired && paymentIntentResult.result.collectionBillingAddressRequired) {
                 false
-            } else paymentIntentResult.result.collectionBillingAddressRequired
+            } else {
+                paymentIntentResult.result.collectionBillingAddressRequired
+            }
         val countryList = getSupportedCountriesList(supportedCountriesDomainEntity)
         val currentSelectedCountry = if (countryList.isNotEmpty()) {
             countryList[0]
@@ -86,11 +82,6 @@ internal class VirtualTerminalViewEntityMapper(
         }
         return BillingAddressViewState(
             isVisible = isSectionVisible,
-            itemPoissonOffset = if (isSectionVisible) {
-                FIRST_SECTION_OFF_SET_DP
-            } else {
-                0
-            },
             supportedCountriesList = countryList,
             currentSelectedCountry = currentSelectedCountry,
         )
@@ -99,23 +90,17 @@ internal class VirtualTerminalViewEntityMapper(
     private fun getCardDetailsSectionWithPaymentIntent(paymentIntentResult: PaymentIntentResult.Success) =
         CardDetailsViewState(
             isVisible = true,
-            itemPoissonOffset = if (!paymentIntentResult.result.collectionShippingAddressRequired && !paymentIntentResult.result.collectionBillingAddressRequired) {
-                FIRST_SECTION_OFF_SET_DP
-            } else if (paymentIntentResult.result.collectionShippingAddressRequired) {
-                SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP
-            } else {
-                SECOND_SECTION_WITH_BILLING_OFF_SET_DP
-            },
             emailInputField = InputFieldState(
-                value = "", isVisible = paymentIntentResult.result.collectionEmailRequired
+                value = "",
+                isVisible = paymentIntentResult.result.collectionEmailRequired,
             ),
             cardHolderInputField = InputFieldState(value = ""),
             cardNumberInputField = InputFieldState(value = ""),
             cardExpireDateInputField = InputFieldState(value = ""),
             cvvInputFieldState = InputFieldState(value = ""),
             allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
-                paymentIntentResult.result.supportedCardsSchemes
-            )
+                paymentIntentResult.result.supportedCardsSchemes,
+            ),
         )
 
     private fun getSupportedCountriesList(supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>): List<SupportedCountriesViewEntity> {

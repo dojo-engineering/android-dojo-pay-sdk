@@ -9,7 +9,7 @@ import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApiBuilder
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentParams
 
 internal class DojoVirtualTerminalViewModelFactory(private val arguments: Bundle?) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val args = requireNotNull(arguments)
         val params =
             args.getSerializable(DojoCardPaymentResultContract.KEY_PARAMS) as DojoCardPaymentParams

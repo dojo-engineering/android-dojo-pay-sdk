@@ -1,8 +1,9 @@
 package tech.dojo.pay.sdk.card.data.entities
 
+import androidx.annotation.Keep
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoShippingDetails
-
+@Keep
 internal data class PaymentDetails(
     val cV2: String?,
     val savePaymentMethod: Boolean? = null, // this is for the SetUp Intent payments it needs to be true

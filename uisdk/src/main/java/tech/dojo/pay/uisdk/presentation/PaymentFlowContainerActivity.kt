@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
-import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
@@ -80,9 +80,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lockToPortrait()
-        configureDojoSDKDebugConfig()
         configureDojoPayCore()
+        disableScreenRecord()
+        lockToPortrait()
         setContent {
             DojoTheme {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
@@ -117,13 +117,21 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
+    private fun disableScreenRecord() {
+        if (!paymentFlowViewModel.isPaymentInSandBoxEnvironment()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE,
+            )
+        }
+    }
+
     @SuppressLint("SourceLockedOrientationActivity")
     private fun lockToPortrait() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureDojoPayCore() {
-        configureDojoSDKDebugConfig()
         gpayPaymentHandler = DojoSdk.createGPayHandler(this) {
             paymentFlowViewModel.updateGpayPaymentState(false)
             paymentFlowViewModel.navigateToPaymentResult(it)
@@ -139,18 +147,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         virtualTerminalHandler = DojoSdk.createVirtualTerminalPaymentHandler(this) {
             paymentFlowViewModel.updatePaymentState(false)
             paymentFlowViewModel.navigateToPaymentResult(it)
-        }
-    }
-
-    private fun configureDojoSDKDebugConfig() {
-        if (DojoSDKDropInUI.dojoSDKDebugConfig != null) {
-            DojoSDKDropInUI.dojoSDKDebugConfig?.let { DojoSdk.dojoSDKDebugConfig = it }
-        } else {
-            val dojoSDKDebugConfig = DojoSDKDebugConfig(
-                isSandboxWallet = paymentFlowViewModel.isPaymentInSandBoxEnvironment(),
-                isSandboxIntent = paymentFlowViewModel.isPaymentInSandBoxEnvironment(),
-            )
-            DojoSdk.dojoSDKDebugConfig = dojoSDKDebugConfig
         }
     }
 

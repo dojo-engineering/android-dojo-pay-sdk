@@ -17,8 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -29,89 +29,88 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.DescriptionField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndValidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.ShippingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun ShippingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.shippingAddressSection?.isVisible == true) {
+        var parentPosition by remember { mutableStateOf(0f) }
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.background(DojoTheme.colors.primarySurfaceBackgroundColor)
+                .onGloballyPositioned { parentPosition = it.positionInParent().y },
         ) {
             HeaderTitle()
             NameField(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
-                keyboardController
+                keyboardController,
+                parentPosition,
             )
             Address1Field(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
-                keyboardController
+                keyboardController,
+                parentPosition,
             )
             Address2Field(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
-                keyboardController
+                keyboardController,
+                parentPosition,
             )
             CityField(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
-                keyboardController
+                keyboardController,
+                parentPosition,
             )
             PostalCodeField(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
                 scrollState,
-                keyboardController
+                keyboardController,
+                parentPosition,
             )
             CountryField(
                 state.shippingAddressSection,
-                viewModel
+                viewModel,
             )
             DeliveryNotesField(
                 state.shippingAddressSection,
                 viewModel,
                 coroutineScope,
-                scrollToPosition,
-                scrollState
+                scrollState,
+                parentPosition,
             )
             AddressesAreTheSameCheckBox(
                 state.shippingAddressSection,
-                viewModel
+                viewModel,
             )
         }
     }
@@ -124,7 +123,7 @@ private fun HeaderTitle() {
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
         style = DojoTheme.typography.h6.medium,
-        color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high)
+        color = DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.high),
     )
 }
 
@@ -134,31 +133,19 @@ private fun NameField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
-    var isTextNotFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + NORMAL_FILED_SIZE_DP.dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier.onFocusChanged {
-            isTextNotFocused = if (it.isFocused) {
-                coroutineScope.launch {
-                    delay(300)
-                    scrollState.animateScrollTo(
-                        scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                    )
-                }
-                true
-            } else {
-                if (isTextNotFocused) {
-                    viewModel.onValidateShippingNameField(shippingAddressSection.name.value)
-                }
-                false
-            }
-        },
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = { viewModel.onValidateShippingNameField(shippingAddressSection.name.value) },
+        ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = shippingAddressSection.name.value,
@@ -167,7 +154,7 @@ private fun NameField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onNameFieldChanged(it) },
-        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_name)) }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_name)) },
     )
 }
 
@@ -177,35 +164,24 @@ private fun Address1Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
-    var isTextNotFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (2 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier
-            .onFocusChanged {
-                isTextNotFocused = if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                        )
-                    }
-                    true
-                } else {
-                    if (isTextNotFocused) {
-                        viewModel.onValidateAddress1Field(
-                            shippingAddressSection.addressLine1.value, true
-                        )
-                    }
-                    false
-                }
-            }
-            .padding(top = 16.dp),
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = {
+                viewModel.onValidateAddress1Field(
+                    shippingAddressSection.addressLine1.value,
+                    true,
+                )
+            },
+        ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = shippingAddressSection.addressLine1.value,
@@ -214,7 +190,7 @@ private fun Address1Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress1FieldChanged(it, true) },
-        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_1)) }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_1)) },
     )
 }
 
@@ -224,31 +200,31 @@ private fun Address2Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (3 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_2))
         append(" ")
-        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) {
+            append("(")
+            append(
+                stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional),
+            )
+            append(")")
+        }
     }
+
     InputFieldWithErrorMessage(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .onFocusChanged {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                        )
-                    }
-                }
-            },
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = {},
+        ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = shippingAddressSection.addressLine2.value,
@@ -257,7 +233,7 @@ private fun Address2Field(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onAddress2FieldChanged(it, true) },
-        label = label
+        label = label,
     )
 }
 
@@ -267,33 +243,21 @@ private fun CityField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
-    var isTextNotFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (4 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier
-            .onFocusChanged {
-                isTextNotFocused = if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                        )
-                    }
-                    true
-                } else {
-                    if (isTextNotFocused) {
-                        viewModel.onValidateCityField(shippingAddressSection.city.value, true)
-                    }
-                    false
-                }
-            }
-            .padding(top = 16.dp),
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = {
+                viewModel.onValidateCityField(shippingAddressSection.city.value, true)
+            },
+        ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = shippingAddressSection.city.value,
@@ -302,7 +266,7 @@ private fun CityField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onCityFieldChanged(it, true) },
-        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_city)) }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_city)) },
     )
 }
 
@@ -312,35 +276,24 @@ private fun PostalCodeField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    parentPosition: Float,
 ) {
-    var isTextNotFocused by remember { mutableStateOf(false) }
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (5 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     InputFieldWithErrorMessage(
-        modifier = Modifier
-            .onFocusChanged {
-                isTextNotFocused = if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                        )
-                    }
-                    true
-                } else {
-                    if (isTextNotFocused) {
-                        viewModel.onValidatePostalCodeField(
-                            shippingAddressSection.postalCode.value, true
-                        )
-                    }
-                    false
-                }
-            }
-            .padding(top = 16.dp),
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = {
+                viewModel.onValidatePostalCodeField(
+                    shippingAddressSection.postalCode.value,
+                    true,
+                )
+            },
+        ).padding(top = 16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         value = shippingAddressSection.postalCode.value,
@@ -349,21 +302,21 @@ private fun PostalCodeField(
             AnnotatedString(stringResource(id = it))
         },
         onValueChange = { viewModel.onSPostalCodeFieldChanged(it, true) },
-        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_postcode)) }
+        label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_postcode)) },
     )
 }
 
 @Composable
 private fun CountryField(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
 ) {
     CountrySelectorField(
         modifier = Modifier
             .padding(top = 16.dp),
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_shipping_country)) },
         supportedCountriesViewEntity = shippingAddressSection.supportedCountriesList,
-        onCountrySelected = { viewModel.onCountrySelected(it, true) }
+        onCountrySelected = { viewModel.onCountrySelected(it, true) },
     )
 }
 
@@ -372,47 +325,46 @@ private fun DeliveryNotesField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
-    scrollToPosition: Float,
     scrollState: ScrollState,
+    parentPosition: Float,
 ) {
-    val scrollOffset = with(LocalDensity.current) {
-        shippingAddressSection.itemPoissonOffset.dp.toPx() + (7 * NORMAL_FILED_SIZE_DP).dp.toPx()
-    }
+    val hasBeenFocused by remember { mutableStateOf(false) }
     val label = buildAnnotatedString {
         append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_delivery_notes))
         append(" ")
-        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) { append(stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional)) }
+        withStyle(SpanStyle(DojoTheme.colors.primaryLabelTextColor.copy(alpha = ContentAlpha.medium))) {
+            append("(")
+            append(
+                stringResource(id = R.string.dojo_ui_sdk_dojo_ui_sdk_card_details_checkout_optional),
+            )
+            append(")")
+        }
     }
+
     DescriptionField(
         value = shippingAddressSection.deliveryNotes.value,
         onDescriptionChanged = { viewModel.onDeliveryNotesFieldChanged(it) },
         maxCharacters = 120,
         label = label,
-        modifier = Modifier
-            .padding(vertical = 16.dp)
-            .onFocusChanged {
-                if (it.isFocused) {
-                    coroutineScope.launch {
-                        delay(300)
-                        scrollState.animateScrollTo(
-                            scrollToPosition.roundToInt() + scrollOffset.roundToInt()
-                        )
-                    }
-                }
-            }
+        modifier = Modifier.autoScrollableInputFieldOnFocusChangeAndValidator(
+            coroutineScope = coroutineScope,
+            scrollState = scrollState,
+            initialHasBeenFocused = hasBeenFocused,
+            parentPosition = parentPosition,
+            onValidate = {},
+        ),
     )
 }
 
 @Composable
 private fun AddressesAreTheSameCheckBox(
     shippingAddressSection: ShippingAddressViewState,
-    viewModel: VirtualTerminalViewModel
+    viewModel: VirtualTerminalViewModel,
 ) {
     CheckBoxItem(
         itemText = stringResource(id = shippingAddressSection.isShippingSameAsBillingCheckBox.messageText),
         onCheckedChange = {
             viewModel.onShippingSameAsBillingChecked(it)
-        }
+        },
     )
 }
-private const val NORMAL_FILED_SIZE_DP = 100

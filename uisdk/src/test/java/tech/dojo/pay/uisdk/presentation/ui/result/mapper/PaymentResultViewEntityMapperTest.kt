@@ -22,7 +22,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Successful Payment")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Payment",
-            imageId = 2131230882,
+            imageId = 2131230888,
             status = "Successful Payment",
             orderInfo = "",
             description = "",
@@ -51,7 +51,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Successful Setup Intent")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Setup Intent",
-            imageId = 2131230882,
+            imageId = 2131230888,
             status = "Successful Setup Intent",
             orderInfo = "",
             description = "",
@@ -82,7 +82,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Failed Setup Intent")
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
-            imageId = 2131230865,
+            imageId = 2131230871,
             status = "Failed Setup Intent",
             details = "Failed Setup Intent",
             shouldNavigateToPreviousScreen = false,
@@ -113,7 +113,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Failed Setup Intent")
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
-            imageId = 2131230865,
+            imageId = 2131230871,
             status = "Failed Setup Intent",
             details = "Failed Setup Intent",
             shouldNavigateToPreviousScreen = false,

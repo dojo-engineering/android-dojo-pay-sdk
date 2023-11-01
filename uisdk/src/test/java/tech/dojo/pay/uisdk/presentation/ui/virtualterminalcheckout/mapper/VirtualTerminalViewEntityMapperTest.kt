@@ -73,12 +73,12 @@ private object TestDataVirtualTerminalViewEntityMapper {
         amount = AmountDomainEntity(
             10L,
             "100",
-            "GBP"
+            "GBP",
         ),
         supportedCardsSchemes = listOf(CardsSchemes.AMEX),
         collectionBillingAddressRequired = true,
         customerId = "customerId",
-        orderId = "orderId"
+        orderId = "orderId",
     )
 
     val countryDomainList = listOf(
@@ -93,11 +93,10 @@ private object TestDataVirtualTerminalViewEntityMapper {
             merchantName = "",
             totalAmount = "100",
             amountCurrency = "£",
-            orderId = "orderId"
+            orderId = "orderId",
         ),
         shippingAddressSection = ShippingAddressViewState(
             isVisible = false,
-            itemPoissonOffset = 0,
             name = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             addressLine1 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             addressLine2 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
@@ -107,29 +106,28 @@ private object TestDataVirtualTerminalViewEntityMapper {
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
-                )
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
-                isPostalCodeEnabled = true
+                isPostalCodeEnabled = true,
             ),
             deliveryNotes = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             isShippingSameAsBillingCheckBox = CheckBoxItem(
                 messageText = R.string.dojo_ui_sdk_card_details_checkout_billing_same_as_shipping,
                 isChecked = true,
-                isVisible = true
-            )
+                isVisible = true,
+            ),
         ),
         billingAddressSection = BillingAddressViewState(
             isVisible = true,
-            itemPoissonOffset = 30,
             addressLine1 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             addressLine2 = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             city = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
@@ -138,33 +136,32 @@ private object TestDataVirtualTerminalViewEntityMapper {
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
+                    isPostalCodeEnabled = true,
                 ),
                 SupportedCountriesViewEntity(
                     countryName = "EGP",
                     countryCode = "EG",
-                    isPostalCodeEnabled = true
-                )
+                    isPostalCodeEnabled = true,
+                ),
             ),
             currentSelectedCountry = SupportedCountriesViewEntity(
                 countryName = "EGP",
                 countryCode = "EG",
-                isPostalCodeEnabled = true
-            )
+                isPostalCodeEnabled = true,
+            ),
         ),
         cardDetailsSection = CardDetailsViewState(
             isVisible = true,
-            itemPoissonOffset = 670,
             emailInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = false),
             cardHolderInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cardNumberInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cardExpireDateInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cvvInputFieldState = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
-            allowedPaymentMethodsIcons = emptyList()
+            allowedPaymentMethodsIcons = emptyList(),
         ),
         payButtonSection = PayButtonViewState(
             isEnabled = false,
-            isLoading = false
-        )
+            isLoading = false,
+        ),
     )
 }

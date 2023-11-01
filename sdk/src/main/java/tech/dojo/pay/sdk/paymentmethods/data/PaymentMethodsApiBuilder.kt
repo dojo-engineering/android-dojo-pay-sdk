@@ -1,4 +1,4 @@
-package tech.dojo.pay.sdk.paymentMethouds.data
+package tech.dojo.pay.sdk.paymentmethods.data
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

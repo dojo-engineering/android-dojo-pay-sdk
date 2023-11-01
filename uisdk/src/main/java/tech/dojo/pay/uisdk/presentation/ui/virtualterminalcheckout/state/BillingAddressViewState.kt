@@ -4,20 +4,15 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedC
 
 internal data class BillingAddressViewState(
     var isVisible: Boolean,
-    // this will be the start point to scroll to the input field when it got focus
-    var itemPoissonOffset: Int,
     var addressLine1: InputFieldState = InputFieldState(value = ""),
     var addressLine2: InputFieldState = InputFieldState(value = ""),
     var city: InputFieldState = InputFieldState(value = ""),
     var postalCode: InputFieldState = InputFieldState(value = ""),
     var supportedCountriesList: List<SupportedCountriesViewEntity>,
-    var currentSelectedCountry: SupportedCountriesViewEntity
+    var currentSelectedCountry: SupportedCountriesViewEntity,
 ) {
     fun updateIsVisible(newValue: Boolean) =
         copy(isVisible = newValue)
-
-    fun updateItemPoissonOffset(newValue: Int) =
-        copy(itemPoissonOffset = newValue)
     fun updateAddressLine1(newValue: InputFieldState) =
         copy(addressLine1 = newValue)
     fun updateAddressLine2(newValue: InputFieldState) =

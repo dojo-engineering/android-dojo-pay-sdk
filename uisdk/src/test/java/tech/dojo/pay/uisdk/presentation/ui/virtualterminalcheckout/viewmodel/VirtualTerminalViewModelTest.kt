@@ -975,11 +975,7 @@ class VirtualTerminalViewModelTest {
                     ),
                 ),
                 billingAddressSection = initPaymentIntent.billingAddressSection
-                    ?.updateIsVisible(false)
-                    ?.updateItemPoissonOffset(0),
-                cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateItemPoissonOffset(
-                    SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP,
-                ),
+                    ?.updateIsVisible(false),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1011,11 +1007,7 @@ class VirtualTerminalViewModelTest {
                     ),
                 ),
                 billingAddressSection = initPaymentIntent.billingAddressSection
-                    ?.updateIsVisible(true)
-                    ?.updateItemPoissonOffset(SECOND_SECTION_WITH_SHIPPING_OFF_SET_DP),
-                cardDetailsSection = initPaymentIntent.cardDetailsSection?.updateItemPoissonOffset(
-                    THIRD_SECTION_OFF_SET_DP,
-                ),
+                    ?.updateIsVisible(true),
             )
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1468,7 +1460,7 @@ private object TestData {
             orderId = "orderId",
         ),
         shippingAddressSection = ShippingAddressViewState(
-            isVisible = false, itemPoissonOffset = 0,
+            isVisible = false,
             name = InputFieldState(
                 value = "",
                 errorMessages = null,
@@ -1530,7 +1522,6 @@ private object TestData {
         ),
         billingAddressSection = BillingAddressViewState(
             isVisible = true,
-            itemPoissonOffset = 50,
             addressLine1 = InputFieldState(
                 value = "",
                 errorMessages = null,
@@ -1575,7 +1566,6 @@ private object TestData {
         ),
         cardDetailsSection = CardDetailsViewState(
             isVisible = true,
-            itemPoissonOffset = 700,
             emailInputField = InputFieldState(
                 value = "",
                 errorMessages = null,

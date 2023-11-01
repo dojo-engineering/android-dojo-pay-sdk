@@ -22,7 +22,7 @@ import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandlerImpl
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
 import tech.dojo.pay.sdk.payemntintent.PaymentIntentProvider
-import tech.dojo.pay.sdk.paymentMethouds.PaymentMethodsProvider
+import tech.dojo.pay.sdk.paymentmethods.PaymentMethodsProvider
 
 object DojoSdk {
     private val REQUEST_CODE_SAVED_CARD = "DOJO_PAY_SAVED_CARD".hashCode()

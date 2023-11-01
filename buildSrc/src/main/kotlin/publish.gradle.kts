@@ -21,7 +21,7 @@ import java.util.*
 
 plugins {
     id("maven-publish")
-    id("org.jetbrains.dokka")
+//    id("org.jetbrains.dokka")
 }
 
 group = "tech.dojo.pay"
@@ -36,18 +36,18 @@ val sourcesJar = tasks.register<Jar>("sourcesJar") {
         from((project.extensions.getByName("sourceSets") as SourceSetContainer).named("main").get().allSource)
     }
 }
+//
+// val dokkaJar = tasks.create<Jar>("dokkaJar") {
+//    group = JavaBasePlugin.DOCUMENTATION_GROUP
+//    description = "Javadoc jar from Analytics"
+//    archiveClassifier.set("javadoc")
+// //    from(tasks.dokkaJavadoc)
+// //    dependsOn(tasks.dokkaJavadoc)
+// }
 
-val dokkaJar = tasks.create<Jar>("dokkaJar") {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Javadoc jar from Analytics"
-    archiveClassifier.set("javadoc")
-    from(tasks.dokkaJavadoc)
-    dependsOn(tasks.dokkaJavadoc)
-}
-
-tasks.dokkaJavadoc.configure {
-    outputDirectory.set(buildDir.resolve("javadoc"))
-}
+// tasks.dokkaJavadoc.configure {
+//    outputDirectory.set(buildDir.resolve("javadoc"))
+// }
 
 /**Create credentials.properties in root project folder file with gpr.user=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
 // val credentialProperties = Properties()
@@ -76,7 +76,7 @@ afterEvaluate {
                 }
 
                 artifact(sourcesJar)
-                artifact(dokkaJar)
+//                artifact(dokkaJar)
 
                 pom {
                     if (!"USE_SNAPSHOT".byProperty.isNullOrBlank()) {
