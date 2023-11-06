@@ -336,7 +336,7 @@ internal class CardDetailsCheckoutViewModel(
         amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
         checkBoxItem = currentState
             .checkBoxItem
-            .updateIsVisible(!paymentIntentResult.result.customerId.isNullOrBlank())
+            .updateIsVisible(isStartDestination || !paymentIntentResult.result.customerId.isNullOrBlank())
             .updateText(getCheckBoxMessage(paymentIntentResult)),
         allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
             paymentIntentResult.result.supportedCardsSchemes,
