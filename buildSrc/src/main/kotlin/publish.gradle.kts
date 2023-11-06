@@ -1,7 +1,6 @@
 import com.android.build.gradle.LibraryExtension
 import java.util.*
 
-
 /**
  * The following plugin tasks care of setting up:
  * - Publishing to github packages
