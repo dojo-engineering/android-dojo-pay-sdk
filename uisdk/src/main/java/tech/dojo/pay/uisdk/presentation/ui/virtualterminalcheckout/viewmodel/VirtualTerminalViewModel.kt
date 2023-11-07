@@ -4,19 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
 import tech.dojo.pay.uisdk.R
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
-import tech.dojo.pay.uisdk.domain.GetRefreshedPaymentTokenFlow
 import tech.dojo.pay.uisdk.domain.GetSupportedCountriesUseCase
+import tech.dojo.pay.uisdk.domain.MakeVTPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
-import tech.dojo.pay.uisdk.domain.RefreshPaymentIntentUseCase
-import tech.dojo.pay.uisdk.domain.UpdatePaymentStateUseCase
-import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
+import tech.dojo.pay.uisdk.domain.entities.MakeVTPaymentParams
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.mapper.FullCardPaymentPayloadMapper
@@ -31,14 +28,12 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator.Vir
 internal class VirtualTerminalViewModel(
     private val observePaymentIntent: ObservePaymentIntent,
     private val observePaymentStatus: ObservePaymentStatus,
-    private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getSupportedCountriesUseCase: GetSupportedCountriesUseCase,
     private val virtualTerminalValidator: VirtualTerminalValidator,
     private var virtualTerminalHandler: DojoVirtualTerminalHandler,
     private val fullCardPaymentPayloadMapper: FullCardPaymentPayloadMapper,
     private val virtualTerminalViewEntityMapper: VirtualTerminalViewEntityMapper,
-    private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase,
-    private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
+    private val makeVTPaymentUseCase: MakeVTPaymentUseCase,
     private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
 ) : ViewModel() {
     private lateinit var paymentIntentId: String
@@ -50,16 +45,18 @@ internal class VirtualTerminalViewModel(
     init {
         currentState = VirtualTerminalViewState(isLoading = true)
         pushStateToUi(currentState)
-        viewModelScope.launch { observePaymentIntent() }
+        observePaymentIntent()
+        observePaymentStatus()
     }
 
-    private suspend fun observePaymentIntent() {
-        observePaymentIntent.observePaymentIntent().collect { it?.let { handlePaymentIntent(it) } }
+    private fun observePaymentIntent() {
+        viewModelScope.launch {
+            observePaymentIntent.observePaymentIntent().collect { handlePaymentIntent(it) }
+        }
     }
 
     private fun handlePaymentIntent(paymentIntentResult: PaymentIntentResult) {
         if (paymentIntentResult is PaymentIntentResult.Success) {
-            viewModelScope.launch { observePaymentStatus() }
             paymentIntentId = paymentIntentResult.result.id
             currentState = virtualTerminalViewEntityMapper.apply(
                 paymentIntentResult,
@@ -69,13 +66,13 @@ internal class VirtualTerminalViewModel(
         }
     }
 
-    private suspend fun observePaymentStatus() {
-        observePaymentStatus.observePaymentStates().collect {
-            if (!it) {
+    private fun observePaymentStatus() {
+        viewModelScope.launch {
+            observePaymentStatus.observePaymentStates().collect {
                 currentState = currentState.copy(
                     payButtonSection = PayButtonViewState(
                         isEnabled = virtualTerminalValidator.isAllDataValid(currentState),
-                        isLoading = false,
+                        isLoading = it,
                     ),
                 )
                 pushStateToUi(currentState)
@@ -468,30 +465,16 @@ internal class VirtualTerminalViewModel(
     fun onPayClicked() {
         showLoadingOnActionButton()
         viewModelScope.launch() {
-            refreshPaymentIntentUseCase.refreshPaymentIntent(paymentIntentId)
-            updatePaymentStateUseCase.updatePaymentSate(isActive = true)
-            getRefreshedPaymentTokenFlow
-                .getUpdatedPaymentTokenFlow()
-                .collectLatest {
-                    when (it) {
-                        is RefreshPaymentIntentResult.Success -> {
-                            executePayment(paymentToken = it.token)
-                        }
-
-                        is RefreshPaymentIntentResult.RefreshFailure ->
-                            navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
-
-                        null -> Unit
-                    }
-                }
+            makeVTPaymentUseCase
+                .makeVTPayment(
+                    params = MakeVTPaymentParams(
+                        fullCardPaymentPayload = fullCardPaymentPayloadMapper.apply(currentState),
+                        virtualTerminalHandler = virtualTerminalHandler,
+                        paymentId = paymentIntentId,
+                    ),
+                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                )
         }
-    }
-
-    private fun executePayment(paymentToken: String) {
-        virtualTerminalHandler.executeVirtualTerminalPayment(
-            paymentToken,
-            fullCardPaymentPayloadMapper.apply(currentState),
-        )
     }
 
     private fun showLoadingOnActionButton() {

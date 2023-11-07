@@ -12,8 +12,8 @@ import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.core.MainCoroutineScopeRule
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.presentation.ui.result.mapper.PaymentResultViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 

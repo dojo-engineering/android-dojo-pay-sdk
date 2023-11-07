@@ -13,10 +13,10 @@ import org.mockito.kotlin.given
 import org.mockito.kotlin.mock
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
-import tech.dojo.pay.uisdk.data.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.data.mapper.PaymentIntentPayLoadMapper
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.mapper.PaymentIntentDomainEntityMapper
 
 @OptIn(ExperimentalCoroutinesApi::class)

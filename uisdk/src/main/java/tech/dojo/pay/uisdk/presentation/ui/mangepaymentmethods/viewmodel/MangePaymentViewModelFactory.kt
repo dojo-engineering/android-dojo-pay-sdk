@@ -4,11 +4,14 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.domain.DeletePaymentMethodsUseCase
+import tech.dojo.pay.uisdk.domain.IsWalletAvailableFromDeviceAndIntentUseCase
+import tech.dojo.pay.uisdk.domain.ObserveDeviceWalletState
+import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentMethods
-import tech.dojo.pay.uisdk.domain.ObserveWalletState
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
+import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory
+import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.deviceWalletStateRepository
 import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.paymentMethodsRepository
-import tech.dojo.pay.uisdk.presentation.PaymentFlowViewModelFactory.Companion.walletStateRepository
 import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultContract
 import tech.dojo.pay.uisdk.presentation.ui.mangepaymentmethods.mapper.PaymentMethodItemViewEntityMapper
 
@@ -21,7 +24,7 @@ class MangePaymentViewModelFactory(
         val customerSecret =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.clientSecret
                 ?: ""
-        val observeWalletState = ObserveWalletState(walletStateRepository)
+        val observeDeviceWalletState = ObserveDeviceWalletState(deviceWalletStateRepository)
         val observePaymentMethods =
             ObservePaymentMethods(paymentMethodsRepository)
         val mapper = PaymentMethodItemViewEntityMapper(isDarkModeEnabled)
@@ -29,13 +32,19 @@ class MangePaymentViewModelFactory(
         val deletePaymentMethodsUseCase = DeletePaymentMethodsUseCase(
             customerId,
             customerSecret,
-            paymentMethodsRepository
+            paymentMethodsRepository,
+        )
+        val observePaymentIntent =
+            ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
+        val isWalletAvailableFromDeviceAndIntentUseCase = IsWalletAvailableFromDeviceAndIntentUseCase(
+            observePaymentIntent,
+            observeDeviceWalletState,
         )
         return MangePaymentViewModel(
             deletePaymentMethodsUseCase,
-            observeWalletState,
             observePaymentMethods,
-            mapper
+            mapper,
+            isWalletAvailableFromDeviceAndIntentUseCase,
         ) as T
     }
 }
