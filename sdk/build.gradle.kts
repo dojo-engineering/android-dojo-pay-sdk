@@ -47,9 +47,16 @@ dependencies {
     implementation(AndroidX.Activity.ACTIVITY)
     implementation(AndroidX.Fragment.FRAGMENT)
     implementation(AndroidX.APPCOMPAT)
-    implementation(Networking.RETROFIT_CORE)
-    implementation(Networking.CONVERTER_GSON)
-    implementation(Networking.CONVERTER_SCALARS)
+    implementation(Networking.OKHTTP)
+    implementation(Networking.RETROFIT_CORE) {
+        exclude(group = "com.squareup.okhttp3", module = "okhttp")
+    }
+    implementation(Networking.CONVERTER_GSON) {
+        exclude(group = "com.squareup.okhttp3", module = "okhttp")
+    }
+    implementation(Networking.CONVERTER_SCALARS) {
+        exclude(group = "com.squareup.okhttp3", module = "okhttp")
+    }
     implementation(AndroidX.Lifecycle.VIEWMODEL)
     implementation(Material.MATERIAL)
     implementation(Wallet.GPAY)
