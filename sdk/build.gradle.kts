@@ -48,10 +48,12 @@ dependencies {
     implementation(AndroidX.Fragment.FRAGMENT)
     implementation(AndroidX.APPCOMPAT)
     implementation(Networking.OKHTTP)
+    api(AndroidX.Network.GSON)
     implementation(Networking.RETROFIT_CORE) {
         exclude(group = "com.squareup.okhttp3", module = "okhttp")
     }
     implementation(Networking.CONVERTER_GSON) {
+        exclude(group = "com.google.code.gson")
         exclude(group = "com.squareup.okhttp3", module = "okhttp")
     }
     implementation(Networking.CONVERTER_SCALARS) {

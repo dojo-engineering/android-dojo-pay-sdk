@@ -35,7 +35,7 @@ object Versions {
     const val COMPOSE_NAVIGATION = "2.5.3"
     const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
     const val TIMBER = "5.0.1"
-    const val GSON = "2.8.7"
+    const val GSON = "2.10.1"
     const val csvReader = "1.6.0"
     const val ANDROIDX_WINDOW = "1.0.0"
     const val RETROFIT = "2.9.0"
