@@ -59,3 +59,4 @@ credentials.properties
 cardinal.properties
 Key
 keystore.properties
+maven.properties

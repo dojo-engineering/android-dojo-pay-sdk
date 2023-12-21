@@ -35,10 +35,11 @@ object Versions {
     const val COMPOSE_NAVIGATION = "2.5.3"
     const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
     const val TIMBER = "5.0.1"
-    const val GSON = "2.8.7"
+    const val GSON = "2.10.1"
     const val csvReader = "1.6.0"
     const val ANDROIDX_WINDOW = "1.0.0"
     const val RETROFIT = "2.9.0"
+    const val OKHTTP = "4.12.0"
     const val GPAY = "19.1.0"
     const val JSON_TEST = "20180813"
     const val CARDINAL = "2.2.7-5"
@@ -181,6 +182,7 @@ object AndroidX {
     }
 }
 object Networking {
+    const val OKHTTP = "com.squareup.okhttp3:okhttp:${Versions.OKHTTP}"
     const val RETROFIT_CORE = "com.squareup.retrofit2:retrofit:${Versions.RETROFIT}"
     const val CONVERTER_GSON = "com.squareup.retrofit2:converter-gson:${Versions.RETROFIT}"
     const val CONVERTER_SCALARS = "com.squareup.retrofit2:converter-scalars:${Versions.RETROFIT}"
