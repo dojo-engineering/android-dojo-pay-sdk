@@ -15,7 +15,7 @@ class GetRefreshedPaymentTokenFlowTest {
     fun `when getUpdatedPaymentTokenFlow should return StateFlow from repo`() {
         // arrange
         val repo = mock<RefreshPaymentIntentRepository>()
-        val expectedFlow: StateFlow<RefreshPaymentIntentResult?> = MutableStateFlow(null)
+        val expectedFlow: StateFlow<RefreshPaymentIntentResult> = MutableStateFlow(RefreshPaymentIntentResult.None)
         given(repo.getRefreshedPaymentTokenFlow()).willReturn(expectedFlow)
         val useCase = GetRefreshedPaymentTokenFlow(repo)
 

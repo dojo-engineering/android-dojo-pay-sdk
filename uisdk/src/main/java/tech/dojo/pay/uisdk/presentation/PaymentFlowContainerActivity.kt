@@ -29,6 +29,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoSavedCardPaymentHandler
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandler
@@ -71,18 +73,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private lateinit var savedCardPaymentHandler: DojoSavedCardPaymentHandler
     private lateinit var virtualTerminalHandler: DojoVirtualTerminalHandler
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
-    private val paymentFlowViewModel: PaymentFlowViewModel by viewModels {
-        PaymentFlowViewModelFactory(
-            arguments,
-        )
-    }
+    private val paymentFlowViewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
     private val flowStartDestination: PaymentFlowScreens by lazy { paymentFlowViewModel.getFlowStartDestination() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureDojoPayCore()
         disableScreenRecord()
         lockToPortrait()
+        configureDojoPayCore()
         setContent {
             DojoTheme {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
@@ -100,9 +98,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                         // Listen for navigation event
                         val viewLifecycleOwner = LocalLifecycleOwner.current
                         LaunchedEffect(Unit) {
-                            paymentFlowViewModel.navigationEvent.observe(viewLifecycleOwner) {
-                                onNavigationEvent(it, navController)
-                            }
+                            paymentFlowViewModel.navigationEvent.observe(viewLifecycleOwner) { onNavigationEvent(it, navController) }
+                            paymentFlowViewModel.allowedCardsSchemes.observe(viewLifecycleOwner) { checkDeviceWalletState(it) }
                         }
                         PaymentFlowNavHost(
                             navController,
@@ -117,6 +114,11 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
+    private fun lockToPortrait() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
     private fun disableScreenRecord() {
         if (!paymentFlowViewModel.isPaymentInSandBoxEnvironment()) {
             window.setFlags(
@@ -124,11 +126,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_SECURE,
             )
         }
-    }
-
-    @SuppressLint("SourceLockedOrientationActivity")
-    private fun lockToPortrait() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     private fun configureDojoPayCore() {
@@ -147,6 +144,25 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         virtualTerminalHandler = DojoSdk.createVirtualTerminalPaymentHandler(this) {
             paymentFlowViewModel.updatePaymentState(false)
             paymentFlowViewModel.navigateToPaymentResult(it)
+        }
+    }
+
+    private fun checkDeviceWalletState(cardsSchemes: List<CardsSchemes>) {
+        val gPayConfig = (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
+        if (gPayConfig != null) {
+            DojoSdk.isGpayAvailable(
+                activity = this,
+                dojoGPayConfig = DojoGPayConfig(
+                    merchantName = gPayConfig.merchantName,
+                    merchantId = gPayConfig.merchantId,
+                    gatewayMerchantId = gPayConfig.gatewayMerchantId,
+                    allowedCardNetworks = cardsSchemes,
+                ),
+                { paymentFlowViewModel.updateDeviceWalletState(isAvailable = true) },
+                { paymentFlowViewModel.updateDeviceWalletState(isAvailable = false) },
+            )
+        } else {
+            paymentFlowViewModel.updateDeviceWalletState(isAvailable = false)
         }
     }
 
@@ -259,6 +275,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     savedCardPaymentHandler = savedCardPaymentHandler,
                     gpayPaymentHandler = gpayPaymentHandler,
                     arguments = arguments,
+                    navigateToCardResult = { viewModel.navigateToPaymentResult(it) },
                 )
             }
             // this is to  handle unregistered activity when screen orientation change
