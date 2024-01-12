@@ -309,7 +309,7 @@ private fun CvvField(
         isError = state.cvvInputFieldState.isError,
         assistiveText = state.cvvInputFieldState.errorMessages?.let { AnnotatedString(it) },
         keyboardActions = KeyboardActions(onDone = {
-            keyboardController?.hide()
+            keyboardController.hide()
         }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
@@ -352,7 +352,7 @@ private fun CardExpireDateField(
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(onDone = {
-            keyboardController?.hide()
+            keyboardController.hide()
         }),
         isError = state.cardExpireDateInputField.isError,
         assistiveText = state.cardExpireDateInputField.errorMessages?.let { AnnotatedString(it) },
