@@ -19,11 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -40,6 +38,7 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooter
 import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndValidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -47,14 +46,13 @@ import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.CardDetailsViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CardDetailsSection(
     viewModel: VirtualTerminalViewModel,
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
@@ -148,14 +146,13 @@ private fun HeaderTitle() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardHolderInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -181,7 +178,6 @@ private fun CardHolderInputField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardNumberInputField(
     cardDetailsViewState: CardDetailsViewState,
@@ -189,7 +185,7 @@ private fun CardNumberInputField(
     isDarkModeEnabled: Boolean,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -223,14 +219,13 @@ private fun CardNumberInputField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardExpireDateField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -261,14 +256,13 @@ private fun CardExpireDateField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CvvField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -300,14 +294,13 @@ private fun CvvField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun EmailInputField(
     cardDetailsViewState: CardDetailsViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }

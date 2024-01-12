@@ -15,11 +15,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -34,19 +32,19 @@ import tech.dojo.pay.uisdk.presentation.components.CheckBoxItem
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.DescriptionField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndValidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.ShippingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun ShippingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     if (state.shippingAddressSection?.isVisible == true) {
@@ -127,14 +125,13 @@ private fun HeaderTitle() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun NameField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -158,14 +155,13 @@ private fun NameField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address1Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -194,14 +190,13 @@ private fun Address1Field(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address2Field(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -237,14 +232,13 @@ private fun Address2Field(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CityField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -270,14 +264,13 @@ private fun CityField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PostalCodeField(
     shippingAddressSection: ShippingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }

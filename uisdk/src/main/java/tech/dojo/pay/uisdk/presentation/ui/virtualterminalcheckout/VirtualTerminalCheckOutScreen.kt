@@ -1,5 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
+import android.content.Context
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,16 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AmountWithMerchantIInfoHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
+import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
@@ -38,7 +41,6 @@ import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.Vir
 import java.util.Locale
 
 @Suppress("LongMethod")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun VirtualTerminalCheckOutScreen(
     windowSize: WindowSize,
@@ -49,7 +51,16 @@ internal fun VirtualTerminalCheckOutScreen(
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val view = LocalView.current
+    val keyboardController = object : KeyboardController {
+        val imm = LocalContext.current.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        override fun show() {
+            imm?.showSoftInput(view, 0)
+        }
+        override fun hide() {
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     Scaffold(
