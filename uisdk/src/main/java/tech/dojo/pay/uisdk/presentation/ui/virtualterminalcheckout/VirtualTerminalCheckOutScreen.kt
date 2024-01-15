@@ -1,7 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout
 
-import android.content.Context
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,19 +20,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.AmountWithMerchantIInfoHeader
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.DojoAppBar
-import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberKeyboardController
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.VirtualTerminalViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
@@ -51,16 +47,7 @@ internal fun VirtualTerminalCheckOutScreen(
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    val view = LocalView.current
-    val keyboardController = object : KeyboardController {
-        val imm = LocalContext.current.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        override fun show() {
-            imm?.showSoftInput(view, 0)
-        }
-        override fun hide() {
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
+    val keyboardController = rememberKeyboardController()
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     Scaffold(
@@ -165,9 +152,15 @@ private fun PayButton(
     val focusManager = LocalFocusManager.current
     SingleButtonView(
         scrollState = scrollState,
-        text =
-        String
-            .format(Locale.getDefault(), "%s %s %s", stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_button_pay), state.paymentDetailsSection?.amountCurrency, state.paymentDetailsSection?.totalAmount),
+        text = String.format(
+            Locale.getDefault(),
+            "%s %s %s",
+            stringResource(
+                id = R.string.dojo_ui_sdk_card_details_checkout_button_pay,
+            ),
+            state.paymentDetailsSection?.amountCurrency,
+            state.paymentDetailsSection?.totalAmount,
+        ),
         isLoading = state.payButtonSection?.isLoading ?: false,
         enabled = state.payButtonSection?.isEnabled ?: false,
     ) {

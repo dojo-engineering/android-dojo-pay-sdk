@@ -1,7 +1,5 @@
 package tech.dojo.pay.uisdk.presentation.ui.result
 
-import android.content.Context
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -25,8 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,9 +38,9 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoFullGroundButton
 import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
-import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberKeyboardController
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
@@ -72,19 +68,7 @@ internal fun ShowResultSheetScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
-    val view = LocalView.current
-    val keyboardController = object : KeyboardController {
-        val imm = LocalContext.current.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-
-        override fun show() {
-            imm?.showSoftInput(view, 0)
-        }
-
-        override fun hide() {
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
+    val keyboardController = rememberKeyboardController()
     LaunchedEffect(Unit) {
         keyboardController.hide()
         paymentResultSheetState.show()

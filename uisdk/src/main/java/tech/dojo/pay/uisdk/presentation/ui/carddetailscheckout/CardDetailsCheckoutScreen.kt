@@ -25,9 +25,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,6 +67,7 @@ import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetw
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberKeyboardController
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -82,21 +85,10 @@ internal fun CardDetailsCheckoutScreen(
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    val view = LocalView.current
-    val keyboardController = object : KeyboardController {
-        val imm = LocalContext.current.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-
-        override fun show() {
-            imm?.showSoftInput(view, 0)
-        }
-
-        override fun hide() {
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    var scrollToPosition by remember { mutableStateOf(0F) }
+    val keyboardController = rememberKeyboardController()
+    var scrollToPosition by remember { mutableFloatStateOf(0F) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
@@ -213,7 +205,6 @@ internal fun CardDetailsCheckoutScreen(
         },
     )
 }
-
 @Composable
 private fun Loading(isVisible: Boolean) {
     if (isVisible) {
