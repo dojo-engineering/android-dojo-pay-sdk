@@ -100,11 +100,11 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 shippingAddressSection = currentState
                     .shippingAddressSection?.updateAddressName(
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue,
-                        InputFieldType.NAME,
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue,
+                            InputFieldType.NAME,
+                        ),
                     ),
-                ),
             )
             pushStateToUi(currentState)
         }
@@ -352,11 +352,11 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardHolderInputField(
-                    virtualTerminalValidator.validateInputFieldIsNotEmpty(
-                        finalValue,
-                        InputFieldType.CARD_HOLDER_NAME,
+                        virtualTerminalValidator.validateInputFieldIsNotEmpty(
+                            finalValue,
+                            InputFieldType.CARD_HOLDER_NAME,
+                        ),
                     ),
-                ),
             )
             pushStateToUi(currentState)
         }
@@ -378,8 +378,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardNumberInputField(
-                    virtualTerminalValidator.validateCardNumberInputField(finalValue),
-                ),
+                        virtualTerminalValidator.validateCardNumberInputField(finalValue),
+                    ),
             )
             pushStateToUi(currentState)
         }
@@ -401,8 +401,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCvvInputFieldState(
-                    virtualTerminalValidator.validateCVVInputField(finalValue),
-                ),
+                        virtualTerminalValidator.validateCVVInputField(finalValue),
+                    ),
             )
             pushStateToUi(currentState)
         }
@@ -424,8 +424,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardExpireDateInputField(
-                    virtualTerminalValidator.validateExpireDateInputField(finalValue),
-                ),
+                        virtualTerminalValidator.validateExpireDateInputField(finalValue),
+                    ),
             )
             pushStateToUi(currentState)
         }
@@ -447,8 +447,8 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateEmailInputField(
-                    virtualTerminalValidator.validateEmailInputField(finalValue),
-                ),
+                        virtualTerminalValidator.validateEmailInputField(finalValue),
+                    ),
             )
             pushStateToUi(currentState)
         }
