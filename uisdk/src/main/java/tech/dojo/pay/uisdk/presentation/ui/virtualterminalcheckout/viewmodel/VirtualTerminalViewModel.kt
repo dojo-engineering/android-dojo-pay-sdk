@@ -464,7 +464,7 @@ internal class VirtualTerminalViewModel(
 
     fun onPayClicked() {
         showLoadingOnActionButton()
-        viewModelScope.launch() {
+        viewModelScope.launch {
             makeVTPaymentUseCase
                 .makeVTPayment(
                     params = MakeVTPaymentParams(

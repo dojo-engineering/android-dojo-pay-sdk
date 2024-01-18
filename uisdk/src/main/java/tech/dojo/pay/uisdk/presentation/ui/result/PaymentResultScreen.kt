@@ -21,10 +21,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,13 +40,14 @@ import tech.dojo.pay.uisdk.presentation.components.DojoOutlinedButton
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberKeyboardController
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.bold
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import tech.dojo.pay.uisdk.presentation.ui.result.viewmodel.PaymentResultViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 internal fun ShowResultSheetScreen(
     windowSize: WindowSize,
@@ -69,11 +68,9 @@ internal fun ShowResultSheetScreen(
         )
     val coroutineScope = rememberCoroutineScope()
     val state = viewModel.state.observeAsState().value ?: return
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-
+    val keyboardController = rememberKeyboardController()
     LaunchedEffect(Unit) {
-        keyboardController?.hide()
+        keyboardController.hide()
         paymentResultSheetState.show()
     }
 

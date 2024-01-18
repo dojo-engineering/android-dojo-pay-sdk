@@ -15,11 +15,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -32,19 +30,19 @@ import kotlinx.coroutines.CoroutineScope
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.CountrySelectorField
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.autoScrollableInputFieldOnFocusChangeAndValidator
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.viewmodel.VirtualTerminalViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun BillingAddressSection(
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
     var parentPosition by remember { mutableStateOf(0f) }
@@ -106,14 +104,13 @@ private fun HeaderTitle() {
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address1Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -142,14 +139,13 @@ private fun Address1Field(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Address2Field(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -185,14 +181,13 @@ private fun Address2Field(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CityField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }
@@ -222,14 +217,13 @@ private fun CityField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PostalCodeField(
     billingAddressViewState: BillingAddressViewState,
     viewModel: VirtualTerminalViewModel,
     coroutineScope: CoroutineScope,
     scrollState: ScrollState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController?,
     parentPosition: Float,
 ) {
     val hasBeenFocused by remember { mutableStateOf(false) }

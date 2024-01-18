@@ -23,20 +23,18 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -59,10 +57,12 @@ import tech.dojo.pay.uisdk.presentation.components.DojoBrandFooterModes
 import tech.dojo.pay.uisdk.presentation.components.DojoSpacer
 import tech.dojo.pay.uisdk.presentation.components.HeaderItem
 import tech.dojo.pay.uisdk.presentation.components.InputFieldWithErrorMessage
+import tech.dojo.pay.uisdk.presentation.components.KeyboardController
 import tech.dojo.pay.uisdk.presentation.components.MerchantInfoWithSupportedNetworksHeader
 import tech.dojo.pay.uisdk.presentation.components.SingleButtonView
 import tech.dojo.pay.uisdk.presentation.components.TitleGravity
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
+import tech.dojo.pay.uisdk.presentation.components.rememberKeyboardController
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardCheckOutHeaderType
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state.CardDetailsCheckoutState
@@ -70,7 +70,6 @@ import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDet
 import kotlin.math.roundToInt
 
 @Suppress("LongMethod")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun CardDetailsCheckoutScreen(
     windowSize: WindowSize,
@@ -81,10 +80,10 @@ internal fun CardDetailsCheckoutScreen(
     showDojoBrand: Boolean,
 ) {
     val state = viewModel.state.observeAsState().value ?: return
-    val keyboardController = LocalSoftwareKeyboardController.current
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    var scrollToPosition by remember { mutableStateOf(0F) }
+    val keyboardController = rememberKeyboardController()
+    var scrollToPosition by remember { mutableFloatStateOf(0F) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
@@ -263,14 +262,13 @@ private fun ActionButton(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CvvField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     val scrollOffset = with(LocalDensity.current) {
@@ -298,20 +296,19 @@ private fun CvvField(
         isError = state.cvvInputFieldState.isError,
         assistiveText = state.cvvInputFieldState.errorMessages?.let { AnnotatedString(it) },
         keyboardActions = KeyboardActions(onDone = {
-            keyboardController?.hide()
+            keyboardController.hide()
         }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCvvValueChanged(it) },
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardExpireDateField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
@@ -342,7 +339,7 @@ private fun CardExpireDateField(
             imeAction = ImeAction.Done,
         ),
         keyboardActions = KeyboardActions(onDone = {
-            keyboardController?.hide()
+            keyboardController.hide()
         }),
         isError = state.cardExpireDateInputField.isError,
         assistiveText = state.cardExpireDateInputField.errorMessages?.let { AnnotatedString(it) },
@@ -352,13 +349,12 @@ private fun CardExpireDateField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardNumberField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
     isDarkModeEnabled: Boolean,
@@ -389,7 +385,7 @@ private fun CardNumberField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
         ),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { keyboardController.hide() }),
         isError = state.cardNumberInputField.isError,
         assistiveText = state.cardNumberInputField.errorMessages?.let {
             AnnotatedString(it)
@@ -401,13 +397,12 @@ private fun CardNumberField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardHolderNameField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     state: CardDetailsCheckoutState,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
@@ -433,7 +428,7 @@ private fun CardHolderNameField(
             onValidate = { viewModel.validateCardHolder(state.cardHolderInputField.value) },
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+        keyboardActions = KeyboardActions(onDone = { keyboardController.hide() }),
         value = state.cardHolderInputField.value,
         isError = state.cardHolderInputField.isError,
         assistiveText = state.cardHolderInputField.errorMessages?.let { AnnotatedString(it) },
@@ -442,14 +437,13 @@ private fun CardHolderNameField(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun EmailField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isEmailInputFieldRequired) {
@@ -476,7 +470,7 @@ private fun EmailField(
                 AnnotatedString(it)
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+            keyboardActions = KeyboardActions(onDone = { keyboardController.hide() }),
             value = state.emailInputField.value,
             onValueChange = { viewModel.onEmailValueChanged(it) },
             label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) },
@@ -498,14 +492,13 @@ private fun BillingCountryField(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun PostalCodeField(
     scrollState: ScrollState,
     coroutineScope: CoroutineScope,
     scrollToPosition: Float,
     state: CardDetailsCheckoutState,
-    keyboardController: SoftwareKeyboardController?,
+    keyboardController: KeyboardController,
     viewModel: CardDetailsCheckoutViewModel,
 ) {
     if (state.isPostalCodeFieldRequired) {
@@ -525,7 +518,7 @@ private fun PostalCodeField(
                 },
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
+            keyboardActions = KeyboardActions(onDone = { keyboardController.hide() }),
             value = state.postalCodeField.value,
             isError = state.postalCodeField.isError,
             assistiveText =
