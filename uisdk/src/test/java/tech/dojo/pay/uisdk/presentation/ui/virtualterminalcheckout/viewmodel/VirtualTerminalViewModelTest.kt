@@ -1361,7 +1361,7 @@ private object TestData {
     val paymentIntentDomainEntity = PaymentIntentDomainEntity(
         id = "id",
         paymentToken = "token",
-        amount = AmountDomainEntity(
+        totalAmount = AmountDomainEntity(
             10L,
             "100",
             "GBP",

@@ -24,9 +24,9 @@ internal class PaymentIntentDomainEntityMapper {
     private fun containsInvalidParameters(raw: PaymentIntentPayload): Boolean {
         if (raw.id == null) return true
         if (raw.clientSessionSecret == null) return true
-        if (raw.amount == null && raw.intendedAmount == null) return true
+        if (raw.totalAmount == null && raw.intendedAmount == null) return true
         if (!isValidCurrencyCode(
-                raw.amount?.currencyCode ?: raw.intendedAmount?.currencyCode,
+                raw.totalAmount?.currencyCode ?: raw.intendedAmount?.currencyCode,
             )
         ) {
             return true
@@ -53,11 +53,11 @@ internal class PaymentIntentDomainEntityMapper {
             id = raw.id.orEmpty(),
             customerId = raw.customer?.id,
             paymentToken = raw.clientSessionSecret.orEmpty(),
-            amount = AmountDomainEntity(
-                valueLong = raw.amount?.value ?: raw.intendedAmount?.value ?: 0L,
-                valueString = (raw.amount?.value ?: raw.intendedAmount?.value)?.centsToString()
+            totalAmount = AmountDomainEntity(
+                valueLong = raw.totalAmount?.value ?: raw.intendedAmount?.value ?: 0L,
+                valueString = (raw.totalAmount?.value ?: raw.intendedAmount?.value)?.centsToString()
                     .orEmpty(),
-                currencyCode = raw.amount?.currencyCode
+                currencyCode = raw.totalAmount?.currencyCode
                     ?: raw.intendedAmount?.currencyCode.orEmpty(),
             ),
             supportedCardsSchemes = raw.merchantConfig?.supportedPaymentMethods?.cardSchemes?.mapNotNull { it }

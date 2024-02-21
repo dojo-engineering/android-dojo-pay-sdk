@@ -6,7 +6,7 @@ import tech.dojo.pay.sdk.card.entities.WalletSchemes
 internal data class PaymentIntentDomainEntity(
     val id: String,
     val paymentToken: String,
-    val amount: AmountDomainEntity,
+    val totalAmount: AmountDomainEntity,
     val supportedCardsSchemes: List<CardsSchemes>,
     val supportedWalletSchemes: List<WalletSchemes> = emptyList(),
     val itemLines: List<ItemLinesDomainEntity>? = null,
