@@ -137,8 +137,8 @@ internal class PaymentMethodCheckoutViewModel(
                             collectBilling = paymentIntent.collectionEmailRequired,
                         ),
                         dojoTotalAmount = DojoTotalAmount(
-                            paymentIntent.amount.valueLong,
-                            paymentIntent.amount.currencyCode,
+                            paymentIntent.totalAmount.valueLong,
+                            paymentIntent.totalAmount.currencyCode,
                         ),
                         gpayPaymentHandler = gpayPaymentHandler,
                         paymentId = paymentIntent.id,

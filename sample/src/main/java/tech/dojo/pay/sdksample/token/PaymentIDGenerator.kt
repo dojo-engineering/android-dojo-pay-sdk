@@ -15,7 +15,7 @@ object PaymentIDGenerator {
     suspend fun generatePaymentId(customerId: String = ""): PaymentIdResponse =
         paymentIntentApi.getToken(
             PaymentIdBody(
-                amount = Amount(
+                totalAmount = Amount(
                     value = 10L,
                     currencyCode = "GBP"
                 ),
