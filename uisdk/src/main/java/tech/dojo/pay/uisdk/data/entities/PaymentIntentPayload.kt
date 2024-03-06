@@ -15,7 +15,6 @@ internal data class PaymentIntentPayload(
     val clientSessionSecretExpirationDate: String? = null,
     val status: String? = null,
     val paymentMethods: List<String>? = null,
-    val amount: Amount? = null,
     val intendedAmount: Amount? = null,
     val tipsAmount: Amount? = null,
     val requestedAmount: Amount? = null,

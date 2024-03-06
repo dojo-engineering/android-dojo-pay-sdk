@@ -327,8 +327,8 @@ internal class CardDetailsCheckoutViewModel(
         headerType = getHeaderType(),
         orderId = paymentIntentResult.result.orderId,
         merchantName = paymentIntentResult.result.merchantName,
-        totalAmount = paymentIntentResult.result.amount.valueString,
-        amountCurrency = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
+        totalAmount = paymentIntentResult.result.totalAmount.valueString,
+        amountCurrency = Currency.getInstance(paymentIntentResult.result.totalAmount.currencyCode).symbol,
         checkBoxItem = currentState
             .checkBoxItem
             .updateIsVisible(isStartDestination || !paymentIntentResult.result.customerId.isNullOrBlank())
@@ -382,8 +382,8 @@ internal class CardDetailsCheckoutViewModel(
                 Locale.getDefault(),
                 "%s %s %s",
                 stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_button_pay),
-                Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol,
-                paymentIntentResult.result.amount.valueString,
+                Currency.getInstance(paymentIntentResult.result.totalAmount.currencyCode).symbol,
+                paymentIntentResult.result.totalAmount.valueString,
             )
         }
 

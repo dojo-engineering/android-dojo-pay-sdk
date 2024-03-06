@@ -63,7 +63,7 @@ internal class PaymentIntentRepositoryTest {
             val paymentIntentDomainEntity = PaymentIntentDomainEntity(
                 id = "id",
                 paymentToken = "clientSessionSecret",
-                amount = AmountDomainEntity(
+                totalAmount = AmountDomainEntity(
                     10L,
                     "0.10",
                     "GBP",
@@ -114,7 +114,7 @@ internal class PaymentIntentRepositoryTest {
             val paymentIntentDomainEntity = PaymentIntentDomainEntity(
                 id = "id",
                 paymentToken = "clientSessionSecret",
-                amount = AmountDomainEntity(
+                totalAmount = AmountDomainEntity(
                     10L,
                     "0.10",
                     "GBP",

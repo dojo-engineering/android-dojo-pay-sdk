@@ -38,7 +38,7 @@ internal class PaymentMethodCheckoutViewEntityMapper {
         currentState = currentState.copy(
             amountBreakDownList = getAmountBreakDownList(paymentIntentResult.result.itemLines)
                 ?: emptyList(),
-            totalAmount = Currency.getInstance(paymentIntentResult.result.amount.currencyCode).symbol + paymentIntentResult.result.amount.valueString,
+            totalAmount = Currency.getInstance(paymentIntentResult.result.totalAmount.currencyCode).symbol + paymentIntentResult.result.totalAmount.valueString,
             isBottomSheetVisible = true,
             isBottomSheetLoading = false,
             payAmountButtonState = null,

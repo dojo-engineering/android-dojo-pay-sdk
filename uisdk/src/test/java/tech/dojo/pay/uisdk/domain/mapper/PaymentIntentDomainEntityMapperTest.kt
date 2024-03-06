@@ -79,7 +79,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         runTest {
             // arrange
             val raw = createValidPaymentIntentPayload().copy(
-                amount = Amount(
+                totalAmount = Amount(
                     10L,
                     "123",
                 ),
@@ -109,7 +109,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         clientSessionSecretExpirationDate = "clientSessionSecretExpirationDate",
         status = "status",
         paymentMethods = listOf("paymentMethods"),
-        amount = Amount(
+        totalAmount = Amount(
             10L,
             "GBP",
         ),
@@ -167,7 +167,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         return PaymentIntentDomainEntity(
             id = id,
             paymentToken = clientSessionSecret,
-            amount = amount,
+            totalAmount = amount,
             supportedCardsSchemes = supportedCardsSchemes,
             supportedWalletSchemes = supportedWalletSchemes,
             itemLines = itemLines,
