@@ -92,7 +92,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = Color.Black.copy(alpha = 0.2f),
+                        color = Color.Transparent,
                     ) {
                         val navController = rememberNavController()
                         // Listen for navigation event
