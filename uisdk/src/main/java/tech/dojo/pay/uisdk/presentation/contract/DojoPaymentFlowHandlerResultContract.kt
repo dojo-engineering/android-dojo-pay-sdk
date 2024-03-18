@@ -21,7 +21,7 @@ internal class DojoPaymentFlowHandlerResultContract :
         return if (resultCode == Activity.RESULT_OK && intent != null) {
             intent.getSerializableExtra(KEY_RESULT) as DojoPaymentResult
         } else {
-            DojoPaymentResult.DECLINED
+            DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING // back button
         }
     }
 

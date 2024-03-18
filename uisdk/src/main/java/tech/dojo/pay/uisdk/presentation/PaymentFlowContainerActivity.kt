@@ -286,7 +286,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 currentSelectedMethod = currentSelectedMethod,
                 viewModel = paymentMethodCheckoutViewModel,
                 onAppBarIconClicked = {
-                    returnResult(DojoPaymentResult.DECLINED)
+                    returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                     viewModel.onCloseFlowClicked()
                 },
                 onManagePaymentClicked = viewModel::navigateToManagePaymentMethods,
@@ -330,7 +330,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     windowSize = windowSize,
                     viewModel = mangePaymentViewModel,
                     onCloseClicked = {
-                        returnResult(DojoPaymentResult.DECLINED)
+                        returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                         viewModel.onCloseFlowClicked()
                     },
                     onBackClicked = viewModel::onBackClickedWithSavedPaymentMethod,
@@ -368,12 +368,12 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     windowSize = windowSize,
                     viewModel = cardDetailsCheckoutViewModel,
                     onCloseClicked = {
-                        returnResult(DojoPaymentResult.DECLINED)
+                        returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                         viewModel.onCloseFlowClicked()
                     },
                     onBackClicked = {
                         if (flowStartDestination == PaymentFlowScreens.CardDetailsCheckout) {
-                            returnResult(DojoPaymentResult.DECLINED)
+                            returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                             viewModel.onCloseFlowClicked()
                         } else {
                             viewModel.onBackClicked()
