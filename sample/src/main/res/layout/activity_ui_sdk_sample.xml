@@ -50,18 +50,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="5dp"
         android:checked="true"
         android:text="Sandbox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkboxAdditonalLegalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:checked="false"
+        android:text="Show additional legal text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkboxSandbox" />
 
     <Button
         android:id="@+id/btnGenerateToken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="88dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="5dp"
         android:text="Generate token"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.698"
@@ -74,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="50dp"
         android:layout_marginRight="16dp"
         android:hint="Token"
         app:layout_constraintEnd_toEndOf="parent"
