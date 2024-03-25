@@ -107,7 +107,7 @@ internal class PaymentIntentDomainEntityMapperTest {
         transactionSource = "transactionSource",
         clientSessionSecret = "clientSessionSecret",
         clientSessionSecretExpirationDate = "clientSessionSecretExpirationDate",
-        status = "status",
+        status = "Created",
         paymentMethods = listOf("paymentMethods"),
         totalAmount = Amount(
             10L,
