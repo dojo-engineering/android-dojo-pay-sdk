@@ -83,8 +83,7 @@ internal class PaymentIntentDomainEntityMapper {
             isSetUpIntentPayment = !raw.merchantInitiatedTransactionType.isNullOrBlank() && !raw.paymentSource.isNullOrBlank(),
             merchantName = raw.config?.tradingName.orEmpty(),
             isPaymentAlreadyCollected =
-            PaymentIntentStatusDomainEntity.fromStatus(raw.status.orEmpty())
-                .let { it == PaymentIntentStatusDomainEntity.CAPTURED || it == PaymentIntentStatusDomainEntity.AUTHORIZED },
+            PaymentIntentStatusDomainEntity.fromStatus(raw.status.orEmpty()) != PaymentIntentStatusDomainEntity.CREATED,
             customerEmailAddress = raw.customer?.emailAddress,
             billingAddress = BillingAddressDomainEntity(
                 postcode = raw.billingAddress?.postcode,
