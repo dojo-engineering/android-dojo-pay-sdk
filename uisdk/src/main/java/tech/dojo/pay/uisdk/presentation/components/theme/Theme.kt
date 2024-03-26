@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -49,6 +50,8 @@ internal fun lightColorPalette(lightColorPalette: LightColorPalette = LightColor
         inputFieldSelectedBorderColor = lightColorPalette.inputFieldSelectedBorderColor.color,
         inputElementActiveTintColor = lightColorPalette.inputElementActiveTintColor.color,
         inputElementDefaultTintColor = lightColorPalette.inputElementDefaultTintColor.color,
+        backdropViewColor = lightColorPalette.backdropViewColor.color,
+        backdropViewAlpha = lightColorPalette.backdropViewAlpha
     )
 
 internal fun darkColorPalette(darkColorPalette: DarkColorPalette = DarkColorPalette()) = DojoColors(
@@ -83,6 +86,8 @@ internal fun darkColorPalette(darkColorPalette: DarkColorPalette = DarkColorPale
     inputFieldSelectedBorderColor = darkColorPalette.inputFieldSelectedBorderColor.color,
     inputElementActiveTintColor = darkColorPalette.inputElementActiveTintColor.color,
     inputElementDefaultTintColor = darkColorPalette.inputElementDefaultTintColor.color,
+    backdropViewColor = darkColorPalette.backdropViewColor.color,
+    backdropViewAlpha = darkColorPalette.backdropViewAlpha
 )
 
 @Composable
@@ -149,6 +154,8 @@ class DojoColors(
     inputFieldSelectedBorderColor: Color,
     inputElementActiveTintColor: Color,
     inputElementDefaultTintColor: Color,
+    backdropViewColor: Color,
+    backdropViewAlpha: Float
 ) {
     var primary by mutableStateOf(primary)
         private set
@@ -219,6 +226,10 @@ class DojoColors(
     var inputElementActiveTintColor by mutableStateOf(inputElementActiveTintColor)
         private set
     var inputElementDefaultTintColor by mutableStateOf(inputElementDefaultTintColor)
+        private set
+    var backdropViewColor by mutableStateOf(backdropViewColor)
+        private set
+    var backdropViewAlpha by mutableFloatStateOf(backdropViewAlpha)
         private set
 }
 

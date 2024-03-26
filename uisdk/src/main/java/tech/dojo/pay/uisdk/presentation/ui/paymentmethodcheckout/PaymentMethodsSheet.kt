@@ -18,6 +18,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +29,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,6 +62,7 @@ internal fun PaymentMethodsCheckOutScreen(
     onManagePaymentClicked: () -> Unit,
     onPayByCard: () -> Unit,
     showDojoBrand: Boolean,
+    additionalLegalText: String
 ) {
     val paymentMethodsSheetState =
         rememberModalBottomSheetState(
@@ -77,7 +80,9 @@ internal fun PaymentMethodsCheckOutScreen(
         viewModel.onSavedPaymentMethodChanged(currentSelectedMethod)
     }
     DojoBottomSheet(
-        modifier = Modifier.fillMaxSize().animateContentSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize(),
         sheetState = paymentMethodsSheetState,
         sheetBackgroundColor = DojoTheme.colors.primarySurfaceBackgroundColor,
         sheetContent = {
@@ -93,6 +98,7 @@ internal fun PaymentMethodsCheckOutScreen(
                 viewModel::onCvvValueChanged,
                 windowSize,
                 showDojoBrand,
+                additionalLegalText
             )
         },
     ) {
@@ -116,6 +122,7 @@ private fun BottomSheetItems(
     onCvvChanged: (String) -> Unit,
     windowSize: WindowSize,
     showDojoBrand: Boolean,
+    additionalLegalText: String,
 ) {
     AppBar(coroutineScope, sheetState, onAppBarIconClicked)
     if (contentState.isBottomSheetLoading) {
@@ -141,23 +148,47 @@ private fun BottomSheetItems(
                 )
                 PaymentMethodsButton(contentState, onPayByCard, onManagePaymentClicked)
                 PayAmountButton(contentState, onPayAmount)
-                FooterItem(showDojoBrand)
+                FooterItem(showDojoBrand, additionalLegalText)
             }
         }
     }
 }
 
 @Composable
-private fun FooterItem(showDojoBrand: Boolean) {
+private fun FooterItem(showDojoBrand: Boolean, additionalLegalText: String) {
+    val bottomPadding = if (additionalLegalText.isNotEmpty()) 8 else 24
     if (showDojoBrand) {
         DojoBrandFooter(
-            modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 24.dp),
+            modifier = Modifier.padding(24.dp, 8.dp, 16.dp, bottomPadding.dp),
             mode = DojoBrandFooterModes.DOJO_BRAND_ONLY,
         )
     } else {
         DojoBrandFooter(
             modifier = Modifier.padding(24.dp, 8.dp, 16.dp, 8.dp),
             mode = DojoBrandFooterModes.NONE,
+        )
+    }
+
+    if (additionalLegalText.isNotEmpty()) {
+        Text(
+            text = additionalLegalText,
+            style = DojoTheme.typography.subtitle2,
+            color = DojoTheme.colors.secondaryLabelTextColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun AdditionalLegalText(text: String) {
+    if (text.isNotEmpty()) {
+        Text(
+            text = text,
+            style = DojoTheme.typography.subtitle2,
+            color = DojoTheme.colors.secondaryLabelTextColor,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 16.dp)
         )
     }
 }
