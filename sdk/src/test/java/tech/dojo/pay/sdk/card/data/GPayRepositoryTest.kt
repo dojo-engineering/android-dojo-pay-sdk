@@ -127,4 +127,14 @@ internal class GPayRepositoryTest {
             messageExpiration = "messageExpiration"
         )
     }
+
+    @Test
+    fun `WHEN expiryMonth is 5 THEN format it to 05`() = runTest {
+        // arrange
+        Assert.assertEquals(repo.sanitiseExpiryMonth("5"), "05")
+        Assert.assertEquals(repo.sanitiseExpiryMonth("12"), "12")
+        Assert.assertEquals(repo.sanitiseExpiryMonth("05"), "05")
+        Assert.assertEquals(repo.sanitiseExpiryMonth("1"), "01")
+        Assert.assertEquals(repo.sanitiseExpiryMonth("01"), "01")
+    }
 }
