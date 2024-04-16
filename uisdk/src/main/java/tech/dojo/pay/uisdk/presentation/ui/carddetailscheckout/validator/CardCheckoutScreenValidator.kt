@@ -1,6 +1,10 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator
 
 import androidx.core.util.PatternsCompat
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.uisdk.presentation.components.isAmexCardScheme
+import tech.dojo.pay.uisdk.presentation.components.isMaestroCardScheme
+import tech.dojo.pay.uisdk.presentation.components.isVisaCardScheme
 
 @Suppress("NestedBlockDepth")
 internal class CardCheckoutScreenValidator {
@@ -48,6 +52,18 @@ internal class CardCheckoutScreenValidator {
         } else {
             false
         }
+    }
+
+    fun isCardSchemaSupported(cardNumberValue: String, availableCardSchemas: List<CardsSchemes>): Boolean {
+        return availableCardSchemas.contains(getCardScheme(cardNumberValue))
+    }
+
+    fun getCardScheme(cardNumberValue: String): CardsSchemes? {
+        if (isAmexCardScheme(cardNumberValue)) { return CardsSchemes.AMEX }
+        if (isMaestroCardScheme(cardNumberValue)) { return CardsSchemes.MAESTRO }
+        if (isMaestroCardScheme(cardNumberValue)) { return CardsSchemes.MASTERCARD }
+        if (isVisaCardScheme(cardNumberValue)) { return CardsSchemes.VISA }
+        return null
     }
 
     fun isCardExpireDateValid(expireDate: String): Boolean {

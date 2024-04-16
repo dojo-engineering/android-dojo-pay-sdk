@@ -1518,6 +1518,7 @@ private object TestData {
                 isVisible = true,
             ),
             allowedPaymentMethodsIcons = emptyList(),
+            allowedCardSchemes = emptyList()
         ),
         payButtonSection = PayButtonViewState(
             isEnabled = false,

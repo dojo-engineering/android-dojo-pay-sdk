@@ -100,6 +100,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "",
                 amountCurrency = "",
                 allowedPaymentMethodsIcons = emptyList(),
+                allowedCardSchemes = listOf(),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isBillingCountryFieldRequired = false,
@@ -154,6 +155,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "",
                 amountCurrency = "",
                 allowedPaymentMethodsIcons = emptyList(),
+                allowedCardSchemes = listOf(),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isBillingCountryFieldRequired = false,
@@ -225,6 +227,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "100",
                 amountCurrency = "£",
                 isBillingCountryFieldRequired = false,
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 supportedCountriesList = emptyList(),
                 currentSelectedCountry = SupportedCountriesViewEntity(
                     countryName = "",
@@ -342,6 +345,7 @@ class CardDetailsCheckoutViewModelTest {
                 ),
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX)
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -391,7 +395,7 @@ class CardDetailsCheckoutViewModelTest {
                             "GBP",
                         ),
                         customerId = "customerId",
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        supportedCardsSchemes = listOf(),
                         collectionBillingAddressRequired = true,
                     ),
                 ),
@@ -534,6 +538,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = "new"),
                 emailInputField = InputFieldState(value = ""),
                 isEmailInputFieldRequired = false,
@@ -631,6 +636,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isEmailInputFieldRequired = false,
@@ -730,6 +736,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = "new"),
                 isEmailInputFieldRequired = true,

@@ -158,6 +158,7 @@ private object TestDataVirtualTerminalViewEntityMapper {
             cardExpireDateInputField = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             cvvInputFieldState = InputFieldState(value = "", errorMessages = null, isError = false, isVisible = true),
             allowedPaymentMethodsIcons = emptyList(),
+            allowedCardSchemes = listOf(CardsSchemes.AMEX)
         ),
         payButtonSection = PayButtonViewState(
             isEnabled = false,

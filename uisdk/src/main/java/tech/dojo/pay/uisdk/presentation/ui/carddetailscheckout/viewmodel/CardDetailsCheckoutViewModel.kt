@@ -140,7 +140,7 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else if (!cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue)) {
+        } else if (!cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) || !cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberValue, currentState.allowedCardSchemes)) {
             currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
                     value = cardNumberValue,
@@ -336,6 +336,7 @@ internal class CardDetailsCheckoutViewModel(
         allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
             paymentIntentResult.result.supportedCardsSchemes,
         ),
+        allowedCardSchemes = paymentIntentResult.result.supportedCardsSchemes,
         isEmailInputFieldRequired = paymentIntentResult.result.collectionEmailRequired,
         isBillingCountryFieldRequired = paymentIntentResult.result.collectionBillingAddressRequired,
         supportedCountriesList = countryList,
