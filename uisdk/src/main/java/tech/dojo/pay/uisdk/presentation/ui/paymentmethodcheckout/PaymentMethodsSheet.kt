@@ -170,7 +170,8 @@ private fun FooterItem(showDojoBrand: Boolean, additionalLegalText: String) {
     }
 
     if (additionalLegalText.isNotEmpty()) {
-        Text(text = additionalLegalText,
+        Text(
+            text = additionalLegalText,
             style = DojoTheme.typography.subtitle2,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
@@ -182,12 +183,13 @@ private fun FooterItem(showDojoBrand: Boolean, additionalLegalText: String) {
 @Composable
 private fun AdditionalLegalText(text: String) {
     if (text.isNotEmpty()) {
-        Text(text = text,
+        Text(
+            text = text,
             style = DojoTheme.typography.subtitle2,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(8.dp, 0.dp, 8.dp, 16.dp)
-            )
+        )
     }
 }
 
