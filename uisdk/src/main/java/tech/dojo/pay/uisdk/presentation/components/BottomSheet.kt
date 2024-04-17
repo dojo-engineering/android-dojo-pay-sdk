@@ -31,7 +31,7 @@ internal fun DojoBottomSheet(
         ),
         sheetBackgroundColor = sheetBackgroundColor ?: DojoTheme.colors.background,
         sheetContentColor = sheetContentColor ?: DojoTheme.colors.onBackground,
-        scrimColor = scrimColor ?: DojoTheme.colors.onBackground.copy(alpha = 0.35f),
+        scrimColor = scrimColor ?: DojoTheme.colors.backdropViewColor.copy(alpha = DojoTheme.colors.backdropViewAlpha),
         sheetContent = { sheetContent() },
         content = content
     )

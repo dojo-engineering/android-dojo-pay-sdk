@@ -86,13 +86,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
                 val isDarkModeEnabled = isSystemInDarkTheme() && !forceLightMode
                 val showDojoBrand = DojoSDKDropInUI.dojoThemeSettings?.showBranding ?: false
+                val additionalLegalText = DojoSDKDropInUI.dojoThemeSettings?.additionalLegalText ?: ""
                 val customColorPalette =
                     paymentFlowViewModel.getCustomColorPalette(isDarkModeEnabled)
                 val windowSize = rememberWindowSize()
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = Color.Black.copy(alpha = 0.2f),
+                        color = Color.Transparent,
                     ) {
                         val navController = rememberNavController()
                         // Listen for navigation event
@@ -107,6 +108,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             isDarkModeEnabled,
                             windowSize,
                             showDojoBrand,
+                            additionalLegalText
                         )
                     }
                 }
@@ -225,6 +227,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         isDarkModeEnabled: Boolean,
         windowSize: WindowSize,
         showDojoBrand: Boolean,
+        additionalLegalText: String
     ) {
         NavHost(
             navController = navController,
@@ -234,6 +237,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 windowSize = windowSize,
                 viewModel = paymentFlowViewModel,
                 showDojoBrand = showDojoBrand,
+                additionalLegalText = additionalLegalText
             )
             managePaymentMethodsScreen(
                 isDarkModeEnabled = isDarkModeEnabled,
@@ -266,6 +270,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         windowSize: WindowSize,
         viewModel: PaymentFlowViewModel,
         showDojoBrand: Boolean,
+        additionalLegalText: String
     ) {
         composable(
             route = PaymentFlowScreens.PaymentMethodCheckout.route,
@@ -286,12 +291,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 currentSelectedMethod = currentSelectedMethod,
                 viewModel = paymentMethodCheckoutViewModel,
                 onAppBarIconClicked = {
-                    returnResult(DojoPaymentResult.DECLINED)
+                    returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                     viewModel.onCloseFlowClicked()
                 },
                 onManagePaymentClicked = viewModel::navigateToManagePaymentMethods,
                 onPayByCard = viewModel::navigateToCardDetailsCheckoutScreen,
                 showDojoBrand = showDojoBrand,
+                additionalLegalText = additionalLegalText
             )
         }
     }
@@ -330,7 +336,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     windowSize = windowSize,
                     viewModel = mangePaymentViewModel,
                     onCloseClicked = {
-                        returnResult(DojoPaymentResult.DECLINED)
+                        returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                         viewModel.onCloseFlowClicked()
                     },
                     onBackClicked = viewModel::onBackClickedWithSavedPaymentMethod,
@@ -368,12 +374,12 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     windowSize = windowSize,
                     viewModel = cardDetailsCheckoutViewModel,
                     onCloseClicked = {
-                        returnResult(DojoPaymentResult.DECLINED)
+                        returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                         viewModel.onCloseFlowClicked()
                     },
                     onBackClicked = {
                         if (flowStartDestination == PaymentFlowScreens.CardDetailsCheckout) {
-                            returnResult(DojoPaymentResult.DECLINED)
+                            returnResult(DojoPaymentResult.USER_CLOSED_WITHOUT_PAYING)
                             viewModel.onCloseFlowClicked()
                         } else {
                             viewModel.onBackClicked()

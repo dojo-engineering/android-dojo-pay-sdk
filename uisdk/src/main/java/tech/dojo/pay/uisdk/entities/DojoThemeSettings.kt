@@ -10,7 +10,8 @@ data class DojoThemeSettings @JvmOverloads constructor(
     val darkColorPalette: DarkColorPalette = DarkColorPalette(),
     val forceLightMode: Boolean = false,
     val showBranding: Boolean = true,
-    val analyticsExcludedFieldsIdentifier: String = ""
+    val analyticsExcludedFieldsIdentifier: String = "",
+    var additionalLegalText: String = ""
 ) : Serializable
 
 @Keep
@@ -35,6 +36,8 @@ data class LightColorPalette @JvmOverloads constructor(
     val inputFieldSelectedBorderColor: String = "#FF00857D",
     val inputElementActiveTintColor: String = "#FF00857D",
     val inputElementDefaultTintColor: String = "#26000000",
+    val backdropViewColor: String = "#FF000000",
+    val backdropViewAlpha: Float = 0.3f,
 ) : Serializable
 
 @Keep
@@ -59,6 +62,8 @@ data class DarkColorPalette @JvmOverloads constructor(
     val inputFieldSelectedBorderColor: String = "#FFFFFFFF",
     val inputElementActiveTintColor: String = "#FFFFFFFF",
     val inputElementDefaultTintColor: String = "#FFFFFFFF",
+    val backdropViewColor: String = "#FF000000",
+    val backdropViewAlpha: Float = 0.3f,
 ) : Serializable
 
 internal val String.color
