@@ -24,10 +24,6 @@ internal class GPayRepository(
         )
     }
 
-    fun sanitiseExpiryMonth(originalExpiryMonth: String): String {
-        return "%02d".format(originalExpiryMonth.toInt()) // GPay may return 5 but BE expects 05
-    }
-
     suspend fun processPayment(gPayPayload: GPayDetails): PaymentResult {
         val response = api.processGPay(token, gPayPayload)
         val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
