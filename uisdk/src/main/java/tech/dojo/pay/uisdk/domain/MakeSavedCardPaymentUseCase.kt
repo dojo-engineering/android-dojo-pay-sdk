@@ -14,7 +14,7 @@ internal class MakeSavedCardPaymentUseCase(
 
     suspend fun makePaymentWithUpdatedToken(
         params: MakeSavedCardPaymentParams,
-        onUpdateTokenError: () -> Unit,
+        onError: () -> Unit,
     ) {
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
@@ -24,10 +24,9 @@ internal class MakeSavedCardPaymentUseCase(
             .firstOrNull()
             ?.let { result ->
                 if (result is RefreshPaymentIntentResult.Success) {
-                    onSuccessResult(params, result)
+                    onSuccessResult(params, result,onError)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
-                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
-                    onUpdateTokenError()
+                    onPaymentError(onError)
                 }
             }
     }
@@ -35,6 +34,18 @@ internal class MakeSavedCardPaymentUseCase(
     private fun onSuccessResult(
         params: MakeSavedCardPaymentParams,
         successResult: RefreshPaymentIntentResult.Success,
+        onError: () -> Unit,
+    ) {
+        try {
+            startSavedCardPayment(params, successResult)
+        } catch (e: Exception) {
+            onPaymentError(onError)
+        }
+    }
+
+    private fun startSavedCardPayment(
+        params: MakeSavedCardPaymentParams,
+        successResult: RefreshPaymentIntentResult.Success
     ) {
         params.savedCardPaymentHandler.executeSavedCardPayment(
             token = successResult.token,
@@ -43,5 +54,10 @@ internal class MakeSavedCardPaymentUseCase(
                 paymentMethodId = params.paymentMethodId,
             ),
         )
+    }
+
+    private fun onPaymentError(onError: () -> Unit) {
+        updatePaymentStateUseCase.updatePaymentSate(isActive = false)
+        onError()
     }
 }

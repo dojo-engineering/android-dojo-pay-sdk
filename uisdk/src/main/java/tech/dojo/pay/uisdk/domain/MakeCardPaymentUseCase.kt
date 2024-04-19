@@ -12,7 +12,7 @@ internal class MakeCardPaymentUseCase(
 ) {
     suspend fun makeCardPayment(
         params: MakeCardPaymentParams,
-        onUpdateTokenError: () -> Unit,
+        onError: () -> Unit,
     ) {
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
@@ -22,10 +22,9 @@ internal class MakeCardPaymentUseCase(
             .firstOrNull()
             ?.let { result ->
                 if (result is RefreshPaymentIntentResult.Success) {
-                    onSuccessResult(params, result)
+                    onSuccessResult(params, result, onError)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
-                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
-                    onUpdateTokenError()
+                    onMakingPaymentError(onError)
                 }
             }
     }
@@ -33,10 +32,27 @@ internal class MakeCardPaymentUseCase(
     private fun onSuccessResult(
         params: MakeCardPaymentParams,
         result: RefreshPaymentIntentResult.Success,
+        onError: () -> Unit
+    ) {
+        try {
+            startCardPayment(params, result)
+        } catch (e: Exception) {
+            onMakingPaymentError(onError)
+        }
+    }
+
+    private fun startCardPayment(
+        params: MakeCardPaymentParams,
+        result: RefreshPaymentIntentResult.Success
     ) {
         params.dojoCardPaymentHandler.executeCardPayment(
             token = result.token,
             payload = params.fullCardPaymentPayload,
         )
+    }
+
+    private fun onMakingPaymentError(onError: () -> Unit) {
+        updatePaymentStateUseCase.updatePaymentSate(isActive = false)
+        onError()
     }
 }

@@ -32,12 +32,22 @@ internal class CardPaymentRequestMapperTest {
         val actual = CardPaymentRequestMapper().mapToPaymentDetails(SAVED_CARD_PAYLOAD)
         Assert.assertEquals(paymentDetailsForSavedCard, actual)
     }
+
+    @Test
+    fun `WHEN expiryMonth is 5 THEN format it to 05`() {
+        // arrange
+        Assert.assertEquals(CardPaymentRequestMapper().sanitiseExpiryMonth("5"), "05")
+        Assert.assertEquals(CardPaymentRequestMapper().sanitiseExpiryMonth("12"), "12")
+        Assert.assertEquals(CardPaymentRequestMapper().sanitiseExpiryMonth("05"), "05")
+        Assert.assertEquals(CardPaymentRequestMapper().sanitiseExpiryMonth("1"), "01")
+        Assert.assertEquals(CardPaymentRequestMapper().sanitiseExpiryMonth("01"), "01")
+    }
     private companion object {
 
         val CARD_DETAILS = DojoCardDetails(
             cardNumber = "4456530000001096",
             cardName = "Card holder",
-            expiryMonth = "12",
+            expiryMonth = "2",
             expiryYear = "24",
             cv2 = "020",
             mitConsentGiven = true,
@@ -75,7 +85,7 @@ internal class CardPaymentRequestMapperTest {
         val paymentDetails = PaymentDetails(
             cardNumber = CARD_DETAILS.cardNumber,
             cardName = CARD_DETAILS.cardName,
-            expiryDate = "${CARD_DETAILS.expiryMonth} / ${CARD_DETAILS.expiryYear}",
+            expiryDate = "02 / ${CARD_DETAILS.expiryYear}", // check that expiryMonth is coming as 02
             cV2 = CARD_DETAILS.cv2,
             userEmailAddress = FULL_CARD_PAYLOAD.userEmailAddress,
             userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,

@@ -42,6 +42,10 @@ internal class VirtualTerminalViewModel(
     val state: LiveData<VirtualTerminalViewState>
         get() = mutableState
 
+    fun updateVirtualTerminalHandler(virtualTerminalHandler: DojoVirtualTerminalHandler) {
+        this.virtualTerminalHandler = virtualTerminalHandler
+    }
+
     init {
         currentState = VirtualTerminalViewState(isLoading = true)
         pushStateToUi(currentState)
@@ -472,7 +476,7 @@ internal class VirtualTerminalViewModel(
                         virtualTerminalHandler = virtualTerminalHandler,
                         paymentId = paymentIntentId,
                     ),
-                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                    onError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
                 )
         }
     }
