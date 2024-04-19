@@ -13,7 +13,7 @@ internal class MakeVTPaymentUseCase(
 
     suspend fun makeVTPayment(
         params: MakeVTPaymentParams,
-        onUpdateTokenError: () -> Unit,
+        onError: () -> Unit,
     ) {
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
@@ -25,19 +25,35 @@ internal class MakeVTPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
-                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
-                    onUpdateTokenError()
+                    onPaymentError(onError)
                 }
             }
     }
+
 
     private fun onSuccessResult(
         params: MakeVTPaymentParams,
         result: RefreshPaymentIntentResult.Success,
     ) {
+        try {
+            startVTPayment(params, result)
+        } catch (e: Exception) {
+            onPaymentError { }
+        }
+    }
+
+    private fun startVTPayment(
+        params: MakeVTPaymentParams,
+        result: RefreshPaymentIntentResult.Success
+    ) {
         params.virtualTerminalHandler.executeVirtualTerminalPayment(
             token = result.token,
             payload = params.fullCardPaymentPayload,
         )
+    }
+
+    private fun onPaymentError(onError: () -> Unit) {
+        updatePaymentStateUseCase.updatePaymentSate(isActive = false)
+        onError()
     }
 }

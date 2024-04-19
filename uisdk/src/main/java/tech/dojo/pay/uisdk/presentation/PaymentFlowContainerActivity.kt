@@ -407,6 +407,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     arguments,
                 ) { viewModel.navigateToPaymentResult(it) }
             }
+            // this is to handle unregistered activity when screen orientation change
+            virtualMachineErrorViewModel.updateVirtualTerminalHandler(virtualTerminalHandler)
             VirtualTerminalCheckOutScreen(
                 windowSize = windowSize,
                 viewModel = virtualMachineErrorViewModel,
