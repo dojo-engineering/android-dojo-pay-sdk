@@ -143,7 +143,7 @@ internal class PaymentMethodCheckoutViewModel(
                         gpayPaymentHandler = gpayPaymentHandler,
                         paymentId = paymentIntent.id,
                     ),
-                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                    onError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
                 )
             }
         }
@@ -208,7 +208,7 @@ internal class PaymentMethodCheckoutViewModel(
                         paymentMethodId = (currentState.paymentMethodItem as? PaymentMethodItemViewEntityItem.CardItemItem)?.id
                             ?: "",
                     ),
-                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                    onError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
                 )
         }
     }
