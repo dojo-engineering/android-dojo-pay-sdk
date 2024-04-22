@@ -31,7 +31,6 @@ internal class MakeVTPaymentUseCase(
             }
     }
 
-
     private fun onSuccessResult(
         params: MakeVTPaymentParams,
         result: RefreshPaymentIntentResult.Success,

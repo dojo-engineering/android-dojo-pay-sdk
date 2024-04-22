@@ -33,7 +33,6 @@ internal class MakeGpayPaymentUseCase(
             }
     }
 
-
     private fun onSuccessResult(
         params: MakeGpayPaymentParams,
         successResult: RefreshPaymentIntentResult.Success,
