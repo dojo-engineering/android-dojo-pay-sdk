@@ -45,6 +45,10 @@ internal class CardPaymentRequestMapper {
     private fun formatExpiryDate(month: String?, year: String?): String? {
         if (month == null || year == null) return null
         val expireYear = if (year.length == 4) { year.substring(2, 4) } else year
-        return String.format(Locale.getDefault(), "%s / %s", month, expireYear)
+        return String.format(Locale.getDefault(), "%s / %s", sanitiseExpiryMonth(month), expireYear)
+    }
+
+    fun sanitiseExpiryMonth(originalExpiryMonth: String): String {
+        return "%02d".format(originalExpiryMonth.toInt()) // GPay may return 5 but BE expects 05
     }
 }

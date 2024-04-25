@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import tech.dojo.pay.uisdk.domain.entities.MakeVTPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class MakeVTPaymentUseCase(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
@@ -13,7 +14,7 @@ internal class MakeVTPaymentUseCase(
 
     suspend fun makeVTPayment(
         params: MakeVTPaymentParams,
-        onUpdateTokenError: () -> Unit,
+        onError: () -> Unit,
     ) {
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
@@ -25,8 +26,7 @@ internal class MakeVTPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
-                    updatePaymentStateUseCase.updatePaymentSate(isActive = false)
-                    onUpdateTokenError()
+                    onPaymentError(onError)
                 }
             }
     }
@@ -35,9 +35,25 @@ internal class MakeVTPaymentUseCase(
         params: MakeVTPaymentParams,
         result: RefreshPaymentIntentResult.Success,
     ) {
+        try {
+            startVTPayment(params, result)
+        } catch (e: Exception) {
+            onPaymentError { }
+        }
+    }
+
+    private fun startVTPayment(
+        params: MakeVTPaymentParams,
+        result: RefreshPaymentIntentResult.Success
+    ) {
         params.virtualTerminalHandler.executeVirtualTerminalPayment(
             token = result.token,
             payload = params.fullCardPaymentPayload,
         )
+    }
+
+    private fun onPaymentError(onError: () -> Unit) {
+        updatePaymentStateUseCase.updatePaymentSate(isActive = false)
+        onError()
     }
 }

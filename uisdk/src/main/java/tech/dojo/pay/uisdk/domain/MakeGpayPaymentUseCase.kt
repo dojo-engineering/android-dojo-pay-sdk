@@ -7,6 +7,7 @@ import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class MakeGpayPaymentUseCase(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
@@ -15,7 +16,7 @@ internal class MakeGpayPaymentUseCase(
 
     suspend fun makePaymentWithUpdatedToken(
         params: MakeGpayPaymentParams,
-        onUpdateTokenError: () -> Unit,
+        onError: () -> Unit,
     ) {
         updatePaymentStateUseCase.updateGpayPaymentSate(isActive = true)
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
@@ -25,10 +26,9 @@ internal class MakeGpayPaymentUseCase(
             .firstOrNull()
             ?.let { result ->
                 if (result is RefreshPaymentIntentResult.Success) {
-                    onSuccessResult(params, result)
+                    onSuccessResult(params, result, onError)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
-                    updatePaymentStateUseCase.updateGpayPaymentSate(isActive = false)
-                    onUpdateTokenError()
+                    onPaymentFlowError(onError)
                 }
             }
     }
@@ -36,8 +36,13 @@ internal class MakeGpayPaymentUseCase(
     private fun onSuccessResult(
         params: MakeGpayPaymentParams,
         successResult: RefreshPaymentIntentResult.Success,
+        onError: () -> Unit,
     ) {
-        startGpayPayment(params, successResult)
+        try {
+            startGpayPayment(params, successResult)
+        } catch (e: Exception) {
+            onPaymentFlowError(onError)
+        }
     }
 
     private fun startGpayPayment(
@@ -51,5 +56,10 @@ internal class MakeGpayPaymentUseCase(
                 totalAmount = params.dojoTotalAmount,
             ),
         )
+    }
+
+    private fun onPaymentFlowError(onError: () -> Unit) {
+        updatePaymentStateUseCase.updateGpayPaymentSate(isActive = false)
+        onError()
     }
 }

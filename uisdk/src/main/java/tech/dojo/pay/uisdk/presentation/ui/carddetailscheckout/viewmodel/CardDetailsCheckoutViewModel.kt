@@ -442,7 +442,7 @@ internal class CardDetailsCheckoutViewModel(
                         dojoCardPaymentHandler = dojoCardPaymentHandler,
                         paymentId = paymentIntentId,
                     ),
-                    onUpdateTokenError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
+                    onError = { navigateToCardResult(DojoPaymentResult.SDK_INTERNAL_ERROR) },
                 )
         }
     }
