@@ -6,6 +6,7 @@ import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import tech.dojo.pay.uisdk.domain.entities.MakeSavedCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class MakeSavedCardPaymentUseCase(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
@@ -24,7 +25,7 @@ internal class MakeSavedCardPaymentUseCase(
             .firstOrNull()
             ?.let { result ->
                 if (result is RefreshPaymentIntentResult.Success) {
-                    onSuccessResult(params, result,onError)
+                    onSuccessResult(params, result, onError)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
                     onPaymentError(onError)
                 }
