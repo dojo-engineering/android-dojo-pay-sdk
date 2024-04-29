@@ -35,7 +35,7 @@ internal class CardCheckoutScreenValidator {
     }
 
     fun isCardNumberValid(cardNumberValue: String): Boolean {
-        return if (cardNumberValue.isNotEmpty()) {
+        return if (cardNumberValue.isNotEmpty() && cardNumberValue.length > 14) {
             var sum = 0
             var alternate = false
             for (i in cardNumberValue.length - 1 downTo 0) {
