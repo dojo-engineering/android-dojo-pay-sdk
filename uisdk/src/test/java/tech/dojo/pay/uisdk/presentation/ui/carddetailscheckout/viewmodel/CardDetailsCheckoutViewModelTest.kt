@@ -473,7 +473,7 @@ class CardDetailsCheckoutViewModelTest {
             )
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(true)
-            given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(true)
+            given(cardCheckoutScreenValidator.isCardSchemaSupported(any(), any())).willReturn(true)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(true)
             given(
                 cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
