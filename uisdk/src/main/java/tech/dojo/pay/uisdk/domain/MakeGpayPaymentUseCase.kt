@@ -7,6 +7,7 @@ import tech.dojo.pay.sdk.card.entities.DojoPaymentIntent
 import tech.dojo.pay.uisdk.domain.entities.MakeGpayPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class MakeGpayPaymentUseCase(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
@@ -31,7 +32,6 @@ internal class MakeGpayPaymentUseCase(
                 }
             }
     }
-
 
     private fun onSuccessResult(
         params: MakeGpayPaymentParams,

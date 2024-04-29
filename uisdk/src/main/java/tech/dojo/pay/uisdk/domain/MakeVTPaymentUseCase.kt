@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import tech.dojo.pay.uisdk.domain.entities.MakeVTPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
 
+@Suppress("TooGenericExceptionCaught", "SwallowedException")
 internal class MakeVTPaymentUseCase(
     private val updatePaymentStateUseCase: UpdatePaymentStateUseCase,
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
@@ -29,7 +30,6 @@ internal class MakeVTPaymentUseCase(
                 }
             }
     }
-
 
     private fun onSuccessResult(
         params: MakeVTPaymentParams,
