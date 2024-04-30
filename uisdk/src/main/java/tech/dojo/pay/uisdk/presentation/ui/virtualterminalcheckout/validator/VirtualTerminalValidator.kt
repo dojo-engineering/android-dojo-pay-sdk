@@ -119,6 +119,7 @@ internal class VirtualTerminalValidator(
         return if (cardDetailsSection?.isVisible == true) {
             cardDetailsSection.cardHolderInputField.value.isNotBlank() &&
                 cardCheckoutScreenValidator.isCardNumberValid(cardDetailsSection.cardNumberInputField.value) &&
+                    cardCheckoutScreenValidator.isCardSchemaSupported(cardDetailsSection.cardNumberInputField.value, cardDetailsSection.allowedCardSchemes) &&
                 cardCheckoutScreenValidator.isEmailValid(cardDetailsSection.emailInputField.value) &&
                 cardCheckoutScreenValidator.isCardExpireDateValid(cardDetailsSection.cardExpireDateInputField.value) &&
                 cardCheckoutScreenValidator.isCvvValid(cardDetailsSection.cvvInputFieldState.value)
