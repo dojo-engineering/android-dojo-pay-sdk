@@ -188,6 +188,7 @@ class VirtualTerminalValidatorTest {
         whenever(currentState.shippingAddressSection).thenReturn(shippingAddress)
         whenever(currentState.billingAddressSection).thenReturn(billingAddress)
         whenever(cardCheckoutScreenValidator.isCardNumberValid(Mockito.anyString())).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCardSchemaSupported(Mockito.anyString(), Mockito.anyList())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isEmailValid(Mockito.anyString())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(Mockito.anyString())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCvvValid(Mockito.anyString())).thenReturn(true)
