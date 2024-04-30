@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator
 
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
@@ -26,9 +27,9 @@ internal class VirtualTerminalValidator(
         }
     }
 
-    fun validateCardNumberInputField(cardNumberFieldNewValue: String): InputFieldState {
+    fun validateCardNumberInputField(cardNumberFieldNewValue: String, allowedCardSchemes: List<CardsSchemes>): InputFieldState {
         val isCardValid: Boolean =
-            cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)
+            cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue) && cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberFieldNewValue, allowedCardSchemes)
         return if (cardNumberFieldNewValue.isNotBlank() && !isCardValid) {
             InputFieldState(
                 value = cardNumberFieldNewValue,

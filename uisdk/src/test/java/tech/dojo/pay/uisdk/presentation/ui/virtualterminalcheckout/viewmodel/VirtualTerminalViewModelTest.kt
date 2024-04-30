@@ -1103,7 +1103,7 @@ class VirtualTerminalViewModelTest {
                 ),
             )
             given(
-                virtualTerminalValidator.validateCardNumberInputField(any()),
+                virtualTerminalValidator.validateCardNumberInputField(any(), any()),
             ).willReturn(InputFieldState(newValue))
             val viewModel = initViewModelWithPaymentIntent(initPaymentIntent)
 
@@ -1111,7 +1111,7 @@ class VirtualTerminalViewModelTest {
             viewModel.onValidateCardNumber(newValue)
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
-            verify(virtualTerminalValidator).validateCardNumberInputField(newValue)
+            verify(virtualTerminalValidator).validateCardNumberInputField(newValue, emptyList())
         }
 
     @Test

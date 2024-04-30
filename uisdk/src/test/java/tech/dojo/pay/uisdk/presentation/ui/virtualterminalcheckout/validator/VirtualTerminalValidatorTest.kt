@@ -6,6 +6,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
@@ -66,8 +67,9 @@ class VirtualTerminalValidatorTest {
         val cardNumberFieldNewValue = "4111111111111111"
 
         whenever(cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberFieldNewValue, emptyList())).thenReturn(true)
 
-        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue)
+        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue, emptyList())
 
         val expected = InputFieldState(value = cardNumberFieldNewValue, isError = false)
 
@@ -80,7 +82,7 @@ class VirtualTerminalValidatorTest {
 
         whenever(cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)).thenReturn(false)
 
-        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue)
+        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue, emptyList())
 
         val expected = InputFieldState(
             value = cardNumberFieldNewValue,
