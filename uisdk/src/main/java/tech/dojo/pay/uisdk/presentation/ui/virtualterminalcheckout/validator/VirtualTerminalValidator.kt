@@ -29,7 +29,7 @@ internal class VirtualTerminalValidator(
 
     fun validateCardNumberInputField(cardNumberFieldNewValue: String, allowedCardSchemes: List<CardsSchemes>): InputFieldState {
         val isCardValid: Boolean =
-            cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue) && cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberFieldNewValue, allowedCardSchemes)
+            cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberFieldNewValue, allowedCardSchemes)
         return if (cardNumberFieldNewValue.isNotBlank() && !isCardValid) {
             InputFieldState(
                 value = cardNumberFieldNewValue,
@@ -118,8 +118,7 @@ internal class VirtualTerminalValidator(
     private fun validateCardDetailsSection(cardDetailsSection: CardDetailsViewState?): Boolean {
         return if (cardDetailsSection?.isVisible == true) {
             cardDetailsSection.cardHolderInputField.value.isNotBlank() &&
-                cardCheckoutScreenValidator.isCardNumberValid(cardDetailsSection.cardNumberInputField.value) &&
-                    cardCheckoutScreenValidator.isCardSchemaSupported(cardDetailsSection.cardNumberInputField.value, cardDetailsSection.allowedCardSchemes) &&
+                cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardDetailsSection.cardNumberInputField.value, cardDetailsSection.allowedCardSchemes) &&
                 cardCheckoutScreenValidator.isEmailValid(cardDetailsSection.emailInputField.value) &&
                 cardCheckoutScreenValidator.isCardExpireDateValid(cardDetailsSection.cardExpireDateInputField.value) &&
                 cardCheckoutScreenValidator.isCvvValid(cardDetailsSection.cvvInputFieldState.value)

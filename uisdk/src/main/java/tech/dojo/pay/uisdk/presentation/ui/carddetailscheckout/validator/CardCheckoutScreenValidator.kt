@@ -55,6 +55,10 @@ internal class CardCheckoutScreenValidator {
         }
     }
 
+    fun isCardNumberValidAndSupported(cardNumberValue: String, availableCardSchemas: List<CardsSchemes>): Boolean {
+        return isCardNumberValid(cardNumberValue) && isCardSchemaSupported(cardNumberValue, availableCardSchemas)
+    }
+
     fun isCardSchemaSupported(cardNumberValue: String, availableCardSchemas: List<CardsSchemes>): Boolean {
         return availableCardSchemas.contains(getCardScheme(cardNumberValue))
     }

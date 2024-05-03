@@ -472,21 +472,8 @@ class CardDetailsCheckoutViewModelTest {
                 SupportedCountriesDomainEntity("", "", false),
             )
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-            given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(true)
-            given(cardCheckoutScreenValidator.isCardSchemaSupported(any(), any())).willReturn(true)
+            given(cardCheckoutScreenValidator.isCardNumberValidAndSupported(any(), any())).willReturn(true)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(true)
-            given(
-                cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
-                    any(),
-                    any(),
-                ),
-            ).willReturn(true)
-            given(
-                cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
-                    any(),
-                    any(),
-                ),
-            ).willReturn(true)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
             val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
@@ -781,7 +768,7 @@ class CardDetailsCheckoutViewModelTest {
                 MutableStateFlow(PaymentIntentResult.None)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-            given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(false)
+            given(cardCheckoutScreenValidator.isCardNumberValidAndSupported(any(), any())).willReturn(false)
             given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isEmailValid(any())).willReturn(false)

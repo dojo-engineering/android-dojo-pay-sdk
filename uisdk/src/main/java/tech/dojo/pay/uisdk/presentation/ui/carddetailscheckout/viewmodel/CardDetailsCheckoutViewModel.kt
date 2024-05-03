@@ -140,7 +140,7 @@ internal class CardDetailsCheckoutViewModel(
                 ),
                 actionButtonState = currentState.actionButtonState.updateIsEnabled(newValue = false),
             )
-        } else if (!cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) || !cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberValue, currentState.allowedCardSchemes)) {
+        } else if (!cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberValue, currentState.allowedCardSchemes)) {
             currentState = currentState.copy(
                 cardNumberInputField = InputFieldState(
                     value = cardNumberValue,
@@ -279,9 +279,9 @@ internal class CardDetailsCheckoutViewModel(
         isCheckBoxChecked: Boolean = currentState.checkBoxItem.isChecked,
     ) =
         cardHolderValue.isNotBlank() &&
-            cardCheckoutScreenValidator.isCardNumberValid(cardNumberValue) &&
-                cardCheckoutScreenValidator.isCardSchemaSupported(cardNumberValue, currentState.allowedCardSchemes) &&
+            cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberValue, currentState.allowedCardSchemes) &&
             cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
+                cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
             cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
                 emailValue,
                 currentState.isEmailInputFieldRequired,
