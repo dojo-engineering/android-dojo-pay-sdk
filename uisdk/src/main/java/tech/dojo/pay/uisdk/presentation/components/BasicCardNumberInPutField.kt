@@ -183,7 +183,7 @@ internal fun BasicCardNumberInputField(
                     .fillMaxWidth()
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
-            if (cardNumberValue.text.isNotBlank() && CardCheckoutScreenValidator().isCardNumberValidAndSupported(cardNumberValue.text, supportedCardSchemas)) {
+            if (cardNumberValue.text.isNotBlank() && CardCheckoutScreenValidator().isCardSchemaSupported(cardNumberValue.text, supportedCardSchemas)) {
                 getCardTypeIcon(cardNumberValue.text, isDarkModeEnabled)?.let {
                     Icon(
                         painter = painterResource(id = it),
