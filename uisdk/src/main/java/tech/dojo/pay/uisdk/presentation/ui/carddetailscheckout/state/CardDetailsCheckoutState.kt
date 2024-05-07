@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
@@ -11,6 +12,7 @@ internal data class CardDetailsCheckoutState(
     var totalAmount: String = "",
     var amountCurrency: String = "",
     var allowedPaymentMethodsIcons: List<Int> = listOf(),
+    var allowedCardSchemes: List<CardsSchemes> = listOf(),
     var cardHolderInputField: InputFieldState = InputFieldState(value = ""),
     var emailInputField: InputFieldState = InputFieldState(value = ""),
     var isEmailInputFieldRequired: Boolean = false,

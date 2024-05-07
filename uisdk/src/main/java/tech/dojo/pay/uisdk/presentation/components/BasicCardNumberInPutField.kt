@@ -37,8 +37,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 
 @Composable
 internal fun BasicCardNumberInPutField(
@@ -58,7 +60,8 @@ internal fun BasicCardNumberInPutField(
         imeAction = ImeAction.Done
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
-    isDarkModeEnabled: Boolean
+    isDarkModeEnabled: Boolean,
+    supportedCardSchemas: List<CardsSchemes>
 ) {
     var cardNumberValueState by remember {
         mutableStateOf(
@@ -86,7 +89,8 @@ internal fun BasicCardNumberInPutField(
         textVerticalPadding = textVerticalPadding,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
-        isDarkModeEnabled = isDarkModeEnabled
+        isDarkModeEnabled = isDarkModeEnabled,
+        supportedCardSchemas = supportedCardSchemas
     )
 }
 
@@ -108,7 +112,8 @@ internal fun BasicCardNumberInputField(
         imeAction = ImeAction.Done
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
-    isDarkModeEnabled: Boolean = false
+    isDarkModeEnabled: Boolean = false,
+    supportedCardSchemas: List<CardsSchemes>
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -178,7 +183,7 @@ internal fun BasicCardNumberInputField(
                     .fillMaxWidth()
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
-            if (cardNumberValue.text.isNotBlank()) {
+            if (cardNumberValue.text.isNotBlank() && CardCheckoutScreenValidator().isCardSchemaSupported(cardNumberValue.text, supportedCardSchemas)) {
                 getCardTypeIcon(cardNumberValue.text, isDarkModeEnabled)?.let {
                     Icon(
                         painter = painterResource(id = it),
@@ -228,6 +233,7 @@ internal fun PreviewBasicCardNumber() = DojoPreview {
     BasicCardNumberInputField(
         cardNumberValue = cardNumberValueState,
         onCardNumberValueChanged = { cardNumberValueState = it },
-        cardNumberPlaceholder = "1234  5678  1234  5678"
+        cardNumberPlaceholder = "1234  5678  1234  5678",
+        supportedCardSchemas = listOf(CardsSchemes.AMEX)
     )
 }

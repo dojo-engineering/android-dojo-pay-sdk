@@ -101,6 +101,7 @@ internal class VirtualTerminalViewEntityMapper(
             allowedPaymentMethodsIcons = allowedPaymentMethodsViewEntityMapper.apply(
                 paymentIntentResult.result.supportedCardsSchemes,
             ),
+            allowedCardSchemes = paymentIntentResult.result.supportedCardsSchemes
         )
 
     private fun getSupportedCountriesList(supportedCountriesDomainEntity: List<SupportedCountriesDomainEntity>): List<SupportedCountriesViewEntity> {

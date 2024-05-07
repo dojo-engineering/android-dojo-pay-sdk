@@ -216,6 +216,7 @@ private fun CardNumberInputField(
         cardNumberPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_pan),
         onCardNumberValueChanged = { viewModel.onCardNumberChanged(it) },
         isDarkModeEnabled = isDarkModeEnabled,
+        supportedCardSchemas = cardDetailsViewState.allowedCardSchemes
     )
 }
 

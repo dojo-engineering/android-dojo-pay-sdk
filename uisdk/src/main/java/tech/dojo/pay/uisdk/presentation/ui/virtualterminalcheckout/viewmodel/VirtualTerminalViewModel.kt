@@ -382,7 +382,7 @@ internal class VirtualTerminalViewModel(
             currentState = currentState.copy(
                 cardDetailsSection = currentState
                     .cardDetailsSection?.updateCardNumberInputField(
-                        virtualTerminalValidator.validateCardNumberInputField(finalValue),
+                        virtualTerminalValidator.validateCardNumberInputField(finalValue, it.allowedCardSchemes),
                     ),
             )
             pushStateToUi(currentState)

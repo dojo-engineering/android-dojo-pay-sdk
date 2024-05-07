@@ -100,6 +100,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "",
                 amountCurrency = "",
                 allowedPaymentMethodsIcons = emptyList(),
+                allowedCardSchemes = listOf(),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isBillingCountryFieldRequired = false,
@@ -154,6 +155,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "",
                 amountCurrency = "",
                 allowedPaymentMethodsIcons = emptyList(),
+                allowedCardSchemes = listOf(),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isBillingCountryFieldRequired = false,
@@ -225,6 +227,7 @@ class CardDetailsCheckoutViewModelTest {
                 totalAmount = "100",
                 amountCurrency = "£",
                 isBillingCountryFieldRequired = false,
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 supportedCountriesList = emptyList(),
                 currentSelectedCountry = SupportedCountriesViewEntity(
                     countryName = "",
@@ -342,6 +345,7 @@ class CardDetailsCheckoutViewModelTest {
                 ),
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX)
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -391,7 +395,7 @@ class CardDetailsCheckoutViewModelTest {
                             "GBP",
                         ),
                         customerId = "customerId",
-                        supportedCardsSchemes = listOf(CardsSchemes.AMEX),
+                        supportedCardsSchemes = listOf(),
                         collectionBillingAddressRequired = true,
                     ),
                 ),
@@ -468,21 +472,8 @@ class CardDetailsCheckoutViewModelTest {
                 SupportedCountriesDomainEntity("", "", false),
             )
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
-            given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(true)
-            given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(true)
+            given(cardCheckoutScreenValidator.isCardNumberValidAndSupported(any(), any())).willReturn(true)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(true)
-            given(
-                cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
-                    any(),
-                    any(),
-                ),
-            ).willReturn(true)
-            given(
-                cardCheckoutScreenValidator.isPostalCodeFieldWithInputFieldVisibility(
-                    any(),
-                    any(),
-                ),
-            ).willReturn(true)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
             val supportedCountriesViewEntity = SupportedCountriesViewEntity(
                 countryName = "EGP",
@@ -534,6 +525,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = "new"),
                 emailInputField = InputFieldState(value = ""),
                 isEmailInputFieldRequired = false,
@@ -631,6 +623,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = ""),
                 isEmailInputFieldRequired = false,
@@ -730,6 +723,7 @@ class CardDetailsCheckoutViewModelTest {
                     isPostalCodeEnabled = true,
                 ),
                 allowedPaymentMethodsIcons = listOf(1, 2, 3),
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
                 cardHolderInputField = InputFieldState(value = ""),
                 emailInputField = InputFieldState(value = "new"),
                 isEmailInputFieldRequired = true,
@@ -774,7 +768,7 @@ class CardDetailsCheckoutViewModelTest {
                 MutableStateFlow(PaymentIntentResult.None)
             given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
             val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(true)
-            given(cardCheckoutScreenValidator.isCardNumberValid(any())).willReturn(false)
+            given(cardCheckoutScreenValidator.isCardNumberValidAndSupported(any(), any())).willReturn(false)
             given(cardCheckoutScreenValidator.isCvvValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isCardExpireDateValid(any())).willReturn(false)
             given(cardCheckoutScreenValidator.isEmailValid(any())).willReturn(false)
