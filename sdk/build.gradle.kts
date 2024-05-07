@@ -14,6 +14,7 @@ android {
         targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField("String", "DOJO_SDK_CORE_VERSION", "\"$version\"")
     }
 
     buildTypes {

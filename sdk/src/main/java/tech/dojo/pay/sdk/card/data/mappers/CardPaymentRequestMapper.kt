@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card.data.mappers
 
+import tech.dojo.pay.sdk.BuildConfig
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import java.util.Locale
@@ -24,7 +25,7 @@ internal class CardPaymentRequestMapper {
             userPhoneNumber = userPhoneNumber,
             billingAddress = billingAddress,
             shippingDetails = shippingDetails,
-            metaData = metaData,
+            metaData = addVersionMetadata(metaData),
         )
 
     private fun DojoCardPaymentPayLoad.SavedCardPaymentPayLoad.toPaymentDetails(): PaymentDetails =
@@ -34,7 +35,7 @@ internal class CardPaymentRequestMapper {
             userEmailAddress = userEmailAddress,
             userPhoneNumber = userPhoneNumber,
             shippingDetails = shippingDetails,
-            metaData = metaData,
+            metaData = addVersionMetadata(metaData),
         )
 
     /**
@@ -50,5 +51,14 @@ internal class CardPaymentRequestMapper {
 
     fun sanitiseExpiryMonth(originalExpiryMonth: String): String {
         return "%02d".format(originalExpiryMonth.toInt()) // GPay may return 5 but BE expects 05
+    }
+
+    /**
+     * Modify existing metadata by adding SDK version
+     */
+    private fun addVersionMetadata(metaData: Map<String, String>?): Map<String, String>? {
+        val newMetadata = (metaData ?: mapOf<String, String>()).toMutableMap()
+        newMetadata["dojo-sdk-core-version"] = "android-${BuildConfig.DOJO_SDK_CORE_VERSION}"
+        return newMetadata
     }
 }
