@@ -33,7 +33,7 @@ internal fun WalletItem(
         if (isSystemInDarkTheme() && !forceLightMode) {
             DARK_COLOR_HEXA.color
         } else {
-            Light_COLOR_HEXA.color
+            Light_COLOR_LOGO_HEXA.color
         }
     Row(
         modifier = modifier

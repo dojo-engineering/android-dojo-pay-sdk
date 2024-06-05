@@ -36,7 +36,7 @@ internal fun WalletItemWithRadioButton(
     val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
     val currentThemColor =
-        if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_HEXA.color }
+        if (isSystemInDarkTheme() && !forceLightMode) { DARK_COLOR_HEXA.color } else { Light_COLOR_LOGO_HEXA.color }
     Row(
         modifier = modifier
             .wrapContentHeight()

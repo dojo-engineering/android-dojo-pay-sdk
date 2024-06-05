@@ -44,7 +44,7 @@ internal fun CheckBoxItem(
                 .size(25.dp)
                 .border(
                     width = 1.dp,
-                    color = if (checkedState.value) DojoTheme.colors.inputElementActiveTintColor else DojoTheme.colors.inputElementDefaultTintColor,
+                    color = if (checkedState.value) DojoTheme.colors.inputElementActiveTintColor else DojoTheme.colors.headerButtonTintColor,
                     shape = DojoTheme.shapes.small,
                 )
                 .background(DojoTheme.colors.primarySurfaceBackgroundColor)
