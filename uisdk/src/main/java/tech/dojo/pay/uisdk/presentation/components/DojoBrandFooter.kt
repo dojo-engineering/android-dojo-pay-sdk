@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
@@ -129,11 +130,11 @@ private fun DojoBrandText(currentThemColor: Color) {
         text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_title),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-        style = DojoTheme.typography.body1,
+        style = DojoTheme.typography.subtitle1,
         color = currentThemColor.copy(alpha = ContentAlpha.high)
     )
     Icon(
-        modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 2.dp, end = 12.dp),
+        modifier = Modifier.size(width = 60.dp, height = 15.dp).then(Modifier.padding(start = 4.dp, top = 3.dp, bottom = 0.dp, end = 10.dp)),
         painter = painterResource(id = R.drawable.ic_dojo),
         tint = currentThemColor.copy(alpha = ContentAlpha.high),
         contentDescription = null,
