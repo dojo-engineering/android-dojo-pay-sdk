@@ -9,90 +9,84 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import tech.dojo.pay.uisdk.R
 
-private val Roboto = FontFamily(
-    Font(R.font.roboto_light, FontWeight.Light),
-    Font(R.font.roboto_regular, FontWeight.Normal),
-    Font(R.font.roboto_regular_italic, FontWeight.Normal, FontStyle.Italic),
-    Font(R.font.roboto_light_italic, FontWeight.Light, FontStyle.Italic),
-    Font(R.font.roboto_bold_italic, FontWeight.Bold, FontStyle.Italic),
-    Font(R.font.roboto_medium_italic, FontWeight.Medium, FontStyle.Italic),
-    Font(R.font.roboto_black_italic, FontWeight.Black, FontStyle.Italic),
-    Font(R.font.roboto_thin_italic, FontWeight.Thin, FontStyle.Italic),
-    Font(R.font.roboto_medium, FontWeight.Medium),
-    Font(R.font.roboto_bold, FontWeight.Bold)
+private val DojoRoobert = FontFamily(
+    Font(R.font.roobert_regular, FontWeight.Normal),
+    Font(R.font.roobert_medium, FontWeight.Medium),
+    Font(R.font.roobert_heavy, FontWeight.Black),
+    Font(R.font.roobert_bold, FontWeight.Bold)
 )
 
 val DojoTypography = Typography(
     h1 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 48.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 56.sp,
         letterSpacing = (-1.5).sp
     ),
     h2 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 40.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 48.sp,
         letterSpacing = (-0.5).sp
     ),
     h3 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 32.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 40.sp
     ),
     h4 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 24.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 28.sp
     ),
     h5 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 20.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 24.sp
     ),
     subtitle1 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 24.sp
     ),
     subtitle2 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp
     ),
     body1 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 24.sp
     ),
     body2 = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp
     ),
     button = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 24.sp
     ),
     caption = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 16.sp
     ),
     overline = TextStyle(
-        fontFamily = Roboto,
+        fontFamily = DojoRoobert,
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 16.sp,
