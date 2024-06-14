@@ -53,13 +53,13 @@ private fun DojoBrandFooterOnly(modifier: Modifier = Modifier) {
     val currentThemColorText = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_TEXT_HEXA.color
+        LIGHT_COLOR_TEXT_HEXA.color
     }
 
     val currentThemColorIcon = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_LOGO_HEXA.color
+        LIGHT_COLOR_LOGO_HEXA.color
     }
     Column(modifier = modifier) {
         Row(
@@ -84,7 +84,7 @@ private fun TermsAndPrivacyFooterOnly(modifier: Modifier = Modifier) {
     val currentThemColor = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_LOGO_HEXA.color
+        LIGHT_COLOR_LOGO_HEXA.color
     }
 
     Column(modifier = modifier) {
@@ -108,13 +108,13 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
     val currentThemColorText = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_TEXT_HEXA.color
+        LIGHT_COLOR_TEXT_HEXA.color
     }
 
     val currentThemColorIcon = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_LOGO_HEXA.color
+        LIGHT_COLOR_LOGO_HEXA.color
     }
 
     Column(modifier = modifier) {
@@ -228,6 +228,6 @@ internal fun PreviewEmptyFooter() = DojoPreview {
 
 private const val TERMS_URL = "https://pay.dojo.tech/terms"
 private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"
-internal const val Light_COLOR_TEXT_HEXA = "#FF003F33"
-internal const val Light_COLOR_LOGO_HEXA = "#FF000000"
+internal const val LIGHT_COLOR_TEXT_HEXA = "#FF003F33"
+internal const val LIGHT_COLOR_LOGO_HEXA = "#FF000000"
 internal const val DARK_COLOR_HEXA = "#FFFFFFFF"

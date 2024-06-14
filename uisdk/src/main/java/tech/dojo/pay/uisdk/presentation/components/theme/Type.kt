@@ -12,7 +12,7 @@ import tech.dojo.pay.uisdk.R
 private val DojoRoobert = FontFamily(
     Font(R.font.roobert_regular, FontWeight.Normal),
     Font(R.font.roobert_medium, FontWeight.Medium),
-    Font(R.font.roobert_heavy, FontWeight.SemiBold),
+    Font(R.font.roobert_heavy, FontWeight.Black),
     Font(R.font.roobert_bold, FontWeight.Bold)
 )
 
