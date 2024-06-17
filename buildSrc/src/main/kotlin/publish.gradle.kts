@@ -1,4 +1,6 @@
 import com.android.build.gradle.LibraryExtension
+import java.io.FileInputStream
+import java.util.Properties
 
 /**
  * The following plugin tasks care of setting up:
