@@ -281,7 +281,7 @@ internal class CardDetailsCheckoutViewModel(
         cardHolderValue.isNotBlank() &&
             cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberValue, currentState.allowedCardSchemes) &&
             cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
-                cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
+            cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
             cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
                 emailValue,
                 currentState.isEmailInputFieldRequired,
