@@ -10,6 +10,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 
 @Composable
 internal fun CardNumberInPutField(
@@ -31,7 +32,8 @@ internal fun CardNumberInPutField(
         imeAction = ImeAction.Done
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
-    isDarkModeEnabled: Boolean
+    isDarkModeEnabled: Boolean,
+    supportedCardSchemas: List<CardsSchemes>
 ) {
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
@@ -54,7 +56,8 @@ internal fun CardNumberInPutField(
             textVerticalPadding,
             keyboardOptions,
             keyboardActions,
-            isDarkModeEnabled
+            isDarkModeEnabled,
+            supportedCardSchemas
         )
     }
 }

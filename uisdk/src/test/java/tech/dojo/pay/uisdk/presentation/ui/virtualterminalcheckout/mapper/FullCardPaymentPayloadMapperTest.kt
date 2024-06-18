@@ -200,6 +200,7 @@ private object TestData {
         cardExpireDateInputField = InputFieldState("MMYY"),
         cvvInputFieldState = InputFieldState("CVV"),
         allowedPaymentMethodsIcons = emptyList(),
+        allowedCardSchemes = emptyList()
     )
     val shippingAddress = ShippingAddressViewState(
         isVisible = true,

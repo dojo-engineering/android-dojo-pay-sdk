@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
@@ -31,6 +32,7 @@ import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
+import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
 internal fun DojoBrandFooter(modifier: Modifier = Modifier, mode: DojoBrandFooterModes = DojoBrandFooterModes.DOJO_BRAND_ONLY) {
@@ -48,10 +50,16 @@ internal fun DojoBrandFooter(modifier: Modifier = Modifier, mode: DojoBrandFoote
 private fun DojoBrandFooterOnly(modifier: Modifier = Modifier) {
     val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
-    val currentThemColor = if (isSystemInDarkTheme() && !forceLightMode) {
+    val currentThemColorText = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_HEXA.color
+        LIGHT_COLOR_TEXT_HEXA.color
+    }
+
+    val currentThemColorIcon = if (isSystemInDarkTheme() && !forceLightMode) {
+        DARK_COLOR_HEXA.color
+    } else {
+        LIGHT_COLOR_LOGO_HEXA.color
     }
     Column(modifier = modifier) {
         Row(
@@ -63,7 +71,7 @@ private fun DojoBrandFooterOnly(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center
 
         ) {
-            DojoBrandText(currentThemColor)
+            DojoBrandText(currentThemColorText, currentThemColorIcon)
         }
     }
 }
@@ -76,7 +84,7 @@ private fun TermsAndPrivacyFooterOnly(modifier: Modifier = Modifier) {
     val currentThemColor = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_HEXA.color
+        LIGHT_COLOR_LOGO_HEXA.color
     }
 
     Column(modifier = modifier) {
@@ -97,10 +105,16 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
-    val currentThemColor = if (isSystemInDarkTheme() && !forceLightMode) {
+    val currentThemColorText = if (isSystemInDarkTheme() && !forceLightMode) {
         DARK_COLOR_HEXA.color
     } else {
-        Light_COLOR_HEXA.color
+        LIGHT_COLOR_TEXT_HEXA.color
+    }
+
+    val currentThemColorIcon = if (isSystemInDarkTheme() && !forceLightMode) {
+        DARK_COLOR_HEXA.color
+    } else {
+        LIGHT_COLOR_LOGO_HEXA.color
     }
 
     Column(modifier = modifier) {
@@ -113,9 +127,9 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center
 
         ) {
-            DojoBrandText(currentThemColor)
-            Divider(currentThemColor)
-            TermsAndAndPrivacy(context, currentThemColor)
+            DojoBrandText(currentThemColorText, currentThemColorIcon)
+            Divider(currentThemColorIcon)
+            TermsAndAndPrivacy(context, currentThemColorIcon)
         }
     }
 }
@@ -124,26 +138,26 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
 private fun EmptyFooter(modifier: Modifier = Modifier) { Spacer(modifier = modifier) }
 
 @Composable
-private fun DojoBrandText(currentThemColor: Color) {
+private fun DojoBrandText(currentThemColorText: Color, currentThemColorIcon: Color) {
     Text(
         text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_title),
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,
-        style = DojoTheme.typography.body1,
-        color = currentThemColor.copy(alpha = ContentAlpha.high)
+        style = DojoTheme.typography.body1.medium,
+        color = currentThemColorText.copy(alpha = ContentAlpha.high)
     )
     Icon(
-        modifier = Modifier.padding(start = 4.dp, top = 4.dp, bottom = 2.dp, end = 12.dp),
+        modifier = Modifier.size(width = 60.dp, height = 15.dp).then(Modifier.padding(start = 4.dp, top = 3.dp, bottom = 0.dp, end = 10.dp)),
         painter = painterResource(id = R.drawable.ic_dojo),
-        tint = currentThemColor.copy(alpha = ContentAlpha.high),
+        tint = currentThemColorIcon.copy(alpha = ContentAlpha.high),
         contentDescription = null,
     )
 }
 
 @Composable
-private fun Divider(currentThemColor: Color) {
+private fun Divider(currentThemColorText: Color) {
     Divider(
-        color = currentThemColor.copy(alpha = ContentAlpha.high),
+        color = currentThemColorText.copy(alpha = ContentAlpha.high),
         modifier = Modifier
             .height(20.dp)
             .width(1.dp)
@@ -214,5 +228,6 @@ internal fun PreviewEmptyFooter() = DojoPreview {
 
 private const val TERMS_URL = "https://pay.dojo.tech/terms"
 private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"
-internal const val Light_COLOR_HEXA = "#FF000000"
+internal const val LIGHT_COLOR_TEXT_HEXA = "#FF003F33"
+internal const val LIGHT_COLOR_LOGO_HEXA = "#FF000000"
 internal const val DARK_COLOR_HEXA = "#FFFFFFFF"

@@ -27,7 +27,7 @@ internal class CardPaymentRequestMapperTest {
             userEmailAddress = "user@gmail.com",
             userPhoneNumber = "123456789",
             shippingDetails = SHIPPING_DETAILS,
-            metaData = mapOf("1" to "one"),
+            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-1.7.2"),
         )
         val actual = CardPaymentRequestMapper().mapToPaymentDetails(SAVED_CARD_PAYLOAD)
         Assert.assertEquals(paymentDetailsForSavedCard, actual)
@@ -91,7 +91,7 @@ internal class CardPaymentRequestMapperTest {
             userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
             billingAddress = ADDRESS_DETAILS,
             shippingDetails = SHIPPING_DETAILS,
-            metaData = FULL_CARD_PAYLOAD.metaData,
+            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-1.7.2"),
             mitConsentGiven = true,
         )
     }

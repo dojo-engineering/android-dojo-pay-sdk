@@ -65,9 +65,9 @@ class VirtualTerminalValidatorTest {
     fun `given calling validateCardNumberInputField with valid CardNumber then should return InputFieldState with CardNumber new value  and false error`() {
         val cardNumberFieldNewValue = "4111111111111111"
 
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberFieldNewValue, emptyList())).thenReturn(true)
 
-        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue)
+        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue, emptyList())
 
         val expected = InputFieldState(value = cardNumberFieldNewValue, isError = false)
 
@@ -78,9 +78,9 @@ class VirtualTerminalValidatorTest {
     fun `given calling validateCardNumberInputField with invalid card number then should return InputFieldState with CardNumber new value , true error and error message`() {
         val cardNumberFieldNewValue = "12345"
 
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberFieldNewValue, emptyList())).thenReturn(false)
 
-        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue)
+        val result = validator.validateCardNumberInputField(cardNumberFieldNewValue, emptyList())
 
         val expected = InputFieldState(
             value = cardNumberFieldNewValue,
@@ -185,7 +185,7 @@ class VirtualTerminalValidatorTest {
         whenever(currentState.cardDetailsSection).thenReturn(cardDetails)
         whenever(currentState.shippingAddressSection).thenReturn(shippingAddress)
         whenever(currentState.billingAddressSection).thenReturn(billingAddress)
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(Mockito.anyString())).thenReturn(true)
+        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(Mockito.anyString(), Mockito.anyList())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isEmailValid(Mockito.anyString())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(Mockito.anyString())).thenReturn(true)
         whenever(cardCheckoutScreenValidator.isCvvValid(Mockito.anyString())).thenReturn(true)
@@ -202,7 +202,7 @@ class VirtualTerminalValidatorTest {
         whenever(currentState.shippingAddressSection).thenReturn(shippingAddress)
         whenever(currentState.billingAddressSection).thenReturn(billingAddress)
 
-        whenever(cardCheckoutScreenValidator.isCardNumberValid(Mockito.anyString())).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(Mockito.anyString(), Mockito.anyList())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isEmailValid(Mockito.anyString())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(Mockito.anyString())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isCvvValid(Mockito.anyString())).thenReturn(false)
@@ -222,6 +222,7 @@ private object TestData {
         cardExpireDateInputField = InputFieldState(value = "1223", isError = false),
         cvvInputFieldState = InputFieldState(value = "123", isError = false),
         allowedPaymentMethodsIcons = emptyList(),
+        allowedCardSchemes = emptyList()
     )
     val shippingAddress = ShippingAddressViewState(
         isVisible = true,

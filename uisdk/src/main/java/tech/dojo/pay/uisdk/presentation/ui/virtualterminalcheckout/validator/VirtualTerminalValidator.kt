@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.validator
 
+import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState
@@ -26,9 +27,9 @@ internal class VirtualTerminalValidator(
         }
     }
 
-    fun validateCardNumberInputField(cardNumberFieldNewValue: String): InputFieldState {
+    fun validateCardNumberInputField(cardNumberFieldNewValue: String, allowedCardSchemes: List<CardsSchemes>): InputFieldState {
         val isCardValid: Boolean =
-            cardCheckoutScreenValidator.isCardNumberValid(cardNumberFieldNewValue)
+            cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberFieldNewValue, allowedCardSchemes)
         return if (cardNumberFieldNewValue.isNotBlank() && !isCardValid) {
             InputFieldState(
                 value = cardNumberFieldNewValue,
@@ -117,7 +118,7 @@ internal class VirtualTerminalValidator(
     private fun validateCardDetailsSection(cardDetailsSection: CardDetailsViewState?): Boolean {
         return if (cardDetailsSection?.isVisible == true) {
             cardDetailsSection.cardHolderInputField.value.isNotBlank() &&
-                cardCheckoutScreenValidator.isCardNumberValid(cardDetailsSection.cardNumberInputField.value) &&
+                cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardDetailsSection.cardNumberInputField.value, cardDetailsSection.allowedCardSchemes) &&
                 cardCheckoutScreenValidator.isEmailValid(cardDetailsSection.emailInputField.value) &&
                 cardCheckoutScreenValidator.isCardExpireDateValid(cardDetailsSection.cardExpireDateInputField.value) &&
                 cardCheckoutScreenValidator.isCvvValid(cardDetailsSection.cvvInputFieldState.value)

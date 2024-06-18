@@ -82,7 +82,7 @@ private fun DojoButton(
 @Composable
 internal fun GooglePayButton(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = DojoTheme.colors.secondarySurface,
+    backgroundColor: Color = DojoTheme.colors.onSurface,
     contentColor: Color = DojoTheme.colors.onPrimary,
     borderStroke: BorderStroke? = null,
     enabled: Boolean = true,

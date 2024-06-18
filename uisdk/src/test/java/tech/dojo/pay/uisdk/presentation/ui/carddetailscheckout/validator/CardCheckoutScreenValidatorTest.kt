@@ -97,6 +97,50 @@ internal class CardCheckoutScreenValidatorTest {
     }
 
     @Test
+    fun `calling isCardNumberValid with short card number should return false`() {
+        // arrange
+        val cardNumber = "55555555"
+        val expected = false
+        // act
+        val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `calling isCardNumberValid for amex should return true`() {
+        // arrange
+        val cardNumber = "379999999999994"
+        val expected = true
+        // act
+        val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `calling isCardNumberValid for visa should return true`() {
+        // arrange
+        val cardNumber = "4111111111111111"
+        val expected = true
+        // act
+        val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `calling isCardNumberValid for mastercard should return true`() {
+        // arrange
+        val cardNumber = "5555555555554444"
+        val expected = true
+        // act
+        val actual = CardCheckoutScreenValidator().isCardNumberValid(cardNumber)
+        // assert
+        Assert.assertEquals(expected, actual)
+    }
+
+    @Test
     fun `calling isCardNumberValid with inValid card number should return false`() {
         // arrange
         val cardNumber = "1234123412341234"
