@@ -45,6 +45,7 @@ internal class VirtualTerminalViewEntityMapper(
             amountCurrency = Currency.getInstance(paymentIntentResult.result.totalAmount.currencyCode).symbol,
             merchantName = paymentIntentResult.result.merchantName,
             orderId = paymentIntentResult.result.orderId,
+            urls = paymentIntentResult.result.urls,
         )
 
     private fun getShippingAddressSectionWithPaymentIntent(

@@ -23,6 +23,7 @@ internal data class PaymentIntentDomainEntity(
     val isPaymentAlreadyCollected: Boolean = false,
     val billingAddress: BillingAddressDomainEntity? = null,
     val shippingDetails: ShippingDetailsDomainEntity? = null,
+    val urls: DojoUrls = DojoUrls.Uk(),
 )
 
 data class AmountDomainEntity(

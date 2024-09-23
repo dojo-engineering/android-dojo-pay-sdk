@@ -25,6 +25,7 @@ import tech.dojo.pay.uisdk.domain.MakeVTPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.RefreshPaymentIntentResult
@@ -1379,6 +1380,7 @@ private object TestData {
             totalAmount = "100",
             amountCurrency = "£",
             orderId = "orderId",
+            urls = DojoUrls.Uk(),
         ),
         shippingAddressSection = ShippingAddressViewState(
             isVisible = false,

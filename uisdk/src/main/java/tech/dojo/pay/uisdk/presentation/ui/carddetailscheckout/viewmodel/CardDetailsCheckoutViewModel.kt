@@ -281,7 +281,7 @@ internal class CardDetailsCheckoutViewModel(
         cardHolderValue.isNotBlank() &&
             cardCheckoutScreenValidator.isCardNumberValidAndSupported(cardNumberValue, currentState.allowedCardSchemes) &&
             cardCheckoutScreenValidator.isCardExpireDateValid(cardExpireDate) &&
-                cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
+            cardCheckoutScreenValidator.isCvvValid(cvvValue) &&
             cardCheckoutScreenValidator.isEmailFieldValidWithInputFieldVisibility(
                 emailValue,
                 currentState.isEmailInputFieldRequired,
@@ -349,6 +349,7 @@ internal class CardDetailsCheckoutViewModel(
         ),
         emailInputField = InputFieldState(value = paymentIntentResult.result.customerEmailAddress ?: ""),
         postalCodeField = InputFieldState(value = paymentIntentResult.result.billingAddress?.postcode ?: ""),
+        urls = paymentIntentResult.result.urls,
     )
 
     private fun getHeaderType() = if (isStartDestination) {

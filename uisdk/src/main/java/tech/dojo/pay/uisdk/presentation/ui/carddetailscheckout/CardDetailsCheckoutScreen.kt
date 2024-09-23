@@ -45,6 +45,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.presentation.components.AppBarIcon
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
@@ -193,7 +194,7 @@ internal fun CardDetailsCheckoutScreen(
                             .background(DojoTheme.colors.primarySurfaceBackgroundColor),
                     ) {
                         ActionButton(scrollState, state, viewModel)
-                        ScreenFooter(showDojoBrand)
+                        ScreenFooter(showDojoBrand, state.urls)
                     }
                 }
             }
@@ -219,10 +220,11 @@ private fun Loading(isVisible: Boolean) {
 }
 
 @Composable
-private fun ScreenFooter(showDojoBrand: Boolean) {
+private fun ScreenFooter(showDojoBrand: Boolean, urls: DojoUrls?) {
     DojoBrandFooter(
         modifier = Modifier.padding(bottom = 24.dp),
         mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY,
+        urls = urls,
     )
 }
 
