@@ -3,7 +3,7 @@ package tech.dojo.pay.uisdk.domain.entities
 sealed class DojoUrls {
 
     companion object {
-        private const val UK_TERMS_URL = "https://pay.dojo.tech/terms"
+        private const val UK_TERMS_URL = "https://dojo.tech/legal/website-terms-conditions/"
         private const val UK_PRIVACY_URL = "https://dojo.tech/legal/privacy/"
 
         private const val IE_TERMS_URL = "https://dojo.tech/ie/legal/website-terms-conditions/"
