@@ -8,6 +8,8 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
+import tech.dojo.pay.sdk.card.entities.DojoSDKDebugConfig
+import tech.dojo.pay.sdk.card.entities.DojoSDKURLConfig
 import tech.dojo.pay.sdksample.customer.CustomerGenerator
 import tech.dojo.pay.sdksample.databinding.ActivityUiSdkSampleBinding
 import tech.dojo.pay.sdksample.token.PaymentIDGenerator
@@ -47,6 +49,12 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         uiSdkSampleBinding.startPaymentFlowWithVT.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
+            val connectEBaseUrl = "https://web.e.test.connect.paymentsense.cloud/"
+            val remoteEBaseUrl = "https://staging-api.dojo.dev/integration-test/"
+            DojoSDKDropInUI.dojoSDKDebugConfig = DojoSDKDebugConfig(
+                urlConfig = DojoSDKURLConfig(connectE = connectEBaseUrl, remote = remoteEBaseUrl),
+                isSandboxIntent = true,
+            )
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
