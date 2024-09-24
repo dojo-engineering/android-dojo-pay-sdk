@@ -106,17 +106,17 @@ internal class PaymentIntentDomainEntityMapperTest {
     fun `when mapping market Id should map urls correctly`() {
         val data = listOf(
             arrayOf("Random", DojoUrls.Uk()),
-            arrayOf("Uk", DojoUrls.Uk()),
-            arrayOf("Ie", DojoUrls.Ie()),
-            arrayOf("Es", DojoUrls.Es()),
-            arrayOf("It", DojoUrls.It()),
+            arrayOf("UK", DojoUrls.Uk()),
+            arrayOf("IE", DojoUrls.Ie()),
+            arrayOf("ES", DojoUrls.Es()),
+            arrayOf("IT", DojoUrls.It()),
         )
 
         data.forEach { test ->
             val marketId = test[0] as String
             val expected = test[1] as DojoUrls
             val actual = mapper.mapPayload(createValidPaymentIntentPayload().let { it.copy(config = it.config?.copy(marketId = marketId)) })
-            Assert.assertEquals(expected, actual)
+            Assert.assertEquals(expected, actual?.urls)
         }
     }
 
