@@ -23,6 +23,7 @@ import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.data.entities.SupportedPaymentMethods
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.BillingAddressDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesAmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
@@ -101,6 +102,24 @@ internal class PaymentIntentDomainEntityMapperTest {
             assertNull(actual)
         }
 
+    @Test
+    fun `when mapping market Id should map urls correctly`() {
+        val data = listOf(
+            arrayOf("Random", DojoUrls.Uk()),
+            arrayOf("UK", DojoUrls.Uk()),
+            arrayOf("IE", DojoUrls.Ie()),
+            arrayOf("ES", DojoUrls.Es()),
+            arrayOf("IT", DojoUrls.It()),
+        )
+
+        data.forEach { test ->
+            val marketId = test[0] as String
+            val expected = test[1] as DojoUrls
+            val actual = mapper.mapPayload(createValidPaymentIntentPayload().let { it.copy(config = it.config?.copy(marketId = marketId)) })
+            Assert.assertEquals(expected, actual?.urls)
+        }
+    }
+
     private fun createValidPaymentIntentPayload() = PaymentIntentPayload(
         id = "id",
         captureMode = "captureMode",
@@ -127,6 +146,7 @@ internal class PaymentIntentDomainEntityMapperTest {
             customerEmail = CollectCustomerEmail(true),
             billingAddress = CollectBillingAddress(true),
             shippingDetails = CollectShippingAddress(true),
+            marketId = "marketId"
         ),
         merchantInitiatedTransactionType = "merchantInitiatedType",
         itemLines = listOf(

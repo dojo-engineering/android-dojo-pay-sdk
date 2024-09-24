@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.presentation.components.CardExpireDateInputField
 import tech.dojo.pay.uisdk.presentation.components.CardNumberInPutField
 import tech.dojo.pay.uisdk.presentation.components.CvvInputField
@@ -131,7 +132,7 @@ internal fun CardDetailsSection(
                 parentPosition,
             )
         }
-        ScreenFooter(showDojoBrand)
+        ScreenFooter(showDojoBrand, state.paymentDetailsSection?.urls)
     }
 }
 
@@ -331,8 +332,9 @@ private fun EmailInputField(
 }
 
 @Composable
-private fun ScreenFooter(showDojoBrand: Boolean) {
+private fun ScreenFooter(showDojoBrand: Boolean, urls: DojoUrls?) {
     DojoBrandFooter(
         mode = if (showDojoBrand) DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY else DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY,
+        urls = urls,
     )
 }

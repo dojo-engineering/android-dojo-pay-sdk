@@ -30,18 +30,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.R
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.entities.color
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
 import tech.dojo.pay.uisdk.presentation.components.theme.medium
 
 @Composable
-internal fun DojoBrandFooter(modifier: Modifier = Modifier, mode: DojoBrandFooterModes = DojoBrandFooterModes.DOJO_BRAND_ONLY) {
+internal fun DojoBrandFooter(
+    modifier: Modifier = Modifier,
+    mode: DojoBrandFooterModes = DojoBrandFooterModes.DOJO_BRAND_ONLY,
+    urls: DojoUrls? = null
+) {
     when (mode) {
         DojoBrandFooterModes.DOJO_BRAND_ONLY -> DojoBrandFooterOnly(modifier)
-        DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY -> TermsAndPrivacyFooterOnly(modifier)
-        DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY -> DojoBrandAndTermsAndPrivacyFooter(
-            modifier
-        )
+        DojoBrandFooterModes.TERMS_AND_PRIVACY_ONLY -> TermsAndPrivacyFooterOnly(modifier, urls)
+        DojoBrandFooterModes.DOJO_BRAND_WITH_TERMS_AND_PRIVACY -> DojoBrandAndTermsAndPrivacyFooter(modifier, urls)
         DojoBrandFooterModes.NONE -> EmptyFooter(modifier)
     }
 }
@@ -77,7 +80,7 @@ private fun DojoBrandFooterOnly(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun TermsAndPrivacyFooterOnly(modifier: Modifier = Modifier) {
+private fun TermsAndPrivacyFooterOnly(modifier: Modifier = Modifier, urls: DojoUrls?) {
     val context = LocalContext.current
     val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
@@ -96,12 +99,12 @@ private fun TermsAndPrivacyFooterOnly(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
 
-        ) { TermsAndAndPrivacy(context, currentThemColor) }
+        ) { TermsAndAndPrivacy(context, currentThemColor, urls) }
     }
 }
 
 @Composable
-private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
+private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier, urls: DojoUrls?) {
     val context = LocalContext.current
     val forceLightMode = DojoSDKDropInUI.dojoThemeSettings?.forceLightMode ?: false
 
@@ -129,7 +132,7 @@ private fun DojoBrandAndTermsAndPrivacyFooter(modifier: Modifier = Modifier) {
         ) {
             DojoBrandText(currentThemColorText, currentThemColorIcon)
             Divider(currentThemColorIcon)
-            TermsAndAndPrivacy(context, currentThemColorIcon)
+            TermsAndAndPrivacy(context, currentThemColorIcon, urls)
         }
     }
 }
@@ -165,7 +168,8 @@ private fun Divider(currentThemColorText: Color) {
 }
 
 @Composable
-private fun TermsAndAndPrivacy(context: Context, currentThemColor: Color) {
+private fun TermsAndAndPrivacy(context: Context, currentThemColor: Color, urls: DojoUrls?) {
+    val ursOrFallback = urls ?: DojoUrls.Uk()
     Text(
         text = stringResource(id = R.string.dojo_ui_sdk_footer_powered_by_terms),
         modifier = Modifier
@@ -175,7 +179,7 @@ private fun TermsAndAndPrivacy(context: Context, currentThemColor: Color) {
             .clickable {
                 context.startActivity(
                     Intent(
-                        Intent.ACTION_VIEW, Uri.parse(TERMS_URL)
+                        Intent.ACTION_VIEW, Uri.parse(ursOrFallback.terms)
                     )
                 )
             },
@@ -191,7 +195,7 @@ private fun TermsAndAndPrivacy(context: Context, currentThemColor: Color) {
             .clickable {
                 context.startActivity(
                     Intent(
-                        Intent.ACTION_VIEW, Uri.parse(PRIVACY_URL)
+                        Intent.ACTION_VIEW, Uri.parse(ursOrFallback.privacy)
                     )
                 )
             },
@@ -226,8 +230,6 @@ internal fun PreviewEmptyFooter() = DojoPreview {
     DojoBrandFooter(mode = DojoBrandFooterModes.NONE)
 }
 
-private const val TERMS_URL = "https://pay.dojo.tech/terms"
-private const val PRIVACY_URL = "https://dojo.tech/legal/privacy/"
 internal const val LIGHT_COLOR_TEXT_HEXA = "#FF003F33"
 internal const val LIGHT_COLOR_LOGO_HEXA = "#FF000000"
 internal const val DARK_COLOR_HEXA = "#FFFFFFFF"

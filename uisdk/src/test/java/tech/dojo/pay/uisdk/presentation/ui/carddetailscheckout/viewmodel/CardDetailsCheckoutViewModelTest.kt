@@ -26,6 +26,7 @@ import tech.dojo.pay.uisdk.domain.MakeCardPaymentUseCase
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
@@ -249,6 +250,7 @@ class CardDetailsCheckoutViewModelTest {
                 ),
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
+                urls = DojoUrls.Uk()
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -345,7 +347,8 @@ class CardDetailsCheckoutViewModelTest {
                 ),
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
-                allowedCardSchemes = listOf(CardsSchemes.AMEX)
+                allowedCardSchemes = listOf(CardsSchemes.AMEX),
+                urls = DojoUrls.Uk(),
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -442,6 +445,7 @@ class CardDetailsCheckoutViewModelTest {
                 ),
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
+                urls = DojoUrls.Uk(),
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -540,6 +544,7 @@ class CardDetailsCheckoutViewModelTest {
                 isPostalCodeFieldRequired = true,
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(isEnabled = false, text = payText),
+                urls = DojoUrls.Uk(),
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -638,6 +643,7 @@ class CardDetailsCheckoutViewModelTest {
                 isPostalCodeFieldRequired = true,
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
+                urls = DojoUrls.Uk(),
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
@@ -738,7 +744,7 @@ class CardDetailsCheckoutViewModelTest {
                 isPostalCodeFieldRequired = true,
                 postalCodeField = InputFieldState(value = ""),
                 actionButtonState = ActionButtonState(text = payText),
-
+                urls = DojoUrls.Uk(),
             )
             // act
             val viewModel = CardDetailsCheckoutViewModel(
