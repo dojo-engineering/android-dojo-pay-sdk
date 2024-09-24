@@ -4,10 +4,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.validator.CardCheckoutScreenValidator
@@ -204,7 +202,7 @@ class VirtualTerminalValidatorTest {
         whenever(currentState.shippingAddressSection).thenReturn(shippingAddress)
         whenever(currentState.billingAddressSection).thenReturn(billingAddress)
 
-        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(Mockito.anyString(),Mockito.anyList())).thenReturn(false)
+        whenever(cardCheckoutScreenValidator.isCardNumberValidAndSupported(Mockito.anyString(), Mockito.anyList())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isEmailValid(Mockito.anyString())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isCardExpireDateValid(Mockito.anyString())).thenReturn(false)
         whenever(cardCheckoutScreenValidator.isCvvValid(Mockito.anyString())).thenReturn(false)

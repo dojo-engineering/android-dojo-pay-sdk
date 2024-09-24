@@ -33,5 +33,5 @@ internal data class CardDetailsViewState(
         copy(allowedPaymentMethodsIcons = newValue)
 
     fun updateAllowedCardSchemes(newValue: List<CardsSchemes>) =
-        copy(allowedCardSchemes= newValue)
+        copy(allowedCardSchemes = newValue)
 }
