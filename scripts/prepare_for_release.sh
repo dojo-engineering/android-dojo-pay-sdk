@@ -3,15 +3,10 @@
 # Define the file to modify
 FILE="./buildSrc/src/main/kotlin/publish.gradle.kts"
 
-# Insert the import statements after line 1
-sed -i '' '1 a\
-import java.io.FileInputStream\
-import java.util.Properties' "$FILE"
+awk 'NR=1 {gsub(/import com.android.build.gradle.LibraryExtension/, "import com.android.build.gradle.LibraryExtension\nimport java.io.FileInputStream\nimport java.util.Properties")} {print}' "$FILE" > temp && mv temp "$FILE"
+awk 'NR>=55 && NR<=56 {gsub(/\//, "")} {print}' "$FILE" > temp && mv temp "$FILE"
+awk 'NR>=63 && NR<=71 {gsub(/\//, "")} {print}' "$FILE" > temp && mv temp "$FILE"
 
-# Uncomment lines 54 and 55
-sed -i '' '53,55s|^//||' "$FILE"
 
-# Uncomment lines 61 to 68
-sed -i '' '60,67s|^//||' "$FILE"
 
 echo "Modifications completed."
