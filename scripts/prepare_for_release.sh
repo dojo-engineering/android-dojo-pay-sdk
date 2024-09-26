@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the file to modify
-FILE="./buildSrc/src/main/kotlin/publish.gradle.kts"
+FILE="./buildSrc/src/main/kotlin/publish.gradle.kts-restore"
 
 awk 'NR=1 {gsub(/import com.android.build.gradle.LibraryExtension/, "import com.android.build.gradle.LibraryExtension\nimport java.io.FileInputStream\nimport java.util.Properties")} {print}' "$FILE" > temp && mv temp "$FILE"
 awk 'NR>=55 && NR<=56 {gsub(/\//, "")} {print}' "$FILE" > temp && mv temp "$FILE"
