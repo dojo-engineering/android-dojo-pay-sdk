@@ -52,7 +52,7 @@ else
     git commit $BUILD_FILE -m "bumped version $inputVersionName"
     git push
     git tag -a "tag/ui_v$inputVersionName" -m ''
-    git push origin "RC_$inputVersionName"
+    git push origin "tag/ui_v$inputVersionName"
     ;;
   *)
   git restore $BUILD_FILE
