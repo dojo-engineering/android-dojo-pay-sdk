@@ -60,7 +60,7 @@ afterEvaluate {
 //            // Do Note delete this lines used on release CI/CD steps
 //            maven {
 //                name = "GitHubPackages"
-//                url = uri("https:maven.pkg.github.comDojo-Engineeringandroid-dojo-pay-sdk")
+//                url = uri("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
 //                credentials {
 //                    username = credentialProperties["gpr.user"] as String
 //                    password = credentialProperties["gpr.key"] as String
