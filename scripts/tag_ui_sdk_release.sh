@@ -15,7 +15,8 @@ if [ -n "$modifiedFiles" ]; then
   echo "$modifiedFiles"
 else
 
-  echo "Insert the new version name (x.y.z), current version is $currentVersion\n"
+  echo "Insert the new version name (x.y.z), current version is '$currentVersion'"
+  echo "\n"
   read -r inputVersionName
   # Check if the input is empty
   if [[ -z "$inputVersionName" ]]; then
@@ -23,8 +24,14 @@ else
     exit 1
   fi
 
+  # Check if the input contains only valid characters
+  if [[ ! "$inputVersionName" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    echo "Error: look like version name can only contain special characters."
+    exit 1
+  fi
+
   echo ""
-  echo "Updating local branch..."
+  echo "Fetching remote branch..."
   git pull origin
 
   currentBranch=$(git rev-parse --abbrev-ref HEAD)
