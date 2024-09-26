@@ -57,7 +57,7 @@ afterEvaluate {
 
     publishing {
         repositories {
-//            // Do Note delete this lines used on release CI/CD steps
+            // Do Note delete this lines used on release CI/CD steps
 //            maven {
 //                name = "GitHubPackages"
 //                url = uri("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
