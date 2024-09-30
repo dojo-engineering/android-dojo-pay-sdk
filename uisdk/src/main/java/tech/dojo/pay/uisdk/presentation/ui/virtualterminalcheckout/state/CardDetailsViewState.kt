@@ -12,8 +12,6 @@ internal data class CardDetailsViewState(
     val allowedPaymentMethodsIcons: List<Int>,
     val allowedCardSchemes: List<CardsSchemes>,
 ) {
-    fun updateIsVisible(newValue: Boolean) =
-        copy(isVisible = newValue)
     fun updateEmailInputField(newValue: InputFieldState) =
         copy(emailInputField = newValue)
 
@@ -28,10 +26,4 @@ internal data class CardDetailsViewState(
 
     fun updateCvvInputFieldState(newValue: InputFieldState) =
         copy(cvvInputFieldState = newValue)
-
-    fun updateAllowedPaymentMethodsIcons(newValue: List<Int>) =
-        copy(allowedPaymentMethodsIcons = newValue)
-
-    fun updateAllowedCardSchemes(newValue: List<CardsSchemes>) =
-        copy(allowedCardSchemes = newValue)
 }

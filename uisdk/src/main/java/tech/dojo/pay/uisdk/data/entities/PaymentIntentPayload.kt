@@ -52,6 +52,7 @@ internal data class Config(
     val customerEmail: CollectCustomerEmail?,
     val billingAddress: CollectBillingAddress?,
     val shippingDetails: CollectShippingAddress?,
+    val marketId: String?,
 )
 
 @Keep

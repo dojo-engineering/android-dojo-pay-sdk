@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.state
 
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 
 internal data class CardDetailsCheckoutState(
@@ -34,6 +35,7 @@ internal data class CardDetailsCheckoutState(
         messageText = "",
     ),
     var actionButtonState: ActionButtonState = ActionButtonState(),
+    val urls: DojoUrls? = null,
 )
 
 internal data class InputFieldState(

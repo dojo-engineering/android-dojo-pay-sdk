@@ -349,6 +349,7 @@ internal class CardDetailsCheckoutViewModel(
         ),
         emailInputField = InputFieldState(value = paymentIntentResult.result.customerEmailAddress ?: ""),
         postalCodeField = InputFieldState(value = paymentIntentResult.result.billingAddress?.postcode ?: ""),
+        urls = paymentIntentResult.result.urls,
     )
 
     private fun getHeaderType() = if (isStartDestination) {

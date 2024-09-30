@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state
 
 import androidx.annotation.StringRes
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.presentation.ui.virtualterminalcheckout.state.BillingAddressViewState as BillingAddressViewState1
 
 internal data class VirtualTerminalViewState(
@@ -16,7 +17,8 @@ internal data class PaymentDetailsViewState(
     val merchantName: String,
     val totalAmount: String,
     val amountCurrency: String,
-    val orderId: String
+    val orderId: String,
+    val urls: DojoUrls,
 )
 
 internal data class PayButtonViewState(

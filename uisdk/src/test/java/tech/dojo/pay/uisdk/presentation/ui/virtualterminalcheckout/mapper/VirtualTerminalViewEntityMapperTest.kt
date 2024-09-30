@@ -9,6 +9,7 @@ import org.mockito.kotlin.any
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
@@ -94,6 +95,7 @@ private object TestDataVirtualTerminalViewEntityMapper {
             totalAmount = "100",
             amountCurrency = "£",
             orderId = "orderId",
+            urls = DojoUrls.Uk(),
         ),
         shippingAddressSection = ShippingAddressViewState(
             isVisible = false,

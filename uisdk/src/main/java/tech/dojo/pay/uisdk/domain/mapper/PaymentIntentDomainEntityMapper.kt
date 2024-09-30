@@ -4,8 +4,10 @@ import tech.dojo.pay.sdk.card.presentation.gpay.util.centsToString
 import tech.dojo.pay.uisdk.data.entities.PaymentIntentPayload
 import tech.dojo.pay.uisdk.domain.entities.AmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.BillingAddressDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesAmountDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ItemLinesDomainEntity
+import tech.dojo.pay.uisdk.domain.entities.MarketId
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentStatusDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.ShippingDetailsDomainEntity
@@ -94,5 +96,11 @@ internal class PaymentIntentDomainEntityMapper {
                 name = raw.shippingDetails?.name,
                 deliveryNotes = raw.shippingDetails?.deliveryNotes,
             ),
+            urls = when (MarketId.fromMarketId(raw.config?.marketId.orEmpty())) {
+                MarketId.Ireland -> DojoUrls.Ie()
+                MarketId.UnitedKingdom -> DojoUrls.Uk()
+                MarketId.Spain -> DojoUrls.Es()
+                MarketId.Italy -> DojoUrls.It()
+            }
         )
 }
