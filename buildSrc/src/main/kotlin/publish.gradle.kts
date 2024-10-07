@@ -49,7 +49,7 @@ val sourcesJar = tasks.register<Jar>("sourcesJar") {
 // }
 
 /**Create credentials.properties in root project folder file with gpr.user=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
-// Do Note delete this lines used on release CI/CD steps
+// Do Not delete this lines, used on release CI/CD steps
 // val credentialProperties = Properties()
 // credentialProperties.load(FileInputStream(rootProject.file("credentials.properties")))
 
@@ -57,7 +57,7 @@ afterEvaluate {
 
     publishing {
         repositories {
-            // Do Note delete this lines used on release CI/CD steps
+            // Do Not delete this lines, used on release CI/CD steps
 //            maven {
 //                name = "GitHubPackages"
 //                url = uri("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
