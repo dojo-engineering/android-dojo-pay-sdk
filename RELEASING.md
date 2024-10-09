@@ -7,17 +7,12 @@ Before starting the release process, ensure that the milestone is update-to-date
 
 #### Sequence of steps for release:
 
-1.  Make sure the version is changed to a non-SNAPSHOT version in version field at `sdk/build.gradle.kts`.
-
-2.  Update the `README.md` with the new version.
-   
-3.  Create release branch, _**release/<version_number>**_ (etc. release/1.5.0) and push.
-
-4.  Create and push tag _**tag/v1.5.0**_. Bitrise CI will create and publish a **release** build and notify ui components release channel.
-
-5.  If the build fails, fix the issue and try again.
-
-6.  GitHub package release should now be created and ready to consume
+1. Create a release branch from develop.<br>For CORE name it releases/CORE_1.7.0<br>For UI name it releaseUI_1.4.0<br>If you need to release both at the same time, name it releases/CORE_1.7.0_UI_1.4.0
+2. Checkout the new branch and run the next command to release:
+   <br>core → sh scripts/publish_core_sdk_release.sh
+   <br>ui → sh scripts/publish_ui_sdk_release.sh
+   <br>The script will update the version asking to input the new version commit the change and create a tag. CI is set to run
+   automatically the workflow to publish the new version (ui or core) based on the tag just created.
 
 
 ### Manual publishing
