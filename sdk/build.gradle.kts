@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    namespace = "tech.dojo.pay.sdk"
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 34
+        compileSdk = Sdk.COMPILE_SDK_VERSION
+        minSdk = Sdk.MIN_SDK_VERSION
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         buildConfigField("String", "DOJO_SDK_CORE_VERSION", "\"$version\"")
@@ -40,6 +40,9 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
