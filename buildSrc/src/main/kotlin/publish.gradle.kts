@@ -76,9 +76,6 @@ afterEvaluate {
                     from(components["java"])
                 }
 
-                artifact(sourcesJar)
-//                artifact(dokkaJar)
-
                 pom {
                     if (!"USE_SNAPSHOT".byProperty.isNullOrBlank()) {
                         version = "$version-SNAPSHOT"
@@ -91,3 +88,14 @@ afterEvaluate {
 }
 
 val String.byProperty: String? get() = findProperty(this) as? String
+
+plugins.withId("com.android.library") {
+    val android = extensions.getByName("android") as LibraryExtension
+
+    android.publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
+    }
+}
