@@ -2,8 +2,8 @@
 
 object Sdk {
     const val MIN_SDK_VERSION = 21
-    const val TARGET_SDK_VERSION = 31
-    const val COMPILE_SDK_VERSION = 31
+    const val TARGET_SDK_VERSION = 34
+    const val COMPILE_SDK_VERSION = 34
 }
 
 object Versions {
@@ -12,28 +12,22 @@ object Versions {
     const val ACTIVITY_COMPOSE = "1.3.0-beta01"
     const val VIEWMODEL_COMPOSE = "1.0.0-alpha04"
     const val VIEWMODEL = "  2.4.1"
-    const val VIEWBINDING = "4.2.1"
     const val ANDROIDX_TEST_EXT = "1.1.3"
     const val ANDROIDX_TEST = "1.4.0"
     const val APPCOMPAT = "1.4.1"
     const val CONSTRAINT_LAYOUT = "2.1.0"
-    const val CONSTRAINT_LAYOUT_COMPOSE = "1.0.0-alpha07"
     const val CORE_KTX = "1.9.0"
     const val ESPRESSO_CORE = "3.4.0"
     const val JUNIT = "4.13.2"
-    const val KTLINT = "0.43.2"
     const val COMPOSE_VERSION = "1.5.0"
     const val COMPOSE_ANIMATION_VERSION = "1.5.0-alpha01"
     const val KOTLIN = "1.9.0"
-    const val ACCOMPANIST = "0.23.0"
     const val COROUTINES = "1.6.1"
     const val MATERIAL = "1.5.0"
-    const val DOJO_PAY_CORE = "1.2.0"
     const val MOCKITO = "4.0.0"
     const val MOCKITO_IN_LINE = "4.3.1"
     const val NAVIGATION = "2.3.3"
     const val COMPOSE_NAVIGATION = "2.5.3"
-    const val COMPOSE_NAVIGATION_ANIMATION = "0.23.1"
     const val TIMBER = "5.0.1"
     const val GSON = "2.10.1"
     const val csvReader = "1.6.0"
@@ -46,18 +40,6 @@ object Versions {
     const val MOCKK = "1.13.4"
 }
 
-object BuildPluginsVersion {
-
-    const val DETEKT = "1.17.1"
-    const val KTLINT = "10.2.0"
-    const val VERSIONS_PLUGIN = "0.39.0"
-}
-
-object Accompanist {
-    const val insets = "com.google.accompanist:accompanist-insets:${Versions.ACCOMPANIST}"
-    const val systemuicontroller =
-        "com.google.accompanist:accompanist-systemuicontroller:${Versions.ACCOMPANIST}"
-}
 
 object MOCKITO {
     const val MOCKITO_KOTLIN = "org.mockito.kotlin:mockito-kotlin:${Versions.MOCKITO}"
@@ -71,12 +53,8 @@ object Coroutines {
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.COROUTINES}"
 }
 
-object DojoPayCore {
-    const val DOJO_PAY_CORE = "tech.dojo.pay:sdk:${Versions.DOJO_PAY_CORE}"
-}
 
 object Kotlin {
-    const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${Versions.KOTLIN}"
     const val reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.KOTLIN}"
     const val extensions = "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.KOTLIN}"
 }
@@ -92,8 +70,7 @@ object Navigation {
     const val NavigationUI = "androidx.navigation:navigation-ui-ktx:${Versions.NAVIGATION}"
     const val NavigationCompose =
         "androidx.navigation:navigation-compose:${Versions.COMPOSE_NAVIGATION}"
-    const val NavigationAnimationCompose =
-        "com.google.accompanist:accompanist-navigation-animation:${Versions.COMPOSE_NAVIGATION_ANIMATION}"
+
 }
 object CsvReader {
     const val csvReader = "com.github.doyaaaaaken:kotlin-csv-jvm:${Versions.csvReader}"
@@ -102,7 +79,6 @@ object AndroidX {
 
     const val APPCOMPAT = "androidx.appcompat:appcompat:${Versions.APPCOMPAT}"
     const val CORE_KTX = "androidx.core:core-ktx:${Versions.CORE_KTX}"
-    const val VIEWBINDING = "androidx.databinding:viewbinding:${Versions.VIEWBINDING}"
     const val CORE_TESTING_ARCH = "androidx.arch.core:core-testing:2.1.0"
     const val WINDOW = "androidx.window:window:${Versions.ANDROIDX_WINDOW}"
 
@@ -148,7 +124,6 @@ object AndroidX {
 
         const val animation = "androidx.compose.animation:animation:${Versions.COMPOSE_ANIMATION_VERSION}"
         const val tooling = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE_VERSION}"
-        const val uiTest = "androidx.compose.ui:ui-test-junit4:${Versions.COMPOSE_VERSION}"
 
         // Integration with observables
         const val livedata = "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}"
@@ -161,8 +136,6 @@ object AndroidX {
 
         const val CONSTRAINT_LAYOUT =
             "androidx.constraintlayout:constraintlayout:${Versions.CONSTRAINT_LAYOUT}"
-        const val CONSTRAINT_LAYOUT_COMPOSE =
-            "androidx.constraintlayout:constraintlayout-compose:${Versions.CONSTRAINT_LAYOUT_COMPOSE}"
     }
 
     object Network {
@@ -172,7 +145,6 @@ object AndroidX {
     object AndroidTestingLib {
 
         const val ANDROIDX_TEST_RULES = "androidx.test:rules:${Versions.ANDROIDX_TEST}"
-        const val ANDROIDX_TEST_RUNNER = "androidx.test:runner:${Versions.ANDROIDX_TEST}"
         const val ANDROIDX_TEST_EXT_JUNIT = "androidx.test.ext:junit:${Versions.ANDROIDX_TEST_EXT}"
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:${Versions.ESPRESSO_CORE}"
     }

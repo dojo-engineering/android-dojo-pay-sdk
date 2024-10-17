@@ -10,11 +10,12 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
+    namespace = "tech.dojo.pay.sdksample"
     defaultConfig {
-        compileSdk = 34
+        compileSdk = Sdk.COMPILE_SDK_VERSION
         applicationId = "tech.dojo.pay.sdksample"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = Sdk.MIN_SDK_VERSION
+        targetSdk = Sdk.TARGET_SDK_VERSION
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
