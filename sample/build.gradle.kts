@@ -45,6 +45,10 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE_VERSION
     }
 }
 
@@ -66,6 +70,7 @@ dependencies {
     implementation(AndroidX.Compose.ui)
     implementation(AndroidX.Compose.runtime)
     implementation(AndroidX.Compose.material)
+    implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ESPRESSO_CORE)

@@ -19,6 +19,8 @@ object DojoSDKDropInUI {
     var dojoThemeSettings: DojoThemeSettings? = DojoThemeSettings()
     var dojoSDKDebugConfig: DojoSDKDebugConfig? = null
 
+    internal var language: String? = null
+
     /**
      * Returns handler which handle payment process with activity  .
      */
@@ -78,5 +80,14 @@ object DojoSDKDropInUI {
     ): DojoPaymentResult? {
         if (requestCode != REQUEST_CODE_DROP_IN_UI) return null
         return DojoPaymentFlowHandlerResultContract().parseResult(resultCode, intent)
+    }
+
+    /**
+     * Set Locale to be used in all the flows, will force ui to use the passed locale instead of the device locale.
+     * If language is not recognized or supported ui will fallback to english.
+     * If no language is set we will use the device locale with the supported languages
+     */
+    fun setSdkLocale(language: String) {
+        this.language = language
     }
 }
