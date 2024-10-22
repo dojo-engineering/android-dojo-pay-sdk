@@ -5,10 +5,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
         classpath("com.android.tools.build:gradle:7.4.1")
-//        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.8.20")
-//        classpath("org.jetbrains.dokka:dokka-core:1.8.20")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1")
     }
 }
@@ -52,6 +50,6 @@ subprojects {
 
 tasks {
     register("clean", Delete::class.java) {
-        delete(rootProject.buildDir)
+        delete(rootProject.layout.buildDirectory)
     }
 }

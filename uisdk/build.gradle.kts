@@ -1,4 +1,4 @@
-version = "1.5.1"
+version = "1.6.0"
 
 plugins {
     id("com.android.library")
@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    namespace = "tech.dojo.pay.uisdk"
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 34
+        compileSdk = Sdk.COMPILE_SDK_VERSION
+        minSdk = Sdk.MIN_SDK_VERSION
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -48,6 +48,9 @@ android {
     }
     testOptions {
         unitTests.isReturnDefaultValues = true
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 dependencies {
