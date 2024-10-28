@@ -8,12 +8,21 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
+import tech.dojo.pay.uisdk.presentation.ui.CustomStringProvider
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 
 class PaymentResultViewEntityMapperTest {
 
     private var mockStringProvider: StringProvider = mock()
+    private val customStringProvider: CustomStringProvider = mock()
     private lateinit var mapper: PaymentResultViewEntityMapper
+
+    private fun buildMapper(type: DojoPaymentType) = PaymentResultViewEntityMapper(
+        stringProvider = mockStringProvider,
+        paymentType = type,
+        isDarkModeEnabled = false,
+        customStringProvider = customStringProvider
+    )
 
     @Test
     fun `when calling mapTpResultState with successful result with for PAYMENT_CARD payment type should return successfulResult with correct fields`() {
@@ -29,11 +38,7 @@ class PaymentResultViewEntityMapperTest {
         )
 
         // act
-        mapper = PaymentResultViewEntityMapper(
-            stringProvider = mockStringProvider,
-            paymentType = DojoPaymentType.PAYMENT_CARD,
-            isDarkModeEnabled = false,
-        )
+        mapper = buildMapper(type = DojoPaymentType.PAYMENT_CARD)
         val result = mapper.mapTpResultState(DojoPaymentResult.SUCCESSFUL)
 
         // Assert
@@ -58,11 +63,7 @@ class PaymentResultViewEntityMapperTest {
         )
 
         // act
-        mapper = PaymentResultViewEntityMapper(
-            stringProvider = mockStringProvider,
-            paymentType = DojoPaymentType.SETUP_INTENT,
-            isDarkModeEnabled = false,
-        )
+        mapper = buildMapper(type = DojoPaymentType.SETUP_INTENT)
         val result = mapper.mapTpResultState(DojoPaymentResult.SUCCESSFUL)
 
         // Assert
@@ -89,11 +90,7 @@ class PaymentResultViewEntityMapperTest {
         )
 
         // act
-        mapper = PaymentResultViewEntityMapper(
-            stringProvider = mockStringProvider,
-            paymentType = DojoPaymentType.SETUP_INTENT,
-            isDarkModeEnabled = false,
-        )
+        mapper = buildMapper(type = DojoPaymentType.SETUP_INTENT)
         val result = mapper.mapTpResultState(DojoPaymentResult.FAILED)
 
         // Assert
@@ -120,11 +117,7 @@ class PaymentResultViewEntityMapperTest {
         )
 
         // act
-        mapper = PaymentResultViewEntityMapper(
-            stringProvider = mockStringProvider,
-            paymentType = DojoPaymentType.PAYMENT_CARD,
-            isDarkModeEnabled = false,
-        )
+        mapper = buildMapper(type = DojoPaymentType.PAYMENT_CARD)
         val result = mapper.mapTpResultState(DojoPaymentResult.FAILED)
 
         // Assert
@@ -142,11 +135,7 @@ class PaymentResultViewEntityMapperTest {
         val orderId = "123456"
         val expectedResult = "Order ID: 123456"
         // act
-        mapper = PaymentResultViewEntityMapper(
-            stringProvider = mockStringProvider,
-            paymentType = DojoPaymentType.PAYMENT_CARD,
-            isDarkModeEnabled = false,
-        )
+        mapper = buildMapper(type = DojoPaymentType.PAYMENT_CARD)
         val mappedOrderId = mapper.mapToOrderIdField(orderId)
         Assert.assertEquals(expectedResult, mappedOrderId)
     }

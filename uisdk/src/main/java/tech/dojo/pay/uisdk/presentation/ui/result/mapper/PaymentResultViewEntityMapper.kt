@@ -4,6 +4,7 @@ import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.uisdk.R
 import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
+import tech.dojo.pay.uisdk.presentation.ui.CustomStringProvider
 import tech.dojo.pay.uisdk.presentation.ui.result.state.PaymentResultState
 import java.util.Locale
 
@@ -11,6 +12,7 @@ internal class PaymentResultViewEntityMapper(
     private val stringProvider: StringProvider,
     private val paymentType: DojoPaymentType,
     private val isDarkModeEnabled: Boolean,
+    private val customStringProvider: CustomStringProvider
 ) {
     fun mapTpResultState(result: DojoPaymentResult) =
         if (result == DojoPaymentResult.SUCCESSFUL) {
@@ -19,21 +21,21 @@ internal class PaymentResultViewEntityMapper(
             buildFailedResult()
         }
 
-    fun mapToOrderIdField(orderId: String): String {
-        return String.format(
+    fun mapToOrderIdField(orderId: String): String =
+     customStringProvider.resultScreenOrderIdText ?: String.format(
             Locale.getDefault(),
             "%s %s",
             stringProvider.getString(R.string.dojo_ui_sdk_order_info),
             orderId,
         )
-    }
+
 
     private fun buildSuccessfulResult() = PaymentResultState.SuccessfulResult(
         appBarTitle = getSuccessfulAppBarTitle(),
         imageId = R.drawable.ic_success_circle,
         status = getSuccessfulStatusTitle(),
         orderInfo = "",
-        description = "",
+        description = getSuccessDetails(),
     )
 
     private fun buildFailedResult() = PaymentResultState.FailedResult(
@@ -47,44 +49,46 @@ internal class PaymentResultViewEntityMapper(
     private fun getFailedDetails() =
         when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail)
-            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
-                R.string.dojo_ui_sdk_payment_result_failed_description,
-            )
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenAdditionalTextFail ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_failed_description)
+        }
+
+    private fun getSuccessDetails() =
+        when (paymentType) {
+            DojoPaymentType.SETUP_INTENT -> ""
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenAdditionalTextSuccess.orEmpty()
         }
 
     private fun getSuccessfulStatusTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_success)
-            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
-                R.string.dojo_ui_sdk_payment_result_title_success,
-            )
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenMainTextSuccess ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success)
         }
     }
 
     private fun getFailedStatusTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_message_setup_intent_fail)
-            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
-                R.string.dojo_ui_sdk_payment_result_title_fail,
-            )
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenMainTextFail ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail)
         }
     }
 
     private fun getSuccessfulAppBarTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_success)
-            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
-                R.string.dojo_ui_sdk_payment_result_title_success,
-            )
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenTitleSuccess ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_success)
         }
     }
 
     private fun getFailedAppBarTitle(): String {
         return when (paymentType) {
             DojoPaymentType.SETUP_INTENT -> stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_fail)
-            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL -> stringProvider.getString(
-                R.string.dojo_ui_sdk_payment_result_title_fail,
-            )
+            DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
+                customStringProvider.resultScreenTitleFail ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail)
         }
     }
 

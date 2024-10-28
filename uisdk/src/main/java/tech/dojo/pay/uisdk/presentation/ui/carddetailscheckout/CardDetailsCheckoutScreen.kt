@@ -561,11 +561,10 @@ private fun HeaderItem(state: CardDetailsCheckoutState) {
 private fun AppBarItem(
     onBackClicked: () -> Unit,
     onCloseClicked: () -> Unit,
-    toolbarTitle: String?,
+    toolbarTitle: String,
 ) {
     DojoAppBar(
-        title = toolbarTitle
-            ?: stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_title),
+        title = toolbarTitle,
         titleGravity = TitleGravity.LEFT,
         navigationIcon = AppBarIcon.back(DojoTheme.colors.headerButtonTintColor) { onBackClicked() },
         actionIcon = AppBarIcon.close(DojoTheme.colors.headerButtonTintColor) { onCloseClicked() },
