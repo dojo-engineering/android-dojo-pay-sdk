@@ -60,7 +60,7 @@ internal fun AmountBreakDownItems(
     }
 }
 private fun getItemHeight(listSize: Int) =
-    if (listSize> 3 || listSize == 3) { 80 } else { listSize * 24 }
+    if (listSize > 3 || listSize == 3) { 80 } else { listSize * 24 }
 
 data class AmountBreakDownItem(
     val caption: String,

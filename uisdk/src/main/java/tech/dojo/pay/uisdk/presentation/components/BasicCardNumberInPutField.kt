@@ -161,9 +161,9 @@ internal fun BasicCardNumberInputField(
                     if ((it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) && isDigit(
                             it
                         )
-                    ) onCardNumberValueChanged(
-                        it
-                    )
+                    ) {
+                        onCardNumberValueChanged(it)
+                    }
                 },
                 visualTransformation = {
                     when (isAmexCardScheme(cardNumberValue.text)) {

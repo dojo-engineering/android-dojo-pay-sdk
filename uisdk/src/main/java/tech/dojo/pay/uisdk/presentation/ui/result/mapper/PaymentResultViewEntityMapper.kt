@@ -22,13 +22,12 @@ internal class PaymentResultViewEntityMapper(
         }
 
     fun mapToOrderIdField(orderId: String): String =
-     customStringProvider.resultScreenOrderIdText ?: String.format(
+        customStringProvider.resultScreenOrderIdText ?: String.format(
             Locale.getDefault(),
             "%s %s",
             stringProvider.getString(R.string.dojo_ui_sdk_order_info),
             orderId,
         )
-
 
     private fun buildSuccessfulResult() = PaymentResultState.SuccessfulResult(
         appBarTitle = getSuccessfulAppBarTitle(),
