@@ -145,6 +145,24 @@ class CardDetailsCheckoutViewModelTest {
         }
 
     @Test
+    fun `when init viewModel with custom title should emit correct title`() =
+        runTest {
+            // arrange
+            val expectedTitle = "customTitle"
+            given(customStringProvider.cardDetailsNavigationTitle).willReturn(expectedTitle)
+
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> = MutableStateFlow(PaymentIntentResult.None)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+
+            // act
+            val viewModel = buildVm()
+            // assert
+            Assert.assertEquals(expectedTitle, viewModel.state.value?.toolbarTitle)
+        }
+
+    @Test
     fun `when init viewModel with isStartDestination as true should emit correct state with full loading as true  and correct toolBar title `() =
         runTest {
             // arrange
