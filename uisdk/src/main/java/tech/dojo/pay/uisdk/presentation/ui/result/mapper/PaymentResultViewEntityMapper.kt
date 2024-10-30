@@ -43,6 +43,7 @@ internal class PaymentResultViewEntityMapper(
         shouldNavigateToPreviousScreen = false,
         status = getFailedStatusTitle(),
         details = getFailedDetails(),
+        orderInfo = getFailedOrderInfo(),
     )
 
     private fun getFailedDetails() =
@@ -89,6 +90,10 @@ internal class PaymentResultViewEntityMapper(
             DojoPaymentType.PAYMENT_CARD, DojoPaymentType.VIRTUAL_TERMINAL ->
                 customStringProvider.resultScreenTitleFail ?: stringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_fail)
         }
+    }
+
+    private fun getFailedOrderInfo(): String? {
+        return customStringProvider.resultScreenOrderIdText
     }
 
     private fun getErrorImage() = if (isDarkModeEnabled) {

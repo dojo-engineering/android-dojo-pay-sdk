@@ -125,18 +125,21 @@ class PaymentResultViewEntityMapperTest {
     @Test
     fun `when calling mapTpResultState with FAILED result with for SETUP_INTENT payment type should return FailedResult with correct fields`() {
         // arrange
+        val orderId = "orderId-custom"
         given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_message_setup_intent_fail))
             .willReturn("Failed Setup Intent")
         given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_main_title_setup_intent_fail))
             .willReturn("Failed Setup Intent")
         given(mockStringProvider.getString(R.string.dojo_ui_sdk_payment_result_title_setup_intent_fail))
             .willReturn("Failed Setup Intent")
+        given(customStringProvider.resultScreenOrderIdText).willReturn(orderId)
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
             imageId = 2131230871,
             status = "Failed Setup Intent",
             details = "Failed Setup Intent",
             shouldNavigateToPreviousScreen = false,
+            orderInfo = orderId
         )
 
         // act

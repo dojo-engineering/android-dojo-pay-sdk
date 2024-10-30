@@ -17,6 +17,16 @@ class ExampleKotlin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample_ui_sdk)
 
+        DojoSDKDropInUI.dojoThemeSettings?.customCardDetailsNavigationTitle = "Custom title"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenTitleFail = "Custom title fail"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenMainTextFail = "Custom title main"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenAdditionalTextFail = "Custom additional text"
+
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenTitleSuccess = "Custom title success"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenMainTextSuccess = "Custom title main s"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenAdditionalTextSuccess = "Custom title main s"
+        DojoSDKDropInUI.dojoThemeSettings?.customResultScreenOrderIdText = "Custom order Id"
+
         val button = findViewById<Button>(R.id.startPayment)
         button.setOnClickListener {
             dojoHandler.startPaymentFlow(
