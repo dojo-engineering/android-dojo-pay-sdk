@@ -15,6 +15,7 @@ import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.domain.ObservePaymentStatus
 import tech.dojo.pay.uisdk.domain.entities.MakeCardPaymentParams
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
+import tech.dojo.pay.uisdk.presentation.ui.CustomStringProvider
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
@@ -40,6 +41,7 @@ internal class CardDetailsCheckoutViewModel(
     private val isStartDestination: Boolean,
     private val makeCardPaymentUseCase: MakeCardPaymentUseCase,
     private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit,
+    private val customStringProvider: CustomStringProvider,
 ) : ViewModel() {
     private lateinit var paymentIntentId: String
     private var currentState: CardDetailsCheckoutState
@@ -361,7 +363,7 @@ internal class CardDetailsCheckoutViewModel(
     private fun getToolBarTitle() = if (isStartDestination) {
         stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title_setup_intent)
     } else {
-        stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
+        customStringProvider.cardDetailsNavigationTitle ?: stringProvider.getString(R.string.dojo_ui_sdk_card_details_checkout_title)
     }
 
     private fun getCheckBoxMessage(paymentIntentResult: PaymentIntentResult.Success) =

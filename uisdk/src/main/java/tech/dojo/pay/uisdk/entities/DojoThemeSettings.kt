@@ -11,7 +11,15 @@ data class DojoThemeSettings @JvmOverloads constructor(
     val forceLightMode: Boolean = false,
     val showBranding: Boolean = true,
     val analyticsExcludedFieldsIdentifier: String = "",
-    var additionalLegalText: String = ""
+    var additionalLegalText: String = "",
+    var customCardDetailsNavigationTitle: String? = null,
+    var customResultScreenTitleSuccess: String? = null,
+    var customResultScreenTitleFail: String? = null,
+    var customResultScreenOrderIdText: String? = null,
+    var customResultScreenMainTextSuccess: String? = null,
+    var customResultScreenMainTextFail: String? = null,
+    var customResultScreenAdditionalTextSuccess: String? = null,
+    var customResultScreenAdditionalTextFail: String? = null,
 ) : Serializable
 
 @Keep

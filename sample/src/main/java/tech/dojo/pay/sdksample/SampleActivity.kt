@@ -30,16 +30,16 @@ import tech.dojo.pay.uisdk.DojoSDKDropInUI
 
 class SampleActivity : ComponentActivity() {
 
-    private val DarkColorPalette = darkColors()
+    private val darkColorPalette = darkColors()
 
-    private val LightColorPalette = lightColors()
+    private val lightColorPalette = lightColors()
 
     @Composable
     fun Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
         val colors = if (darkTheme) {
-            DarkColorPalette
+            darkColorPalette
         } else {
-            LightColorPalette
+            lightColorPalette
         }
 
         MaterialTheme(colors = colors, content = content)

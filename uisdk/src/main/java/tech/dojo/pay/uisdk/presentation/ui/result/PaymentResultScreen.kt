@@ -187,6 +187,15 @@ private fun SuccessfulResult(
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.padding(top = 16.dp),
         )
+        state.description.takeIf { it.isNotEmpty() }?.let {
+            Text(
+                text = state.description,
+                style = DojoTheme.typography.subtitle2,
+                textAlign = TextAlign.Center,
+                color = DojoTheme.colors.primaryLabelTextColor,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
 
         DojoSpacer(height = 32.dp)
         DojoFullGroundButton(
@@ -249,9 +258,19 @@ private fun FailedResult(
             modifier = Modifier.padding(top = 16.dp),
         )
 
+        state.orderInfo?.let {
+            Text(
+                text = it,
+                style = DojoTheme.typography.subtitle1,
+                color = DojoTheme.colors.secondaryLabelTextColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
+
         Text(
             text = state.details,
-            style = DojoTheme.typography.subtitle1,
+            style = DojoTheme.typography.subtitle2,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp),

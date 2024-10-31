@@ -30,6 +30,7 @@ import tech.dojo.pay.uisdk.domain.entities.DojoUrls
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentDomainEntity
 import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.entities.SupportedCountriesDomainEntity
+import tech.dojo.pay.uisdk.presentation.ui.CustomStringProvider
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.entity.SupportedCountriesViewEntity
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.AllowedPaymentMethodsViewEntityMapper
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.mapper.CardCheckOutFullCardPaymentPayloadMapper
@@ -64,6 +65,7 @@ class CardDetailsCheckoutViewModelTest {
     private val makeCardPaymentUseCase: MakeCardPaymentUseCase = mock()
     private val navigateToCardResult: (dojoPaymentResult: DojoPaymentResult) -> Unit = mock()
     private var isStartDestination: Boolean = false
+    private val customStringProvider: CustomStringProvider = mock()
 
     @Before
     fun setUp() {
@@ -84,6 +86,22 @@ class CardDetailsCheckoutViewModelTest {
             saveCardToolBar,
         )
     }
+
+    private fun buildVm() = CardDetailsCheckoutViewModel(
+        observePaymentIntent,
+        dojoCardPaymentHandler,
+        observePaymentStatus,
+        getSupportedCountriesUseCase,
+        supportedCountriesViewEntityMapper,
+        allowedPaymentMethodsViewEntityMapper,
+        cardCheckoutScreenValidator,
+        cardCheckOutFullCardPaymentPayloadMapper,
+        stringProvider,
+        isStartDestination,
+        makeCardPaymentUseCase,
+        navigateToCardResult,
+        customStringProvider,
+    )
 
     @Test
     fun `when init viewModel with isStartDestination as false should emit correct state`() =
@@ -121,22 +139,27 @@ class CardDetailsCheckoutViewModelTest {
                 actionButtonState = ActionButtonState(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
+        }
+
+    @Test
+    fun `when init viewModel with custom title should emit correct title`() =
+        runTest {
+            // arrange
+            val expectedTitle = "customTitle"
+            given(customStringProvider.cardDetailsNavigationTitle).willReturn(expectedTitle)
+
+            val paymentIntentFakeFlow: MutableStateFlow<PaymentIntentResult> = MutableStateFlow(PaymentIntentResult.None)
+            given(observePaymentIntent.observePaymentIntent()).willReturn(paymentIntentFakeFlow)
+            val paymentStateFakeFlow: MutableStateFlow<Boolean> = MutableStateFlow(false)
+            given(observePaymentStatus.observePaymentStates()).willReturn(paymentStateFakeFlow)
+
+            // act
+            val viewModel = buildVm()
+            // assert
+            Assert.assertEquals(expectedTitle, viewModel.state.value?.toolbarTitle)
         }
 
     @Test
@@ -176,20 +199,7 @@ class CardDetailsCheckoutViewModelTest {
                 actionButtonState = ActionButtonState(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
         }
@@ -253,20 +263,7 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk()
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
         }
@@ -351,20 +348,7 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
         }
@@ -448,20 +432,7 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
         }
@@ -547,20 +518,7 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
 
             viewModel.onCardHolderValueChanged("new")
             // assert
@@ -646,20 +604,7 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
             viewModel.onCardNumberValueChanged("new")
             viewModel.onCvvValueChanged("new")
             viewModel.onExpireDateValueChanged("new")
@@ -747,20 +692,8 @@ class CardDetailsCheckoutViewModelTest {
                 urls = DojoUrls.Uk(),
             )
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
+
             viewModel.onEmailValueChanged("new")
             // assert
             Assert.assertEquals(expected, viewModel.state.value)
@@ -804,20 +737,8 @@ class CardDetailsCheckoutViewModelTest {
             )
             given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
+
             viewModel.validateCardHolder("new")
             viewModel.validateCardNumber("new")
             viewModel.validateExpireDate("new")
@@ -884,20 +805,8 @@ class CardDetailsCheckoutViewModelTest {
             )
             given(allowedPaymentMethodsViewEntityMapper.apply(any())).willReturn(supportedIcons)
             // act
-            val viewModel = CardDetailsCheckoutViewModel(
-                observePaymentIntent,
-                dojoCardPaymentHandler,
-                observePaymentStatus,
-                getSupportedCountriesUseCase,
-                supportedCountriesViewEntityMapper,
-                allowedPaymentMethodsViewEntityMapper,
-                cardCheckoutScreenValidator,
-                cardCheckOutFullCardPaymentPayloadMapper,
-                stringProvider,
-                isStartDestination,
-                makeCardPaymentUseCase,
-                navigateToCardResult,
-            )
+            val viewModel = buildVm()
+
             viewModel.onPayWithCardClicked()
             // assert
             verify(makeCardPaymentUseCase).makeCardPayment(any(), any())
