@@ -263,10 +263,14 @@ private fun getBorderStroke(
     enabled: Boolean,
     borderStrokeColor: Color?
 ) =
-    if (enabled) BorderStroke(
-        1.dp,
-        borderStrokeColor ?: DojoTheme.colors.secondaryCTAButtonActiveBorderColor
-    ) else null
+    if (enabled) {
+        BorderStroke(
+            1.dp,
+            borderStrokeColor ?: DojoTheme.colors.secondaryCTAButtonActiveBorderColor
+        )
+    } else {
+        null
+    }
 
 @Preview("Button", group = "Buttons")
 @Composable

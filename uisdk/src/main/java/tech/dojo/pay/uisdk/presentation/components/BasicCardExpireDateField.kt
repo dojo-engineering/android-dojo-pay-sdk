@@ -138,9 +138,9 @@ internal fun BasicCardExpireDateField(
                     if ((it.text.length < expireDataCharLength || it.text.length == expireDataCharLength) && isDigit(
                             it
                         )
-                    ) onExpireDateValueChanged(
-                        it
-                    )
+                    ) {
+                        onExpireDateValueChanged(it)
+                    }
                 },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                 maxLines = maxLines,

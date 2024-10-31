@@ -134,9 +134,9 @@ internal fun BasicCvvInputField(
             BasicTextField(
                 value = cvvValue,
                 onValueChange = {
-                    if ((it.text.length < maxCvvChar || it.text.length == maxCvvChar) && isDigit(it)) onCvvValueChanged(
-                        it
-                    )
+                    if ((it.text.length < maxCvvChar || it.text.length == maxCvvChar) && isDigit(it)) {
+                        onCvvValueChanged(it)
+                    }
                 },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                 maxLines = maxLines,

@@ -8,7 +8,6 @@ import tech.dojo.pay.uisdk.domain.entities.PaymentIntentResult
 import tech.dojo.pay.uisdk.domain.mapper.PaymentIntentDomainEntityMapper
 
 @Suppress("TooGenericExceptionCaught", "SwallowedException")
-
 internal class PaymentIntentRepository(
     private val dataSource: PaymentIntentDataSource = PaymentIntentDataSource(),
     private val paymentIntentDomainEntityMapper: PaymentIntentDomainEntityMapper = PaymentIntentDomainEntityMapper(),

@@ -35,9 +35,9 @@ internal class PaymentMethodItemViewEntityMapper(private val isDarkModeEnabled: 
         PaymentMethodItemViewEntityItem.CardItemItem(
             id = it.id,
             scheme = it.scheme.cardsSchemes.replaceFirstChar { firstChar ->
-                if (firstChar.isLowerCase()) firstChar.titlecase(
-                    Locale.getDefault()
-                ) else firstChar.toString()
+                if (firstChar.isLowerCase()) {
+                    firstChar.titlecase(Locale.getDefault())
+                } else firstChar.toString()
             },
             pan = if (it.pan.length > 8) {
                 it.pan.substring(it.pan.length - 8, it.pan.length)

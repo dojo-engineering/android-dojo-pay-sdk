@@ -15,22 +15,19 @@ plugins {
     id("com.android.library") apply false
     kotlin("android") apply false
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
 }
 
 subprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
-    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        debug.set(false)
-        version.set("0.42.1")
-        verbose.set(true)
-        android.set(false)
-        outputToConsole.set(true)
-        ignoreFailures.set(false)
-        disabledRules.set(setOf("experimental:argument-list-wrapping"))
-        enableExperimentalRules.set(true)
+    ktlint {
+        android = false
+        debug = false
+        verbose = true
+        version = "0.49.1"
+        ignoreFailures = false
         filter {
             exclude("**/generated/**")
             include("**/kotlin/**")

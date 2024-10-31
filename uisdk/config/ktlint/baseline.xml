@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/main/java/tech/dojo/pay/uisdk/presentation/components/CardItemWithRadioButton.kt">
+        <error line="57" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/domain/IsWalletAvailableFromDeviceAndIntentUseCaseTest.kt">
+        <error line="84" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/domain/mapper/PaymentIntentDomainEntityMapperTest.kt">
+        <error line="55" column="1" source="standard:max-line-length" />
+        <error line="67" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/PaymentFlowViewModelTest.kt">
+        <error line="57" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/ui/carddetailscheckout/mapper/CardCheckOutFullCardPaymentPayloadMapperTest.kt">
+        <error line="293" column="1" source="standard:max-line-length" />
+        <error line="346" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/ui/carddetailscheckout/mapper/SupportedCountriesViewEntityMapperTest.kt">
+        <error line="19" column="1" source="standard:max-line-length" />
+        <error line="68" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/ui/result/viewmodel/PaymentResultViewModelTest.kt">
+        <error line="62" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/ui/virtualterminalcheckout/validator/VirtualTerminalValidatorTest.kt">
+        <error line="78" column="1" source="standard:max-line-length" />
+    </file>
+    <file name="src/test/java/tech/dojo/pay/uisdk/presentation/ui/virtualterminalcheckout/viewmodel/VirtualTerminalViewModelTest.kt">
+        <error line="102" column="1" source="standard:max-line-length" />
+        <error line="323" column="1" source="standard:max-line-length" />
+        <error line="384" column="1" source="standard:max-line-length" />
+        <error line="727" column="1" source="standard:max-line-length" />
+        <error line="788" column="1" source="standard:max-line-length" />
+    </file>
+</baseline>

@@ -110,7 +110,9 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
                         collectShipping = binding.checkboxShippingAddress.isChecked,
                         allowedCountryCodesForShipping = if (binding.checkboxShippingAddress.isChecked) {
                             listOf("US", "GB", "DE")
-                        } else null,
+                        } else {
+                            null
+                        },
                         collectBilling = binding.checkboxBillingAddress.isChecked,
                         collectPhoneNumber = binding.checkboxPhoneNumber.isChecked,
                         collectEmailAddress = binding.checkboxEmail.isChecked,

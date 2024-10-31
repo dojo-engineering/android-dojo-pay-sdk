@@ -37,9 +37,9 @@ internal fun PaymentMethodsList(
         { paymentMethodItem: PaymentMethodItemViewEntityItem -> selectedOption = paymentMethodItem }
 
     LaunchedEffect(Unit) {
-        if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) onItemChecked(
-            selectedOption
-        )
+        if (paymentMethodItems.isNotEmpty() && paymentMethodItems[0] is PaymentMethodItemViewEntityItem.WalletItemItem) {
+            onItemChecked(selectedOption)
+        }
     }
 
     if (paymentMethodItems.size > 1 && !paymentMethodItems.contains(selectedOption)) {

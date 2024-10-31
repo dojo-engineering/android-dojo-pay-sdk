@@ -24,10 +24,16 @@ inline fun <reified Activity : ComponentActivity> Context.getActivity(): Activit
 
 inline fun <reified T : Serializable> Bundle.serializableCompat(key: String): T? = when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getSerializable(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getSerializable(key) as? T
+    else ->
+        @Suppress("DEPRECATION")
+        getSerializable(key)
+            as? T
 }
 
 inline fun <reified T : Serializable> Intent.serializableCompat(key: String): T? = when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> getSerializableExtra(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getSerializableExtra(key) as? T
+    else ->
+        @Suppress("DEPRECATION")
+        getSerializableExtra(key)
+            as? T
 }
