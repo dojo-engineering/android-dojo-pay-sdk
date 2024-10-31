@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -40,6 +41,7 @@ import tech.dojo.pay.uisdk.core.StringProvider
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
+import tech.dojo.pay.uisdk.presentation.components.LocaleManager
 import tech.dojo.pay.uisdk.presentation.components.WindowSize
 import tech.dojo.pay.uisdk.presentation.components.rememberWindowSize
 import tech.dojo.pay.uisdk.presentation.components.theme.DojoTheme
@@ -75,6 +77,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private var currentSelectedMethod: PaymentMethodItemViewEntityItem? = null
     private val paymentFlowViewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
     private val flowStartDestination: PaymentFlowScreens by lazy { paymentFlowViewModel.getFlowStartDestination() }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleManager.updateBaseContextLocale(newBase, DojoSDKDropInUI.language))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

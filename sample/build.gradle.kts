@@ -10,11 +10,12 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
+    namespace = "tech.dojo.pay.sdksample"
     defaultConfig {
-        compileSdk = 34
+        compileSdk = Sdk.COMPILE_SDK_VERSION
         applicationId = "tech.dojo.pay.sdksample"
-        minSdk = 26
-        targetSdk = 34
+        minSdk = Sdk.MIN_SDK_VERSION
+        targetSdk = Sdk.TARGET_SDK_VERSION
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,6 +45,10 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE_VERSION
     }
 }
 
@@ -65,6 +70,7 @@ dependencies {
     implementation(AndroidX.Compose.ui)
     implementation(AndroidX.Compose.runtime)
     implementation(AndroidX.Compose.material)
+    implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ESPRESSO_CORE)

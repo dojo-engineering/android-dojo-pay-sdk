@@ -49,6 +49,7 @@ val sourcesJar = tasks.register<Jar>("sourcesJar") {
 // }
 
 /**Create credentials.properties in root project folder file with gpr.user=GITHUB_USER_ID  & gpr.key=PERSONAL_ACCESS_TOKEN**/
+// Do Not delete this lines, used on release CI/CD steps
 // val credentialProperties = Properties()
 // credentialProperties.load(FileInputStream(rootProject.file("credentials.properties")))
 
@@ -56,6 +57,7 @@ afterEvaluate {
 
     publishing {
         repositories {
+            // Do Not delete this lines, used on release CI/CD steps
 //            maven {
 //                name = "GitHubPackages"
 //                url = uri("https://maven.pkg.github.com/Dojo-Engineering/android-dojo-pay-sdk")
@@ -74,9 +76,6 @@ afterEvaluate {
                     from(components["java"])
                 }
 
-                artifact(sourcesJar)
-//                artifact(dokkaJar)
-
                 pom {
                     if (!"USE_SNAPSHOT".byProperty.isNullOrBlank()) {
                         version = "$version-SNAPSHOT"
@@ -89,3 +88,14 @@ afterEvaluate {
 }
 
 val String.byProperty: String? get() = findProperty(this) as? String
+
+plugins.withId("com.android.library") {
+    val android = extensions.getByName("android") as LibraryExtension
+
+    android.publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
+    }
+}
