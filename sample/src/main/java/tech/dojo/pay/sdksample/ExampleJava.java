@@ -42,7 +42,7 @@ public class ExampleJava extends AppCompatActivity {
         Button button= findViewById(R.id.startPaymentJava);
         button.setOnClickListener(v -> dojoPaymentFlowHandler.startPaymentFlow(
                 new DojoPaymentFlowParams(
-                        "pi_sandbox_RBMHTJ4fIkmSppDILZVCGw",
+                        "", // payment-intent-id
                         "" , // add this if you supports saved card else pass null
                         dojoGPayConfig // add this if you support google pay else pass null
                 )
