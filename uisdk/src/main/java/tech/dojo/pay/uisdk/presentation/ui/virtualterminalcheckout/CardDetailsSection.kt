@@ -176,6 +176,7 @@ private fun CardHolderInputField(
         },
         onValueChange = { viewModel.onCardHolderChanged(it) },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_card_name)) },
+        inputTestTag = "vt_card_holder_input"
     )
 }
 
@@ -255,6 +256,7 @@ private fun CardExpireDateField(
         expireDateValue = cardDetailsViewState.cardExpireDateInputField.value,
         expireDaterPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_expiry),
         onExpireDateValueChanged = { viewModel.onCardDateChanged(it) },
+        inputTestTag = "vt_card_expire_date_input"
     )
 }
 
@@ -293,6 +295,7 @@ private fun CvvField(
         keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() }),
         cvvPlaceholder = stringResource(R.string.dojo_ui_sdk_card_details_checkout_placeholder_cvv),
         onCvvValueChanged = { viewModel.onCardCvvChanged(it) },
+        inputTestTag = "vt_cvv_input"
     )
 }
 
@@ -328,6 +331,7 @@ private fun EmailInputField(
         assistiveText = assistiveText,
         onValueChange = { viewModel.onEmailChanged(it) },
         label = buildAnnotatedString { append(stringResource(R.string.dojo_ui_sdk_card_details_checkout_field_email)) },
+        inputTestTag = "vt_email_input"
     )
 }
 

@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,8 @@ internal fun InputField(
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    inputTestTag: String? = null,
 ) {
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
@@ -40,7 +42,7 @@ internal fun InputField(
         BasicInputField(
             value,
             onValueChange,
-            Modifier,
+            Modifier.conditional(inputTestTag != null) { testTag(inputTestTag.orEmpty()) },
             placeholder,
             focusRequester,
             isError,
