@@ -1,0 +1,15 @@
+name: Security Scans
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main,  master ]
+jobs:
+  security-scans:
+    uses: dojo-engineering/github-workflows/.github/workflows/security-scans.yml@main
+    secrets: inherit
+    with:
+      # wiz-dir-policy-name: ${{ vars.WIZ_POLICY_DIR_PCI }} # uncomment for PCI projects
+      # wiz-iac-policy-name: ${{ vars.WIZ_POLICY_IAC_PCI }} # uncomment for PCI projects
+      wiz-project-uuid: ${{ vars.WIZ_PROJECT_UUID_PAYMENTS_PRODUCTS }}
