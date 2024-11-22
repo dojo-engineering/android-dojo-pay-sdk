@@ -31,7 +31,8 @@ internal fun InputFieldWithErrorMessage(
     isError: Boolean = false,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    inputTestTag: String? = null,
 ) {
     InputField(
         modifier = modifier,
@@ -46,6 +47,7 @@ internal fun InputFieldWithErrorMessage(
         focusRequester = focusRequester,
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
+        inputTestTag = inputTestTag,
     )
 }
 

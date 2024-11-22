@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import tech.dojo.pay.uisdk.R
@@ -151,6 +152,7 @@ private fun PayButton(
 ) {
     val focusManager = LocalFocusManager.current
     SingleButtonView(
+        modifier = Modifier.testTag("vt_checkout_pay_button"),
         scrollState = scrollState,
         text = String.format(
             Locale.getDefault(),

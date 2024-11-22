@@ -136,6 +136,7 @@ private fun Address1Field(
         },
         onValueChange = { viewModel.onAddress1FieldChanged(it, false) },
         label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_line_1)) },
+        inputTestTag = "vt_billing_address_line_1_input"
     )
 }
 
@@ -178,6 +179,7 @@ private fun Address2Field(
         },
         onValueChange = { viewModel.onAddress2FieldChanged(it, false) },
         label = label,
+        inputTestTag = "vt_billing_address_line_2_input"
     )
 }
 
@@ -214,6 +216,7 @@ private fun CityField(
         },
         onValueChange = { viewModel.onCityFieldChanged(it, false) },
         label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_city)) },
+        inputTestTag = "vt_billing_address_city_input"
     )
 }
 
@@ -250,6 +253,7 @@ private fun PostalCodeField(
         },
         onValueChange = { viewModel.onSPostalCodeFieldChanged(it, false) },
         label = buildAnnotatedString { append(stringResource(id = R.string.dojo_ui_sdk_card_details_checkout_field_shipping_postcode)) },
+        inputTestTag = "vt_billing_address_postcode_input"
     )
 }
 

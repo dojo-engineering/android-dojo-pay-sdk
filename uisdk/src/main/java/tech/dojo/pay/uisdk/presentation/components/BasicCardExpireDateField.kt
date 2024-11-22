@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -46,7 +47,8 @@ internal fun BasicCardExpireDateField(
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    inputTestTag: String? = null
 ) {
     var expireDateValueState by remember {
         mutableStateOf(
@@ -72,7 +74,8 @@ internal fun BasicCardExpireDateField(
         textHorizontalPadding = textHorizontalPadding,
         textVerticalPadding = textVerticalPadding,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        inputTestTag = inputTestTag,
     )
 }
 
@@ -90,7 +93,8 @@ internal fun BasicCardExpireDateField(
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    inputTestTag: String? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -153,6 +157,7 @@ internal fun BasicCardExpireDateField(
                 keyboardActions = keyboardActions,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .conditional(inputTestTag != null) { testTag(inputTestTag.orEmpty()) }
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
         }
