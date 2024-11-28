@@ -33,7 +33,8 @@ internal fun CardNumberInPutField(
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
     isDarkModeEnabled: Boolean,
-    supportedCardSchemas: List<CardsSchemes>
+    supportedCardSchemas: List<CardsSchemes>,
+    inputTestTag: String? = null,
 ) {
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
@@ -57,7 +58,8 @@ internal fun CardNumberInPutField(
             keyboardOptions,
             keyboardActions,
             isDarkModeEnabled,
-            supportedCardSchemas
+            supportedCardSchemas,
+            inputTestTag,
         )
     }
 }

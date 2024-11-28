@@ -29,6 +29,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -61,7 +62,8 @@ internal fun BasicCardNumberInPutField(
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
     isDarkModeEnabled: Boolean,
-    supportedCardSchemas: List<CardsSchemes>
+    supportedCardSchemas: List<CardsSchemes>,
+    inputTestTag: String? = null,
 ) {
     var cardNumberValueState by remember {
         mutableStateOf(
@@ -90,7 +92,8 @@ internal fun BasicCardNumberInPutField(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         isDarkModeEnabled = isDarkModeEnabled,
-        supportedCardSchemas = supportedCardSchemas
+        supportedCardSchemas = supportedCardSchemas,
+        inputTestTag = inputTestTag,
     )
 }
 
@@ -113,7 +116,8 @@ internal fun BasicCardNumberInputField(
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
     isDarkModeEnabled: Boolean = false,
-    supportedCardSchemas: List<CardsSchemes>
+    supportedCardSchemas: List<CardsSchemes>,
+    inputTestTag: String? = null,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -161,9 +165,9 @@ internal fun BasicCardNumberInputField(
                     if ((it.text.length < maxCardNumberChar || it.text.length == maxCardNumberChar) && isDigit(
                             it
                         )
-                    ) onCardNumberValueChanged(
-                        it
-                    )
+                    ) {
+                        onCardNumberValueChanged(it)
+                    }
                 },
                 visualTransformation = {
                     when (isAmexCardScheme(cardNumberValue.text)) {
@@ -181,6 +185,7 @@ internal fun BasicCardNumberInputField(
                 keyboardActions = keyboardActions,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .conditional(inputTestTag != null) { testTag(inputTestTag.orEmpty()) }
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
             if (cardNumberValue.text.isNotBlank() && CardCheckoutScreenValidator().isCardSchemaSupported(cardNumberValue.text, supportedCardSchemas)) {

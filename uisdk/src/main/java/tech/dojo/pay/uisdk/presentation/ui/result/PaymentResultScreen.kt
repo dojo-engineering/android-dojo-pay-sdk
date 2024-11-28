@@ -23,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -187,11 +188,21 @@ private fun SuccessfulResult(
             color = DojoTheme.colors.primaryLabelTextColor,
             modifier = Modifier.padding(top = 16.dp),
         )
+        state.description.takeIf { it.isNotEmpty() }?.let {
+            Text(
+                text = state.description,
+                style = DojoTheme.typography.subtitle2,
+                textAlign = TextAlign.Center,
+                color = DojoTheme.colors.primaryLabelTextColor,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
 
         DojoSpacer(height = 32.dp)
         DojoFullGroundButton(
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag("payment_result_success_done_button")
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
@@ -249,9 +260,19 @@ private fun FailedResult(
             modifier = Modifier.padding(top = 16.dp),
         )
 
+        state.orderInfo?.let {
+            Text(
+                text = it,
+                style = DojoTheme.typography.subtitle1,
+                color = DojoTheme.colors.secondaryLabelTextColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
+
         Text(
             text = state.details,
-            style = DojoTheme.typography.subtitle1,
+            style = DojoTheme.typography.subtitle2,
             color = DojoTheme.colors.secondaryLabelTextColor,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp),
@@ -260,6 +281,7 @@ private fun FailedResult(
         DojoFullGroundButton(
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag("payment_result_failed_retry_button")
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_try_again),
             backgroundColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,
@@ -269,6 +291,7 @@ private fun FailedResult(
         DojoOutlinedButton(
             modifier = Modifier
                 .fillMaxWidth()
+                .testTag("payment_result_failed_done_button")
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
             text = stringResource(id = R.string.dojo_ui_sdk_payment_result_button_done),
             borderStrokeColor = DojoTheme.colors.primaryCTAButtonActiveBackgroundColor,

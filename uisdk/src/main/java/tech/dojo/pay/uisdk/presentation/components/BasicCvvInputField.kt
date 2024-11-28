@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,7 +49,8 @@ internal fun BasicCvvInputField(
     textHorizontalPadding: Dp = 16.dp,
     textVerticalPadding: Dp = 12.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    inputTestTag: String? = null,
 ) {
     var cvvValueState by remember {
         mutableStateOf(TextFieldValue(text = cvvValue, selection = TextRange(cvvValue.length)))
@@ -69,7 +71,8 @@ internal fun BasicCvvInputField(
         textHorizontalPadding = textHorizontalPadding,
         textVerticalPadding = textVerticalPadding,
         keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions
+        keyboardActions = keyboardActions,
+        inputTestTag = inputTestTag,
     )
 }
 
@@ -90,7 +93,8 @@ internal fun BasicCvvInputField(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Done
     ),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    inputTestTag: String? = null
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -134,9 +138,9 @@ internal fun BasicCvvInputField(
             BasicTextField(
                 value = cvvValue,
                 onValueChange = {
-                    if ((it.text.length < maxCvvChar || it.text.length == maxCvvChar) && isDigit(it)) onCvvValueChanged(
-                        it
-                    )
+                    if ((it.text.length < maxCvvChar || it.text.length == maxCvvChar) && isDigit(it)) {
+                        onCvvValueChanged(it)
+                    }
                 },
                 textStyle = DojoTheme.typography.subtitle1.copy(color = colors.textColor(enabled).value),
                 maxLines = maxLines,
@@ -148,6 +152,7 @@ internal fun BasicCvvInputField(
                 keyboardActions = keyboardActions,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .conditional(inputTestTag != null) { testTag(inputTestTag.orEmpty()) }
                     .run { if (focusRequester != null) focusRequester(focusRequester) else this }
             )
         }

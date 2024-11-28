@@ -14,6 +14,7 @@ internal sealed class PaymentResultState(open val appBarTitle: String) {
         val imageId: Int,
         val status: String,
         val details: String,
+        val orderInfo: String? = null,
         val shouldNavigateToPreviousScreen: Boolean,
     ) : PaymentResultState(appBarTitle)
 }

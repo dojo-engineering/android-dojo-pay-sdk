@@ -21,7 +21,8 @@ class ExampleKotlin : AppCompatActivity() {
         button.setOnClickListener {
             dojoHandler.startPaymentFlow(
                 DojoPaymentFlowParams(
-                    paymentId = "pi_sandbox_mDvzElFkoU2QH440cwoOEg",
+                    // payment-intent-id
+                    paymentId = "",
                     // add this if you supports saved card
                     clientSecret = "",
                     // add this if you supports google pay

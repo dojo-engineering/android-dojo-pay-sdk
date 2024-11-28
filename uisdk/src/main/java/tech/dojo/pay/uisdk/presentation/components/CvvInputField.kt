@@ -30,7 +30,8 @@ internal fun CvvInputField(
         keyboardType = KeyboardType.Number,
         imeAction = ImeAction.Done
     ),
-    keyboardActions: KeyboardActions = KeyboardActions()
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    inputTestTag: String? = null
 ) {
     LabelAndAssistiveTextWrapper(
         modifier = modifier,
@@ -52,7 +53,8 @@ internal fun CvvInputField(
             textHorizontalPadding,
             textVerticalPadding,
             keyboardOptions,
-            keyboardActions
+            keyboardActions,
+            inputTestTag
         )
     }
 }

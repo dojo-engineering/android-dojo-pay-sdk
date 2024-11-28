@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.DojoSdk
+import tech.dojo.pay.sdk.R
 import tech.dojo.pay.sdk.card.entities.CardsSchemes
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.presentation.card.handler.DojoCardPaymentHandler
@@ -38,6 +39,7 @@ import tech.dojo.pay.sdk.card.presentation.card.handler.DojoVirtualTerminalHandl
 import tech.dojo.pay.sdk.card.presentation.gpay.handler.DojoGPayHandler
 import tech.dojo.pay.uisdk.DojoSDKDropInUI
 import tech.dojo.pay.uisdk.core.StringProvider
+import tech.dojo.pay.uisdk.core.serializableCompat
 import tech.dojo.pay.uisdk.domain.ObservePaymentIntent
 import tech.dojo.pay.uisdk.entities.DojoPaymentFlowParams
 import tech.dojo.pay.uisdk.entities.DojoPaymentType
@@ -51,6 +53,7 @@ import tech.dojo.pay.uisdk.presentation.navigation.CUSTOMER_ID_PARAMS_KEY
 import tech.dojo.pay.uisdk.presentation.navigation.DOJO_PAYMENT_RESULT_PARAMS_KEY
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowNavigationEvents
 import tech.dojo.pay.uisdk.presentation.navigation.PaymentFlowScreens
+import tech.dojo.pay.uisdk.presentation.ui.CustomStringProvider
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.CardDetailsCheckoutScreen
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModel
 import tech.dojo.pay.uisdk.presentation.ui.carddetailscheckout.viewmodel.CardDetailsCheckoutViewModelFactory
@@ -95,6 +98,17 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 val additionalLegalText = DojoSDKDropInUI.dojoThemeSettings?.additionalLegalText ?: ""
                 val customColorPalette =
                     paymentFlowViewModel.getCustomColorPalette(isDarkModeEnabled)
+                val customStringProvider = CustomStringProvider(
+                    cardDetailsNavigationTitle = DojoSDKDropInUI.dojoThemeSettings?.customCardDetailsNavigationTitle,
+                    resultScreenTitleSuccess = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenTitleSuccess,
+                    resultScreenTitleFail = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenTitleFail,
+                    resultScreenOrderIdText = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenOrderIdText,
+                    resultScreenMainTextSuccess = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenMainTextSuccess,
+                    resultScreenMainTextFail = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenMainTextFail,
+                    resultScreenAdditionalTextSuccess = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenAdditionalTextSuccess,
+                    resultScreenAdditionalTextFail = DojoSDKDropInUI.dojoThemeSettings?.customResultScreenAdditionalTextFail,
+                )
+
                 val windowSize = rememberWindowSize()
                 CompositionLocalProvider(LocalDojoColors provides customColorPalette) {
                     Surface(
@@ -114,7 +128,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                             isDarkModeEnabled,
                             windowSize,
                             showDojoBrand,
-                            additionalLegalText
+                            additionalLegalText,
+                            customStringProvider,
                         )
                     }
                 }
@@ -156,7 +171,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     }
 
     private fun checkDeviceWalletState(cardsSchemes: List<CardsSchemes>) {
-        val gPayConfig = (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)?.GPayConfig
+        val gPayConfig =
+            arguments?.serializableCompat<DojoPaymentFlowParams>(DojoPaymentFlowHandlerResultContract.KEY_PARAMS)?.GPayConfig
         if (gPayConfig != null) {
             DojoSdk.isGpayAvailable(
                 activity = this,
@@ -233,7 +249,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         isDarkModeEnabled: Boolean,
         windowSize: WindowSize,
         showDojoBrand: Boolean,
-        additionalLegalText: String
+        additionalLegalText: String,
+        customStringProvider: CustomStringProvider,
     ) {
         NavHost(
             navController = navController,
@@ -256,12 +273,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 windowSize = windowSize,
                 viewModel = paymentFlowViewModel,
                 showDojoBrand = showDojoBrand,
+                customStringProvider = customStringProvider,
             )
             cardDetailsCheckoutScreen(
                 isDarkModeEnabled = isDarkModeEnabled,
                 windowSize = windowSize,
                 viewModel = paymentFlowViewModel,
                 showDojoBrand = showDojoBrand,
+                customStringProvider = customStringProvider,
             )
             virtualTerminalCheckOutScreen(
                 isDarkModeEnabled = isDarkModeEnabled,
@@ -358,6 +377,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         windowSize: WindowSize,
         viewModel: PaymentFlowViewModel,
         showDojoBrand: Boolean,
+        customStringProvider: CustomStringProvider,
     ) {
         composable(route = PaymentFlowScreens.CardDetailsCheckout.route) {
             val cardDetailsCheckoutViewModel: CardDetailsCheckoutViewModel by viewModels {
@@ -367,6 +387,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     context = this@PaymentFlowContainerActivity,
                     isStartDestination = flowStartDestination == PaymentFlowScreens.CardDetailsCheckout,
                     arguments = arguments,
+                    customStringProvider = customStringProvider,
                 ) { viewModel.navigateToPaymentResult(it) }
             }
             // this is to handle unregistered activity when screen orientation change
@@ -437,6 +458,7 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         windowSize: WindowSize,
         viewModel: PaymentFlowViewModel,
         showDojoBrand: Boolean,
+        customStringProvider: CustomStringProvider,
     ) {
         composable(
             route = PaymentFlowScreens.PaymentResult.route,
@@ -448,18 +470,18 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 },
             ),
         ) {
-            val result = it.arguments?.get(DOJO_PAYMENT_RESULT_PARAMS_KEY) as DojoPaymentResult
+            val result = it.arguments?.serializableCompat<DojoPaymentResult>(DOJO_PAYMENT_RESULT_PARAMS_KEY)
+                ?: DojoPaymentResult.SDK_INTERNAL_ERROR
             val observePaymentIntent =
                 ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
             val paymentType =
-                (
-                    arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as?
-                        DojoPaymentFlowParams
-                    )?.paymentType ?: DojoPaymentType.PAYMENT_CARD
+                arguments?.serializableCompat<DojoPaymentFlowParams>(DojoPaymentFlowHandlerResultContract.KEY_PARAMS)
+                    ?.paymentType ?: DojoPaymentType.PAYMENT_CARD
             val paymentResultViewEntityMapper = PaymentResultViewEntityMapper(
                 stringProvider = StringProvider(this@PaymentFlowContainerActivity),
                 paymentType = paymentType,
                 isDarkModeEnabled = isDarkModeEnabled,
+                customStringProvider = customStringProvider,
             )
             val paymentResultViewModel = PaymentResultViewModel(
                 result = result,
@@ -486,6 +508,6 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         val data = Intent()
         data.putExtra(DojoPaymentFlowHandlerResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
-        overridePendingTransition(200, tech.dojo.pay.sdk.R.anim.exit)
+        overridePendingTransition(200, R.anim.exit)
     }
 }
