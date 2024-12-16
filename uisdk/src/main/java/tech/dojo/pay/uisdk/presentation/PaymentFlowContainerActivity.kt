@@ -140,6 +140,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun lockToPortrait() {
+        // had to avoid locking orientation because failing on Android 8 or less.
+        // FullScreen and transparent mode do not allow to force orientation on Android 8 and previous.
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
