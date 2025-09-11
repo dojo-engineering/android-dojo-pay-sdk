@@ -1,8 +1,9 @@
 package tech.dojo.pay.uisdk.core
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
@@ -12,7 +13,7 @@ import org.junit.runner.Description
  * MainCoroutineRule installs a TestCoroutineDispatcher for Dispatchers.Main.
  *
  * Since it extends TestCoroutineScope, you can directly launch coroutines on the MainCoroutineRule
- * as a [CoroutineScope]:
+ * as a CoroutineScope:
  *
  * ```
  * mainCoroutineRule.launch { aTestCoroutine() }
@@ -22,7 +23,7 @@ import org.junit.runner.Description
  * finishes, or it will throw an exception.
  *
  * When using MainCoroutineRule you should always invoke runBlockingTest on it to avoid creating two
- * instances of [TestCoroutineDispatcher] or [TestCoroutineScope] in your test:
+ * instances of TestCoroutineDispatcher in your test:
  *
  * ```
  * @Test
@@ -31,7 +32,7 @@ import org.junit.runner.Description
  * }
  * ```
  *
- * You may call [DelayController] methods on [MainCoroutineScopeRule] and they will control the
+ * You may call DelayController methods on [MainCoroutineScopeRule] and they will control the
  * virtual-clock.
  *
  * ```
@@ -42,23 +43,19 @@ import org.junit.runner.Description
  *
  * By default, [MainCoroutineScopeRule] will be in a *resumed* state.
  *
- * @param dispatcher if provided, this [TestCoroutineDispatcher] will be used.
+ * @param testDispatcher if provided, this [TestDispatcher] will be used.
  */
 
-class MainCoroutineScopeRule(val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()) :
-    TestWatcher(),
-    TestCoroutineScope by TestCoroutineScope(dispatcher) {
+@ExperimentalCoroutinesApi
+class MainCoroutineScopeRule(
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+) : TestWatcher() {
 
     override fun starting(description: Description) {
-        super.starting(description)
-        // All injected dispatchers in a test should point to a single instance of
-        // TestCoroutineDispatcher.
-        Dispatchers.setMain(dispatcher)
+        Dispatchers.setMain(testDispatcher)
     }
 
     override fun finished(description: Description) {
-        super.finished(description)
-        cleanupTestCoroutines()
         Dispatchers.resetMain()
     }
 }

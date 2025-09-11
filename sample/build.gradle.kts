@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -47,9 +48,6 @@ android {
         viewBinding = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.COMPOSE_VERSION
-    }
 }
 
 dependencies {
@@ -74,5 +72,5 @@ dependencies {
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ESPRESSO_CORE)
-    androidTestImplementation(AndroidX.Compose.compiler)
+//    androidTestImplementation(AndroidX.Compose.compiler)
 }

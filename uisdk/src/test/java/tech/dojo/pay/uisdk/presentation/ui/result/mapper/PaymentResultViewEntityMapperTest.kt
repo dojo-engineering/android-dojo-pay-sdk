@@ -31,7 +31,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Successful Payment")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Payment",
-            imageId = 2131230888,
+            imageId = R.drawable.ic_success_circle,
             status = "Successful Payment",
             orderInfo = "",
             description = "",
@@ -56,7 +56,7 @@ class PaymentResultViewEntityMapperTest {
 
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Title Successful Payment",
-            imageId = 2131230888,
+            imageId = R.drawable.ic_success_circle,
             status = "Successful Payment",
             orderInfo = "",
             description = "Successful Payment Add",
@@ -106,7 +106,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Successful Setup Intent")
         val expected = PaymentResultState.SuccessfulResult(
             appBarTitle = "Successful Setup Intent",
-            imageId = 2131230888,
+            imageId = R.drawable.ic_success_circle,
             status = "Successful Setup Intent",
             orderInfo = "",
             description = "",
@@ -135,7 +135,7 @@ class PaymentResultViewEntityMapperTest {
         given(customStringProvider.resultScreenOrderIdText).willReturn(orderId)
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
-            imageId = 2131230871,
+            imageId = R.drawable.ic_error_circle,
             status = "Failed Setup Intent",
             details = "Failed Setup Intent",
             shouldNavigateToPreviousScreen = false,
@@ -163,7 +163,7 @@ class PaymentResultViewEntityMapperTest {
             .willReturn("Failed Setup Intent")
         val expected = PaymentResultState.FailedResult(
             appBarTitle = "Failed Setup Intent",
-            imageId = 2131230871,
+            imageId = R.drawable.ic_error_circle,
             status = "Failed Setup Intent",
             details = "Failed Setup Intent",
             shouldNavigateToPreviousScreen = false,

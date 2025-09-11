@@ -57,12 +57,15 @@ class PaymentMethodCheckoutViewModelTest {
     private val viewEntityMapper: PaymentMethodCheckoutViewEntityMapper = mock()
     private val makeGpayPaymentUseCase: MakeGpayPaymentUseCase = mock()
     private val makeSavedCardPaymentUseCase: MakeSavedCardPaymentUseCase = mock()
-    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase =
-        mock()
+    private val isWalletAvailableFromDeviceAndIntentUseCase: IsWalletAvailableFromDeviceAndIntentUseCase = mock()
 
     @Test
     fun `when init viewModel then it should emits loading in the first place`() = runTest {
         // arrange
+        given(observePaymentIntent.observePaymentIntent()).willReturn(MutableStateFlow(PaymentIntentResult.None))
+        given(observePaymentMethods.observe()).willReturn(MutableStateFlow(FetchPaymentMethodsResult.None))
+        given(observePaymentStatus.observePaymentStates()).willReturn(MutableStateFlow(false))
+        given(observePaymentStatus.observeGpayPaymentStates()).willReturn(MutableStateFlow(false))
         val expected = PaymentMethodCheckoutState(
             isGooglePayButtonVisible = false,
             isBottomSheetVisible = true,
@@ -78,7 +81,7 @@ class PaymentMethodCheckoutViewModelTest {
             ),
             payAmountButtonState = null,
         )
-        // arrange
+        // act
         val viewModel = PaymentMethodCheckoutViewModel(
             savedCardPaymentHandler,
             observePaymentIntent,
@@ -93,7 +96,7 @@ class PaymentMethodCheckoutViewModelTest {
             {},
         )
         val actual = viewModel.state.value
-        // act
+        // assert
         Assert.assertEquals(expected, actual)
     }
 
@@ -156,6 +159,10 @@ class PaymentMethodCheckoutViewModelTest {
     fun `when calling OnSavedPaymentMethodChanged from viewModel then it should update the selected payment method and emits updated state to view `() =
         runTest {
             // arrange
+            given(observePaymentIntent.observePaymentIntent()).willReturn(MutableStateFlow(PaymentIntentResult.None))
+            given(observePaymentMethods.observe()).willReturn(MutableStateFlow(FetchPaymentMethodsResult.None))
+            given(observePaymentStatus.observePaymentStates()).willReturn(MutableStateFlow(false))
+            given(observePaymentStatus.observeGpayPaymentStates()).willReturn(MutableStateFlow(false))
             val expected = PaymentMethodCheckoutState(
                 isGooglePayButtonVisible = true,
                 isBottomSheetVisible = true,
@@ -195,6 +202,10 @@ class PaymentMethodCheckoutViewModelTest {
     fun `when calling OnCvvValueChanged from viewModel then it should update the cvv value along with the pay amount button and emits updated state to view `() =
         runTest {
             // arrange
+            given(observePaymentIntent.observePaymentIntent()).willReturn(MutableStateFlow(PaymentIntentResult.None))
+            given(observePaymentMethods.observe()).willReturn(MutableStateFlow(FetchPaymentMethodsResult.None))
+            given(observePaymentStatus.observePaymentStates()).willReturn(MutableStateFlow(false))
+            given(observePaymentStatus.observeGpayPaymentStates()).willReturn(MutableStateFlow(false))
             val expected = PaymentMethodCheckoutState(
                 isGooglePayButtonVisible = false,
                 isBottomSheetVisible = true,

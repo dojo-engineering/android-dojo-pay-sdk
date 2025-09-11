@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("androidx.navigation.safeargs.kotlin")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
     publish
 }
 
@@ -29,9 +30,6 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.COMPOSE_VERSION
     }
 
     compileOptions {
@@ -66,7 +64,7 @@ dependencies {
     implementation(Navigation.NavigationCompose)
     implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
-    implementation(AndroidX.Compose.compiler)
+//    implementation(AndroidX.Compose.compiler)
     implementation(AndroidX.Compose.animation)
     implementation(AndroidX.Compose.foundation)
     implementation(AndroidX.Compose.layout)

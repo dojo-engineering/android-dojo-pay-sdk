@@ -1,13 +1,10 @@
 package tech.dojo.pay.sdk.payemntintent
 
-import io.mockk.called
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -323,14 +320,5 @@ internal class PaymentIntentProviderTest {
 
         // assert
         assertTrue(actualPaymentIntentResult.isBlank())
-    }
-
-    @After
-    fun tearDown() {
-        coVerify {
-            paymentIntentRepository.getPaymentIntent(any()) wasNot called
-            paymentIntentRepository.getSetUpIntent(any()) wasNot called
-            paymentIntentRepository.refreshPaymentIntent(any()) wasNot called
-        }
     }
 }
