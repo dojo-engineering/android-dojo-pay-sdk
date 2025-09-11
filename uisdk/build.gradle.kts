@@ -64,7 +64,6 @@ dependencies {
     implementation(Navigation.NavigationCompose)
     implementation(Navigation.NavigationUI)
     implementation(AndroidX.Activity.ACTIVITY_COMPOSE)
-//    implementation(AndroidX.Compose.compiler)
     implementation(AndroidX.Compose.animation)
     implementation(AndroidX.Compose.foundation)
     implementation(AndroidX.Compose.layout)

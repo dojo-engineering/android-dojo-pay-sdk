@@ -126,9 +126,6 @@ object AndroidX {
 
         // Integration with observables
         const val livedata = "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}"
-
-        // Compiler
-//        const val compiler = "androidx.compose.compiler:compiler:${Versions.COMPOSE_VERSION}"
     }
 
     object ConstraintLayout {

@@ -72,5 +72,4 @@ dependencies {
     testImplementation(TestingLib.JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ANDROIDX_TEST_EXT_JUNIT)
     androidTestImplementation(AndroidX.AndroidTestingLib.ESPRESSO_CORE)
-//    androidTestImplementation(AndroidX.Compose.compiler)
 }
