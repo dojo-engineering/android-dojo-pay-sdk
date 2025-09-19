@@ -7,7 +7,7 @@ object Sdk {
 }
 
 object Versions {
-    const val ACTIVITY = "1.4.0"
+    const val ACTIVITY = "1.9.3"
     const val FRAGMENT = "1.4.1"
     const val ACTIVITY_COMPOSE = "1.3.0-beta01"
     const val VIEWMODEL_COMPOSE = "1.0.0-alpha04"
