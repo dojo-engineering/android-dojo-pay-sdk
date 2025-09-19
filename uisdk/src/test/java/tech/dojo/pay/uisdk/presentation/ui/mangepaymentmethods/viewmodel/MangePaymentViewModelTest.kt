@@ -50,6 +50,7 @@ internal class MangePaymentViewModelTest {
             MutableStateFlow(FetchPaymentMethodsResult.None)
         whenever(observePaymentMethods.observe()).thenReturn(fetchPaymentMethodsStream)
         whenever(isWalletAvailableFromDeviceAndIntentUseCase.isAvailable()).thenReturn(true)
+        whenever(mapper.apply(FetchPaymentMethodsResult.Failure, true)).thenReturn(PaymentMethodItemViewEntity(emptyList()))
         fetchPaymentMethodsStream.tryEmit(FetchPaymentMethodsResult.Failure)
         val expected = MangePaymentMethodsState(
             appBarIconType = AppBarIconType.CLOSE,
