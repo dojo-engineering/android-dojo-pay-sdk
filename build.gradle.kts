@@ -27,7 +27,7 @@ subprojects {
         android = false
         debug = false
         verbose = true
-        version = "0.49.1"
+        version = "1.7.1"
         ignoreFailures = false
         filter {
             exclude("**/generated/**")
