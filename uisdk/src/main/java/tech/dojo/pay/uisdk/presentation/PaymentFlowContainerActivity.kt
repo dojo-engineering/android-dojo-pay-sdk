@@ -495,11 +495,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 isDarkModeEnabled = isDarkModeEnabled,
                 customStringProvider = customStringProvider,
             )
-            val paymentResultViewModel = PaymentResultViewModel(
-                result = result,
-                observePaymentIntent = observePaymentIntent,
-                paymentResultViewEntityMapper = paymentResultViewEntityMapper,
-            )
+            val paymentResultViewModel: PaymentResultViewModel by viewModels {
+                PaymentResultViewModelFactory(
+                    result = result,
+                    observePaymentIntent = observePaymentIntent,
+                    paymentResultViewEntityMapper = paymentResultViewEntityMapper,
+                )
+            }
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),
@@ -527,9 +529,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.navigationBars()
-                    or WindowInsetsCompat.Type.statusBars()
-                    or WindowInsetsCompat.Type.displayCutout()
-                    or WindowInsetsCompat.Type.ime(),
+                        or WindowInsetsCompat.Type.statusBars()
+                        or WindowInsetsCompat.Type.displayCutout()
+                        or WindowInsetsCompat.Type.ime(),
             )
             v.updatePadding(
                 left = bars.left,

@@ -40,15 +40,15 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val updateDeviceWalletState = UpdateDeviceWalletState(deviceWalletStateRepository)
 
         return PaymentFlowViewModel(
-            paymentId,
-            customerSecret,
-            paymentType,
-            fetchPaymentIntentUseCase,
-            observePaymentIntent,
-            fetchPaymentMethodsUseCase,
-            updatePaymentStateUseCase,
-            isSDKInitializedCorrectlyUseCase,
-            updateDeviceWalletState,
+            paymentId = paymentId,
+            customerSecret = customerSecret,
+            paymentType = paymentType,
+            fetchPaymentIntentUseCase = fetchPaymentIntentUseCase,
+            observePaymentIntent = observePaymentIntent,
+            fetchPaymentMethodsUseCase = fetchPaymentMethodsUseCase,
+            updatePaymentStateUseCase = updatePaymentStateUseCase,
+            isSDKInitializedCorrectlyUseCase = isSDKInitializedCorrectlyUseCase,
+            updateDeviceWalletState = updateDeviceWalletState,
         ) as T
     }
 
