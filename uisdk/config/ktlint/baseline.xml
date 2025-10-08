@@ -162,6 +162,9 @@
     <file name="src/main/java/tech/dojo/pay/uisdk/presentation/PaymentFlowViewModelFactory.kt">
         <error line="21" column="5" source="standard:class-signature" />
     </file>
+    <file name="src/main/java/tech/dojo/pay/uisdk/presentation/PaymentResultViewModelFactory.kt">
+        <error line="17" column="66" source="standard:function-expression-body" />
+    </file>
     <file name="src/main/java/tech/dojo/pay/uisdk/presentation/components/AmountBreakDown.kt">
         <error line="17" column="35" source="standard:statement-wrapping" />
         <error line="17" column="71" source="standard:statement-wrapping" />

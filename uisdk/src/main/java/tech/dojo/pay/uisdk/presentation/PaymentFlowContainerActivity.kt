@@ -529,9 +529,9 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.navigationBars()
-                        or WindowInsetsCompat.Type.statusBars()
-                        or WindowInsetsCompat.Type.displayCutout()
-                        or WindowInsetsCompat.Type.ime(),
+                    or WindowInsetsCompat.Type.statusBars()
+                    or WindowInsetsCompat.Type.displayCutout()
+                    or WindowInsetsCompat.Type.ime(),
             )
             v.updatePadding(
                 left = bars.left,
