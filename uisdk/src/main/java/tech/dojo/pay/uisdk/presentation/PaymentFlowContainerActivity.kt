@@ -495,11 +495,13 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 isDarkModeEnabled = isDarkModeEnabled,
                 customStringProvider = customStringProvider,
             )
-            val paymentResultViewModel = PaymentResultViewModel(
-                result = result,
-                observePaymentIntent = observePaymentIntent,
-                paymentResultViewEntityMapper = paymentResultViewEntityMapper,
-            )
+            val paymentResultViewModel: PaymentResultViewModel by viewModels {
+                PaymentResultViewModelFactory(
+                    result = result,
+                    observePaymentIntent = observePaymentIntent,
+                    paymentResultViewEntityMapper = paymentResultViewEntityMapper,
+                )
+            }
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),
