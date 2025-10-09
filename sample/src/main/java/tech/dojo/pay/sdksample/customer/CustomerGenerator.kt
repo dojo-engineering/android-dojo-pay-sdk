@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object CustomerGenerator {
-    private val CustomerCreationApi by lazy {
+    private val CustomerCreationApi: CustomerCreationApi by lazy {
         Retrofit.Builder()
             .baseUrl("https://api.dojo.tech/")
             .addConverterFactory(GsonConverterFactory.create())

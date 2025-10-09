@@ -1,43 +1,43 @@
 
 
 object Sdk {
-    const val MIN_SDK_VERSION = 21
-    const val TARGET_SDK_VERSION = 34
-    const val COMPILE_SDK_VERSION = 34
+    const val MIN_SDK_VERSION = 26
+    const val TARGET_SDK_VERSION = 36
+    const val COMPILE_SDK_VERSION = 36
 }
 
 object Versions {
-    const val ACTIVITY = "1.4.0"
-    const val FRAGMENT = "1.4.1"
-    const val ACTIVITY_COMPOSE = "1.3.0-beta01"
-    const val VIEWMODEL_COMPOSE = "1.0.0-alpha04"
-    const val VIEWMODEL = "  2.4.1"
-    const val ANDROIDX_TEST_EXT = "1.1.3"
-    const val ANDROIDX_TEST = "1.4.0"
-    const val APPCOMPAT = "1.4.1"
-    const val CONSTRAINT_LAYOUT = "2.1.0"
-    const val CORE_KTX = "1.9.0"
-    const val ESPRESSO_CORE = "3.4.0"
+    const val ACTIVITY = "1.11.0"
+    const val FRAGMENT = "1.8.9"
+    const val ACTIVITY_COMPOSE = "1.11.0"
+    const val VIEWMODEL_COMPOSE = "2.9.3"
+    const val VIEWMODEL = "2.9.3"
+    const val ANDROIDX_TEST_EXT = "1.3.0"
+    const val ANDROIDX_TEST = "1.7.0"
+    const val APPCOMPAT = "1.7.1"
+    const val CONSTRAINT_LAYOUT = "2.2.1"
+    const val CORE_KTX = "1.17.0"
+    const val ESPRESSO_CORE = "3.7.0"
     const val JUNIT = "4.13.2"
-    const val COMPOSE_VERSION = "1.5.0"
-    const val COMPOSE_ANIMATION_VERSION = "1.5.0-alpha01"
-    const val KOTLIN = "1.9.0"
-    const val COROUTINES = "1.6.1"
-    const val MATERIAL = "1.5.0"
-    const val MOCKITO = "4.0.0"
-    const val MOCKITO_IN_LINE = "4.3.1"
-    const val NAVIGATION = "2.3.3"
-    const val COMPOSE_NAVIGATION = "2.5.3"
+    const val COMPOSE_VERSION = "1.9.1"
+    const val COMPOSE_ANIMATION_VERSION = "1.9.1"
+    const val KOTLIN = "2.1.21"
+    const val COROUTINES = "1.10.2"
+    const val MATERIAL = "1.13.0"
+    const val MOCKITO = "4.1.0"
+    const val MOCKITO_IN_LINE = "4.11.0"
+    const val NAVIGATION = "2.9.3"
+    const val COMPOSE_NAVIGATION = "2.9.4"
     const val TIMBER = "5.0.1"
-    const val GSON = "2.10.1"
-    const val csvReader = "1.6.0"
-    const val ANDROIDX_WINDOW = "1.0.0"
-    const val RETROFIT = "2.9.0"
+    const val GSON = "2.13.1"
+    const val csvReader = "1.10.0"
+    const val ANDROIDX_WINDOW = "1.4.0"
+    const val RETROFIT = "2.12.0"
     const val OKHTTP = "4.12.0"
-    const val GPAY = "19.1.0"
-    const val JSON_TEST = "20180813"
+    const val GPAY = "19.4.0"
+    const val JSON_TEST = "20231013"
     const val CARDINAL = "2.2.7-5"
-    const val MOCKK = "1.13.4"
+    const val MOCKK = "1.14.5"
 }
 
 
@@ -119,17 +119,13 @@ object AndroidX {
 
         // Material Design
         const val material = "androidx.compose.material:material:${Versions.COMPOSE_VERSION}"
-        const val iconsExtended =
-            "androidx.compose.material:material-icons-extended:${Versions.COMPOSE_VERSION}"
+        const val iconsExtended = "androidx.compose.material:material-icons-extended:1.7.8"
 
         const val animation = "androidx.compose.animation:animation:${Versions.COMPOSE_ANIMATION_VERSION}"
         const val tooling = "androidx.compose.ui:ui-tooling:${Versions.COMPOSE_VERSION}"
 
         // Integration with observables
         const val livedata = "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}"
-
-        // Compiler
-        const val compiler = "androidx.compose.compiler:compiler:${Versions.COMPOSE_VERSION}"
     }
 
     object ConstraintLayout {

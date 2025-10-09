@@ -6,16 +6,17 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.KOTLIN}")
-        classpath("com.android.tools.build:gradle:7.4.1")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.1")
+        classpath("com.android.tools.build:gradle:8.13.0")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.9.4")
     }
 }
 plugins {
     id("com.android.application") apply false
     id("com.android.library") apply false
     kotlin("android") apply false
-    id("io.gitlab.arturbosch.detekt") version "1.17.1"
-    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.21"
 }
 
 subprojects {
@@ -26,7 +27,7 @@ subprojects {
         android = false
         debug = false
         verbose = true
-        version = "0.49.1"
+        version = "1.7.1"
         ignoreFailures = false
         filter {
             exclude("**/generated/**")
