@@ -74,6 +74,6 @@ internal class BaseUrlRepository(
 
 internal const val BASE_URL_GOOGLE_PROD =
     "https://storage.googleapis.com/rag-prod-manifest/rag-manifest.json"
-internal const val BASE_URL_AWS_PROD = "https://d1vkrwwafyvizg.cloudfront.net/rag-manifest.json"
+internal const val BASE_URL_AWS_PROD = "https://rag-prod-manifest.s3.eu-west-2.amazonaws.com/rag-manifest.json"
 
 private const val LAST_UPDATE_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z"
