@@ -2,6 +2,7 @@ package tech.dojo.pay.sdk.card.data.mappers
 
 import tech.dojo.pay.sdk.BuildConfig
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
+import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardPaymentPayLoad
 import java.util.Locale
 
@@ -23,7 +24,7 @@ internal class CardPaymentRequestMapper {
             savePaymentMethod = savePaymentMethod,
             mitConsentGiven = cardDetails.mitConsentGiven,
             userPhoneNumber = userPhoneNumber,
-            billingAddress = billingAddress,
+            billingAddress = billingAddress?.takeIf { it.hasAnyField() },
             shippingDetails = shippingDetails,
             metaData = addVersionMetadata(metaData),
         )
@@ -61,4 +62,12 @@ internal class CardPaymentRequestMapper {
         newMetadata["dojo-sdk-core-version"] = "android-${BuildConfig.DOJO_SDK_CORE_VERSION}"
         return newMetadata
     }
+
+    /**
+     * Returns true if at least one address field is non-null/non-blank,
+     * so that a fully-empty DojoAddressDetails is serialised as null rather than an empty object.
+     */
+    private fun DojoAddressDetails.hasAnyField(): Boolean =
+        listOf(address1, address2, address3, address4, city, state, postcode, countryCode)
+            .any { !it.isNullOrBlank() }
 }

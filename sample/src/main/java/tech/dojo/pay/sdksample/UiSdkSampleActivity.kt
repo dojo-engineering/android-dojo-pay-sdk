@@ -1,6 +1,7 @@
 package tech.dojo.pay.sdksample
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,10 @@ class UiSdkSampleActivity : AppCompatActivity() {
     private lateinit var uiSdkSampleBinding: ActivityUiSdkSampleBinding
     private val dojoPayUI =
         DojoSDKDropInUI.createUIPaymentHandler(this) { result -> showResult(result) }
+
+    companion object {
+        private const val TAG = "UiSdkSampleActivity"
+    }
 
     var secret = ""
 
@@ -50,6 +55,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = false)
             secret = if (secret.isEmpty()) uiSdkSampleBinding.clientSecret.text.toString() else ""
             print(secret)
+            val paymentId = uiSdkSampleBinding.token.text.toString()
+            Log.d(TAG, "startPaymentFlow clicked: paymentId='$paymentId', customerSecret='${secret.take(10)}...'")
             if (uiSdkSampleBinding.checkboxAdditonalLegalText.isChecked) {
                 DojoSDKDropInUI.dojoThemeSettings?.additionalLegalText =
                     "Dojo is a trading name of Paymentsense Limited. Copyright ©2024 Paymentsense Limited. All rights reserved. Paymentsense Limited is authorised and regulated by the Financial Conduct Authority (FCA FRN 738728) and under the Electronic Money Regulations 2011 (FCA FRN 900925) for the issuing of electronic money and provision of payment services. Our company number is 06730690 and our registered office address is The Brunel Building, 2 Canalside Walk, London W2 1DG"
@@ -63,6 +70,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         uiSdkSampleBinding.startPaymentFlowWithVT.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
+            val paymentId = uiSdkSampleBinding.token.text.toString()
+            Log.d(TAG, "startPaymentFlowWithVT clicked: paymentId='$paymentId', paymentType=VIRTUAL_TERMINAL")
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
@@ -78,6 +87,8 @@ class UiSdkSampleActivity : AppCompatActivity() {
         }
         uiSdkSampleBinding.startPaymentFlowCOF.setOnClickListener {
             DojoSDKDropInUI.dojoThemeSettings = DojoThemeSettings(forceLightMode = true)
+            val paymentId = uiSdkSampleBinding.token.text.toString()
+            Log.d(TAG, "startPaymentFlowCOF clicked: paymentId='$paymentId', paymentType=SETUP_INTENT")
             dojoPayUI.startPaymentFlow(
                 DojoPaymentFlowParams(
                     uiSdkSampleBinding.token.text.toString(),
@@ -110,8 +121,11 @@ class UiSdkSampleActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 showLoading()
                 try {
-                    displayToken(PaymentIDGenerator.generatePaymentId(uiSdkSampleBinding.userId.text.toString()).id)
+                    val generatedId = PaymentIDGenerator.generatePaymentId(uiSdkSampleBinding.userId.text.toString()).id
+                    Log.d(TAG, "btnGenerateToken: Generated paymentId='$generatedId'")
+                    displayToken(generatedId)
                 } catch (e: Throwable) {
+                    Log.e(TAG, "btnGenerateToken: Failed to generate payment ID", e)
                     showTokenError(e)
                 } finally {
                     hideLoading()

@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -42,7 +43,10 @@ internal class PaymentFlowViewModel(
     val navigationEvent = SingleLiveData<PaymentFlowNavigationEvents>()
     private var currentCustomerId: String? = null
 
+    companion object { private const val TAG = "PaymentFlowViewModel" }
+
     init {
+        Log.d(TAG, "init: paymentId='$paymentId', paymentType=$paymentType, isSandbox=${isPaymentInSandBoxEnvironment()}")
         configureDojoSDKDebugConfig()
         viewModelScope.launch {
             try {

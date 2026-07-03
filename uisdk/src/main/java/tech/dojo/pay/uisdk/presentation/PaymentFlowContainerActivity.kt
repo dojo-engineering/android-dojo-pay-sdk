@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.compose.setContent
@@ -87,6 +88,10 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     private val paymentFlowViewModel: PaymentFlowViewModel by viewModels { PaymentFlowViewModelFactory(arguments) }
     private val flowStartDestination: PaymentFlowScreens by lazy { paymentFlowViewModel.getFlowStartDestination() }
 
+    companion object {
+        private const val TAG = "PaymentFlowContainerAct"
+    }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleManager.updateBaseContextLocale(newBase, DojoSDKDropInUI.language))
     }
@@ -94,6 +99,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        val params = arguments?.serializableCompat<DojoPaymentFlowParams>(DojoPaymentFlowHandlerResultContract.KEY_PARAMS)
+        Log.d(TAG, "onCreate: PaymentFlowContainerActivity started. paymentId='${params?.paymentId}', paymentType=${params?.paymentType}, clientSecret='${params?.clientSecret?.take(10)}...'")
         applyWindowInset(window.decorView)
         disableScreenRecord()
         lockToPortrait()

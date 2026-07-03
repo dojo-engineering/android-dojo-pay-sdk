@@ -1,6 +1,7 @@
 package tech.dojo.pay.uisdk.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import tech.dojo.pay.uisdk.data.DeviceWalletStateRepository
@@ -20,6 +21,13 @@ import tech.dojo.pay.uisdk.presentation.contract.DojoPaymentFlowHandlerResultCon
 internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
     ViewModelProvider.Factory {
 
+    companion object {
+        val paymentIntentRepository by lazy { PaymentIntentRepository() }
+        val paymentStatusRepository by lazy { PaymentStateRepository() }
+        val paymentMethodsRepository by lazy { PaymentMethodsRepository() }
+        val deviceWalletStateRepository by lazy { DeviceWalletStateRepository() }
+    }
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val paymentId =
@@ -31,6 +39,7 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
         val paymentType =
             (arguments?.getSerializable(DojoPaymentFlowHandlerResultContract.KEY_PARAMS) as? DojoPaymentFlowParams)
                 ?.paymentType ?: DojoPaymentType.PAYMENT_CARD
+        Log.d("PaymentFlowVMFactory", "create: Unpacked from Intent. paymentId='$paymentId', paymentType=$paymentType, clientSecret='${customerSecret.take(10)}...'")
         val fetchPaymentIntentUseCase = FetchPaymentIntentUseCase(paymentIntentRepository)
         val observePaymentIntent = ObservePaymentIntent(paymentIntentRepository)
         val updatePaymentStateUseCase = UpdatePaymentStateUseCase(paymentStatusRepository)
@@ -50,12 +59,5 @@ internal class PaymentFlowViewModelFactory(private val arguments: Bundle?) :
             isSDKInitializedCorrectlyUseCase = isSDKInitializedCorrectlyUseCase,
             updateDeviceWalletState = updateDeviceWalletState,
         ) as T
-    }
-
-    companion object {
-        val paymentIntentRepository by lazy { PaymentIntentRepository() }
-        val paymentStatusRepository by lazy { PaymentStateRepository() }
-        val paymentMethodsRepository by lazy { PaymentMethodsRepository() }
-        val deviceWalletStateRepository by lazy { DeviceWalletStateRepository() }
     }
 }

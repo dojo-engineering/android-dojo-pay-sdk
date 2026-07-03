@@ -1,5 +1,6 @@
 package tech.dojo.pay.uisdk.domain
 
+import android.util.Log
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
 import tech.dojo.pay.uisdk.domain.entities.MakeCardPaymentParams
@@ -11,10 +12,9 @@ internal class MakeCardPaymentUseCase(
     private val getRefreshedPaymentTokenFlow: GetRefreshedPaymentTokenFlow,
     private val refreshPaymentIntentUseCase: RefreshPaymentIntentUseCase,
 ) {
-    suspend fun makeCardPayment(
-        params: MakeCardPaymentParams,
-        onError: () -> Unit,
-    ) {
+    companion object { private const val TAG = "MakeCardPaymentUseCase" }
+
+    suspend fun makeCardPayment(params: MakeCardPaymentParams, onError: () -> Unit) {
         updatePaymentStateUseCase.updatePaymentSate(isActive = true)
         refreshPaymentIntentUseCase.refreshPaymentIntent(params.paymentId)
         getRefreshedPaymentTokenFlow
@@ -25,27 +25,22 @@ internal class MakeCardPaymentUseCase(
                 if (result is RefreshPaymentIntentResult.Success) {
                     onSuccessResult(params, result, onError)
                 } else if (result is RefreshPaymentIntentResult.RefreshFailure) {
+                    Log.e(TAG, "makeCardPayment: Token refresh failed.")
                     onMakingPaymentError(onError)
                 }
             }
     }
 
-    private fun onSuccessResult(
-        params: MakeCardPaymentParams,
-        result: RefreshPaymentIntentResult.Success,
-        onError: () -> Unit
-    ) {
+    private fun onSuccessResult(params: MakeCardPaymentParams, result: RefreshPaymentIntentResult.Success, onError: () -> Unit) {
         try {
             startCardPayment(params, result)
         } catch (e: Exception) {
+            Log.e(TAG, "onSuccessResult: startCardPayment threw exception", e)
             onMakingPaymentError(onError)
         }
     }
 
-    private fun startCardPayment(
-        params: MakeCardPaymentParams,
-        result: RefreshPaymentIntentResult.Success
-    ) {
+    private fun startCardPayment(params: MakeCardPaymentParams, result: RefreshPaymentIntentResult.Success) {
         params.dojoCardPaymentHandler.executeCardPayment(
             token = result.token,
             payload = params.fullCardPaymentPayload,

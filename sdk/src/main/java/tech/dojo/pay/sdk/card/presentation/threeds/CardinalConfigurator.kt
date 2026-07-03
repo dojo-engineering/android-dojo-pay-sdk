@@ -1,6 +1,7 @@
 package tech.dojo.pay.sdk.card.presentation.threeds
 
 import android.content.Context
+import android.util.Log
 import com.cardinalcommerce.cardinalmobilesdk.Cardinal
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalEnvironment
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalRenderType
@@ -12,10 +13,17 @@ import tech.dojo.pay.sdk.DojoSdk
 
 class CardinalConfigurator(private val context: Context) {
 
+    companion object {
+        private const val TAG = "CardinalConfigurator"
+    }
+
     fun getConfiguredCardinalInstance(): Cardinal {
+        Log.d(TAG, "getConfiguredCardinalInstance: Configuring Cardinal SDK instance")
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
-        cardinalConfigurationParameters.environment = getEnvironment()
+        val env = getEnvironment()
+        cardinalConfigurationParameters.environment = env
+        Log.d(TAG, "getConfiguredCardinalInstance: environment=$env, requestTimeout=8000, challengeTimeout=5")
 
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
@@ -27,6 +35,7 @@ class CardinalConfigurator(private val context: Context) {
         cardinalConfigurationParameters.uiCustomization = yourUICustomizationObject
 
         cardinal.configure(context, cardinalConfigurationParameters)
+        Log.d(TAG, "getConfiguredCardinalInstance: Cardinal SDK configured successfully")
         return cardinal
     }
 

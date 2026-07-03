@@ -1,5 +1,6 @@
 package tech.dojo.pay.sdk.card.data
 
+import android.util.Log
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.card.data.mappers.CardPaymentRequestMapper
 import tech.dojo.pay.sdk.card.data.remote.cardpayment.CardPaymentApi
@@ -14,13 +15,19 @@ internal class CardPaymentRepository(
     private val requestMapper: CardPaymentRequestMapper = CardPaymentRequestMapper()
 ) {
 
+    companion object {
+        private const val TAG = "CardPaymentRepository"
+    }
+
     private val paymentDetails = requestMapper.mapToPaymentDetails(payload)
 
     suspend fun processPayment(): PaymentResult {
         val response = processCardPaymentCall()
         val paymentResult = DojoPaymentResult.fromCode(response.statusCode)
+        Log.d(TAG, "processPayment: statusCode=${response.statusCode}, paymentResult=$paymentResult")
 
         return if (paymentResult == DojoPaymentResult.AUTHORIZING) {
+            Log.d(TAG, "processPayment: 3DS required.")
             PaymentResult.ThreeDSRequired(
                 ThreeDSParams(
                     stepUpUrl = requireNotNull(response.stepUpUrl),
@@ -35,13 +42,7 @@ internal class CardPaymentRepository(
 
     private suspend fun processCardPaymentCall() =
         when (payload) {
-            is DojoCardPaymentPayLoad.FullCardPaymentPayload -> api.processPaymentForFullCard(
-                token,
-                paymentDetails
-            )
-            is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> api.processPaymentForSaverCard(
-                token,
-                paymentDetails
-            )
+            is DojoCardPaymentPayLoad.FullCardPaymentPayload -> api.processPaymentForFullCard(token, paymentDetails)
+            is DojoCardPaymentPayLoad.SavedCardPaymentPayLoad -> api.processPaymentForSaverCard(token, paymentDetails)
         }
 }

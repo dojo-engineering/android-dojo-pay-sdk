@@ -2,6 +2,7 @@ package tech.dojo.pay.sdk.card.presentation.card.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -18,6 +19,10 @@ import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 @Suppress("SwallowedException")
 internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHost {
 
+    companion object {
+        private const val TAG = "DojoCardPaymentActivity"
+    }
+
     private val viewModel: DojoCardPaymentViewModel by viewModels {
         DojoCardPaymentViewModelFactory(intent.extras, this)
     }
@@ -31,7 +36,9 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
     }
 
     private fun observeDeviceData() {
-        viewModel.deviceData.observe(this) { viewModel.initCardinal() }
+        viewModel.deviceData.observe(this) {
+            viewModel.initCardinal()
+        }
     }
 
     private fun observeResult() {
@@ -44,6 +51,7 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
     }
 
     private fun returnResult(result: DojoPaymentResult) {
+        Log.d(TAG, "returnResult: result=$result")
         val data = Intent()
         data.putExtra(DojoCardPaymentResultContract.KEY_RESULT, result)
         setResult(RESULT_OK, data)
@@ -58,18 +66,16 @@ internal class DojoCardPaymentActivity : AppCompatActivity(), Dojo3DSViewModelHo
                 params.jwt,
                 this
             ) { _, validateResponse, serverJWT ->
-                viewModel.on3dsCompleted(
-                    serverJWT,
-                    params.md,
-                    validateResponse,
-                )
+                viewModel.on3dsCompleted(serverJWT, params.md, validateResponse)
             }
         } catch (throwable: Throwable) {
+            Log.e(TAG, "navigate3DS: Cardinal cca_continue threw exception — payment will fail.", throwable)
             viewModel.on3dsCompleted()
         }
     }
 
     override fun onBackPressed() {
+        Log.d(TAG, "onBackPressed: canExit=${viewModel.canExit}")
         if (viewModel.canExit) super.onBackPressed()
     }
 }
