@@ -6,9 +6,9 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import com.google.android.gms.wallet.AutoResolveHelper
-import com.google.android.gms.wallet.AutoResolveHelper.RESULT_ERROR
 import com.google.android.gms.wallet.PaymentData
+import com.google.android.gms.wallet.contract.ApiTaskResult
+import com.google.android.gms.wallet.contract.TaskResultContracts
 import org.json.JSONException
 import tech.dojo.pay.sdk.DojoPaymentResult
 import tech.dojo.pay.sdk.R
@@ -17,14 +17,15 @@ import tech.dojo.pay.sdk.card.entities.DojoGPayParams
 import tech.dojo.pay.sdk.card.entities.PaymentResult
 import tech.dojo.pay.sdk.card.entities.ThreeDSParams
 import tech.dojo.pay.sdk.card.presentation.gpay.util.DojoGPayEngine
-import tech.dojo.pay.sdk.card.presentation.gpay.util.GOOGLE_PAY_ACTIVITY_REQUEST_CODE
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModel
 import tech.dojo.pay.sdk.card.presentation.gpay.viewmodel.DojoGPayViewModelFactory
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSBaseViewModel
 import tech.dojo.pay.sdk.card.presentation.threeds.Dojo3DSViewModelHost
 
 @Suppress("SwallowedException")
-internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
+internal class DojoGPayActivity :
+    AppCompatActivity(),
+    Dojo3DSViewModelHost {
 
     private val viewModel: DojoGPayViewModel by viewModels {
         DojoGPayViewModelFactory(intent.extras, this)
@@ -32,6 +33,10 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
     override val threeDSViewModel: Dojo3DSBaseViewModel by lazy { viewModel }
 
     private val gPayEngine: DojoGPayEngine by lazy { DojoGPayEngine(this) }
+
+    private val paymentDataLauncher = registerForActivityResult(
+        TaskResultContracts.GetPaymentDataResult()
+    ) { result -> handlePaymentDataResult(result) }
 
     val params: DojoGPayParams by lazy {
         requireNotNull(intent.extras)
@@ -69,33 +74,17 @@ internal class DojoGPayActivity : AppCompatActivity(), Dojo3DSViewModelHost {
             params.dojoPaymentIntent.totalAmount,
             params.dojoGPayPayload.dojoGPayConfig
         ) { returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR) }
+            ?.addOnCompleteListener { task -> paymentDataLauncher.launch(task) }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            // Value passed in AutoResolveHelper
-            GOOGLE_PAY_ACTIVITY_REQUEST_CODE -> handleGPayResults(resultCode, data)
-        }
-    }
-
-    private fun handleGPayResults(resultCode: Int, data: Intent?) {
-        when (resultCode) {
-            RESULT_OK -> handleOkResultFromGPay(data)
-            RESULT_CANCELED -> returnResult(DojoPaymentResult.FAILED)
-            RESULT_ERROR -> {
-                AutoResolveHelper.getStatusFromIntent(data)
-                    ?.let { Log.d("GPay Failed", it.status.toString()) }
-                returnResult(DojoPaymentResult.FAILED)
-            }
-        }
-    }
-
-    private fun handleOkResultFromGPay(data: Intent?) {
-        if (data != null && PaymentData.getFromIntent(data) != null) {
-            PaymentData.getFromIntent(data)?.let(::handlePaymentSuccess)
-        } else {
+    private fun handlePaymentDataResult(result: ApiTaskResult<PaymentData>) {
+        result.result?.let(::handlePaymentSuccess) ?: if (result.status.isSuccess) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
+        } else {
+            if (!result.status.isCanceled) {
+                Log.d("GPay Failed", result.status.toString())
+            }
+            returnResult(DojoPaymentResult.FAILED)
         }
     }
 
