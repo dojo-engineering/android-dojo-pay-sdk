@@ -78,7 +78,10 @@ internal class DojoGPayActivity :
     }
 
     private fun handlePaymentDataResult(result: ApiTaskResult<PaymentData>) {
-        result.result?.let(::handlePaymentSuccess) ?: if (result.status.isSuccess) {
+        val paymentData = result.result
+        if (paymentData != null) {
+            handlePaymentSuccess(paymentData)
+        } else if (result.status.isSuccess) {
             returnResult(DojoPaymentResult.SDK_INTERNAL_ERROR)
         } else {
             if (!result.status.isCanceled) {
