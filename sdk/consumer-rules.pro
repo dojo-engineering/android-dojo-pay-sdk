@@ -11,8 +11,9 @@
 # Returned to the host app through the ActivityResultContract as a Serializable.
 -keep class tech.dojo.pay.sdk.DojoPaymentResult { *; }
 
-# Generic Serializable contract required for java.io.Serialization to work.
--keepclassmembers class * implements java.io.Serializable {
+# Serializable contract required for java.io.Serialization to work. Scoped to the
+# SDK package so R8 can still optimize Serializable classes in the host app.
+-keepclassmembers class tech.dojo.pay.sdk.** implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
     !static !transient <fields>;

@@ -7,8 +7,12 @@
 # flow Activities crash on launch.
 -keep class tech.dojo.pay.uisdk.entities.** { *; }
 
-# Generic Serializable contract required for java.io.Serialization to work.
--keepclassmembers class * implements java.io.Serializable {
+# Raw API models consumed reflectively by Gson.
+-keep class tech.dojo.pay.uisdk.data.entities.** { *; }
+
+# Serializable contract required for java.io.Serialization to work. Scoped to the
+# UI SDK package so R8 can still optimize Serializable classes in the host app.
+-keepclassmembers class tech.dojo.pay.uisdk.** implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
     !static !transient <fields>;
