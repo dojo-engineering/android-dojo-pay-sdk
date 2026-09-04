@@ -4,6 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import tech.dojo.pay.sdk.BuildConfig
 import tech.dojo.pay.sdk.card.data.entities.PaymentDetails
 import tech.dojo.pay.sdk.card.entities.DojoAddressDetails
 import tech.dojo.pay.sdk.card.entities.DojoCardDetails
@@ -27,7 +28,7 @@ internal class CardPaymentRequestMapperTest {
             userEmailAddress = "user@gmail.com",
             userPhoneNumber = "123456789",
             shippingDetails = SHIPPING_DETAILS,
-            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-1.8.1"),
+            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-${BuildConfig.DOJO_SDK_CORE_VERSION}"),
         )
         val actual = CardPaymentRequestMapper().mapToPaymentDetails(SAVED_CARD_PAYLOAD)
         Assert.assertEquals(paymentDetailsForSavedCard, actual)
@@ -91,7 +92,7 @@ internal class CardPaymentRequestMapperTest {
             userPhoneNumber = FULL_CARD_PAYLOAD.userPhoneNumber,
             billingAddress = ADDRESS_DETAILS,
             shippingDetails = SHIPPING_DETAILS,
-            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-1.8.1"),
+            metaData = mapOf("1" to "one", "dojo-sdk-core-version" to "android-${BuildConfig.DOJO_SDK_CORE_VERSION}"),
             mitConsentGiven = true,
         )
     }
