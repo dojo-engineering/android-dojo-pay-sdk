@@ -2,16 +2,15 @@ package tech.dojo.pay.sdk.card.presentation.gpay.util
 
 import android.app.Activity
 import android.util.Log
-import com.google.android.gms.wallet.AutoResolveHelper
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.wallet.IsReadyToPayRequest
+import com.google.android.gms.wallet.PaymentData
 import com.google.android.gms.wallet.PaymentDataRequest
 import com.google.android.gms.wallet.PaymentsClient
 import tech.dojo.pay.sdk.card.entities.DojoGPayConfig
 import tech.dojo.pay.sdk.card.entities.DojoTotalAmount
 
-class DojoGPayEngine(
-    private val activity: Activity,
-) {
+class DojoGPayEngine(private val activity: Activity) {
     private val paymentsClient: PaymentsClient by lazy {
         GooglePayJsonFactory.createPaymentsClient(
             activity
@@ -45,29 +44,23 @@ class DojoGPayEngine(
 
     /**
      * start the payment process for google pay
+     *
+     * Returns the [Task] for the caller to pass to Google's Activity Result contract after
+     * completion. This replaces the removed `AutoResolveHelper.resolveTask` API.
      */
     internal fun payWithGoogle(
         totalAmountPayload: DojoTotalAmount,
         dojoGPayConfig: DojoGPayConfig,
         onPaymentRequestError: () -> Unit
-    ) {
+    ): Task<PaymentData>? {
         val paymentDataRequestJson =
             GooglePayJsonFactory.getPaymentDataRequest(totalAmountPayload, dojoGPayConfig)
-        if (paymentDataRequestJson != null) {
+        return if (paymentDataRequestJson != null) {
             val request = PaymentDataRequest.fromJson(paymentDataRequestJson.toString())
-
-            // Since loadPaymentData may show the UI asking the user to select a payment method, we use
-            // AutoResolveHelper to wait for the user interacting with it. Once completed,
-            // onActivityResult will be called with the result.
-            AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request),
-                activity,
-                GOOGLE_PAY_ACTIVITY_REQUEST_CODE
-            )
+            paymentsClient.loadPaymentData(request)
         } else {
             onPaymentRequestError()
+            null
         }
     }
 }
-
-const val GOOGLE_PAY_ACTIVITY_REQUEST_CODE = 99999
