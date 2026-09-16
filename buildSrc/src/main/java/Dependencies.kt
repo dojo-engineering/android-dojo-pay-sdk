@@ -34,9 +34,9 @@ object Versions {
     const val ANDROIDX_WINDOW = "1.4.0"
     const val RETROFIT = "2.12.0"
     const val OKHTTP = "4.12.0"
-    const val GPAY = "19.4.0"
+    const val GPAY = "20.0.0"
     const val JSON_TEST = "20231013"
-    const val CARDINAL = "2.2.7-5"
+    const val CARDINAL = "2.2.7-7"
     const val MOCKK = "1.14.5"
 }
 
