@@ -163,6 +163,10 @@ abstract class CardPaymentBaseActivity : AppCompatActivity() {
         binding.btnNo3DS.setOnClickListener {
             setCardDetails(Cards.NoThreeDS)
         }
+
+        binding.btnDecline.setOnClickListener {
+            setCardDetails(Cards.Decline)
+        }
     }
 
     private fun setTokenListener() {

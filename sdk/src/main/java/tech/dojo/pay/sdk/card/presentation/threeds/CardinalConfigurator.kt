@@ -2,6 +2,7 @@ package tech.dojo.pay.sdk.card.presentation.threeds
 
 import android.content.Context
 import com.cardinalcommerce.cardinalmobilesdk.Cardinal
+import com.cardinalcommerce.cardinalmobilesdk.enums.CCADatabase
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalEnvironment
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalRenderType
 import com.cardinalcommerce.cardinalmobilesdk.enums.CardinalUiType
@@ -16,6 +17,7 @@ class CardinalConfigurator(private val context: Context) {
         val cardinal: Cardinal = Cardinal.getInstance()
         val cardinalConfigurationParameters = CardinalConfigurationParameters()
         cardinalConfigurationParameters.environment = getEnvironment()
+        cardinalConfigurationParameters.setCCAUrl(getDataCenter())
 
         cardinalConfigurationParameters.requestTimeout = 8000
         cardinalConfigurationParameters.challengeTimeout = 5
@@ -40,11 +42,31 @@ class CardinalConfigurator(private val context: Context) {
         return rTYPE
     }
 
-    private fun getEnvironment(): CardinalEnvironment {
-        return if (DojoSdk.dojoSDKDebugConfig.isSandboxIntent) {
+    private fun getEnvironment(): CardinalEnvironment =
+        if (DojoSdk.dojoSDKDebugConfig.isSandboxIntent) {
             CardinalEnvironment.STAGING
         } else {
             CardinalEnvironment.PRODUCTION
+        }
+
+    private fun getDataCenter(): CCADatabase = dataCenterFor(
+        isSandbox = DojoSdk.dojoSDKDebugConfig.isSandboxIntent,
+        currentTimeMillis = System.currentTimeMillis(),
+    )
+
+    internal companion object {
+        // 2026-10-29T00:00:00Z
+        const val VISA_PRODUCTION_CUTOVER_MILLIS = 1793232000000L
+
+        fun dataCenterFor(
+            isSandbox: Boolean,
+            currentTimeMillis: Long,
+        ): CCADatabase = if (
+            isSandbox || currentTimeMillis >= VISA_PRODUCTION_CUTOVER_MILLIS
+        ) {
+            CCADatabase.CGKURLS
+        } else {
+            CCADatabase.CCAURLS
         }
     }
 }
