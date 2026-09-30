@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -481,8 +482,8 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                     nullable = false
                 },
             ),
-        ) {
-            val result = it.arguments?.serializableCompat<DojoPaymentResult>(DOJO_PAYMENT_RESULT_PARAMS_KEY)
+        ) { backStackEntry ->
+            val result = backStackEntry.arguments?.serializableCompat<DojoPaymentResult>(DOJO_PAYMENT_RESULT_PARAMS_KEY)
                 ?: DojoPaymentResult.SDK_INTERNAL_ERROR
             val observePaymentIntent =
                 ObservePaymentIntent(PaymentFlowViewModelFactory.paymentIntentRepository)
@@ -495,13 +496,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 isDarkModeEnabled = isDarkModeEnabled,
                 customStringProvider = customStringProvider,
             )
-            val paymentResultViewModel: PaymentResultViewModel by viewModels {
+            val paymentResultViewModel = ViewModelProvider(
+                backStackEntry,
                 PaymentResultViewModelFactory(
                     result = result,
                     observePaymentIntent = observePaymentIntent,
                     paymentResultViewEntityMapper = paymentResultViewEntityMapper,
                 )
-            }
+            ).get(PaymentResultViewModel::class.java)
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),
