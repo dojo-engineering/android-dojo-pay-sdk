@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -496,14 +496,14 @@ class PaymentFlowContainerActivity : AppCompatActivity() {
                 isDarkModeEnabled = isDarkModeEnabled,
                 customStringProvider = customStringProvider,
             )
-            val paymentResultViewModel = ViewModelProvider(
-                backStackEntry,
-                PaymentResultViewModelFactory(
+            val paymentResultViewModel: PaymentResultViewModel = viewModel(
+                viewModelStoreOwner = backStackEntry,
+                factory = PaymentResultViewModelFactory(
                     result = result,
                     observePaymentIntent = observePaymentIntent,
                     paymentResultViewEntityMapper = paymentResultViewEntityMapper,
-                )
-            ).get(PaymentResultViewModel::class.java)
+                ),
+            )
             AnimatedVisibility(
                 visible = true,
                 enter = expandVertically(),
